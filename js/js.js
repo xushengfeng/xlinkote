@@ -1,8 +1,9 @@
 var O = document.getElementById("O");
 var o_e;
 var o_rect;
+var move = false;
 document.onmousedown = (e) => {
-    if (e.target == document.querySelector("html")) {
+    if (e.button == 2 && e.target == document.querySelector("html")) {
         o_e = e;
         o_rect = O.getBoundingClientRect();
     }
@@ -11,10 +12,14 @@ document.onmousedown = (e) => {
 };
 document.onmousemove = (e) => {
     mouse(e);
+    move = true;
 };
 document.onmouseup = (e) => {
     mouse(e);
     o_e = null;
+    if (!move)
+        context_menu(e);
+    move = false;
 };
 var mouse = (e) => {
     if (o_e) {
@@ -34,26 +39,28 @@ document.getElementById("归位").onclick = () => {
 var menu = document.getElementById("上下文菜单");
 document.oncontextmenu = (e) => {
     e.preventDefault();
-    let x = e.offsetX, y = e.offsetY;
+};
+function context_menu(e) {
+    let x = e.clientX, y = e.clientY;
     menu.style.left = x + "px";
     menu.style.top = y + "px";
     menu.classList.add("上下文菜单展示");
     document.getElementById("在此新建").onmousedown = () => {
         let input = document.createElement("input");
         input.className = "add_tag";
-        input.style.left = e.offsetX + "px";
-        input.style.top = e.offsetY + "px";
+        input.style.left = x + "px";
+        input.style.top = y + "px";
         O.append(input);
         input.focus();
         input.onchange = () => {
             let el = document.createElement(input.value);
             el.contentEditable = "true";
             el.style.position = "absolute";
-            el.style.left = e.offsetX + "px";
-            el.style.top = e.offsetY + "px";
+            el.style.left = x + "px";
+            el.style.top = y + "px";
             O.append(el);
             el.focus();
             input.remove();
         };
     };
-};
+}
