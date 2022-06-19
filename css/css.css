@@ -7,10 +7,28 @@ html {
 body {
     margin: 0;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
+/* 画布 */
 #O {
     position: absolute;
+}
+
+/* 导航 */
+#导航 {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+}
+#导航 button {
+    width: 16px;
+    height: 16px;
+    background-color: #eee;
+    border-radius: 8px;
+    border: none;
 }
 
 h1 {
