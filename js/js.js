@@ -41,9 +41,9 @@ document.oncontextmenu = (e) => {
     e.preventDefault();
 };
 function context_menu(e) {
-    let x = e.clientX, y = e.clientY;
-    menu.style.left = x + "px";
-    menu.style.top = y + "px";
+    let x = e.offsetX - O.offsetLeft, y = e.offsetY - O.offsetTop;
+    menu.style.left = e.offsetX + "px";
+    menu.style.top = e.offsetY + "px";
     menu.classList.add("上下文菜单展示");
     document.getElementById("在此新建").onmousedown = () => {
         let input = document.createElement("input");
@@ -54,11 +54,12 @@ function context_menu(e) {
         input.focus();
         input.onchange = () => {
             let el = document.createElement(input.value);
+            let xel = document.createElement("x-x");
             el.contentEditable = "true";
-            el.style.position = "absolute";
-            el.style.left = x + "px";
-            el.style.top = y + "px";
-            O.append(el);
+            xel.style.left = x + "px";
+            xel.style.top = y + "px";
+            O.append(xel);
+            xel.append(el);
             el.focus();
             input.remove();
         };

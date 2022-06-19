@@ -47,16 +47,14 @@ body {
     position: absolute;
 }
 
-h1 {
-    position: relative;
-    top: 20px;
-    left: 20px;
+x-x {
+    position: absolute;
+    display: block;
+    width: 100vw;
 }
 
-p {
-    position: relative;
-    top: 30px;
-    left: -20px;
+x-x > * {
+    margin: 0;
 }
 
 @media (max-width: 900px) {
