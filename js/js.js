@@ -27,3 +27,6 @@ document.getElementById("归位").onclick = () => {
         O.style.transition = "";
     }, 400);
 };
+document.oncontextmenu = (e) => {
+    e.preventDefault();
+};
