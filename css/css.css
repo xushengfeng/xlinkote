@@ -4,9 +4,20 @@
 html {
 }
 
-@media (max-width:900px) {
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+#main {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #eee;
+}
+
+@media (max-width: 900px) {
 }
 
 @media (prefers-color-scheme: dark) {
-
 }
