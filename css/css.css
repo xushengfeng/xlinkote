@@ -31,6 +31,22 @@ body {
     border: none;
 }
 
+#上下文菜单 {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+
+.上下文菜单展示 {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+.add_tag {
+    position: absolute;
+}
+
 h1 {
     position: relative;
     top: 20px;
