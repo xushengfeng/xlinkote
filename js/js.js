@@ -36,6 +36,10 @@ document.getElementById("归位").onclick = () => {
         O.style.transition = "";
     }, 400);
 };
+document.getElementById("画布").onwheel = (e) => {
+    O.style.left = O.offsetLeft - e.deltaX + "px";
+    O.style.top = O.offsetTop - e.deltaY + "px";
+};
 var menu = document.getElementById("上下文菜单");
 document.oncontextmenu = (e) => {
     e.preventDefault();

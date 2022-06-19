@@ -28,6 +28,8 @@ body {
 /* 画布 */
 #O {
     position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /* 导航 */
