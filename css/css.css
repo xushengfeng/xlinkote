@@ -1,4 +1,5 @@
 :root {
+    --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 html {
@@ -17,8 +18,28 @@ body {
     flex-direction: column;
 }
 
-#nav {
-    height: 32px;
+#nav > #tabs {
+    display: flex;
+}
+#nav > #tabs > div {
+    margin: 0 4px;
+}
+#nav > #items {
+    width: 100%;
+    display: flex;
+}
+#nav > #items > div {
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+#nav > #items > div::-webkit-scrollbar {
+    display: none;
+}
+#nav > #items > div > div {
+    margin: 0 4px;
 }
 
 #画布 {

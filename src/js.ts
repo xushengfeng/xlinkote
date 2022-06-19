@@ -1,3 +1,18 @@
+document.getElementById("tabs").onclick = (e) => {
+    document.querySelectorAll("#tabs > div").forEach((el, i) => {
+        if (el == e.target) {
+            document.querySelectorAll("#items > div").forEach((iel: HTMLDivElement, j) => {
+                if (i == j) {
+                    iel.style.width = "100%";
+                } else {
+                    iel.style.width = "0";
+                }
+            });
+        }
+    });
+};
+document.getElementById("文件").click();
+
 var O = document.getElementById("O");
 
 var o_e: MouseEvent;
