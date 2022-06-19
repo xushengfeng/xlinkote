@@ -4,8 +4,10 @@ var o_e: MouseEvent;
 var o_rect: DOMRect;
 
 document.onmousedown = (e) => {
-    o_e = e;
-    o_rect = O.getBoundingClientRect();
+    if (e.target == document.querySelector("html")) {
+        o_e = e;
+        o_rect = O.getBoundingClientRect();
+    }
 };
 
 document.onmousemove = (e) => {

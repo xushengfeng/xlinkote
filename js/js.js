@@ -2,8 +2,10 @@ var O = document.getElementById("O");
 var o_e;
 var o_rect;
 document.onmousedown = (e) => {
-    o_e = e;
-    o_rect = O.getBoundingClientRect();
+    if (e.target == document.querySelector("html")) {
+        o_e = e;
+        o_rect = O.getBoundingClientRect();
+    }
 };
 document.onmousemove = (e) => {
     mouse(e);
