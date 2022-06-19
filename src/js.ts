@@ -5,7 +5,7 @@ var o_rect: DOMRect;
 var move: boolean = false;
 
 document.onmousedown = (e) => {
-    if (e.button == 2 && e.target == document.querySelector("html")) {
+    if (e.button == 2 && e.target == document.querySelector("#画布")) {
         o_e = e;
         o_rect = O.getBoundingClientRect();
     }

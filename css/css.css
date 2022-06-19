@@ -11,6 +11,20 @@ body {
     height: 100%;
 }
 
+#main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#nav {
+    height: 32px;
+}
+
+#画布 {
+    flex-grow: 1;
+}
+
 /* 画布 */
 #O {
     position: absolute;
