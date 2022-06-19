@@ -94,6 +94,16 @@ x-x > * {
     margin: 0;
 }
 
+x-x > #x-x_bar {
+    display: flex;
+    position: absolute;
+    top: -16px;
+}
+x-x > #x-x_bar > div {
+    width: 16px;
+    height: 16px;
+    background-color: #eee;
+}
 @media (max-width: 900px) {
 }
 
