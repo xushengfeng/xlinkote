@@ -112,6 +112,11 @@ x-x > #x-x_bar > div {
     height: 16px;
     background-color: #eee;
 }
+x-x > #x-x_bar > input {
+    border: none;
+    padding: 0;
+    outline: none;
+}
 @media (max-width: 900px) {
 }
 
