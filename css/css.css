@@ -9,11 +9,20 @@ body {
     overflow: hidden;
 }
 
-#main {
+#O {
     position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: #eee;
+}
+
+h1 {
+    position: relative;
+    top: 20px;
+    left: 20px;
+}
+
+p {
+    position: relative;
+    top: 30px;
+    left: -20px;
 }
 
 @media (max-width: 900px) {

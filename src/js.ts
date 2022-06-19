@@ -1,13 +1,11 @@
-var main = document.getElementById("main");
+var O = document.getElementById("O");
 
 var o_e: MouseEvent;
 var o_rect: DOMRect;
 
 document.onmousedown = (e) => {
-    if (e.target == main) {
-        o_e = e;
-        o_rect = main.getBoundingClientRect();
-    }
+    o_e = e;
+    o_rect = O.getBoundingClientRect();
 };
 
 document.onmousemove = (e) => {
@@ -21,7 +19,7 @@ var mouse = (e: MouseEvent) => {
     if (o_e) {
         let x = o_rect.x + (e.clientX - o_e.clientX),
             y = o_rect.y + (e.clientY - o_e.clientY);
-        main.style.left = x + "px";
-        main.style.top = y + "px";
+        O.style.left = x + "px";
+        O.style.top = y + "px";
     }
 };
