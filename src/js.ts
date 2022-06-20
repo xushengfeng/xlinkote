@@ -43,7 +43,7 @@ document.onmousemove = (e) => {
 };
 document.onmouseup = (e) => {
     mouse(e);
-    if (selected_el.length == 0 && move) {
+    if (e.button == 0 && selected_el.length == 0 && move) {
         let r = e2rect(o_e, e);
         let p = document.createElement("p");
         creat_x_x(r.x, r.y, p);
