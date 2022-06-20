@@ -124,7 +124,9 @@ function context_menu(e) {
         input.style.left = x + "px";
         input.style.top = y + "px";
         O.append(input);
-        input.focus();
+        setTimeout(() => {
+            input.focus();
+        }, 10);
         input.onchange = () => {
             let el = document.createElement(input.value);
             let xel = document.createElement("x-x");
@@ -140,6 +142,9 @@ function context_menu(e) {
                 }
             };
             el.focus();
+            input.remove();
+        };
+        input.onblur = () => {
             input.remove();
         };
     };
