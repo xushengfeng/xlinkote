@@ -4,6 +4,7 @@
     --bg-color2: rgba(255, 255, 255, 0.6);
     --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
+    --bg1: #ffffff;
 }
 
 html {
@@ -55,6 +56,7 @@ body {
 #画布 {
     flex-grow: 1;
     position: relative;
+    background-color: var(--bg1);
 }
 
 /* 画布 */

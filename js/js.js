@@ -270,3 +270,9 @@ function creat_x_x(x, y, el) {
     };
     el.focus();
 }
+document.onkeydown = (e) => {
+    if (e.key == "F11") {
+        e.preventDefault();
+        画布.requestFullscreen();
+    }
+};

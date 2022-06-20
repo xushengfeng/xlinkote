@@ -281,3 +281,10 @@ function creat_x_x(x: number, y: number, el: HTMLElement) {
     };
     el.focus();
 }
+
+document.onkeydown = (e) => {
+    if (e.key == "F11") {
+        e.preventDefault();
+        画布.requestFullscreen();
+    }
+};
