@@ -43,6 +43,11 @@ document.onmousemove = (e) => {
 };
 document.onmouseup = (e) => {
     mouse(e);
+    if (selected_el.length == 0 && move) {
+        let r = e2rect(o_e, e);
+        let p = document.createElement("p");
+        creat_x_x(r.x, r.y, p);
+    }
     o_e = null;
     if (!move && e.button == 2) context_menu(e);
     move = false;
@@ -137,23 +142,27 @@ function context_menu(e: MouseEvent) {
         }, 10);
         input.onchange = () => {
             let el = document.createElement(input.value);
-            let xel = document.createElement("x-x");
-            el.contentEditable = "true";
-            xel.style.left = x + "px";
-            xel.style.top = y + "px";
-            O.append(xel);
-            xel.append(el);
-            el.onkeydown = (e) => {
-                let eeel = <HTMLInputElement>e.target;
-                if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
-                    xel.remove();
-                }
-            };
-            el.focus();
+            creat_x_x(x, y, el);
             input.remove();
         };
         input.onblur = () => {
             input.remove();
         };
     };
+}
+
+function creat_x_x(x: number, y: number, el: HTMLElement) {
+    let xel = document.createElement("x-x");
+    el.contentEditable = "true";
+    xel.style.left = x + "px";
+    xel.style.top = y + "px";
+    O.append(xel);
+    xel.append(el);
+    el.onkeydown = (e) => {
+        let eeel = <HTMLInputElement>e.target;
+        if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
+            xel.remove();
+        }
+    };
+    el.focus();
 }
