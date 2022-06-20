@@ -88,7 +88,7 @@ function context_menu(e: MouseEvent) {
             O.append(xel);
             xel.append(el);
             el.onkeydown = (e) => {
-                let eeel = <HTMLElement>e.target;
+                let eeel = <HTMLInputElement>e.target;
                 if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
                     xel.remove();
                 }
