@@ -60,6 +60,10 @@ var mouse = (e) => {
         }
         else if (e.button == 0) {
             if (select_id) {
+                画布.querySelectorAll(".x-x_selected").forEach((el) => {
+                    el.classList.remove("x-x_selected");
+                    selected_el = [];
+                });
                 let rect = e2rect(o_e, e);
                 let select = document.getElementById(select_id);
                 select.id = select_id;
@@ -67,6 +71,7 @@ var mouse = (e) => {
                 select.style.top = rect.y + "px";
                 select.style.width = rect.w + "px";
                 select.style.height = rect.h + "px";
+                select_x_x(rect);
             }
         }
     }
@@ -74,6 +79,22 @@ var mouse = (e) => {
 function e2rect(e0, e1) {
     let r0 = { x: e0.clientX - 画布.getBoundingClientRect().x, y: e0.clientY - 画布.getBoundingClientRect().y }, r1 = { x: e1.clientX - 画布.getBoundingClientRect().x, y: e1.clientY - 画布.getBoundingClientRect().y };
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
+}
+var selected_el = [];
+function select_x_x(rect) {
+    for (const el of 画布.querySelectorAll("x-x")) {
+        let r = el.getBoundingClientRect();
+        let rr = {
+            left: r.left - 画布.getBoundingClientRect().x,
+            top: r.top - 画布.getBoundingClientRect().y,
+            right: r.right - 画布.getBoundingClientRect().x,
+            bottom: r.bottom - 画布.getBoundingClientRect().y,
+        };
+        if (rect.x <= rr.left && rr.right <= rect.x + rect.w && rect.y <= rr.top && rr.bottom <= rect.y + rect.h) {
+            el.classList.add("x-x_selected");
+            selected_el.push(el);
+        }
+    }
 }
 document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";

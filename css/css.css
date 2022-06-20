@@ -127,6 +127,10 @@ x-x > #x-x_bar > input {
     padding: 0;
     outline: none;
 }
+
+.x-x_selected {
+    outline: 1px solid #0000ff;
+}
 @media (max-width: 900px) {
 }
 
