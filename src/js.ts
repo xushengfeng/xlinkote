@@ -39,12 +39,12 @@ document.onmousedown = (e) => {
 
 document.onmousemove = (e) => {
     mouse(e);
-    move = true;
+    if (o_e) move = true;
 };
 document.onmouseup = (e) => {
     mouse(e);
     o_e = null;
-    if (!move) context_menu(e);
+    if (!move && e.button == 2) context_menu(e);
     move = false;
     document.getElementById("画布").style.cursor = "auto";
     if (select_id) document.getElementById(select_id).remove();
