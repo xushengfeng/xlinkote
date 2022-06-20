@@ -23,6 +23,7 @@ document.onmousedown = (e) => {
     if (e.button == 2 && e.target == document.querySelector("#画布")) {
         o_e = e;
         o_rect = { x: O.offsetLeft, y: O.offsetTop };
+        document.getElementById("画布").style.cursor = "move";
     }
     if (e.target != menu) menu.classList.remove("上下文菜单展示");
 };
@@ -36,6 +37,7 @@ document.onmouseup = (e) => {
     o_e = null;
     if (!move) context_menu(e);
     move = false;
+    document.getElementById("画布").style.cursor = "auto";
 };
 var mouse = (e: MouseEvent) => {
     if (o_e) {
