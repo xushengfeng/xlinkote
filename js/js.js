@@ -59,7 +59,7 @@ document.onmouseup = (e) => {
 };
 var mouse = (e) => {
     if (o_e) {
-        if (e.button == 2) {
+        if (e.buttons == 2) {
             let x = o_rect.x + (e.clientX - o_e.clientX), y = o_rect.y + (e.clientY - o_e.clientY);
             O.style.left = x + "px";
             O.style.top = y + "px";
