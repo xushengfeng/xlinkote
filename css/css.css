@@ -1,5 +1,9 @@
 :root {
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    --bg-color1: rgba(235, 235, 235, 0.6);
+    --bg-color2: rgba(255, 255, 255, 0.6);
+    --shadow1: 0 0 4px #3333;
+    --blur: blur(10px);
 }
 
 html {
@@ -18,6 +22,12 @@ body {
     flex-direction: column;
 }
 
+#nav {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    position: relative;
+    z-index: 2;
+}
 #nav > #tabs {
     display: flex;
 }
@@ -92,6 +102,13 @@ body {
 
 .add_tag {
     position: absolute;
+    outline: none;
+    padding: 0;
+    border: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
 }
 
 x-x {
@@ -107,6 +124,7 @@ x-x:hover > #x-x_bar {
 
 x-x > * {
     margin: 0;
+    outline: none;
 }
 
 x-x > #x-x_bar {
@@ -120,12 +138,26 @@ x-x > #x-x_bar {
 x-x > #x-x_bar > div {
     width: 16px;
     height: 16px;
-    background-color: #eee;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
 }
 x-x > #x-x_bar > input {
     border: none;
     padding: 0;
     outline: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    margin-right: 4px;
+    box-shadow: var(--shadow1);
+}
+x-x > #x-x_bar > input:nth-child(1) {
+    width: 100px;
+}
+x-x > #x-x_bar > input[list="tags"] {
+    width: 50px;
 }
 
 .x-x_selected {
