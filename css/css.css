@@ -44,6 +44,7 @@ body {
 
 #画布 {
     flex-grow: 1;
+    position: relative;
 }
 
 /* 画布 */

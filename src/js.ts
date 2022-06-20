@@ -16,13 +16,13 @@ document.getElementById("文件").click();
 var O = document.getElementById("O");
 
 var o_e: MouseEvent;
-var o_rect: DOMRect;
+var o_rect;
 var move: boolean = false;
 
 document.onmousedown = (e) => {
     if (e.button == 2 && e.target == document.querySelector("#画布")) {
         o_e = e;
-        o_rect = O.getBoundingClientRect();
+        o_rect = { x: O.offsetLeft, y: O.offsetTop };
     }
     if (e.target != menu) menu.classList.remove("上下文菜单展示");
 };
@@ -68,8 +68,8 @@ document.oncontextmenu = (e) => {
 function context_menu(e: MouseEvent) {
     let x = e.offsetX - O.offsetLeft,
         y = e.offsetY - O.offsetTop;
-    menu.style.left = e.offsetX + "px";
-    menu.style.top = e.offsetY + "px";
+    menu.style.left = e.clientX + "px";
+    menu.style.top = e.clientY + "px";
     menu.classList.add("上下文菜单展示");
 
     document.getElementById("在此新建").onmousedown = () => {
