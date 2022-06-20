@@ -13,15 +13,25 @@ document.getElementById("tabs").onclick = (e) => {
     });
 };
 document.getElementById("文件").click();
+var 画布 = document.getElementById("画布");
 var O = document.getElementById("O");
 var o_e;
 var o_rect;
 var move = false;
+var select_id = "";
 document.onmousedown = (e) => {
-    if (e.button == 2 && e.target == document.querySelector("#画布")) {
-        o_e = e;
-        o_rect = { x: O.offsetLeft, y: O.offsetTop };
-        document.getElementById("画布").style.cursor = "move";
+    if (e.target == document.querySelector("#画布")) {
+        if (e.button == 2) {
+            o_e = e;
+            o_rect = { x: O.offsetLeft, y: O.offsetTop };
+            document.getElementById("画布").style.cursor = "move";
+        }
+        else if (e.button == 0) {
+            o_e = e;
+            let select = document.createElement("div");
+            select_id = select.id = `s${new Date().getTime()}`;
+            document.getElementById("选择").append(select);
+        }
     }
     if (e.target != menu)
         menu.classList.remove("上下文菜单展示");
@@ -37,14 +47,34 @@ document.onmouseup = (e) => {
         context_menu(e);
     move = false;
     document.getElementById("画布").style.cursor = "auto";
+    if (select_id)
+        document.getElementById(select_id).remove();
+    select_id = "";
 };
 var mouse = (e) => {
     if (o_e) {
-        let x = o_rect.x + (e.clientX - o_e.clientX), y = o_rect.y + (e.clientY - o_e.clientY);
-        O.style.left = x + "px";
-        O.style.top = y + "px";
+        if (e.button == 2) {
+            let x = o_rect.x + (e.clientX - o_e.clientX), y = o_rect.y + (e.clientY - o_e.clientY);
+            O.style.left = x + "px";
+            O.style.top = y + "px";
+        }
+        else if (e.button == 0) {
+            if (select_id) {
+                let rect = e2rect(o_e, e);
+                let select = document.getElementById(select_id);
+                select.id = select_id;
+                select.style.left = rect.x + "px";
+                select.style.top = rect.y + "px";
+                select.style.width = rect.w + "px";
+                select.style.height = rect.h + "px";
+            }
+        }
     }
 };
+function e2rect(e0, e1) {
+    let r0 = { x: e0.clientX - 画布.getBoundingClientRect().x, y: e0.clientY - 画布.getBoundingClientRect().y }, r1 = { x: e1.clientX - 画布.getBoundingClientRect().x, y: e1.clientY - 画布.getBoundingClientRect().y };
+    return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
+}
 document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";
     O.style.left = "0px";

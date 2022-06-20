@@ -53,6 +53,15 @@ body {
     top: 0;
     left: 0;
 }
+#选择 {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#选择 > div {
+    position: absolute;
+    border: 1px solid #000;
+}
 
 /* 导航 */
 #导航 {
