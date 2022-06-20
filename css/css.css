@@ -114,7 +114,7 @@ body {
 x-x {
     position: absolute;
     display: block;
-    width: 100vw;
+    width: 60vw;
 }
 
 x-x:hover > #x-x_bar {
