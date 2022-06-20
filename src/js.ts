@@ -46,7 +46,7 @@ document.onmouseup = (e) => {
     if (e.button == 0 && selected_el.length == 0 && move) {
         let r = e2rect(o_e, e);
         let p = document.createElement("p");
-        creat_x_x(r.x, r.y, p);
+        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop, p);
     }
     o_e = null;
     if (!move && e.button == 2) context_menu(e);
