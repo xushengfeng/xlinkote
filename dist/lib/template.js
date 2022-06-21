@@ -81,6 +81,8 @@ class x extends HTMLElement {
             selected_el = selected_el.filter((el) => el != this);
         };
         this.insertAdjacentHTML("beforeend", html);
+        if (this.childNodes[1])
+            add_event(this.childNodes[1]);
     }
 }
 window.customElements.define("x-x", x);

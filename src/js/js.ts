@@ -273,8 +273,14 @@ function creat_x_x(x: number, y: number, el: HTMLElement) {
     xel.style.top = y + "px";
     O.append(xel);
     xel.append(el);
+    add_event(el);
+    el.focus();
+}
+
+function add_event(el: HTMLElement) {
     el.onkeydown = (e) => {
         let eeel = <HTMLInputElement>e.target;
+        let xel = eeel.parentElement;
         if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
             xel.remove();
         }
@@ -285,7 +291,6 @@ function creat_x_x(x: number, y: number, el: HTMLElement) {
             creat_x_x(x, y, document.createElement("p"));
         }
     };
-    el.focus();
 }
 
 document.onkeydown = (e) => {

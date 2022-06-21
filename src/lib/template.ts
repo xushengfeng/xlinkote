@@ -91,6 +91,7 @@ class x extends HTMLElement {
         };
 
         this.insertAdjacentHTML("beforeend", html);
+        if (this.childNodes[1]) add_event(this.childNodes[1]);
     }
 }
 

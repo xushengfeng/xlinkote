@@ -262,8 +262,13 @@ function creat_x_x(x, y, el) {
     xel.style.top = y + "px";
     O.append(xel);
     xel.append(el);
+    add_event(el);
+    el.focus();
+}
+function add_event(el) {
     el.onkeydown = (e) => {
         let eeel = e.target;
+        let xel = eeel.parentElement;
         if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
             xel.remove();
         }
@@ -273,7 +278,6 @@ function creat_x_x(x, y, el) {
             creat_x_x(x, y, document.createElement("p"));
         }
     };
-    el.focus();
 }
 document.onkeydown = (e) => {
     switch (e.key) {
