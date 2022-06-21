@@ -49,8 +49,9 @@ class x extends HTMLElement {
         tag_type.onchange = () => {
             if (this.childNodes[1]) {
                 let n_tag = document.createElement(tag_type.value);
-                n_tag.contentEditable = true;
-                n_tag.innerHTML = this.childNodes[1].value || this.childNodes[1].innerHTML;
+                n_tag.contentEditable = "true";
+                n_tag.innerHTML =
+                    this.childNodes[1].value || this.childNodes[1].innerHTML;
                 this.childNodes[1].replaceWith(n_tag);
                 tag_type.value = "";
                 tag_type.blur();
