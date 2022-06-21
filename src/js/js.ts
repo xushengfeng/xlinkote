@@ -278,6 +278,12 @@ function creat_x_x(x: number, y: number, el: HTMLElement) {
         if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
             xel.remove();
         }
+        if (e.key == "Enter") {
+            e.preventDefault();
+            let x = xel.offsetLeft,
+                y = xel.offsetTop + xel.offsetHeight;
+            creat_x_x(x, y, document.createElement("p"));
+        }
     };
     el.focus();
 }
