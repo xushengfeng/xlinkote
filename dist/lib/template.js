@@ -4,6 +4,8 @@ class x extends HTMLElement {
         super();
     }
     connectedCallback() {
+        var html = this.innerHTML;
+        this.innerHTML = "";
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
         var size = document.createElement("input");
@@ -78,6 +80,7 @@ class x extends HTMLElement {
             this.remove();
             selected_el = selected_el.filter((el) => el != this);
         };
+        this.insertAdjacentHTML("beforeend", html);
     }
 }
 window.customElements.define("x-x", x);

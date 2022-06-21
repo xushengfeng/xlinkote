@@ -302,3 +302,7 @@ document.onkeydown = (e) => {
             break;
     }
 };
+
+function get_data() {
+    return O.innerHTML.replaceAll(document.getElementById("x-x_bar").outerHTML, "");
+}
