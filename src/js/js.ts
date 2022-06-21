@@ -87,7 +87,7 @@ function e2rect(e0: MouseEvent, e1: MouseEvent) {
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
 }
 
-var selected_el = [];
+var selected_el: Array<HTMLElement> = [];
 
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     for (const el of 画布.querySelectorAll("x-x")) {
@@ -100,7 +100,7 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
         };
         if (rect.x <= rr.left && rr.right <= rect.x + rect.w && rect.y <= rr.top && rr.bottom <= rect.y + rect.h) {
             el.classList.add("x-x_selected");
-            selected_el.push(el);
+            selected_el.push(<HTMLElement>el);
         }
     }
 }

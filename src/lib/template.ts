@@ -16,14 +16,22 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
-        var o_e;
-        var o_rect;
+        var o_e: MouseEvent;
+        var o_rect: { x: number; y: number };
+        var o_rects = [];
 
         this.addEventListener("mousedown", (e) => {
             if (e.button != 2) return;
             o_e = e;
             o_rect = { x: this.offsetLeft, y: this.offsetTop };
             document.getElementById("画布").style.cursor = "move";
+
+            if (selected_el.length != 0 && selected_el.includes(this)) {
+                o_rects = [];
+                for (const el of selected_el) {
+                    o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                }
+            }
         });
 
         document.addEventListener("mousemove", (e) => {
@@ -35,13 +43,23 @@ class x extends HTMLElement {
             o_e = null;
             move = false;
             document.getElementById("画布").style.cursor = "auto";
+            o_rects = [];
         });
-        var mouse = (e) => {
+        var mouse = (e: MouseEvent) => {
             if (o_e) {
-                let x = o_rect.x + (e.clientX - o_e.clientX),
-                    y = o_rect.y + (e.clientY - o_e.clientY);
-                this.style.left = x + "px";
-                this.style.top = y + "px";
+                if (o_rects.length != 0) {
+                    for (const xel of o_rects) {
+                        let x = xel.x + (e.clientX - o_e.clientX),
+                            y = xel.y + (e.clientY - o_e.clientY);
+                        xel.el.style.left = x + "px";
+                        xel.el.style.top = y + "px";
+                    }
+                } else {
+                    let x = o_rect.x + (e.clientX - o_e.clientX),
+                        y = o_rect.y + (e.clientY - o_e.clientY);
+                    this.style.left = x + "px";
+                    this.style.top = y + "px";
+                }
             }
         };
 
