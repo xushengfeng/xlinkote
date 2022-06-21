@@ -283,8 +283,16 @@ function creat_x_x(x: number, y: number, el: HTMLElement) {
 }
 
 document.onkeydown = (e) => {
-    if (e.key == "F11") {
-        e.preventDefault();
-        画布.requestFullscreen();
+    switch (e.key) {
+        case "F11":
+            e.preventDefault();
+            画布.requestFullscreen();
+            break;
+        case "Delete":
+            for (let el of selected_el) {
+                el.remove();
+            }
+            selected_el = [];
+            break;
     }
 };
