@@ -176,3 +176,9 @@ document.onkeydown = (e) => {
 function get_data() {
     return O.innerHTML.replaceAll(document.getElementById("x-x_bar").outerHTML, "");
 }
+
+var md = window.markdownit({
+    html: true,
+    linkify: true,
+    typographer: true,
+});

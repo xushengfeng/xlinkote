@@ -76,13 +76,26 @@ class x extends HTMLElement {
 }
 window.customElements.define("x-x", x);
 // markdown
-class md extends HTMLElement {
+class markdown extends HTMLElement {
     constructor() {
         super();
         this.value = "";
     }
     connectedCallback() {
-        this.contentEditable = "true";
+        var b = document.createElement("div");
+        b.id = "t_md";
+        var s = document.createElement("div");
+        var text = document.createElement("textarea");
+        this.append(b);
+        this.append(s);
+        this.append(text);
+        b.onclick = () => {
+            text.classList.toggle("show_md");
+        };
+        text.oninput = () => {
+            this.value = text.value;
+            s.innerHTML = md.render(text.value);
+        };
     }
 }
-window.customElements.define("x-md", md);
+window.customElements.define("x-md", markdown);

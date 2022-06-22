@@ -165,6 +165,35 @@ x-x > #x-x_bar > input[list="tags"] {
 .x-x_selected {
     outline: 1px solid #0000ff;
 }
+
+x-md {
+    position: relative;
+}
+#t_md {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
+x-md > textarea {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    top: 0;
+    left: 100%;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    outline: none;
+    border: none;
+}
+
+.show_md {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
 @media (max-width: 900px) {
 }
 
