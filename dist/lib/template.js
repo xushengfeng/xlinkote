@@ -71,7 +71,7 @@ class x extends HTMLElement {
             add_event(this.childNodes[1]);
         var md = document.createElement("x-md");
         this.append(md);
-        md.focus();
+        md.edit();
     }
 }
 window.customElements.define("x-x", x);
@@ -97,6 +97,9 @@ class markdown extends HTMLElement {
             this.value = text.value;
             s.innerHTML = md.render(text.value);
         };
+    }
+    edit() {
+        this.querySelector("#t_md").click();
     }
 }
 window.customElements.define("x-md", markdown);
