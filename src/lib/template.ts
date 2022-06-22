@@ -92,7 +92,26 @@ class x extends HTMLElement {
 
         this.insertAdjacentHTML("beforeend", html);
         if (this.childNodes[1]) add_event(<HTMLInputElement>this.childNodes[1]);
+
+        var md = document.createElement("x-md");
+        this.append(md);
+        md.focus();
     }
 }
 
 window.customElements.define("x-x", x);
+
+// markdown
+class md extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    value = "";
+
+    connectedCallback() {
+        this.contentEditable = "true";
+    }
+}
+
+window.customElements.define("x-md", md);

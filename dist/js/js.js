@@ -45,8 +45,7 @@ document.onmouseup = (e) => {
     mouse(e);
     if (e.button == 0 && selected_el.length == 0 && move) {
         let r = e2rect(o_e, e);
-        let p = document.createElement("p");
-        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop, p);
+        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop);
     }
     o_e = null;
     if (!move && e.button == 2)
@@ -102,119 +101,6 @@ function select_x_x(rect) {
         }
     }
 }
-var x_x_types = [
-    "address",
-    "article",
-    "aside",
-    "footer",
-    "header",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "main",
-    "nav",
-    "section",
-    "blockquote",
-    "dd",
-    "div",
-    "dl",
-    "dt",
-    "figcaption",
-    "figure",
-    "hr",
-    "li",
-    "menu",
-    "ol",
-    "p",
-    "pre",
-    "ul",
-    "a",
-    "abbr",
-    "b",
-    "bdi",
-    "bdo",
-    "br",
-    "cite",
-    "code",
-    "data",
-    "dfn",
-    "em",
-    "i",
-    "kbd",
-    "mark",
-    "q",
-    "rp",
-    "rt",
-    "ruby",
-    "s",
-    "samp",
-    "small",
-    "span",
-    "strong",
-    "sub",
-    "sup",
-    "time",
-    "u",
-    "var",
-    "wbr",
-    "area",
-    "audio",
-    "img",
-    "map",
-    "track",
-    "video",
-    "embed",
-    "iframe",
-    "object",
-    "picture",
-    "portal",
-    "source",
-    "canvas",
-    "del",
-    "ins",
-    "caption",
-    "col",
-    "colgroup",
-    "table",
-    "tbody",
-    "td",
-    "tfoot",
-    "th",
-    "thead",
-    "tr",
-    "button",
-    "datalist",
-    "fieldset",
-    "form",
-    "input",
-    "label",
-    "legend",
-    "meter",
-    "optgroup",
-    "option",
-    "output",
-    "progress",
-    "select",
-    "textarea",
-    "details",
-    "dialog",
-    "summary",
-    "content",
-    "shadow",
-    "slot",
-    "template",
-];
-var tags_data = document.createElement("datalist");
-tags_data.id = "tags";
-for (const i of x_x_types) {
-    let op = document.createElement("option");
-    op.value = i;
-    tags_data.append(op);
-}
-document.body.append(tags_data);
 document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";
     O.style.left = "0px";
@@ -237,33 +123,14 @@ function context_menu(e) {
     menu.style.top = e.clientY + "px";
     menu.classList.add("上下文菜单展示");
     document.getElementById("在此新建").onmousedown = () => {
-        let input = document.createElement("input");
-        input.className = "add_tag";
-        input.style.left = x + "px";
-        input.style.top = y + "px";
-        O.append(input);
-        setTimeout(() => {
-            input.focus();
-        }, 10);
-        input.onchange = () => {
-            let el = document.createElement(input.value);
-            creat_x_x(x, y, el);
-            input.remove();
-        };
-        input.onblur = () => {
-            input.remove();
-        };
+        creat_x_x(x, y);
     };
 }
-function creat_x_x(x, y, el) {
+function creat_x_x(x, y) {
     let xel = document.createElement("x-x");
-    el.contentEditable = "true";
     xel.style.left = x + "px";
     xel.style.top = y + "px";
     O.append(xel);
-    xel.append(el);
-    add_event(el);
-    el.focus();
 }
 function add_event(el) {
     el.onkeydown = (e) => {
@@ -275,7 +142,7 @@ function add_event(el) {
         if (e.key == "Enter") {
             e.preventDefault();
             let x = xel.offsetLeft, y = xel.offsetTop + xel.offsetHeight;
-            creat_x_x(x, y, document.createElement("p"));
+            creat_x_x(x, y);
         }
     };
 }
