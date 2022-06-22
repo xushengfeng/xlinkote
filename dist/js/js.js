@@ -176,9 +176,21 @@ function get_data() {
                 continue;
             values[eel.tagName] = eel.value;
         }
-        l.push({ posi: { x: el.offsetLeft, y: el.offsetTop }, values });
+        l.push({ style: el.getAttribute("style"), values });
     }
     return l;
+}
+function set_data(l) {
+    for (const x of l) {
+        let el = document.createElement("x-x");
+        O.append(el);
+        el.setAttribute("style", x.style);
+        for (let i in x.values) {
+            let eel = document.createElement(i);
+            el.append(eel);
+            eel.value = x.values[i];
+        }
+    }
 }
 var md = window.markdownit({
     html: true,

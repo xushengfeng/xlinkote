@@ -92,7 +92,7 @@ class markdown extends HTMLElement {
         super();
     }
 
-    value = "";
+    _value = "";
 
     connectedCallback() {
         var b = document.createElement("div");
@@ -108,13 +108,22 @@ class markdown extends HTMLElement {
             text.focus();
         };
         text.oninput = () => {
-            this.value = text.value;
+            this._value = text.value;
             s.innerHTML = md.render(text.value);
         };
     }
 
     edit() {
         (<HTMLElement>this.querySelector("#t_md")).click();
+    }
+
+    set value(v) {
+        this._value = this.querySelector("textarea").value = v;
+        this.querySelector("div:nth-child(2)").innerHTML = md.render(v);
+    }
+
+    get value() {
+        return this._value;
     }
 }
 
