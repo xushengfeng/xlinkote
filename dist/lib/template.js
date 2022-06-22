@@ -9,10 +9,8 @@ class x extends HTMLElement {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
         var size = document.createElement("input");
-        var tag_type = document.createElement("input");
         var d = document.createElement("div");
         bar.append(size);
-        bar.append(tag_type);
         bar.append(d);
         this.append(bar);
         var o_e;
@@ -63,18 +61,6 @@ class x extends HTMLElement {
             let l = size.value.split(",");
             this.style.width = l[0];
             this.style.height = l[1];
-        };
-        tag_type.setAttribute("list", "tags");
-        tag_type.onchange = () => {
-            if (this.childNodes[1]) {
-                let n_tag = document.createElement(tag_type.value);
-                n_tag.contentEditable = "true";
-                n_tag.innerHTML =
-                    this.childNodes[1].value || this.childNodes[1].innerHTML;
-                this.childNodes[1].replaceWith(n_tag);
-                tag_type.value = "";
-                tag_type.blur();
-            }
         };
         d.onclick = () => {
             this.remove();
