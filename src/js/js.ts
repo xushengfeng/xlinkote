@@ -114,8 +114,12 @@ document.getElementById("归位").onclick = () => {
 };
 
 document.getElementById("画布").onwheel = (e) => {
-    O.style.left = O.offsetLeft - e.deltaX + "px";
-    O.style.top = O.offsetTop - e.deltaY + "px";
+    if (e.shiftKey && !e.deltaX) {
+        O.style.left = O.offsetLeft - e.deltaY + "px";
+    } else {
+        O.style.left = O.offsetLeft - e.deltaX + "px";
+        O.style.top = O.offsetTop - e.deltaY + "px";
+    }
 };
 
 var menu = document.getElementById("上下文菜单");
