@@ -144,6 +144,9 @@ function creat_x_x(x: number, y: number) {
     xel.style.left = x + "px";
     xel.style.top = y + "px";
     O.append(xel);
+    var md = document.createElement("x-md");
+    xel.append(md);
+    (<markdown>md).edit();
 }
 
 function add_event(el: HTMLElement) {
