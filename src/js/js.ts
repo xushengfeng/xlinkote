@@ -174,7 +174,18 @@ document.onkeydown = (e) => {
 };
 
 function get_data() {
-    return O.innerHTML.replaceAll(document.getElementById("x-x_bar").outerHTML, "");
+    let l = [];
+    for (let i of O.childNodes) {
+        let el = <HTMLElement>i;
+        let values = {};
+        for (let k of el.childNodes) {
+            let eel = <HTMLInputElement>k;
+            if (eel.id == "x-x_bar") continue;
+            values[eel.tagName] = eel.value;
+        }
+        l.push({ posi: { x: el.offsetLeft, y: el.offsetTop }, values });
+    }
+    return l;
 }
 
 var md = window.markdownit({
