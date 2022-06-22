@@ -91,6 +91,7 @@ class markdown extends HTMLElement {
         this.append(text);
         b.onclick = () => {
             text.classList.toggle("show_md");
+            text.focus();
         };
         text.oninput = () => {
             this.value = text.value;
