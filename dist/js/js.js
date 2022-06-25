@@ -270,3 +270,9 @@ async function write_file(text) {
         URL.revokeObjectURL(String(blob));
     }
 }
+document.getElementById("toggle_md").onclick = () => {
+    if (focus_md) {
+        focus_md.edit();
+    }
+};
+var focus_md = null;

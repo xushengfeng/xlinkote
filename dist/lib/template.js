@@ -74,18 +74,11 @@ class markdown extends HTMLElement {
         this._value = "";
     }
     connectedCallback() {
-        var b = document.createElement("div");
-        b.id = "t_md";
         var s = document.createElement("div");
         s.id = "h";
         var text = document.createElement("textarea");
-        this.append(b);
         this.append(s);
         this.append(text);
-        b.onclick = () => {
-            text.classList.toggle("show_md");
-            text.focus();
-        };
         var l = md.parse(text.value, {
             references: {},
         });
@@ -115,6 +108,18 @@ class markdown extends HTMLElement {
                 text.style.top = y + "px";
             }
         };
+        text.addEventListener("keydown", (e) => {
+            if (e.ctrlKey) {
+                if (e.key == "/") {
+                    e.preventDefault();
+                    text.classList.toggle("show_md");
+                    text.focus();
+                }
+            }
+        });
+        text.onblur = () => {
+            focus_md = this;
+        };
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = e.target;
@@ -126,7 +131,9 @@ class markdown extends HTMLElement {
         };
     }
     edit() {
-        this.querySelector("#t_md").click();
+        var text = this.querySelector("textarea");
+        text.classList.toggle("show_md");
+        text.focus();
     }
     set value(v) {
         this._value = this.querySelector("textarea").value = v;
