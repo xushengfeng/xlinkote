@@ -105,6 +105,14 @@ class markdown extends HTMLElement {
                 text.style.top = el.offsetTop + el.offsetHeight + "px";
             }
         };
+        s.onclick = (e) => {
+            let el = e.target;
+            text.style.left = el.offsetLeft + "px";
+            text.style.top = el.offsetTop + el.offsetHeight + "px";
+            let line = el_line(text, index, s, el);
+            text_set_line(text, line);
+            text.focus();
+        };
     }
     edit() {
         this.querySelector("#t_md").click();
@@ -144,4 +152,24 @@ function text_get_line(text) {
             return line;
     }
     return 1;
+}
+function el_line(text, index, s, iel) {
+    for (let l_i of Object.keys(index)) {
+        let t_l = index[l_i];
+        if (t_l) {
+            let el = s.querySelectorAll(`#h > ${index[l_i][0]}`)[index[l_i][1] - 1];
+            if (el == iel)
+                return Number(l_i);
+        }
+    }
+}
+function text_set_line(text, n) {
+    let line = 1;
+    let value = text.value;
+    for (let t in value) {
+        if (line == n)
+            text.selectionStart = text.selectionEnd = Number(t) + (Number(t) == value.length - 1 ? 1 : 0);
+        if (value[t] == "\n")
+            line++;
+    }
 }
