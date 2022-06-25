@@ -209,11 +209,13 @@ function set_data(l: Array<{ style: string; values: object }>) {
     }
 }
 
-var md = window.markdownit({
-    html: true,
-    linkify: true,
-    typographer: true,
-});
+var md = window
+    .markdownit({
+        html: true,
+        linkify: true,
+        typographer: true,
+    })
+    .use(window.markdownitTaskLists);
 
 window.MathJax = {
     tex: {

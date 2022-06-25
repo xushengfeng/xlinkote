@@ -197,11 +197,13 @@ function set_data(l) {
         }
     }
 }
-var md = window.markdownit({
+var md = window
+    .markdownit({
     html: true,
     linkify: true,
     typographer: true,
-});
+})
+    .use(window.markdownitTaskLists);
 window.MathJax = {
     tex: {
         inlineMath: [["$", "$"]],

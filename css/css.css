@@ -200,6 +200,11 @@ x-md > textarea {
     pointer-events: all !important;
 }
 
+.contains-task-list {
+    list-style: none;
+    padding-inline-start: 16px;
+}
+
 @media (max-width: 900px) {
 }
 
