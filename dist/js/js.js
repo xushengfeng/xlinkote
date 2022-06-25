@@ -200,3 +200,64 @@ var md = window.markdownit({
     linkify: true,
     typographer: true,
 });
+var upload_el = document.getElementById("upload_i");
+var fileHandle;
+if (window.showOpenFilePicker) {
+    document.getElementById("上传文件").onclick = file_load;
+}
+else {
+    document.getElementById("上传文件").onclick = () => {
+        upload_el.click();
+    };
+    upload_el.onchange = file_load;
+}
+async function file_load() {
+    let file;
+    if (window.showOpenFilePicker) {
+        [fileHandle] = await window.showOpenFilePicker({
+            types: [
+                {
+                    description: "JSON",
+                    accept: {
+                        "text/*": [".json"],
+                    },
+                },
+            ],
+            excludeAcceptAllOption: true,
+        });
+        if (fileHandle.kind != "file")
+            return;
+        file = await fileHandle.getFile();
+    }
+    else {
+        file = upload_el.files[0];
+    }
+    let reader = new FileReader();
+    reader.onload = () => {
+        let o = JSON.parse(reader.result);
+        set_data(o);
+    };
+    reader.readAsText(file);
+}
+document.getElementById("保存文件").onclick = () => {
+    write_file(JSON.stringify(get_data()));
+};
+async function write_file(text) {
+    if (fileHandle && (await fileHandle.requestPermission({ mode: "readwrite" })) === "granted") {
+        const writable = await fileHandle.createWritable();
+        await writable.write(text);
+        await writable.close();
+    }
+    else {
+        let a = document.createElement("a");
+        let blob = new Blob([text]);
+        a.download = `note-${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000)
+            .toISOString()
+            .slice(0, 19)
+            .replaceAll(":", "-")
+            .replace("T", "-")}.json`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        URL.revokeObjectURL(String(blob));
+    }
+}
