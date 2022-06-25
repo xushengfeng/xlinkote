@@ -202,6 +202,11 @@ var md = window.markdownit({
     linkify: true,
     typographer: true,
 });
+window.MathJax = {
+    tex: {
+        inlineMath: [["$", "$"]],
+    },
+};
 var upload_el = document.getElementById("upload_i");
 var fileHandle;
 if (window.showOpenFilePicker) {

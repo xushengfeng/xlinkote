@@ -215,6 +215,12 @@ var md = window.markdownit({
     typographer: true,
 });
 
+window.MathJax = {
+    tex: {
+        inlineMath: [["$", "$"]],
+    },
+};
+
 var upload_el = <HTMLInputElement>document.getElementById("upload_i");
 
 var fileHandle;

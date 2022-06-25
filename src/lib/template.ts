@@ -111,6 +111,7 @@ class markdown extends HTMLElement {
                 references: {},
             });
             this.index = line_el(l);
+            window.MathJax.typeset();
         };
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
@@ -151,6 +152,7 @@ class markdown extends HTMLElement {
             references: {},
         });
         this.index = line_el(l);
+        window.MathJax.typeset();
     }
 
     get value() {
