@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "jsxgraph": "^1.4.4",
     "markdown-it": "^13.0.1",
     "markdown-it-task-lists": "^2.1.1",
     "mathjax": "^3.2.2"
