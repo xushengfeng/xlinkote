@@ -154,7 +154,7 @@ class markdown extends HTMLElement {
 
     set value(v) {
         this._value = this.querySelector("textarea").value = v;
-        this.querySelector("div:nth-child(2)").innerHTML = md.render(v);
+        this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
         var l = md.parse(v, {
             references: {},
         });
