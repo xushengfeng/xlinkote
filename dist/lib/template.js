@@ -107,8 +107,11 @@ class markdown extends HTMLElement {
             let t_l = index[l_i];
             if (t_l) {
                 let el = s.querySelectorAll(`#h > ${index[l_i][0]}`)[index[l_i][1] - 1];
-                text.style.left = el.offsetLeft + "px";
-                text.style.top = el.offsetTop + el.offsetHeight + "px";
+                let x = el.offsetLeft, y = el.offsetTop + el.offsetHeight;
+                O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
+                O.style.top = O.offsetTop - (y - text.offsetTop) + "px";
+                text.style.left = x + "px";
+                text.style.top = y + "px";
             }
         };
         // 点击元素定位到源文本行
