@@ -89,24 +89,24 @@ class markdown extends HTMLElement {
         var l = md.parse(text.value, {
             references: {},
         });
-        var index = line_el(l);
+        this.index = line_el(l);
         text.oninput = () => {
             this._value = text.value;
             s.innerHTML = md.render(text.value);
             l = md.parse(text.value, {
                 references: {},
             });
-            index = line_el(l);
+            this.index = line_el(l);
         };
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             let l_i = text_get_line(text);
-            while (!index[l_i] && l_i <= Object.keys(index).length) {
+            while (!this.index[l_i] && l_i <= Object.keys(this.index).length) {
                 l_i++;
             }
-            let t_l = index[l_i];
+            let t_l = this.index[l_i];
             if (t_l) {
-                let el = s.querySelectorAll(`#h > ${index[l_i][0]}`)[index[l_i][1] - 1];
+                let el = s.querySelectorAll(`#h > ${this.index[l_i][0]}`)[this.index[l_i][1] - 1];
                 let x = el.offsetLeft, y = el.offsetTop + el.offsetHeight;
                 O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
                 O.style.top = O.offsetTop - (y - text.offsetTop) + "px";
@@ -119,7 +119,7 @@ class markdown extends HTMLElement {
             let el = e.target;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
-            let line = el_line(text, index, s, el);
+            let line = el_line(text, this.index, s, el);
             text_set_line(text, line);
             text.focus();
         };
@@ -130,6 +130,10 @@ class markdown extends HTMLElement {
     set value(v) {
         this._value = this.querySelector("textarea").value = v;
         this.querySelector("div:nth-child(2)").innerHTML = md.render(v);
+        var l = md.parse(v, {
+            references: {},
+        });
+        this.index = line_el(l);
     }
     get value() {
         return this._value;
