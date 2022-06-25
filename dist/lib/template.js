@@ -216,10 +216,11 @@ class graph extends HTMLElement {
         s.style.width = "500px";
         s.style.height = "500px";
         var text = document.createElement("textarea");
+        text.value = this.getAttribute("value") || this.innerText;
+        this.innerHTML = "";
         this.append(b);
         this.append(s);
         this.append(text);
-        text.value = this.getAttribute("value");
         if (text.value)
             eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
         b.onclick = () => {
