@@ -77,6 +77,7 @@ class markdown extends HTMLElement {
         var b = document.createElement("div");
         b.id = "t_md";
         var s = document.createElement("div");
+        s.id = "h";
         var text = document.createElement("textarea");
         this.append(b);
         this.append(s);
@@ -85,9 +86,24 @@ class markdown extends HTMLElement {
             text.classList.toggle("show_md");
             text.focus();
         };
+        var index = {};
         text.oninput = () => {
             this._value = text.value;
             s.innerHTML = md.render(text.value);
+            let l = md.parse(text.value);
+            index = line_el(l);
+        };
+        text.onclick = text.onkeyup = () => {
+            let l_i = text_get_line(text);
+            while (!index[l_i] && l_i <= Object.keys(index).length) {
+                l_i++;
+            }
+            let t_l = index[l_i];
+            if (t_l) {
+                let el = s.querySelectorAll(`#h > ${index[l_i][0]}`)[index[l_i][1] - 1];
+                text.style.left = el.offsetLeft + "px";
+                text.style.top = el.offsetTop + el.offsetHeight + "px";
+            }
         };
     }
     edit() {
@@ -102,3 +118,30 @@ class markdown extends HTMLElement {
     }
 }
 window.customElements.define("x-md", markdown);
+function line_el(l) {
+    let o = {};
+    let line2el = {};
+    for (let i of l) {
+        if (i.type.includes("open")) {
+            if (o[i.tag]) {
+                o[i.tag]++;
+            }
+            else {
+                o[i.tag] = 1;
+            }
+            line2el[i.map[1]] = [i.tag, o[i.tag]];
+        }
+    }
+    return line2el;
+}
+function text_get_line(text) {
+    let value = text.value;
+    let line = 1;
+    for (let t in value) {
+        if (value[t] == "\n")
+            line++;
+        if (Number(t) + 1 == text.selectionStart)
+            return line;
+    }
+    return 1;
+}
