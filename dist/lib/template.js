@@ -86,11 +86,14 @@ class markdown extends HTMLElement {
             text.classList.toggle("show_md");
             text.focus();
         };
-        var index = {};
+        var l = md.parse(text.value, {
+            references: {},
+        });
+        var index = line_el(l);
         text.oninput = () => {
             this._value = text.value;
             s.innerHTML = md.render(text.value);
-            let l = md.parse(text.value, {
+            l = md.parse(text.value, {
                 references: {},
             });
             index = line_el(l);
