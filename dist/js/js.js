@@ -110,6 +110,8 @@ document.getElementById("归位").onclick = () => {
     }, 400);
 };
 document.getElementById("画布").onwheel = (e) => {
+    if (e.target.tagName == "TEXTAREA")
+        return;
     if (e.shiftKey && !e.deltaX) {
         O.style.left = O.offsetLeft - e.deltaY + "px";
     }

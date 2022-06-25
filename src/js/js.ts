@@ -114,6 +114,7 @@ document.getElementById("归位").onclick = () => {
 };
 
 document.getElementById("画布").onwheel = (e) => {
+    if ((<HTMLElement>e.target).tagName == "TEXTAREA") return;
     if (e.shiftKey && !e.deltaX) {
         O.style.left = O.offsetLeft - e.deltaY + "px";
     } else {
