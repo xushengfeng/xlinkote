@@ -90,7 +90,9 @@ class markdown extends HTMLElement {
         text.oninput = () => {
             this._value = text.value;
             s.innerHTML = md.render(text.value);
-            let l = md.parse(text.value);
+            let l = md.parse(text.value, {
+                references: {},
+            });
             index = line_el(l);
         };
         // 光标移动或点击以移动光标时定位到相应元素
