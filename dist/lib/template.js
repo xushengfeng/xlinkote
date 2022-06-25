@@ -93,6 +93,7 @@ class markdown extends HTMLElement {
             let l = md.parse(text.value);
             index = line_el(l);
         };
+        // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             let l_i = text_get_line(text);
             while (!index[l_i] && l_i <= Object.keys(index).length) {
@@ -105,6 +106,7 @@ class markdown extends HTMLElement {
                 text.style.top = el.offsetTop + el.offsetHeight + "px";
             }
         };
+        // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = e.target;
             text.style.left = el.offsetLeft + "px";
@@ -126,6 +128,7 @@ class markdown extends HTMLElement {
     }
 }
 window.customElements.define("x-md", markdown);
+// 获取行->元素
 function line_el(l) {
     let o = {};
     let line2el = {};
@@ -142,6 +145,7 @@ function line_el(l) {
     }
     return line2el;
 }
+// 获取当前定位的行数
 function text_get_line(text) {
     let value = text.value;
     let line = 1;
@@ -153,6 +157,7 @@ function text_get_line(text) {
     }
     return 1;
 }
+// 获取元素->行
 function el_line(text, index, s, iel) {
     for (let l_i of Object.keys(index)) {
         let t_l = index[l_i];
@@ -163,6 +168,7 @@ function el_line(text, index, s, iel) {
         }
     }
 }
+// 定位到行
 function text_set_line(text, n) {
     let line = 1;
     let value = text.value;
