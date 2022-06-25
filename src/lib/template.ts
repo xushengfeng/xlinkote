@@ -138,6 +138,7 @@ class markdown extends HTMLElement {
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
+            if (el.tagName == "TEXTAREA") return;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
             let line = el_line(text, this.index, s, el);
@@ -217,3 +218,52 @@ function text_set_line(text: HTMLTextAreaElement, n: number) {
         if (value[t] == "\n") line++;
     }
 }
+
+// 几何图形
+class graph extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value = "";
+
+    connectedCallback() {
+        var b = document.createElement("div");
+        b.id = "t_md";
+        var s = document.createElement("div");
+        s.id = `g${new Date().getTime()}`;
+        s.style.width = "500px";
+        s.style.height = "500px";
+        var text = document.createElement("textarea");
+        this.append(b);
+        this.append(s);
+        this.append(text);
+
+        text.value = this.getAttribute("value");
+        if (text.value)
+            eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
+
+        b.onclick = () => {
+            text.classList.toggle("show_md");
+            text.focus();
+        };
+        text.oninput = () => {
+            this._value = text.value;
+            this.setAttribute("value", text.value);
+        };
+        text.onchange = () => {
+            eval(text.value.replace("gid", s.id));
+        };
+    }
+
+    set value(v) {
+        this._value = this.querySelector("textarea").value = v;
+        eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
+    }
+
+    get value() {
+        return this._value;
+    }
+}
+
+window.customElements.define("x-graph", graph);

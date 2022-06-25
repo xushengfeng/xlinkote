@@ -205,6 +205,17 @@ x-md > textarea {
     padding-inline-start: 16px;
 }
 
+x-graph > textarea {
+    opacity: 0;
+    pointer-events: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    outline: none;
+    border: none;
+}
+
 @media (max-width: 900px) {
 }
 
