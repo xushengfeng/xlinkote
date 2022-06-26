@@ -218,7 +218,12 @@ x-graph > textarea {
     border: none;
 }
 
-@media (max-width: 900px) {
+@media (any-pointer: coarse) {
+    #items > div > div,
+    #tabs > div {
+        padding: 8px !important;
+        margin: 0 !important;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
