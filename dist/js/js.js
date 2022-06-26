@@ -187,7 +187,6 @@ function creat_x_x(x, y) {
     O.append(xel);
     var md = document.createElement("x-md");
     xel.append(md);
-    md.edit();
 }
 function add_event(el) {
     el.onkeydown = (e) => {
