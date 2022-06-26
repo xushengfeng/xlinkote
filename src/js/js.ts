@@ -239,17 +239,17 @@ function get_data() {
         let values = {};
         for (let k of el.childNodes) {
             let eel = <HTMLInputElement>k;
-            if (eel.id == "x-x_bar") continue;
+            if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
             values[eel.tagName] = eel.value;
         }
-        l.push({ style: el.getAttribute("style"), values });
+        l.push({ style: el.getAttribute("style"), values, tag: el.tagName });
     }
     return l;
 }
 
-function set_data(l: Array<{ style: string; values: object }>) {
+function set_data(l: Array<{ style: string; values: object; tag: string }>) {
     for (const x of l) {
-        let el = document.createElement("x-x");
+        let el = document.createElement(x.tag);
         O.append(el);
         el.setAttribute("style", x.style);
         for (let i in x.values) {

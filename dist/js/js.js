@@ -224,17 +224,17 @@ function get_data() {
         let values = {};
         for (let k of el.childNodes) {
             let eel = k;
-            if (eel.id == "x-x_bar")
+            if (eel.id == "x-x_bar" || eel.id == "x-x_page")
                 continue;
             values[eel.tagName] = eel.value;
         }
-        l.push({ style: el.getAttribute("style"), values });
+        l.push({ style: el.getAttribute("style"), values, tag: el.tagName });
     }
     return l;
 }
 function set_data(l) {
     for (const x of l) {
-        let el = document.createElement("x-x");
+        let el = document.createElement(x.tag);
         O.append(el);
         el.setAttribute("style", x.style);
         for (let i in x.values) {
