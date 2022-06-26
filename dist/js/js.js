@@ -83,9 +83,13 @@ var mouse = (e) => {
 };
 var o_touch_e;
 document.ontouchstart = (e) => {
-    o_touch_e = e;
-    o_rect = { x: O.offsetLeft, y: O.offsetTop };
-    document.getElementById("画布").style.cursor = "move";
+    let el = e.changedTouches[0].target;
+    if (el == document.querySelector("#画布") ||
+        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA")) {
+        o_touch_e = e;
+        o_rect = { x: O.offsetLeft, y: O.offsetTop };
+        document.getElementById("画布").style.cursor = "move";
+    }
 };
 document.ontouchmove = (e) => {
     pointer(e);
