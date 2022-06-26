@@ -307,3 +307,14 @@ document.getElementById("toggle_md").onclick = () => {
 };
 
 var focus_md = null;
+
+document.getElementById("新建元素").onclick = () => {
+    creat_x_x(0, 0);
+};
+
+document.getElementById("删除元素").onclick = () => {
+    for (let i of selected_el) {
+        i.remove();
+    }
+    if (focus_md) focus_md.remove();
+};
