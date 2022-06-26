@@ -76,6 +76,8 @@ class x extends HTMLElement {
 
 window.customElements.define("x-x", x);
 
+var parse;
+
 // markdown
 class markdown extends HTMLElement {
     constructor() {
@@ -103,6 +105,7 @@ class markdown extends HTMLElement {
             l = md.parse(text.value, {
                 references: {},
             });
+            parse = l;
             this.index = line_el(l);
             window.MathJax.typeset();
         };
