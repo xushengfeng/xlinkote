@@ -98,7 +98,12 @@ class page extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
+        style.value = this.getAttribute("style");
         this.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
+
+        style.onfocus = () => {
+            style.value = this.getAttribute("style");
+        };
 
         style.oninput = () => {
             this.setAttribute("style", style.value);
