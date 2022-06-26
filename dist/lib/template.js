@@ -217,6 +217,7 @@ class graph extends HTMLElement {
         s.style.height = "500px";
         var text = document.createElement("textarea");
         text.value = this.getAttribute("value") || this.innerText;
+        this.setAttribute("value", text.value);
         this.innerHTML = "";
         this.append(b);
         this.append(s);
