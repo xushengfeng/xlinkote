@@ -86,12 +86,14 @@ body {
     bottom: 10px;
     display: flex;
 }
-#导航 button {
+#导航 div {
     width: 16px;
     height: 16px;
     background-color: #eee;
     border-radius: 8px;
     border: none;
+    margin-left: 8px;
+    cursor: pointer;
 }
 
 #上下文菜单 {

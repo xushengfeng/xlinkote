@@ -19,6 +19,13 @@ var o_e;
 var o_rect;
 var move = false;
 var select_id = "";
+var fxsd_el = document.getElementById("方向锁定");
+var fxsd = 0;
+fxsd_el.onclick = () => {
+    let o = { 0: 1, 1: 2, 2: 0 };
+    fxsd = o[fxsd];
+    fxsd_el.innerText = String(fxsd);
+};
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
         if (e.button == 2) {
@@ -59,7 +66,7 @@ document.onmouseup = (e) => {
 var mouse = (e) => {
     if (o_e) {
         if (e.buttons == 2) {
-            let x = o_rect.x + (e.clientX - o_e.clientX), y = o_rect.y + (e.clientY - o_e.clientY);
+            let x = o_rect.x + (fxsd == 0 || fxsd == 2 ? e.clientX - o_e.clientX : 0), y = o_rect.y + (fxsd == 0 || fxsd == 1 ? e.clientY - o_e.clientY : 0);
             O.style.left = x + "px";
             O.style.top = y + "px";
         }
@@ -109,7 +116,9 @@ var pointer_move = true;
 var pointer = (e) => {
     if (o_touch_e) {
         if (pointer_move) {
-            let x = o_rect.x + (e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX), y = o_rect.y + (e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY);
+            let x = o_rect.x +
+                (fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0), y = o_rect.y +
+                (fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0);
             O.style.left = x + "px";
             O.style.top = y + "px";
         }
@@ -147,11 +156,14 @@ document.getElementById("画布").onwheel = (e) => {
     if (e.target.tagName == "TEXTAREA")
         return;
     if (e.shiftKey && !e.deltaX) {
-        O.style.left = O.offsetLeft - e.deltaY + "px";
+        if (fxsd == 0 || fxsd == 2)
+            O.style.left = O.offsetLeft - e.deltaY + "px";
     }
     else {
-        O.style.left = O.offsetLeft - e.deltaX + "px";
-        O.style.top = O.offsetTop - e.deltaY + "px";
+        if (fxsd == 0 || fxsd == 2)
+            O.style.left = O.offsetLeft - e.deltaX + "px";
+        if (fxsd == 0 || fxsd == 1)
+            O.style.top = O.offsetTop - e.deltaY + "px";
     }
 };
 var menu = document.getElementById("上下文菜单");
