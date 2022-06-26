@@ -171,6 +171,7 @@ class markdown extends HTMLElement {
             text_set_line(text, line);
             text.focus();
         };
+        this.edit();
     }
     edit() {
         var text = this.querySelector("textarea");
