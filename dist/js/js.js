@@ -81,6 +81,36 @@ var mouse = (e) => {
         }
     }
 };
+var o_touch_e;
+document.ontouchstart = (e) => {
+    o_touch_e = e;
+    o_rect = { x: O.offsetLeft, y: O.offsetTop };
+    document.getElementById("画布").style.cursor = "move";
+};
+document.ontouchmove = (e) => {
+    pointer(e);
+    if (o_touch_e)
+        move = true;
+};
+document.ontouchend = (e) => {
+    pointer(e);
+    o_touch_e = null;
+    move = false;
+    document.getElementById("画布").style.cursor = "auto";
+    if (select_id)
+        document.getElementById(select_id).remove();
+    select_id = "";
+};
+var pointer_move = true;
+var pointer = (e) => {
+    if (o_touch_e) {
+        if (pointer_move) {
+            let x = o_rect.x + (e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX), y = o_rect.y + (e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY);
+            O.style.left = x + "px";
+            O.style.top = y + "px";
+        }
+    }
+};
 function e2rect(e0, e1) {
     let r0 = { x: e0.clientX - 画布.getBoundingClientRect().x, y: e0.clientY - 画布.getBoundingClientRect().y }, r1 = { x: e1.clientX - 画布.getBoundingClientRect().x, y: e1.clientY - 画布.getBoundingClientRect().y };
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
