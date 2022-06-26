@@ -215,6 +215,11 @@ document.onkeydown = (e) => {
             }
             selected_el = [];
             break;
+        case "Home":
+            if (e.ctrlKey) {
+                document.getElementById("归位").click();
+            }
+            break;
     }
 };
 function get_data() {
