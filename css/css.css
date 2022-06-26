@@ -5,6 +5,15 @@
     --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
     --bg1: #ffffff;
+    --icon-color: none;
+}
+
+.icon {
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    filter: var(--icon-color);
 }
 
 html {
@@ -86,7 +95,7 @@ body {
     bottom: 10px;
     display: flex;
 }
-#导航 div {
+#导航 > div {
     width: 16px;
     height: 16px;
     background-color: #eee;
@@ -94,6 +103,11 @@ body {
     border: none;
     margin-left: 8px;
     cursor: pointer;
+    position: relative;
+}
+#导航 > div > .icon {
+    width: 16px;
+    height: 16px;
 }
 
 #上下文菜单 {

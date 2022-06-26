@@ -24,7 +24,8 @@ var fxsd = 0;
 fxsd_el.onclick = () => {
     let o = { 0: 1, 1: 2, 2: 0 };
     fxsd = o[fxsd];
-    fxsd_el.innerText = String(fxsd);
+    let os = { 0: "./assets/icons/x_y.svg", 1: "./assets/icons/y.svg", 2: "./assets/icons/x.svg" };
+    fxsd_el.querySelector("img").src = os[fxsd];
 };
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
