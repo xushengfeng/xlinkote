@@ -344,3 +344,7 @@ document.getElementById("删除元素").onclick = () => {
     if (focus_md)
         focus_md.remove();
 };
+document.getElementById("新建页").onclick = () => {
+    let page = document.createElement("x-page");
+    O.append(page);
+};

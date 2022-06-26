@@ -184,6 +184,44 @@ x-x > #x-x_bar > input[list="tags"] {
     width: 50px;
 }
 
+x-page {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    box-sizing: border-box;
+}
+x-page > #x-page_bar {
+    display: flex;
+    position: absolute;
+    bottom: -16px;
+    transition: var(--transition);
+}
+x-page > #x-page_bar > * {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    height: 16px;
+}
+x-page > #x-page_bar > div {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+x-page > #x-page_bar > select {
+    border: none;
+    padding: 0;
+    outline: none;
+    margin-right: 4px;
+}
+x-page > #x-page_bar > input {
+    border: none;
+    padding: 0;
+    outline: none;
+    margin-right: 4px;
+    width: 300px;
+}
+
 .x-x_selected {
     outline: 1px solid #0000ff;
 }

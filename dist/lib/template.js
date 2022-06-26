@@ -67,6 +67,44 @@ class x extends HTMLElement {
     }
 }
 window.customElements.define("x-x", x);
+var x_x_types = ["x-md", "x-graph"];
+// 非自由 页
+class page extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        var bar = document.createElement("div");
+        bar.id = "x-page_bar";
+        var style = document.createElement("input");
+        var type = document.createElement("select");
+        var b = document.createElement("div");
+        var d = document.createElement("div");
+        bar.append(style);
+        bar.append(type);
+        bar.append(b);
+        bar.append(d);
+        this.append(bar);
+        this.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
+        style.oninput = () => {
+            this.setAttribute("style", style.value);
+        };
+        for (const i of x_x_types) {
+            let op = document.createElement("option");
+            op.value = i;
+            op.innerText = i;
+            type.append(op);
+        }
+        b.onclick = () => {
+            this.append(document.createElement(type.value));
+        };
+        d.onclick = () => {
+            this.remove();
+            selected_el = selected_el.filter((el) => el != this);
+        };
+    }
+}
+window.customElements.define("x-page", page);
 var parse;
 // markdown
 class markdown extends HTMLElement {
