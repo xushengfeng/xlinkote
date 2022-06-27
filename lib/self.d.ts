@@ -3,4 +3,5 @@ declare interface Window {
     showOpenFilePicker: any;
     MathJax: any;
     markdownitTaskLists: any;
+    JXG: any;
 }

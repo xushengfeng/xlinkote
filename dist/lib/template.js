@@ -267,8 +267,22 @@ class graph extends HTMLElement {
         this.append(b);
         this.append(s);
         this.append(text);
-        if (text.value)
-            eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
+        if (window.JXG) {
+            if (text.value)
+                eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
+        }
+        else {
+            let script = document.createElement("script");
+            script.src = "./node_modules/jsxgraph/distrib/jsxgraphcore.js";
+            this.append(script);
+            let style = document.createElement("link");
+            style.href = "./node_modules/jsxgraph/distrib/jsxgraph.css";
+            this.append(style);
+            script.onload = () => {
+                if (text.value)
+                    eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
+            };
+        }
         b.onclick = () => {
             text.classList.toggle("show_md");
             text.focus();
