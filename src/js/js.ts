@@ -363,4 +363,6 @@ document.getElementById("新建页").onclick = () => {
     let page = document.createElement("x-page");
     O.append(page);
     page.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
+    O.style.left = -page.offsetLeft + "px";
+    O.style.top = "0";
 };
