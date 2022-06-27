@@ -19,6 +19,30 @@
 html {
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #ddd;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+}
+::-webkit-scrollbar-track {
+    background: #0000;
+}
+::-webkit-scrollbar-button {
+    border-radius: 10px;
+    height: 8px;
+    width: 8px;
+    background-color: #ddd;
+}
+::-webkit-scrollbar-corner {
+    background-color: #0000;
+}
+
 body {
     margin: 0;
     overflow: hidden;
