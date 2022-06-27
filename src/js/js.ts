@@ -274,6 +274,9 @@ window.MathJax = {
     tex: {
         inlineMath: [["$", "$"]],
     },
+    options: {
+        enableMenu: false,
+    },
 };
 
 var upload_el = <HTMLInputElement>document.getElementById("upload_i");
