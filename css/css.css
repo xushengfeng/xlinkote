@@ -61,6 +61,10 @@ body {
 #nav > #items > div > div {
     margin: 0 4px;
 }
+#items > div > div,
+#tabs > div {
+    cursor: pointer;
+}
 #upload_i {
     display: none;
 }
