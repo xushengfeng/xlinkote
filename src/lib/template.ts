@@ -168,7 +168,7 @@ class markdown extends HTMLElement {
             }
             let t_l = this.index[l_i];
             if (t_l) {
-                let el = <HTMLElement>s.querySelectorAll(`#h > ${this.index[l_i][0]}`)[this.index[l_i][1] - 1];
+                let el = <HTMLElement>s.querySelectorAll(`${this.index[l_i][0]}`)[this.index[l_i][1] - 1];
                 let x = el.offsetLeft,
                     y = el.offsetTop + el.offsetHeight;
                 O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
@@ -230,8 +230,14 @@ window.customElements.define("x-md", markdown);
 function line_el(l: Array<any>) {
     let o = {};
     let line2el = {};
+    let list = false;
     for (let i of l) {
+        if (<string>i.type == "bullet_list_open") list = true;
+        if (<string>i.type == "bullet_list_close") list = false;
         if ((<string>i.type).includes("open")) {
+            if (i.tag == "p") {
+                if (list) continue;
+            }
             if (o[i.tag]) {
                 o[i.tag]++;
             } else {
