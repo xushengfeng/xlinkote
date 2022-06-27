@@ -241,7 +241,9 @@ function set_data(l) {
         try {
             let el = document.createElement(x.tag);
             O.append(el);
-            el.setAttribute("style", x.style);
+            setTimeout(() => {
+                el.setAttribute("style", x.style);
+            }, 0);
             for (let i in x.values) {
                 let eel = document.createElement(i);
                 el.append(eel);
@@ -338,4 +340,5 @@ document.getElementById("删除元素").onclick = () => {
 document.getElementById("新建页").onclick = () => {
     let page = document.createElement("x-page");
     O.append(page);
+    page.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
 };
