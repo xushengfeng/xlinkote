@@ -4,4 +4,5 @@ declare interface Window {
     MathJax: any;
     markdownitTaskLists: any;
     JXG: any;
+    markdownitContainer: any;
 }
