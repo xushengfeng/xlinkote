@@ -238,13 +238,18 @@ function get_data() {
 }
 function set_data(l) {
     for (const x of l) {
-        let el = document.createElement(x.tag);
-        O.append(el);
-        el.setAttribute("style", x.style);
-        for (let i in x.values) {
-            let eel = document.createElement(i);
-            el.append(eel);
-            eel.value = x.values[i];
+        try {
+            let el = document.createElement(x.tag);
+            O.append(el);
+            el.setAttribute("style", x.style);
+            for (let i in x.values) {
+                let eel = document.createElement(i);
+                el.append(eel);
+                eel.value = x.values[i];
+            }
+        }
+        catch (e) {
+            console.error(e);
         }
     }
 }
