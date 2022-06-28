@@ -162,6 +162,9 @@ x-sinppet {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
 }
 x-sinppet > div:nth-child(1) {
     width: 16px;
