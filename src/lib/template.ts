@@ -365,8 +365,13 @@ class symbols extends HTMLElement {
     }
 
     connectedCallback() {
+        var h = document.createElement("div");
+        this.append(h);
         var div = document.createElement("div");
         this.append(div);
+        h.onclick = () => {
+            this.classList.toggle("sinppet_h");
+        };
         for (const i in mathSymbols) {
             for (const j of mathSymbols[i]) {
                 let span = document.createElement("span");
