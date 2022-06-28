@@ -266,8 +266,8 @@ class graph extends HTMLElement {
         b.id = "t_md";
         var s = document.createElement("div");
         s.id = `g${new Date().getTime()}`;
-        s.style.width = "500px";
-        s.style.height = "500px";
+        // s.style.width = "500px";
+        // s.style.height = "500px";
         var text = document.createElement("textarea");
         text.value = this.getAttribute("value") || this.innerText;
         this.setAttribute("value", text.value);
