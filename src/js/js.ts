@@ -201,6 +201,8 @@ function creat_x_x(x: number, y: number) {
     O.append(xel);
     var md = document.createElement("x-md");
     xel.append(md);
+
+    data_changed();
 }
 
 function add_event(el: HTMLElement) {
@@ -333,7 +335,12 @@ document.getElementById("保存文件").onclick = () => {
     write_file(JSON.stringify(get_data()));
 };
 
+var saved = true;
+var file_name = "xlinkote";
+
 async function write_file(text: string) {
+    saved = true;
+    document.title = file_name;
     if (fileHandle && (await fileHandle.requestPermission({ mode: "readwrite" })) === "granted") {
         const writable = await fileHandle.createWritable();
         await writable.write(text);
@@ -349,6 +356,13 @@ async function write_file(text: string) {
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
+    }
+}
+
+function data_changed() {
+    if (saved) {
+        saved = false;
+        document.title = `・`;
     }
 }
 

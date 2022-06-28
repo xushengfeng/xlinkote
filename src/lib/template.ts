@@ -159,6 +159,8 @@ class markdown extends HTMLElement {
             parse = l;
             this.index = line_el(l);
             window.MathJax.typeset();
+
+            data_changed();
         };
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
