@@ -28,9 +28,9 @@
      showgrid="true"
      units="px"
      width="512px"
-     inkscape:zoom="1.9776937"
-     inkscape:cx="-10.871249"
-     inkscape:cy="119.0781"
+     inkscape:zoom="3.2"
+     inkscape:cx="48.28125"
+     inkscape:cy="122.03125"
      inkscape:window-width="1920"
      inkscape:window-height="1031"
      inkscape:window-x="0"
@@ -87,25 +87,43 @@
        inkscape:collect="always"
        xlink:href="#linearGradient1055"
        id="linearGradient1057"
-       x1="0"
-       y1="240"
-       x2="240"
-       y2="0"
+       x1="40"
+       y1="200"
+       x2="200"
+       y2="40"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:label="图层 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;fill-opacity:1"
+       id="rect3675"
+       width="240"
+       height="240"
+       x="0"
+       y="0"
+       ry="20" />
     <path
        style="fill:url(#linearGradient1057);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 0,240 C 0,240 67.376519,125.08232 120,90 150,70 240,0 240,0 240,0 200,80 160,130 124.66191,174.17261 90,190 0,240"
+       d="m 40,200 c 0,0 27.376519,-74.91768 80,-110 30,-20 80,-50 80,-50 0,0 -10,50 -50,90 -35.35534,35.35534 -40,40 -110,70"
        id="path750"
        sodipodi:nodetypes="cscsc" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:20;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="m 10,10 c 0,0 58.398431,-13.8437649 110,110 50,120 110,110 110,110"
+       style="fill:none;stroke:#333333;stroke-width:20;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 50,60 c 0,0 50,-20 70,60 20,80 70,60 70,60"
        id="path859"
-       sodipodi:nodetypes="csc" />
+       sodipodi:nodetypes="czc" />
+    <path
+       style="fill:none;stroke:#333333;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 70,50 50,60 70,70"
+       id="path3490"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;stroke:#333333;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m 170,170 20,10 -20,10"
+       id="path3492"
+       sodipodi:nodetypes="ccc" />
   </g>
 </svg>
