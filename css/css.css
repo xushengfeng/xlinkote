@@ -204,7 +204,8 @@ x-sinppet > div:nth-child(2) {
 x-x {
     position: absolute;
     display: block;
-    width: 60vw;
+    width: max-content;
+    min-width: 1em;
 }
 
 x-x:hover > #x-x_bar {
