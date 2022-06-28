@@ -324,7 +324,7 @@ async function write_file(text) {
     else {
         let a = document.createElement("a");
         let blob = new Blob([text]);
-        a.download = `note-${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000)
+        a.download = `xlinkote-${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000)
             .toISOString()
             .slice(0, 19)
             .replaceAll(":", "-")
