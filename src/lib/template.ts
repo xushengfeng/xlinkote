@@ -377,17 +377,38 @@ class symbols extends HTMLElement {
             }
         }
 
-        this.onclick = (e) => {
-            let el = <HTMLElement>e.target;
+        this.onmousedown = (e) => {
+            e.stopPropagation();
+            f(<HTMLElement>e.target);
+        };
+        this.ontouchstart = (e) => {
+            e.stopPropagation();
+            let el = <HTMLElement>e.changedTouches[0].target;
+            f(el);
+        };
+        var f = (el: HTMLElement) => {
+            let text = <HTMLTextAreaElement>document.activeElement;
+            if (text.tagName != "TEXTAREA") return;
             if (el.parentElement.id.includes("snippet")) {
                 for (let i in mathSymbols) {
                     for (let j of mathSymbols[i]) {
                         if ("snippet_" + j.source == el.parentElement.id) {
+                            let v = text.value;
+                            let se = v.substring(text.selectionStart, text.selectionEnd);
                             let s = <string>j.snippet;
                             let ss = s.replace(/\$\d/g, "");
                             let sss = ss.replace(/\${\d:(.*?)}/g, "$1");
-                            let ssss = sss.replace(/\${(.*?)}/g, "");
-                            console.log(ssss);
+                            let ssss = sss.replace(/\${(TM_SELECTED_TEXT)}/g, se);
+                            let ts = text.selectionStart,
+                                es = text.selectionEnd;
+                            let e_v = v.substring(0, ts) + ssss + v.substring(es, v.length);
+                            text.value = e_v;
+                            text.selectionStart = ts;
+                            text.selectionEnd = ts;
+                            setTimeout(() => {
+                                text.focus();
+                            }, 10);
+                            text.dispatchEvent(new InputEvent("input"));
                         }
                     }
                 }
