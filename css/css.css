@@ -127,11 +127,12 @@ body {
     width: 16px;
     height: 16px;
     background-color: #eee;
-    border-radius: 8px;
+    border-radius: 50%;
     border: none;
     margin-left: 8px;
     cursor: pointer;
     position: relative;
+    outline: none;
 }
 #导航 > div > .icon {
     width: 16px;
@@ -315,6 +316,14 @@ x-graph > textarea {
     #tabs > div {
         padding: 8px !important;
         margin: 0 !important;
+    }
+    #导航 > div {
+        width: 32px;
+        height: 32px;
+    }
+    #导航 > div > .icon {
+        width: 32px;
+        height: 32px;
     }
 }
 
