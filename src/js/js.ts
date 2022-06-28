@@ -94,7 +94,8 @@ document.ontouchstart = (e) => {
     let el = <HTMLElement>e.changedTouches[0].target;
     if (
         el == document.querySelector("#画布") ||
-        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA")
+        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
+        ![].slice.call(document.querySelectorAll("x-sinppet *")).includes(el)
     ) {
         o_touch_e = e;
         o_rect = { x: O.offsetLeft, y: O.offsetTop };
@@ -165,7 +166,9 @@ document.getElementById("归位").onclick = () => {
 };
 
 document.getElementById("画布").onwheel = (e) => {
-    if ((<HTMLElement>e.target).tagName == "TEXTAREA") return;
+    let el = <HTMLElement>e.target;
+    if (el.tagName == "TEXTAREA") return;
+    if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el)) return;
     if (e.shiftKey && !e.deltaX) {
         if (fxsd == 0 || fxsd == 2) O.style.left = O.offsetLeft - e.deltaY + "px";
     } else {

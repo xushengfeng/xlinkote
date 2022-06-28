@@ -358,3 +358,42 @@ class graph extends HTMLElement {
 }
 
 window.customElements.define("x-graph", graph);
+
+class symbols extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        var div = document.createElement("div");
+        this.append(div);
+        for (const i in mathSymbols) {
+            for (const j of mathSymbols[i]) {
+                let span = document.createElement("span");
+                span.title = j.name;
+                span.id = `snippet_${j.source}`;
+                span.innerHTML = j.svg;
+                div.append(span);
+            }
+        }
+
+        this.onclick = (e) => {
+            let el = <HTMLElement>e.target;
+            if (el.parentElement.id.includes("snippet")) {
+                for (let i in mathSymbols) {
+                    for (let j of mathSymbols[i]) {
+                        if ("snippet_" + j.source == el.parentElement.id) {
+                            let s = <string>j.snippet;
+                            let ss = s.replace(/\$\d/g, "");
+                            let sss = ss.replace(/\${\d:(.*?)}/g, "$1");
+                            let ssss = sss.replace(/\${(.*?)}/g, "");
+                            console.log(ssss);
+                        }
+                    }
+                }
+            }
+        };
+    }
+}
+
+window.customElements.define("x-sinppet", symbols);

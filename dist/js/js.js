@@ -93,7 +93,8 @@ var o_touch_e;
 document.ontouchstart = (e) => {
     let el = e.changedTouches[0].target;
     if (el == document.querySelector("#画布") ||
-        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA")) {
+        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
+        ![].slice.call(document.querySelectorAll("x-sinppet *")).includes(el)) {
         o_touch_e = e;
         o_rect = { x: O.offsetLeft, y: O.offsetTop };
         document.getElementById("画布").style.cursor = "move";
@@ -154,7 +155,10 @@ document.getElementById("归位").onclick = () => {
     }, 400);
 };
 document.getElementById("画布").onwheel = (e) => {
-    if (e.target.tagName == "TEXTAREA")
+    let el = e.target;
+    if (el.tagName == "TEXTAREA")
+        return;
+    if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el))
         return;
     if (e.shiftKey && !e.deltaX) {
         if (fxsd == 0 || fxsd == 2)

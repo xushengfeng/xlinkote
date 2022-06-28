@@ -153,6 +153,15 @@ body {
     pointer-events: all !important;
 }
 
+x-sinppet {
+    width: 300px;
+    height: 300px;
+    display: block;
+    overflow: auto;
+    position: fixed;
+    right: 10px;
+}
+
 .add_tag {
     position: absolute;
     outline: none;

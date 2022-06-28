@@ -6,3 +6,5 @@ declare interface Window {
     JXG: any;
     markdownitContainer: any;
 }
+
+declare const mathSymbols: any;
