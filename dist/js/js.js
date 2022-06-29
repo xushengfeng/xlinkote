@@ -39,6 +39,7 @@ document.onmousedown = (e) => {
             let select = document.createElement("div");
             select_id = select.id = `s${new Date().getTime()}`;
             document.getElementById("选择").append(select);
+            画布.style.userSelect = "none";
         }
     }
     if (e.target != menu)
@@ -60,6 +61,7 @@ document.onmouseup = (e) => {
         context_menu(e);
     move = false;
     document.getElementById("画布").style.cursor = "auto";
+    画布.style.userSelect = "auto";
     if (select_id)
         document.getElementById(select_id).remove();
     select_id = "";
