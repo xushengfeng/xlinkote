@@ -162,6 +162,11 @@ class markdown extends HTMLElement {
 
             data_changed();
         };
+        text.onkeydown = (e) => {
+            if (e.key == "Enter") {
+                if (fileHandle) document.getElementById("保存文件").click();
+            }
+        };
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             let l_i = text_get_line(text);
