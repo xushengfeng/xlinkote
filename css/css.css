@@ -2,6 +2,7 @@
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     --bg-color1: rgba(235, 235, 235, 0.6);
     --bg-color2: rgba(255, 255, 255, 0.6);
+    --bg-color3: #ddd;
     --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
     --bg1: #ffffff;
@@ -347,6 +348,30 @@ x-graph > textarea {
     box-shadow: var(--shadow1);
     outline: none;
     border: none;
+}
+
+x-pro {
+    display: inline-block;
+    width: 40px;
+    height: 16px;
+    background-color: var(--bg-color3);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+x-pro > div {
+    background-color: #000;
+    height: 100%;
+}
+x-pro > span {
+    position: absolute;
+    top: 0;
+    font-size: 12px;
+    height: 16px;
+    width: 100%;
+    text-align: center;
+    mix-blend-mode: difference;
+    color: #fff;
 }
 
 @media (any-pointer: coarse) {

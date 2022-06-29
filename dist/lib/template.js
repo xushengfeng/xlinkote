@@ -388,3 +388,18 @@ class symbols extends HTMLElement {
     }
 }
 window.customElements.define("x-sinppet", symbols);
+class progress extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        var v = this.getAttribute("value");
+        var div = document.createElement("div");
+        var p = document.createElement("span");
+        this.append(div);
+        this.append(p);
+        div.style.width = `${v}%`;
+        p.innerText = `${v}%`;
+    }
+}
+window.customElements.define("x-pro", progress);
