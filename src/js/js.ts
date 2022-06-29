@@ -369,7 +369,7 @@ function data_changed() {
 
 document.getElementById("toggle_md").onclick = () => {
     if (focus_md) {
-        focus_md.edit();
+        focus_md.edit = !focus_md.edit;
     }
 };
 
