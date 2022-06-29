@@ -162,20 +162,27 @@ function zoom_o(z) {
     O.style.transform = `scale(${z})`;
 }
 document.getElementById("画布").onwheel = (e) => {
-    let el = e.target;
-    if (el.tagName == "TEXTAREA")
-        return;
-    if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el))
-        return;
-    if (e.shiftKey && !e.deltaX) {
-        if (fxsd == 0 || fxsd == 2)
-            O.style.left = O.offsetLeft - e.deltaY + "px";
+    if (e.ctrlKey) {
+        e.preventDefault();
+        zoom += -e.deltaY / 500;
+        zoom_o(zoom);
     }
     else {
-        if (fxsd == 0 || fxsd == 2)
-            O.style.left = O.offsetLeft - e.deltaX + "px";
-        if (fxsd == 0 || fxsd == 1)
-            O.style.top = O.offsetTop - e.deltaY + "px";
+        let el = e.target;
+        if (el.tagName == "TEXTAREA")
+            return;
+        if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el))
+            return;
+        if (e.shiftKey && !e.deltaX) {
+            if (fxsd == 0 || fxsd == 2)
+                O.style.left = O.offsetLeft - e.deltaY + "px";
+        }
+        else {
+            if (fxsd == 0 || fxsd == 2)
+                O.style.left = O.offsetLeft - e.deltaX + "px";
+            if (fxsd == 0 || fxsd == 1)
+                O.style.top = O.offsetTop - e.deltaY + "px";
+        }
     }
 };
 var menu = document.getElementById("上下文菜单");
@@ -243,6 +250,9 @@ document.onkeydown = (e) => {
                 e.preventDefault();
                 document.getElementById("toggle_md").click();
             }
+            break;
+        case "0":
+            zoom_o(1);
             break;
     }
 };
