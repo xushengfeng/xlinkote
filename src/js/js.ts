@@ -201,6 +201,7 @@ function creat_x_x(x: number, y: number) {
     O.append(xel);
     var md = document.createElement("x-md");
     xel.append(md);
+    (<markdown>md).edit = true;
 
     data_changed();
 }
@@ -253,9 +254,9 @@ function get_data() {
         let el = <HTMLElement>i;
         let values = {};
         for (let k of el.childNodes) {
-            let eel = <HTMLInputElement>k;
+            let eel = <markdown>k;
             if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
-            values[eel.tagName] = eel.value;
+            values[eel.tagName] = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
         }
         l.push({ style: el.getAttribute("style"), values, tag: el.tagName });
     }
@@ -271,9 +272,10 @@ function set_data(l: Array<{ style: string; values: object; tag: string }>) {
                 el.setAttribute("style", x.style);
             }, 0);
             for (let i in x.values) {
-                let eel = <HTMLInputElement>document.createElement(i);
+                let eel = <markdown>document.createElement(i);
                 el.append(eel);
-                eel.value = x.values[i];
+                eel.value = x.values[i].value;
+                if (x.values[i].edit) eel.edit = true;
             }
         } catch (e) {
             console.error(e);

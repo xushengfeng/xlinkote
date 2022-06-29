@@ -175,12 +175,21 @@ class markdown extends HTMLElement {
             text_set_line(text, line);
             text.focus();
         };
-        this.edit();
     }
-    edit() {
+    set edit(v) {
         var text = this.querySelector("textarea");
-        text.classList.toggle("show_md");
-        text.focus();
+        if (v) {
+            text.classList.add("show_md");
+            text.focus();
+        }
+        else {
+            text.classList.remove("show_md");
+            text.blur();
+        }
+    }
+    get edit() {
+        var text = this.querySelector("textarea");
+        return text.classList.contains("show_md");
     }
     set value(v) {
         this._value = this.querySelector("textarea").value = v;

@@ -191,6 +191,7 @@ function creat_x_x(x, y) {
     O.append(xel);
     var md = document.createElement("x-md");
     xel.append(md);
+    md.edit = true;
     data_changed();
 }
 function add_event(el) {
@@ -241,7 +242,7 @@ function get_data() {
             let eel = k;
             if (eel.id == "x-x_bar" || eel.id == "x-x_page")
                 continue;
-            values[eel.tagName] = eel.value;
+            values[eel.tagName] = { value: eel.value, ...(eel.edit ? { edit: eel.edit } : {}) };
         }
         l.push({ style: el.getAttribute("style"), values, tag: el.tagName });
     }
@@ -258,7 +259,9 @@ function set_data(l) {
             for (let i in x.values) {
                 let eel = document.createElement(i);
                 el.append(eel);
-                eel.value = x.values[i];
+                eel.value = x.values[i].value;
+                if (x.values[i].edit)
+                    eel.edit = true;
             }
         }
         catch (e) {
