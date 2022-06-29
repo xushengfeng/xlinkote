@@ -156,6 +156,11 @@ document.getElementById("归位").onclick = () => {
         O.style.transition = "";
     }, 400);
 };
+var zoom = 1;
+function zoom_o(z) {
+    zoom = z;
+    O.style.transform = `scale(${z})`;
+}
 document.getElementById("画布").onwheel = (e) => {
     let el = e.target;
     if (el.tagName == "TEXTAREA")
@@ -188,8 +193,8 @@ function context_menu(e) {
 }
 function creat_x_x(x, y) {
     let xel = document.createElement("x-x");
-    xel.style.left = x + "px";
-    xel.style.top = y + "px";
+    xel.style.left = x / zoom + "px";
+    xel.style.top = y / zoom + "px";
     O.append(xel);
     var md = document.createElement("x-md");
     xel.append(md);

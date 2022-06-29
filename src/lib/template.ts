@@ -47,14 +47,14 @@ class x extends HTMLElement {
             if (o_e) {
                 if (o_rects.length != 0) {
                     for (const xel of o_rects) {
-                        let x = xel.x + (e.clientX - o_e.clientX),
-                            y = xel.y + (e.clientY - o_e.clientY);
+                        let x = xel.x + (e.clientX - o_e.clientX) / zoom,
+                            y = xel.y + (e.clientY - o_e.clientY) / zoom;
                         xel.el.style.left = x + "px";
                         xel.el.style.top = y + "px";
                     }
                 } else {
-                    let x = o_rect.x + (e.clientX - o_e.clientX),
-                        y = o_rect.y + (e.clientY - o_e.clientY);
+                    let x = o_rect.x + (e.clientX - o_e.clientX) / zoom,
+                        y = o_rect.y + (e.clientY - o_e.clientY) / zoom;
                     this.style.left = x + "px";
                     this.style.top = y + "px";
                 }
