@@ -233,6 +233,12 @@ document.onkeydown = (e) => {
                 document.getElementById("保存文件").click();
             }
             break;
+        case "/":
+            if (e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById("toggle_md").click();
+            }
+            break;
     }
 };
 function get_data() {

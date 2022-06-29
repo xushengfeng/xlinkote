@@ -152,16 +152,7 @@ class markdown extends HTMLElement {
                 text.style.top = y + "px";
             }
         };
-        text.addEventListener("keydown", (e) => {
-            if (e.ctrlKey) {
-                if (e.key == "/") {
-                    e.preventDefault();
-                    text.classList.toggle("show_md");
-                    text.focus();
-                }
-            }
-        });
-        text.onblur = () => {
+        this.onclick = text.onfocus = () => {
             focus_md = this;
         };
         // 点击元素定位到源文本行
