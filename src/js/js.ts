@@ -272,6 +272,7 @@ function get_data() {
 }
 
 function set_data(l: Array<{ style: string; values: object; tag: string }>) {
+    O.innerHTML = "";
     for (const x of l) {
         try {
             let el = document.createElement(x.tag);

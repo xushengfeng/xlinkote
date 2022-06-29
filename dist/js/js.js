@@ -257,6 +257,7 @@ function get_data() {
     return l;
 }
 function set_data(l) {
+    O.innerHTML = "";
     for (const x of l) {
         try {
             let el = document.createElement(x.tag);
