@@ -195,6 +195,7 @@ class markdown extends HTMLElement {
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
             if (el.tagName == "TEXTAREA") return;
+            if (!this.edit) return;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
             let line = el_line(text, this.index, s, el);
