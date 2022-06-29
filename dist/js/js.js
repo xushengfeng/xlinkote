@@ -309,6 +309,8 @@ async function file_load() {
     else {
         file = upload_el.files[0];
     }
+    file_name = file.name.replace(/\.json$/, "");
+    document.title = `${file_name} - xlinkote`;
     let reader = new FileReader();
     reader.onload = () => {
         let o = JSON.parse(reader.result);
@@ -320,7 +322,7 @@ document.getElementById("保存文件").onclick = () => {
     write_file(JSON.stringify(get_data()));
 };
 var saved = true;
-var file_name = "xlinkote";
+var file_name = "";
 async function write_file(text) {
     saved = true;
     document.title = file_name;
@@ -332,11 +334,8 @@ async function write_file(text) {
     else {
         let a = document.createElement("a");
         let blob = new Blob([text]);
-        a.download = `xlinkote-${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000)
-            .toISOString()
-            .slice(0, 19)
-            .replaceAll(":", "-")
-            .replace("T", "-")}.json`;
+        let name = file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+        a.download = `${name}.json`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
@@ -345,7 +344,7 @@ async function write_file(text) {
 function data_changed() {
     if (saved) {
         saved = false;
-        document.title = `・`;
+        document.title = `・` + document.title;
     }
 }
 document.getElementById("toggle_md").onclick = () => {
