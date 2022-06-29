@@ -170,7 +170,7 @@ class markdown extends HTMLElement {
         };
     }
     set edit(v) {
-        var text = this.querySelector("textarea");
+        var text = this.childNodes[1];
         if (v) {
             text.classList.add("show_md");
             text.focus();
@@ -181,11 +181,11 @@ class markdown extends HTMLElement {
         }
     }
     get edit() {
-        var text = this.querySelector("textarea");
+        var text = this.childNodes[1];
         return text.classList.contains("show_md");
     }
     set value(v) {
-        this._value = this.querySelector("textarea").value = v;
+        this._value = this.childNodes[1].value = v;
         this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
         var l = md.parse(v, {
             references: {},
