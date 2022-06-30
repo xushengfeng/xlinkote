@@ -394,3 +394,11 @@ document.getElementById("新建页").onclick = () => {
     O.style.left = -page.offsetLeft + "px";
     O.style.top = "0";
 };
+画布.ondragover = (e) => {
+    e.preventDefault();
+};
+画布.ondrop = (e) => {
+    e.preventDefault();
+    console.log(e.dataTransfer.files);
+    console.log(e.dataTransfer.getData("text/plain"));
+};
