@@ -409,3 +409,35 @@ class progress extends HTMLElement {
     }
 }
 window.customElements.define("x-pro", progress);
+class img extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        var v = this.getAttribute("src");
+        var img = document.createElement("img");
+        this.append(img);
+        if (v)
+            img.src = v;
+    }
+    set src(s) {
+        this.querySelector("img").src = s;
+    }
+}
+window.customElements.define("x-img", img);
+class video extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        var v = this.getAttribute("src");
+        var video = document.createElement("video");
+        this.append(video);
+        if (v)
+            video.src = v;
+    }
+    set src(s) {
+        this.querySelector("video").src = s;
+    }
+}
+window.customElements.define("x-video", video);

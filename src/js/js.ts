@@ -426,5 +426,41 @@ document.getElementById("新建页").onclick = () => {
 画布.ondrop = (e) => {
     e.preventDefault();
     console.log(e.dataTransfer.files);
-    console.log(e.dataTransfer.getData("text/plain"));
+    console.log(e.dataTransfer.getData("text/html"));
+    if (e.dataTransfer.files.length != 0) {
+        for (let f of e.dataTransfer.files) {
+            let type = f.type.split("/")[0];
+            let x = e.offsetX - O.offsetLeft,
+                y = e.offsetY - O.offsetTop;
+            let xel = document.createElement("x-x");
+            xel.style.left = x / zoom + "px";
+            xel.style.top = y / zoom + "px";
+            O.append(xel);
+            if (type == "image") {
+                let img = <img>document.createElement("x-img");
+                xel.append(img);
+                let reader = new FileReader();
+                reader.readAsDataURL(f);
+                reader.onload = () => {
+                    img.src = reader.result;
+                };
+            } else if (type == "video") {
+                let video = <video>document.createElement("x-video");
+                xel.append(video);
+                let reader = new FileReader();
+                reader.readAsDataURL(f);
+                reader.onload = () => {
+                    video.src = reader.result;
+                };
+            } else if (f.type == "text/markdown") {
+                let md = <markdown>document.createElement("x-md");
+                xel.append(md);
+                let reader = new FileReader();
+                reader.readAsText(f);
+                reader.onload = () => {
+                    md.value = <string>reader.result;
+                };
+            }
+        }
+    }
 };
