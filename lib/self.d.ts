@@ -5,6 +5,7 @@ declare interface Window {
     markdownitTaskLists: any;
     JXG: any;
     markdownitContainer: any;
+    TurndownService: any;
 }
 
 declare const mathSymbols: any;

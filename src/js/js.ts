@@ -425,8 +425,6 @@ document.getElementById("新建页").onclick = () => {
 
 画布.ondrop = (e) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files);
-    console.log(e.dataTransfer.getData("text/html"));
     if (e.dataTransfer.files.length != 0) {
         for (let f of e.dataTransfer.files) {
             let type = f.type.split("/")[0];
@@ -462,5 +460,17 @@ document.getElementById("新建页").onclick = () => {
                 };
             }
         }
+    } else {
+        let x = e.offsetX - O.offsetLeft,
+            y = e.offsetY - O.offsetTop;
+        let xel = document.createElement("x-x");
+        xel.style.left = x / zoom + "px";
+        xel.style.top = y / zoom + "px";
+        O.append(xel);
+        let html = e.dataTransfer.getData("text/html");
+        let turndownService = new window.TurndownService({ headingStyle: "atx" });
+        let md = <markdown>document.createElement("x-md");
+        xel.append(md);
+        md.value = turndownService.turndown(html);
     }
 };
