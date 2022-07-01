@@ -444,11 +444,13 @@ window.customElements.define("x-video", video);
 class draw extends HTMLElement {
     constructor() {
         super();
+        this.z = [];
         this.points = { x: NaN, y: NaN };
     }
     connectedCallback() {
         this.main_canvas = document.createElement("canvas");
         this.append(this.main_canvas);
+        this.z[0] = this.main_canvas;
     }
     draw(e) {
         let canvas = this.main_canvas;
@@ -501,6 +503,9 @@ class draw extends HTMLElement {
             ctx.stroke();
         }
         this.points = { x, y };
+    }
+    get value() {
+        return this.z.map((v) => v.toDataURL());
     }
 }
 window.customElements.define("x-draw", draw);

@@ -499,11 +499,14 @@ class draw extends HTMLElement {
     }
 
     main_canvas: HTMLCanvasElement;
+    z = [];
 
     connectedCallback() {
         this.main_canvas = document.createElement("canvas");
 
         this.append(this.main_canvas);
+
+        this.z[0] = this.main_canvas;
     }
 
     points = { x: NaN, y: NaN };
@@ -562,6 +565,10 @@ class draw extends HTMLElement {
             ctx.stroke();
         }
         this.points = { x, y };
+    }
+
+    get value() {
+        return this.z.map((v) => v.toDataURL());
     }
 }
 
