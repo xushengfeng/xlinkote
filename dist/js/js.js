@@ -449,3 +449,17 @@ document.getElementById("新建页").onclick = () => {
         md.value = turndownService.turndown(html);
     }
 };
+画布.onpointerdown = (e) => {
+    let c = document.querySelector("x-draw");
+    c?.draw(e);
+};
+画布.onpointermove = (e) => {
+    let c = document.querySelector("x-draw");
+    c?.draw(e);
+};
+画布.onpointerup = (e) => {
+    let c = document.querySelector("x-draw");
+    c?.draw(e);
+    if (c)
+        c.points = { x: NaN, y: NaN };
+};

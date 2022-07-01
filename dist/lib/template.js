@@ -441,3 +441,66 @@ class video extends HTMLElement {
     }
 }
 window.customElements.define("x-video", video);
+class draw extends HTMLElement {
+    constructor() {
+        super();
+        this.points = { x: NaN, y: NaN };
+    }
+    connectedCallback() {
+        this.main_canvas = document.createElement("canvas");
+        this.append(this.main_canvas);
+    }
+    draw(e) {
+        let canvas = this.main_canvas;
+        if (!e.pressure)
+            return;
+        if (e.target != this.main_canvas)
+            return;
+        let ctx = this.main_canvas.getContext("2d");
+        let x = e.offsetX, y = e.offsetY;
+        let dd = 100, xx = 100;
+        // 无限画板
+        if (x > canvas.width - dd) {
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.width += xx;
+            ctx.putImageData(imageData, 0, 0);
+        }
+        if (y > canvas.height - dd) {
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.height += xx;
+            ctx.putImageData(imageData, 0, 0);
+        }
+        if (x < dd) {
+            if (this.parentElement.tagName == "X-X") {
+                let pel = this.parentElement;
+                pel.style.left = pel.offsetLeft - xx + "px";
+            }
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.width += xx;
+            ctx.putImageData(imageData, xx, 0);
+            this.points.x += xx;
+            x += xx;
+        }
+        if (y < dd) {
+            if (this.parentElement.tagName == "X-X") {
+                let pel = this.parentElement;
+                pel.style.top = pel.offsetTop - xx + "px";
+            }
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.height += xx;
+            ctx.putImageData(imageData, 0, xx);
+            this.points.y += xx;
+            y += xx;
+        }
+        // 画
+        if (!isNaN(this.points.x)) {
+            ctx.beginPath();
+            ctx.lineWidth = e.pressure * 2;
+            ctx.moveTo(this.points.x, this.points.y);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+        this.points = { x, y };
+    }
+}
+window.customElements.define("x-draw", draw);
