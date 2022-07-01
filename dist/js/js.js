@@ -463,3 +463,12 @@ document.getElementById("新建页").onclick = () => {
     if (c)
         c.points = { x: NaN, y: NaN };
 };
+document.getElementById("新建画板").onclick = () => {
+    let xel = document.createElement("x-x");
+    xel.style.left = 0 + "px";
+    xel.style.top = 0 + "px";
+    O.append(xel);
+    let draw = document.createElement("x-draw");
+    xel.append(draw);
+    data_changed();
+};
