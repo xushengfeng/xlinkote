@@ -502,11 +502,15 @@ class draw extends HTMLElement {
     z = [];
 
     connectedCallback() {
-        this.main_canvas = document.createElement("canvas");
+        if (this.getAttribute("value")) {
+            this.set_v(this.getAttribute("value"));
+        } else {
+            this.main_canvas = document.createElement("canvas");
 
-        this.append(this.main_canvas);
+            this.append(this.main_canvas);
 
-        this.z[0] = this.main_canvas;
+            this.z[0] = this.main_canvas;
+        }
     }
 
     points = { x: NaN, y: NaN };
@@ -567,8 +571,29 @@ class draw extends HTMLElement {
         this.points = { x, y };
     }
 
+    set_v(v: string) {
+        this.z = JSON.parse(v);
+        this.innerHTML = "";
+        for (let c of this.z) {
+            let img = new Image();
+            img.src = c;
+            let canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            img.onload = () => {
+                canvas.getContext("2d").drawImage(img, 0, 0);
+            };
+            this.append(canvas);
+        }
+        this.main_canvas = this.querySelector("canvas");
+    }
+
     get value() {
-        return this.z.map((v) => v.toDataURL());
+        return JSON.stringify(this.z.map((v) => v.toDataURL()));
+    }
+
+    set value(v: string) {
+        this.set_v(v);
     }
 }
 
