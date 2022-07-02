@@ -203,7 +203,7 @@ class markdown extends HTMLElement {
         return this._value;
     }
     zy(v) {
-        v = v.replace(/\$\$([\w\W]*?)\$\$/g, (t) => t.replaceAll("\\\\", "\\\\\\\\"));
+        v = v.replace(/\$\$([\w\W]*?)\$\$/g, (t) => `${t.slice(0, 2)}\\displaylines{${t.slice(2, t.length - 2).replaceAll("\\\\", "\\\\\\\\")}}${t.slice(t.length - 2, t.length)}`);
         return v;
     }
 }
