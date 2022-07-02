@@ -463,6 +463,8 @@ class draw extends HTMLElement {
             return;
         if (e.target != this.main_canvas)
             return;
+        if (e.pointerType == "mouse" && e.buttons == 2)
+            return;
         let ctx = this.main_canvas.getContext("2d");
         let x = e.offsetX, y = e.offsetY;
         let dd = 100, xx = 100;
