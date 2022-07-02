@@ -127,13 +127,15 @@ class markdown extends HTMLElement {
         this.index = line_el(l);
         text.oninput = () => {
             this._value = text.value;
-            s.innerHTML = md.render(text.value);
-            l = md.parse(text.value, {
-                references: {},
-            });
-            parse = l;
-            this.index = line_el(l);
             data_changed();
+            setTimeout(() => {
+                s.innerHTML = md.render(text.value);
+                l = md.parse(text.value, {
+                    references: {},
+                });
+                parse = l;
+                this.index = line_el(l);
+            }, 0);
         };
         text.onkeydown = (e) => {
             if (e.key == "Enter") {
