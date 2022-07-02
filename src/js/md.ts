@@ -36,6 +36,20 @@ md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
     }
     return defaultRender(tokens, idx, options, env, self);
 };
+md.renderer.rules.strong_open = function (tokens, idx, options, env, self) {
+    let aIndex = tokens[idx].attrIndex("id");
+    if (aIndex < 0) {
+        tokens[idx].attrPush(["id", tokens[idx + 1].content]);
+    }
+    return defaultRender(tokens, idx, options, env, self);
+};
+md.renderer.rules.em_open = function (tokens, idx, options, env, self) {
+    let aIndex = tokens[idx].attrIndex("id");
+    if (aIndex < 0) {
+        tokens[idx].attrPush(["id", tokens[idx + 1].content]);
+    }
+    return defaultRender(tokens, idx, options, env, self);
+};
 
 var mathjax_cache = {};
 function get_svg(c: string) {
