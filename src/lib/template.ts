@@ -234,10 +234,11 @@ class markdown extends HTMLElement {
         v = v.replace(
             /\$\$([\w\W]*?)\$\$/g,
             (t) =>
-                `${t.slice(0, 2)}\\displaylines{${t.slice(2, t.length - 2).replaceAll("\\\\", "\\\\\\\\")}}${t.slice(
-                    t.length - 2,
-                    t.length
-                )}`
+                `${t.slice(0, 2)}\\displaylines{${t
+                    .slice(2, t.length - 2)
+                    .replaceAll("\\\\", "\\\\\\\\")
+                    .replace("\\{", "\\\\{")
+                    .replace("\\}", "\\\\}")}}${t.slice(t.length - 2, t.length)}`
         );
         return v;
     }
