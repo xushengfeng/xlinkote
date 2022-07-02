@@ -13,7 +13,7 @@ var md = window
         var m = tokens[idx].info.trim().match(/^(.*)$/);
         if (tokens[idx].nesting === 1) {
             // opening tag
-            return "<details><summary>" + md.utils.escapeHtml(m[1]) + "</summary>\n";
+            return "<details><summary>" + md.render(m[1]) + "</summary>\n";
         }
         else {
             // closing tag

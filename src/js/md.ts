@@ -15,7 +15,7 @@ var md = window
 
             if (tokens[idx].nesting === 1) {
                 // opening tag
-                return "<details><summary>" + md.utils.escapeHtml(m[1]) + "</summary>\n";
+                return "<details><summary>" + md.render(m[1]) + "</summary>\n";
             } else {
                 // closing tag
                 return "</details>\n";
