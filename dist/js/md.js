@@ -33,9 +33,18 @@ md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
     }
     return defaultRender(tokens, idx, options, env, self);
 };
+var mathjax_cache = {};
+function get_svg(c) {
+    let html = mathjax_cache?.[c] || window.MathJax.tex2svg(c).outerHTML;
+    mathjax_cache[c] = window.MathJax.tex2svg(c).outerHTML;
+    return html;
+}
+setInterval(() => {
+    mathjax_cache = {};
+}, 10000);
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_inline = (tokens, idx, options, env, self) => {
-    return window.MathJax.tex2svg(tokens[idx].content).outerHTML.replace(`display="true"`, "");
+    return get_svg(tokens[idx].content).replace(`display="true"`, "");
 };
 md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
     var found, content, token, max = state.posMax, start = state.pos;
@@ -76,7 +85,7 @@ md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
 });
 md.renderer.rules["mathjax_block"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_block = (tokens, idx, options, env, self) => {
-    return window.MathJax.tex2svg(`\\displaylines{${tokens[idx].content}}`).outerHTML;
+    return get_svg(`\\displaylines{${tokens[idx].content}}`);
 };
 function math_b(state, startLine, endLine, silent) {
     var nextLine, token, lineText, pos = state.bMarks[startLine] + state.tShift[startLine], max = state.eMarks[startLine];
