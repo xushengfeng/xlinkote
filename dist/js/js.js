@@ -472,6 +472,7 @@ document.getElementById("新建页").onclick = () => {
     c?.draw(e);
     if (c)
         c.points = { x: NaN, y: NaN };
+    c?.clip();
 };
 document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");

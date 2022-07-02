@@ -531,5 +531,59 @@ class draw extends HTMLElement {
     set value(v) {
         this.set_v(v);
     }
+    clip() {
+        let t_c = document.createElement("canvas");
+        t_c.width = this.main_canvas.width;
+        t_c.height = this.main_canvas.height;
+        for (let c of this.querySelectorAll("canvas")) {
+            t_c.getContext("2d").drawImage(c, 0, 0);
+        }
+        let min_x = 0, min_y = 0, max_x = this.main_canvas.width, max_y = this.main_canvas.height, min_x_c = false, min_y_c = false;
+        for (let x = 0; x < this.main_canvas.width; x++) {
+            let c = t_c.getContext("2d").getImageData(x, 0, 1, this.main_canvas.height).data;
+            for (const i of c) {
+                if (i != 0) {
+                    if (!min_x_c) {
+                        min_x = x;
+                        min_x_c = true;
+                    }
+                    else {
+                        max_x = x;
+                    }
+                    break;
+                }
+            }
+        }
+        for (let y = 0; y < this.main_canvas.height; y++) {
+            let c = t_c.getContext("2d").getImageData(0, y, this.main_canvas.width, 1).data;
+            for (const i of c) {
+                if (i != 0) {
+                    if (!min_y_c) {
+                        min_y = y;
+                        min_y_c = true;
+                    }
+                    else {
+                        max_y = y;
+                    }
+                    break;
+                }
+            }
+        }
+        min_x--;
+        min_y--;
+        max_x++;
+        max_y++;
+        for (let c of this.querySelectorAll("canvas")) {
+            let img = c.getContext("2d").getImageData(min_x, min_y, max_x - min_x, max_y - min_y);
+            c.width = max_x - min_x;
+            c.height = max_y - min_y;
+            c.getContext("2d").putImageData(img, 0, 0);
+        }
+        if (this.parentElement.tagName == "X-X") {
+            let pel = this.parentElement;
+            pel.style.left = pel.offsetLeft + min_x + "px";
+            pel.style.top = pel.offsetTop + min_y + "px";
+        }
+    }
 }
 window.customElements.define("x-draw", draw);
