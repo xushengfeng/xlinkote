@@ -450,7 +450,16 @@ document.getElementById("新建页").onclick = () => {
                 reader.onload = () => {
                     video.src = reader.result;
                 };
-            } else if (f.type == "text/markdown") {
+            } else if (f.type == "text/html") {
+                let md = <markdown>document.createElement("x-md");
+                xel.append(md);
+                let reader = new FileReader();
+                reader.readAsText(f);
+                reader.onload = () => {
+                    let turndownService = new window.TurndownService({ headingStyle: "atx" });
+                    md.value = turndownService.turndown(reader.result);
+                };
+            } else if (type == "text") {
                 let md = <markdown>document.createElement("x-md");
                 xel.append(md);
                 let reader = new FileReader();

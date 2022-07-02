@@ -425,7 +425,17 @@ document.getElementById("新建页").onclick = () => {
                     video.src = reader.result;
                 };
             }
-            else if (f.type == "text/markdown") {
+            else if (f.type == "text/html") {
+                let md = document.createElement("x-md");
+                xel.append(md);
+                let reader = new FileReader();
+                reader.readAsText(f);
+                reader.onload = () => {
+                    let turndownService = new window.TurndownService({ headingStyle: "atx" });
+                    md.value = turndownService.turndown(reader.result);
+                };
+            }
+            else if (type == "text") {
                 let md = document.createElement("x-md");
                 xel.append(md);
                 let reader = new FileReader();
