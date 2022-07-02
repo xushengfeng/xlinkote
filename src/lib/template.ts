@@ -146,14 +146,14 @@ class markdown extends HTMLElement {
         this.append(s);
         this.append(text);
 
-        var l = md.parse(text.value, {
+        var l = md.parse(this.zy(text.value), {
             references: {},
         });
         this.index = line_el(l);
         text.oninput = () => {
             this._value = text.value;
-            s.innerHTML = md.render(text.value);
-            l = md.parse(text.value, {
+            s.innerHTML = md.render(this.zy(text.value));
+            l = md.parse(this.zy(text.value), {
                 references: {},
             });
             parse = l;
@@ -218,8 +218,8 @@ class markdown extends HTMLElement {
 
     set value(v) {
         this._value = (<HTMLTextAreaElement>this.childNodes[1]).value = v;
-        this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
-        var l = md.parse(v, {
+        this.querySelector("div:nth-child(1)").innerHTML = md.render(this.zy(v));
+        var l = md.parse(this.zy(v), {
             references: {},
         });
         this.index = line_el(l);
@@ -228,6 +228,11 @@ class markdown extends HTMLElement {
 
     get value() {
         return this._value;
+    }
+
+    zy(v: string) {
+        v = v.replace(/\$\$([\w\W]*?)\$\$/g, (t) => t.replaceAll("\\\\", "\\\\\\\\"));
+        return v;
     }
 }
 
