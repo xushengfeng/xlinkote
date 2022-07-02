@@ -76,12 +76,6 @@ md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
 
     content = state.src.slice(start + 1, state.pos);
 
-    // don't allow unescaped spaces/newlines inside
-    if (content.match(/(^|[^\\])(\\\\)*\s/)) {
-        state.pos = start;
-        return false;
-    }
-
     // found!
     state.posMax = state.pos;
     state.pos = start + 1;
