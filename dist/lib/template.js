@@ -512,9 +512,9 @@ class draw extends HTMLElement {
         this.points = { x, y };
     }
     set_v(v) {
-        this.z = JSON.parse(v);
+        let x = JSON.parse(v);
         this.innerHTML = "";
-        for (let c of this.z) {
+        for (let c of x) {
             let img = new Image();
             img.src = c;
             let canvas = document.createElement("canvas");
@@ -526,6 +526,7 @@ class draw extends HTMLElement {
             this.append(canvas);
         }
         this.main_canvas = this.querySelector("canvas");
+        this.z = Array(...this.querySelectorAll("canvas"));
     }
     get value() {
         return JSON.stringify(this.z.map((v) => v.toDataURL()));
