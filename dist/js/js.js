@@ -378,7 +378,7 @@ document.getElementById("toggle_md").onclick = () => {
 };
 var focus_md = null;
 document.getElementById("新建元素").onclick = () => {
-    creat_x_x(0, 0);
+    creat_x_x(-O.offsetLeft, -O.offsetTop);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
@@ -476,8 +476,8 @@ document.getElementById("新建页").onclick = () => {
 };
 document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");
-    xel.style.left = 0 + "px";
-    xel.style.top = 0 + "px";
+    xel.style.left = -O.offsetLeft + "px";
+    xel.style.top = -O.offsetTop + "px";
     O.append(xel);
     let draw = document.createElement("x-draw");
     xel.append(draw);
