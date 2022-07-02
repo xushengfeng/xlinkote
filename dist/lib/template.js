@@ -518,9 +518,9 @@ class draw extends HTMLElement {
             let img = new Image();
             img.src = c;
             let canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
             img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
                 canvas.getContext("2d").drawImage(img, 0, 0);
             };
             this.append(canvas);
