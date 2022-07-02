@@ -35,13 +35,27 @@ md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
 };
 var mathjax_cache = {};
 function get_svg(c) {
-    let html = mathjax_cache?.[c] || window.MathJax.tex2svg(c).outerHTML;
-    mathjax_cache[c] = window.MathJax.tex2svg(c).outerHTML;
+    let html, ca = mathjax_cache?.[c];
+    if (ca) {
+        html = ca[0];
+        mathjax_cache[c][1] = 2;
+    }
+    else {
+        html = window.MathJax.tex2svg(c).outerHTML;
+        mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
+    }
     return html;
 }
 setInterval(() => {
-    mathjax_cache = {};
+    for (let i in mathjax_cache) {
+        if (mathjax_cache[i][1] == 1) {
+            delete mathjax_cache[i];
+        }
+    }
 }, 10000);
+setInterval(() => {
+    mathjax_cache = {};
+}, 100000);
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_inline = (tokens, idx, options, env, self) => {
     return get_svg(tokens[idx].content).replace(`display="true"`, "");
