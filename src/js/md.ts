@@ -41,7 +41,7 @@ md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.
 md.renderer.rules.mathjax_inline = (tokens, idx, options, env, self) => {
     return window.MathJax.tex2svg(tokens[idx].content).outerHTML.replace(`display="true"`, "");
 };
-md.inline.ruler.before("emphasis", "mathjax_inline", function (state, silent) {
+md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
     var found,
         content,
         token,
@@ -96,4 +96,72 @@ md.inline.ruler.before("emphasis", "mathjax_inline", function (state, silent) {
     state.pos = state.posMax + 1;
     state.posMax = max;
     return true;
+});
+
+md.renderer.rules["mathjax_block"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
+md.renderer.rules.mathjax_block = (tokens, idx, options, env, self) => {
+    return window.MathJax.tex2svg(`\\displaylines{${tokens[idx].content}}`).outerHTML;
+};
+
+function math_b(state, startLine, endLine, silent) {
+    var nextLine,
+        token,
+        lineText,
+        pos = state.bMarks[startLine] + state.tShift[startLine],
+        max = state.eMarks[startLine];
+
+    // if it's indented more than 3 spaces, it should be a code block
+    if (state.sCount[startLine] - state.blkIndent >= 4) {
+        return false;
+    }
+
+    if (!state.md.options.html) {
+        return false;
+    }
+
+    if (state.src.charCodeAt(pos) !== 36 /* $ */) {
+        return false;
+    }
+
+    lineText = state.src.slice(pos, max);
+
+    if (!lineText.includes("$$")) return false;
+
+    if (silent) {
+        return true;
+    }
+
+    nextLine = startLine + 1;
+
+    if (lineText.match(/\$\$/g).length == 1) {
+        for (; nextLine < endLine; nextLine++) {
+            if (state.sCount[nextLine] < state.blkIndent) {
+                break;
+            }
+
+            pos = state.bMarks[nextLine] + state.tShift[nextLine];
+            max = state.eMarks[nextLine];
+            lineText = state.src.slice(pos, max);
+
+            if (lineText.includes("$$")) {
+                if (lineText.length !== 0) {
+                    nextLine++;
+                }
+                break;
+            }
+        }
+    }
+
+    state.line = nextLine;
+
+    token = state.push("mathjax_block", "", 0);
+    token.map = [startLine, nextLine];
+    let t = state.getLines(startLine, nextLine, state.blkIndent, true).trim();
+
+    token.content = t.slice(2, t.length - 2);
+
+    return true;
+}
+md.block.ruler.after("blockquote", "mathjax_block", math_b, {
+    alt: ["paragraph", "reference", "blockquote", "list"],
 });

@@ -121,19 +121,18 @@ class markdown extends HTMLElement {
         var text = document.createElement("textarea");
         this.append(s);
         this.append(text);
-        var l = md.parse(this.zy(text.value), {
+        var l = md.parse(text.value, {
             references: {},
         });
         this.index = line_el(l);
         text.oninput = () => {
             this._value = text.value;
-            s.innerHTML = md.render(this.zy(text.value));
-            l = md.parse(this.zy(text.value), {
+            s.innerHTML = md.render(text.value);
+            l = md.parse(text.value, {
                 references: {},
             });
             parse = l;
             this.index = line_el(l);
-            window.MathJax.typeset();
             data_changed();
         };
         text.onkeydown = (e) => {
@@ -192,23 +191,14 @@ class markdown extends HTMLElement {
     }
     set value(v) {
         this._value = this.childNodes[1].value = v;
-        this.querySelector("div:nth-child(1)").innerHTML = md.render(this.zy(v));
-        var l = md.parse(this.zy(v), {
+        this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
+        var l = md.parse(v, {
             references: {},
         });
         this.index = line_el(l);
-        window.MathJax.typeset();
     }
     get value() {
         return this._value;
-    }
-    zy(v) {
-        v = v.replace(/\$\$([\w\W]*?)\$\$/g, (t) => `${t.slice(0, 2)}\\displaylines{${t
-            .slice(2, t.length - 2)
-            .replaceAll("\\\\", "\\\\\\\\")
-            .replace("\\{", "\\\\{")
-            .replace("\\}", "\\\\}")}}${t.slice(t.length - 2, t.length)}`);
-        return v;
     }
 }
 window.customElements.define("x-md", markdown);
