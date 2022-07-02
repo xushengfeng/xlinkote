@@ -485,19 +485,25 @@ document.getElementById("新建页").onclick = () => {
 };
 
 画布.onpointerdown = (e) => {
-    let c = <draw>document.querySelector("x-draw");
-    c?.draw(e);
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        (<draw>c)?.draw(e);
+    }
 };
 
 画布.onpointermove = (e) => {
-    let c = <draw>document.querySelector("x-draw");
-    c?.draw(e);
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        (<draw>c)?.draw(e);
+    }
 };
 画布.onpointerup = (e) => {
-    let c = <draw>document.querySelector("x-draw");
-    c?.draw(e);
-    if (c) c.points = { x: NaN, y: NaN };
-    c?.clip();
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        (<draw>c)?.draw(e);
+        if (c) (<draw>c).points = { x: NaN, y: NaN };
+        (<draw>c)?.clip();
+    }
 };
 
 document.getElementById("新建画板").onclick = () => {

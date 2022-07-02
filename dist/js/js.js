@@ -460,19 +460,25 @@ document.getElementById("新建页").onclick = () => {
     }
 };
 画布.onpointerdown = (e) => {
-    let c = document.querySelector("x-draw");
-    c?.draw(e);
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        c?.draw(e);
+    }
 };
 画布.onpointermove = (e) => {
-    let c = document.querySelector("x-draw");
-    c?.draw(e);
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        c?.draw(e);
+    }
 };
 画布.onpointerup = (e) => {
-    let c = document.querySelector("x-draw");
-    c?.draw(e);
-    if (c)
-        c.points = { x: NaN, y: NaN };
-    c?.clip();
+    let cl = document.querySelectorAll("x-draw");
+    for (let c of cl) {
+        c?.draw(e);
+        if (c)
+            c.points = { x: NaN, y: NaN };
+        c?.clip();
+    }
 };
 document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");
