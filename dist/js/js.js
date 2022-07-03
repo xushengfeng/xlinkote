@@ -495,3 +495,7 @@ document.getElementById("新建画板").onclick = () => {
     xel.append(draw);
     data_changed();
 };
+window.onbeforeunload = () => {
+    if (!saved)
+        return true;
+};

@@ -520,3 +520,7 @@ document.getElementById("新建画板").onclick = () => {
 
     data_changed();
 };
+
+window.onbeforeunload = () => {
+    if (!saved) return true;
+};
