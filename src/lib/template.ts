@@ -187,6 +187,12 @@ class markdown extends HTMLElement {
         this.onclick = text.onfocus = () => {
             focus_md = this;
         };
+        // 输入框失焦且无内容时删除元素的容器
+        text.onblur = () => {
+            if (text.value == "" && this.parentElement.childElementCount == 2) {
+                this.parentElement.remove();
+            }
+        };
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
