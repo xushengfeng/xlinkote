@@ -395,9 +395,13 @@ document.getElementById("新建页").onclick = () => {
     O.style.top = "0";
 };
 画布.ondragover = (e) => {
+    if (e.target != 画布)
+        return;
     e.preventDefault();
 };
 画布.ondrop = (e) => {
+    if (e.target != 画布)
+        return;
     e.preventDefault();
     if (e.dataTransfer.files.length != 0) {
         for (let f of e.dataTransfer.files) {
