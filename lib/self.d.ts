@@ -6,6 +6,7 @@ declare interface Window {
     JXG: any;
     markdownitContainer: any;
     TurndownService: any;
+    html2canvas: any;
 }
 
 declare const mathSymbols: any;

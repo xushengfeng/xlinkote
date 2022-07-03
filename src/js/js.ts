@@ -524,3 +524,17 @@ document.getElementById("新建画板").onclick = () => {
 window.onbeforeunload = () => {
     if (!saved) return true;
 };
+
+function to_canvas() {
+    for (let m of document.querySelectorAll("mjx-assistive-mml")) {
+        m.remove();
+    }
+    window.html2canvas(画布).then(function (canvas: HTMLCanvasElement) {
+        let url = canvas.toDataURL();
+        let a = document.createElement("a");
+        let name = file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+        a.download = `${name}.png`;
+        a.href = url;
+        a.click();
+    });
+}
