@@ -514,6 +514,8 @@ document.getElementById("新建画板").onclick = () => {
     xel.style.top = -O.offsetTop + "px";
     O.append(xel);
     let draw = document.createElement("x-draw");
+    draw.setAttribute("width", String(画布.offsetWidth));
+    draw.setAttribute("height", String(画布.offsetHeight));
     xel.append(draw);
 
     data_changed();

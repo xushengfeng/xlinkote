@@ -453,6 +453,10 @@ class draw extends HTMLElement {
         }
         else {
             this.main_canvas = document.createElement("canvas");
+            if (this.getAttribute("width"))
+                this.main_canvas.width = Number(this.getAttribute("width"));
+            if (this.getAttribute("height"))
+                this.main_canvas.height = Number(this.getAttribute("height"));
             this.append(this.main_canvas);
             this.z[0] = this.main_canvas;
         }
