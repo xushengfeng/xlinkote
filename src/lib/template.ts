@@ -246,7 +246,7 @@ function line_el(l: Array<any>) {
     for (let i of l) {
         if (<string>i.type == "bullet_list_open") list = true;
         if (<string>i.type == "bullet_list_close") list = false;
-        if ((<string>i.type).includes("open")) {
+        if ((<string>i.type).includes("_open") || (<string>i.type).includes("_block")) {
             if (i.tag == "p") {
                 if (list) continue;
             }

@@ -151,7 +151,7 @@ function math_b(state, startLine, endLine, silent) {
         }
     }
     state.line = nextLine;
-    token = state.push("mathjax_block", "", 0);
+    token = state.push("mathjax_block", "mjx-container", 0);
     token.map = [startLine, nextLine];
     let t = state.getLines(startLine, nextLine, state.blkIndent, true).trim();
     token.content = t.slice(2, t.length - 2);

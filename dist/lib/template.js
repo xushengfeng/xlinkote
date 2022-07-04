@@ -220,7 +220,7 @@ function line_el(l) {
             list = true;
         if (i.type == "bullet_list_close")
             list = false;
-        if (i.type.includes("open")) {
+        if (i.type.includes("_open") || i.type.includes("_block")) {
             if (i.tag == "p") {
                 if (list)
                     continue;
