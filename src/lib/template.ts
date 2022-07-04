@@ -251,8 +251,8 @@ function line_el(l: Array<any>) {
     let line2el = [];
     let list = false;
     for (let i of l) {
-        if (<string>i.type == "bullet_list_open") list = true;
-        if (<string>i.type == "bullet_list_close") list = false;
+        if (<string>i.type == "container_spoiler_open") list = true;
+        if (<string>i.type == "container_spoiler_close") list = false;
         if ((<string>i.type).includes("_open") || (<string>i.type).includes("_block")) {
             let tag = i.tag;
             if (tag == "p") {
@@ -260,6 +260,9 @@ function line_el(l: Array<any>) {
             }
             if (i.type == "html_block") {
                 tag = i.content.match(/<(.*?)>/)?.[1] || "";
+            }
+            if (i.type == "container_spoiler_open") {
+                tag = "details";
             }
             if (o[tag]) {
                 o[tag]++;

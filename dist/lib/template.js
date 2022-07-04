@@ -224,9 +224,9 @@ function line_el(l) {
     let line2el = [];
     let list = false;
     for (let i of l) {
-        if (i.type == "bullet_list_open")
+        if (i.type == "container_spoiler_open")
             list = true;
-        if (i.type == "bullet_list_close")
+        if (i.type == "container_spoiler_close")
             list = false;
         if (i.type.includes("_open") || i.type.includes("_block")) {
             let tag = i.tag;
@@ -236,6 +236,9 @@ function line_el(l) {
             }
             if (i.type == "html_block") {
                 tag = i.content.match(/<(.*?)>/)?.[1] || "";
+            }
+            if (i.type == "container_spoiler_open") {
+                tag = "details";
             }
             if (o[tag]) {
                 o[tag]++;
