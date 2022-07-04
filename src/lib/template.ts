@@ -170,12 +170,19 @@ class markdown extends HTMLElement {
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             let l_i = text_get_line(text);
-            while (!this.index[l_i] && l_i <= Object.keys(this.index).length) {
-                l_i++;
+            let index_i: any;
+            for (let i = 0; i < this.index.length; i++) {
+                if (this.index[i][2][0] <= l_i && l_i <= this.index[i][2][1]) {
+                    index_i = this.index[i];
+                    break;
+                } else if (i != 0 && this.index[i - 1][2][1] <= l_i && l_i <= this.index[i][2][0]) {
+                    // 空行处无map
+                    index_i = this.index[i];
+                    break;
+                }
             }
-            let t_l = this.index[l_i];
-            if (t_l) {
-                let el = <HTMLElement>s.querySelectorAll(`${this.index[l_i][0]}`)[this.index[l_i][1] - 1];
+            if (index_i) {
+                let el = <HTMLElement>s.querySelectorAll(`${index_i[0]}`)[index_i[1] - 1];
                 let x = el.offsetLeft,
                     y = el.offsetTop + el.offsetHeight;
                 O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
@@ -241,7 +248,7 @@ window.customElements.define("x-md", markdown);
 // 获取行->元素
 function line_el(l: Array<any>) {
     let o = {};
-    let line2el = {};
+    let line2el = [];
     let list = false;
     for (let i of l) {
         if (<string>i.type == "bullet_list_open") list = true;
@@ -255,7 +262,7 @@ function line_el(l: Array<any>) {
             } else {
                 o[i.tag] = 1;
             }
-            line2el[i.map[1]] = [i.tag, o[i.tag]];
+            line2el.push([i.tag, o[i.tag], i.map]);
         }
     }
     return line2el;
@@ -273,13 +280,15 @@ function text_get_line(text: HTMLTextAreaElement) {
 }
 
 // 获取元素->行
-function el_line(text: HTMLTextAreaElement, index: object, s: HTMLElement, iel: HTMLElement) {
-    for (let l_i of Object.keys(index)) {
-        let t_l = index[l_i];
-        if (t_l) {
-            let el = <HTMLElement>s.querySelectorAll(`#h > ${index[l_i][0]}`)[index[l_i][1] - 1];
-            if (el == iel) return Number(l_i);
-        }
+function el_line(
+    text: HTMLTextAreaElement,
+    index: Array<[number, number, [number, number]]>,
+    s: HTMLElement,
+    iel: HTMLElement
+) {
+    for (let l_i of index) {
+        let el = <HTMLElement>s.querySelectorAll(`#h > ${l_i[0]}`)[l_i[1] - 1];
+        if (el == iel) return Number(l_i[2][1]);
     }
 }
 
