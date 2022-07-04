@@ -229,17 +229,21 @@ function line_el(l) {
         if (i.type == "bullet_list_close")
             list = false;
         if (i.type.includes("_open") || i.type.includes("_block")) {
-            if (i.tag == "p") {
+            let tag = i.tag;
+            if (tag == "p") {
                 if (list)
                     continue;
             }
-            if (o[i.tag]) {
-                o[i.tag]++;
+            if (i.type == "html_block") {
+                tag = i.content.match(/<(.*?)>/)?.[1] || "";
+            }
+            if (o[tag]) {
+                o[tag]++;
             }
             else {
-                o[i.tag] = 1;
+                o[tag] = 1;
             }
-            line2el.push([i.tag, o[i.tag], i.map]);
+            line2el.push([tag, o[tag], i.map]);
         }
     }
     return line2el;

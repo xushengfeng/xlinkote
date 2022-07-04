@@ -254,15 +254,19 @@ function line_el(l: Array<any>) {
         if (<string>i.type == "bullet_list_open") list = true;
         if (<string>i.type == "bullet_list_close") list = false;
         if ((<string>i.type).includes("_open") || (<string>i.type).includes("_block")) {
-            if (i.tag == "p") {
+            let tag = i.tag;
+            if (tag == "p") {
                 if (list) continue;
             }
-            if (o[i.tag]) {
-                o[i.tag]++;
-            } else {
-                o[i.tag] = 1;
+            if (i.type == "html_block") {
+                tag = i.content.match(/<(.*?)>/)?.[1] || "";
             }
-            line2el.push([i.tag, o[i.tag], i.map]);
+            if (o[tag]) {
+                o[tag]++;
+            } else {
+                o[tag] = 1;
+            }
+            line2el.push([tag, o[tag], i.map]);
         }
     }
     return line2el;
