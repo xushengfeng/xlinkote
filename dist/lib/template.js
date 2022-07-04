@@ -264,7 +264,7 @@ function text_get_line(text) {
 function el_line(text, index, s, iel) {
     for (let l_i of index) {
         let el = s.querySelectorAll(`#h > ${l_i[0]}`)[l_i[1] - 1];
-        if (el == iel)
+        if (el == iel || el.contains(iel))
             return Number(l_i[2][1]);
     }
 }

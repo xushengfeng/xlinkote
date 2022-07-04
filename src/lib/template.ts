@@ -292,7 +292,7 @@ function el_line(
 ) {
     for (let l_i of index) {
         let el = <HTMLElement>s.querySelectorAll(`#h > ${l_i[0]}`)[l_i[1] - 1];
-        if (el == iel) return Number(l_i[2][1]);
+        if (el == iel || el.contains(iel)) return Number(l_i[2][1]);
     }
 }
 
