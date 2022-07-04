@@ -182,7 +182,7 @@ class markdown extends HTMLElement {
                 }
             }
             if (index_i) {
-                let el = <HTMLElement>s.querySelectorAll(`${index_i[0]}`)[index_i[1] - 1];
+                let el = <HTMLElement>s.querySelectorAll(`#h > ${index_i[0]}`)[index_i[1] - 1];
                 let x = el.offsetLeft,
                     y = el.offsetTop + el.offsetHeight;
                 O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
