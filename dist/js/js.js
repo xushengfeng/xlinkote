@@ -512,3 +512,6 @@ function to_canvas() {
         a.click();
     });
 }
+document.getElementById("新建画布").onclick = () => {
+    window.open(location.href);
+};
