@@ -356,6 +356,7 @@ async function file_load() {
         });
         if (fileHandle.kind != "file")
             return;
+        fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
     }
     else {

@@ -380,6 +380,7 @@ async function file_load() {
             excludeAcceptAllOption: true,
         });
         if (fileHandle.kind != "file") return;
+        fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
     } else {
         file = upload_i.files[0];
