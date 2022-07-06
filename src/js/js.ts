@@ -370,8 +370,10 @@ async function file_load() {
     reader.readAsText(file);
 }
 
+var 集el = document.getElementById("集");
+var 集 = [];
+
 async function dir_load() {
-    let o = [];
     if (window.showOpenFilePicker) {
         const dirHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
         d(dirHandle);
@@ -381,12 +383,27 @@ async function dir_load() {
                     d(entry);
                 } else {
                     if (entry.name.match(/.xln$/)) {
-                        o.push(entry);
+                        let file = await entry.getFile();
+                        let reader = new FileReader();
+                        reader.readAsText(file);
+                        let o;
+
+                        let div = document.createElement("div");
+                        let file_name = entry.name.replace(/.xln$/, "");
+                        div.innerText = file_name;
+                        reader.onload = () => {
+                            o = JSON.parse(<string>reader.result);
+                            集el.append(div);
+                            集.push(o);
+                        };
+                        div.onclick = async () => {
+                            set_data(o);
+                            document.title = `${file_name} - xlinkote`;
+                        };
                     }
                 }
             }
         }
-        return o;
     }
 }
 
