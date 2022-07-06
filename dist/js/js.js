@@ -301,16 +301,26 @@ window.MathJax = {
         enableMenu: false,
     },
 };
-var upload_el = document.getElementById("upload_i");
+var upload_i = document.getElementById("upload_i");
+var upload_d = document.getElementById("upload_d");
 var fileHandle;
 if (window.showOpenFilePicker) {
     document.getElementById("上传文件").onclick = file_load;
 }
 else {
     document.getElementById("上传文件").onclick = () => {
-        upload_el.click();
+        upload_i.click();
     };
-    upload_el.onchange = file_load;
+    upload_i.onchange = file_load;
+}
+if (window.showOpenFilePicker) {
+    document.getElementById("打开目录").onclick = dir_load;
+}
+else {
+    document.getElementById("打开目录").onclick = () => {
+        upload_d.click();
+    };
+    upload_d.onchange = dir_load;
 }
 async function file_load() {
     let file;
@@ -331,7 +341,7 @@ async function file_load() {
         file = await fileHandle.getFile();
     }
     else {
-        file = upload_el.files[0];
+        file = upload_i.files[0];
     }
     file_name = file.name.replace(/\.json$/, "");
     document.title = `${file_name} - xlinkote`;
@@ -341,6 +351,26 @@ async function file_load() {
         set_data(o);
     };
     reader.readAsText(file);
+}
+async function dir_load() {
+    let o = [];
+    if (window.showOpenFilePicker) {
+        const dirHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
+        d(dirHandle);
+        async function d(dirHandle) {
+            for await (const entry of dirHandle.values()) {
+                if (entry.kind == "directory") {
+                    d(entry);
+                }
+                else {
+                    if (entry.name.match(/.xln$/)) {
+                        o.push(entry);
+                    }
+                }
+            }
+        }
+        return o;
+    }
 }
 document.getElementById("保存文件").onclick = () => {
     write_file(JSON.stringify(get_data()));

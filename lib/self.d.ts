@@ -1,6 +1,7 @@
 declare interface Window {
     markdownit: any;
     showOpenFilePicker: any;
+    showDirectoryPicker: any;
     MathJax: any;
     markdownitTaskLists: any;
     JXG: any;
