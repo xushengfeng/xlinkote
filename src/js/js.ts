@@ -272,8 +272,18 @@ document.onkeydown = (e) => {
     }
 };
 
+var 集 = [{ name: "xlinkote", data: [] }];
+
+var focus_page = "xlinkote";
+
 function get_data() {
-    let l = [];
+    let l = {
+        meta: {
+            focus_page,
+        },
+        集,
+    };
+    let data = [];
     for (let i of O.childNodes) {
         let el = <HTMLElement>i;
         let values = {};
@@ -282,14 +292,38 @@ function get_data() {
             if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
             values[eel.tagName] = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
         }
-        l.push({ style: el.getAttribute("style"), values, tag: el.tagName });
+        data.push({ style: el.getAttribute("style"), values, tag: el.tagName });
+    }
+    for (let p of 集) {
+        if (p.name == focus_page) p.data = data;
     }
     return l;
 }
 
-function set_data(l: Array<{ style: string; values: object; tag: string }>) {
+function set_data(l: {
+    meta: {
+        focus_page: string;
+    };
+    集: Array<{ name: string; data: Array<{ style: string; values: object; tag: string }> }>;
+}) {
+    集 = l.集;
     O.innerHTML = "";
-    for (const x of l) {
+    for (const p of l.集) {
+        let div = document.createElement("div");
+        document.getElementById("集").append(div);
+        div.innerText = p.name;
+        div.onclick = () => {
+            render_data(p.data);
+            focus_page = p.name;
+        };
+        if (l.meta.focus_page == p.name) {
+            render_data(p.data);
+        }
+    }
+}
+
+function render_data(data: Array<{ style: string; values: object; tag: string }>) {
+    for (const x of data) {
         try {
             let el = document.createElement(x.tag);
             O.append(el);
@@ -331,24 +365,15 @@ if (window.showOpenFilePicker) {
     upload_i.onchange = file_load;
 }
 
-if (window.showOpenFilePicker) {
-    document.getElementById("打开目录").onclick = dir_load;
-} else {
-    document.getElementById("打开目录").onclick = () => {
-        upload_d.click();
-    };
-    upload_d.onchange = dir_load;
-}
-
 async function file_load() {
     let file: File;
     if (window.showOpenFilePicker) {
         [fileHandle] = await window.showOpenFilePicker({
             types: [
                 {
-                    description: "JSON",
+                    description: "xlinkote文件",
                     accept: {
-                        "text/*": [".json"],
+                        "text/*": [".xln"],
                     },
                 },
             ],
@@ -368,44 +393,6 @@ async function file_load() {
         set_data(o);
     };
     reader.readAsText(file);
-}
-
-var 集el = document.getElementById("集");
-var 集 = [];
-
-async function dir_load() {
-    if (window.showOpenFilePicker) {
-        const dirHandle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
-        d(dirHandle);
-        async function d(dirHandle) {
-            for await (const entry of dirHandle.values()) {
-                if (entry.kind == "directory") {
-                    d(entry);
-                } else {
-                    if (entry.name.match(/.xln$/)) {
-                        let file = await entry.getFile();
-                        let reader = new FileReader();
-                        reader.readAsText(file);
-                        let o;
-
-                        let div = document.createElement("div");
-                        let file_name = entry.name.replace(/.xln$/, "");
-                        div.innerText = file_name;
-                        reader.onload = () => {
-                            o = JSON.parse(<string>reader.result);
-                            集el.append(div);
-                            集.push(o);
-                        };
-                        div.onclick = async () => {
-                            set_data(o);
-                            document.title = `${file_name} - xlinkote`;
-                            fileHandle = entry;
-                        };
-                    }
-                }
-            }
-        }
-    }
 }
 
 document.getElementById("保存文件").onclick = () => {
