@@ -615,7 +615,7 @@ class draw extends HTMLElement {
     }
 
     get value() {
-        return JSON.stringify(this.z.map((v) => v.toDataURL()));
+        return JSON.stringify(this.z.map((v) => v.toDataURL("image/webp")));
     }
 
     set value(v: string) {

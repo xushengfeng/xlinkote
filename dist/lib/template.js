@@ -551,7 +551,7 @@ class draw extends HTMLElement {
         this.z = Array(...this.querySelectorAll("canvas"));
     }
     get value() {
-        return JSON.stringify(this.z.map((v) => v.toDataURL()));
+        return JSON.stringify(this.z.map((v) => v.toDataURL("image/webp")));
     }
     set value(v) {
         this.set_v(v);
