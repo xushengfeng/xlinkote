@@ -380,6 +380,7 @@ async function dir_load() {
                         div.onclick = async () => {
                             set_data(o);
                             document.title = `${file_name} - xlinkote`;
+                            fileHandle = entry;
                         };
                     }
                 }
