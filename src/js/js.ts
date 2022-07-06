@@ -385,7 +385,7 @@ async function file_load() {
     } else {
         file = upload_i.files[0];
     }
-    file_name = file.name.replace(/\.json$/, "");
+    file_name = file.name.replace(/\.xln$/, "");
     document.title = `${file_name} - xlinkote`;
 
     let reader = new FileReader();
@@ -414,7 +414,7 @@ async function write_file(text: string) {
         let a = document.createElement("a");
         let blob = new Blob([text]);
         let name = file_name || document.querySelector("h1")?.innerText || `xlinkote`;
-        a.download = `${name}.json`;
+        a.download = `${name}.xln`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
