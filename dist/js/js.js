@@ -203,6 +203,8 @@ function creat_x_x(x, y) {
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
     O.append(xel);
+    xel.id = crypto.randomUUID();
+    z.push(xel);
     var md = document.createElement("x-md");
     xel.append(md);
     md.edit = true;
@@ -561,25 +563,38 @@ document.getElementById("新建集").onclick = () => {
 class 图层 {
     constructor() {
         this.z = [];
+        this.聚焦元素 = null;
     }
-    reflash() {
+    reflash(el) {
         document.getElementById("层").innerHTML = "";
         for (let i in this.z) {
             this.z[i].style.zIndex = i;
             let div = document.createElement("div");
-            div.innerText = this.z[i].id;
+            let r = document.createElement("input");
+            r.type = "radio";
+            r.name = "层";
+            r.value = i;
+            if (this.z[i] == el)
+                r.checked = true;
+            let l = document.createElement("label");
+            l.append(this.z[i].id);
+            l.append(r);
+            div.append(l);
+            div.onclick = () => {
+                this.聚焦元素 = this.z[i];
+            };
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
     }
     push(el) {
         this.z.push(el);
-        this.reflash();
+        this.reflash(el);
     }
     remove(el) {
         for (let i in this.z) {
             if (this.z[i] == el) {
                 this.z.splice(Number(i), 1);
-                this.reflash();
+                this.reflash(el);
                 return;
             }
         }
@@ -590,7 +605,7 @@ class 图层 {
     底层(el) {
         this.remove(el);
         this.z.unshift(el);
-        this.reflash();
+        this.reflash(el);
     }
     下一层(el) {
         let i = this.get(el);
@@ -598,7 +613,7 @@ class 图层 {
             return;
         this.remove(el);
         this.z.splice(i - 1, 0, el);
-        this.reflash();
+        this.reflash(el);
     }
     上一层(el) {
         let i = this.get(el);
@@ -606,12 +621,29 @@ class 图层 {
             return;
         this.remove(el);
         this.z.splice(i + 1, 0, el);
-        this.reflash();
+        this.reflash(el);
     }
     顶层(el) {
         this.remove(el);
         this.z.push(el);
-        this.reflash();
+        this.reflash(el);
     }
 }
 var z = new 图层();
+document.getElementById("层按钮").onclick = (e) => {
+    let el = z.聚焦元素;
+    switch (e.target.id) {
+        case "底层":
+            z.底层(el);
+            break;
+        case "下一层":
+            z.下一层(el);
+            break;
+        case "上一层":
+            z.上一层(el);
+            break;
+        case "顶层":
+            z.顶层(el);
+            break;
+    }
+};
