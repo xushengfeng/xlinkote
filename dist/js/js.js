@@ -275,7 +275,7 @@ function get_data() {
                 continue;
             values[eel.tagName] = { value: eel.value, ...(eel.edit ? { edit: eel.edit } : {}) };
         }
-        data.push({ style: el.getAttribute("style"), values, tag: el.tagName });
+        data.push({ style: el.getAttribute("style"), values, fixed: el.fixed });
     }
     for (let p of 集) {
         if (p.name == focus_page)
@@ -302,8 +302,9 @@ function set_data(l) {
 function render_data(data) {
     for (const x of data) {
         try {
-            let el = document.createElement(x.tag);
+            let el = document.createElement("x-x");
             z.push(el);
+            el.fixed = x.fixed;
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
