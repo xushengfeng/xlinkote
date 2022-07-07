@@ -202,8 +202,6 @@ function creat_x_x(x, y) {
     let xel = document.createElement("x-x");
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
-    O.append(xel);
-    xel.id = crypto.randomUUID();
     z.push(xel);
     var md = document.createElement("x-md");
     xel.append(md);
@@ -305,7 +303,7 @@ function render_data(data) {
     for (const x of data) {
         try {
             let el = document.createElement(x.tag);
-            O.append(el);
+            z.push(el);
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
@@ -434,7 +432,7 @@ document.getElementById("删除元素").onclick = () => {
 };
 document.getElementById("新建页").onclick = () => {
     let page = document.createElement("x-page");
-    O.append(page);
+    z.push(page);
     page.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
     O.style.left = -page.offsetLeft + "px";
     O.style.top = "0";
@@ -455,7 +453,7 @@ document.getElementById("新建页").onclick = () => {
             let xel = document.createElement("x-x");
             xel.style.left = x / zoom + "px";
             xel.style.top = y / zoom + "px";
-            O.append(xel);
+            z.push(xel);
             if (type == "image") {
                 let img = document.createElement("x-img");
                 xel.append(img);
@@ -500,7 +498,7 @@ document.getElementById("新建页").onclick = () => {
         let xel = document.createElement("x-x");
         xel.style.left = x / zoom + "px";
         xel.style.top = y / zoom + "px";
-        O.append(xel);
+        z.push(xel);
         let html = e.dataTransfer.getData("text/html");
         let turndownService = new window.TurndownService({ headingStyle: "atx" });
         let md = document.createElement("x-md");
@@ -533,7 +531,7 @@ document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");
     xel.style.left = -O.offsetLeft + "px";
     xel.style.top = -O.offsetTop + "px";
-    O.append(xel);
+    z.push(xel);
     let draw = document.createElement("x-draw");
     draw.setAttribute("width", String(画布.offsetWidth));
     draw.setAttribute("height", String(画布.offsetHeight));
@@ -587,6 +585,8 @@ class 图层 {
         }
     }
     push(el) {
+        el.id = `新图层${crypto.randomUUID().slice(0, 7)}`;
+        O.append(el);
         this.z.push(el);
         this.reflash(el);
     }
@@ -597,6 +597,13 @@ class 图层 {
                 this.reflash(el);
                 return;
             }
+        }
+    }
+    focus(el) {
+        this.聚焦元素 = el;
+        for (let l of document.getElementById("层").querySelectorAll("label")) {
+            if (el.id == l.innerText)
+                l.querySelector("input").checked = true;
         }
     }
     get(el) {

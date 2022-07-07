@@ -55,6 +55,12 @@ class x extends HTMLElement {
                 }
             }
         };
+        this.onclick = () => {
+            z.focus(this);
+        };
+        this.onfocus = () => {
+            z.focus(this);
+        };
         size.oninput = () => {
             let l = size.value.split(",");
             this.style.width = l[0];
