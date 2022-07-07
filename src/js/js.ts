@@ -608,8 +608,8 @@ class 图层 {
             r.value = i;
             if (this.z[i] == el) r.checked = true;
             let l = document.createElement("label");
-            l.append(this.z[i].id);
             l.append(r);
+            l.append(this.z[i].id);
             div.append(l);
             div.onclick = () => {
                 this.聚焦元素 = this.z[i];
@@ -619,7 +619,7 @@ class 图层 {
     }
 
     push(el: x) {
-        el.id = `新图层${crypto.randomUUID().slice(0, 7)}`;
+        el.id = `${crypto.randomUUID().slice(0, 7)}`;
         O.append(el);
         this.z.push(el);
         this.reflash(el);
