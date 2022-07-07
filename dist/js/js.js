@@ -296,6 +296,7 @@ function set_data(l) {
         };
         if (l.meta.focus_page == p.name) {
             render_data(p.data);
+            focus_page = p.name;
         }
     }
 }
