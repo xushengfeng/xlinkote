@@ -558,3 +558,60 @@ function to_canvas() {
 document.getElementById("新建集").onclick = () => {
     window.open(location.href);
 };
+class 图层 {
+    constructor() {
+        this.z = [];
+    }
+    reflash() {
+        document.getElementById("层").innerHTML = "";
+        for (let i in this.z) {
+            this.z[i].style.zIndex = i;
+            let div = document.createElement("div");
+            div.innerText = this.z[i].id;
+            document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
+        }
+    }
+    push(el) {
+        this.z.push(el);
+        this.reflash();
+    }
+    remove(el) {
+        for (let i in this.z) {
+            if (this.z[i] == el) {
+                this.z.splice(Number(i), 1);
+                this.reflash();
+                return;
+            }
+        }
+    }
+    get(el) {
+        return this.z.indexOf(el);
+    }
+    底层(el) {
+        this.remove(el);
+        this.z.unshift(el);
+        this.reflash();
+    }
+    下一层(el) {
+        let i = this.get(el);
+        if (i == 0)
+            return;
+        this.remove(el);
+        this.z.splice(i - 1, 0, el);
+        this.reflash();
+    }
+    上一层(el) {
+        let i = this.get(el);
+        if (i == this.z.length - 1)
+            return;
+        this.remove(el);
+        this.z.splice(i + 1, 0, el);
+        this.reflash();
+    }
+    顶层(el) {
+        this.remove(el);
+        this.z.push(el);
+        this.reflash();
+    }
+}
+var z = new 图层();

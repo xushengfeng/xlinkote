@@ -55,7 +55,7 @@ body {
     height: 100vh;
     display: grid;
     grid-template-columns: min-content auto;
-    grid-template-rows: min-content auto;
+    grid-template-rows: min-content auto auto;
 }
 
 #nav {
@@ -110,7 +110,7 @@ body {
     position: relative;
     background-color: var(--bg1);
     overflow: hidden;
-    grid-area: 2 / 2 / 3 / 3;
+    grid-area: 2 / 2 / 4 / 3;
 }
 
 /* 画布 */
