@@ -275,7 +275,7 @@ function get_data() {
                 continue;
             values[eel.tagName] = { value: eel.value, ...(eel.edit ? { edit: eel.edit } : {}) };
         }
-        data.push({ style: el.getAttribute("style"), values, fixed: el.fixed });
+        data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
     }
     for (let p of 集) {
         if (p.name == focus_page)
@@ -303,8 +303,9 @@ function render_data(data) {
     for (const x of data) {
         try {
             let el = document.createElement("x-x");
-            z.push(el);
             el.fixed = x.fixed;
+            el.id = x.id;
+            z.push(el);
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
@@ -584,7 +585,7 @@ class 图层 {
         }
     }
     push(el) {
-        el.id = `${crypto.randomUUID().slice(0, 7)}`;
+        el.id = el.id === "undefined" ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
         this.reflash(el);

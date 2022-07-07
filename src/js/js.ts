@@ -292,7 +292,7 @@ function get_data() {
             if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
             values[eel.tagName] = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
         }
-        data.push({ style: el.getAttribute("style"), values, fixed: el.fixed });
+        data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
     }
     for (let p of 集) {
         if (p.name == focus_page) p.data = data;
@@ -300,11 +300,13 @@ function get_data() {
     return l;
 }
 
+type data = Array<{ id: string; style: string; values: object; fixed: boolean }>;
+
 function set_data(l: {
     meta: {
         focus_page: string;
     };
-    集: Array<{ name: string; data: Array<{ style: string; values: object; fixed: boolean }> }>;
+    集: Array<{ name: string; data: data }>;
 }) {
     集 = l.集;
     O.innerHTML = "";
@@ -322,12 +324,13 @@ function set_data(l: {
     }
 }
 
-function render_data(data: Array<{ style: string; values: object; fixed: boolean }>) {
+function render_data(data: data) {
     for (const x of data) {
         try {
             let el = <x>document.createElement("x-x");
-            z.push(el);
             el.fixed = x.fixed;
+            el.id = x.id;
+            z.push(el);
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
@@ -619,7 +622,7 @@ class 图层 {
     }
 
     push(el: x) {
-        el.id = `${crypto.randomUUID().slice(0, 7)}`;
+        el.id = el.id === "undefined" ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
         this.reflash(el);
