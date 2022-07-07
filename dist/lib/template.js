@@ -150,6 +150,7 @@ class markdown extends HTMLElement {
         text.onblur = () => {
             if (text.value == "" && this.parentElement.childElementCount == 2) {
                 this.parentElement.remove();
+                z.remove(this.parentElement);
             }
         };
         // 点击元素定位到源文本行
