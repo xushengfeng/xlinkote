@@ -1,4 +1,12 @@
 {
+  "name":"xlinkote",
+  "author": {
+    "email": "xushengfeng_zg@163.com",
+    "name": "xsf"
+  },
+  "version": "0.0.1",
+  "homepage": "https://github.com/xushengfeng/xlinkote/",
+  "license": "GPL-3.0",
   "dependencies": {
     "html2canvas": "^1.4.1",
     "jsxgraph": "^1.4.4",
