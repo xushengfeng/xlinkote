@@ -4,13 +4,17 @@ class x extends HTMLElement {
         super();
     }
 
+    fixed = false;
+
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
-        var size = document.createElement("input");
+        var style = document.createElement("input");
+        var f = document.createElement("div");
         var d = document.createElement("div");
 
-        bar.append(size);
+        bar.append(style);
+        bar.append(f);
         bar.append(d);
         this.append(bar);
 
@@ -20,6 +24,7 @@ class x extends HTMLElement {
 
         this.addEventListener("mousedown", (e) => {
             if (e.button != 2) return;
+            if (this.fixed) return;
             o_e = e;
             o_rect = { x: this.offsetLeft, y: this.offsetTop };
             document.getElementById("画布").style.cursor = "move";
@@ -69,43 +74,6 @@ class x extends HTMLElement {
             z.focus(this);
         };
 
-        size.oninput = () => {
-            let l = size.value.split(",");
-            this.style.width = l[0];
-            this.style.height = l[1];
-        };
-
-        d.onclick = () => {
-            this.remove();
-            selected_el = selected_el.filter((el) => el != this);
-        };
-    }
-}
-
-window.customElements.define("x-x", x);
-
-var x_x_types = ["x-md", "x-graph"];
-
-// 非自由 页
-class page extends HTMLElement {
-    constructor() {
-        super();
-    }
-
-    connectedCallback() {
-        var bar = document.createElement("div");
-        bar.id = "x-page_bar";
-        var style = document.createElement("input");
-        var type = document.createElement("select");
-        var b = document.createElement("div");
-        var d = document.createElement("div");
-
-        bar.append(style);
-        bar.append(type);
-        bar.append(b);
-        bar.append(d);
-        this.append(bar);
-
         style.value = this.getAttribute("style");
 
         style.onfocus = () => {
@@ -116,14 +84,8 @@ class page extends HTMLElement {
             this.setAttribute("style", style.value);
         };
 
-        for (const i of x_x_types) {
-            let op = document.createElement("option");
-            op.value = i;
-            op.innerText = i;
-            type.append(op);
-        }
-        b.onclick = () => {
-            this.append(document.createElement(type.value));
+        f.onclick = () => {
+            this.fixed = !this.fixed;
         };
 
         d.onclick = () => {
@@ -133,7 +95,7 @@ class page extends HTMLElement {
     }
 }
 
-window.customElements.define("x-page", page);
+window.customElements.define("x-x", x);
 
 var parse;
 

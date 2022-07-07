@@ -431,11 +431,9 @@ document.getElementById("删除元素").onclick = () => {
         focus_md.remove();
 };
 document.getElementById("新建页").onclick = () => {
-    let page = document.createElement("x-page");
+    let page = document.createElement("x-x");
     z.push(page);
-    page.style.left = `${(O.querySelectorAll("x-page").length - 1) * 100}vw`;
-    O.style.left = -page.offsetLeft + "px";
-    O.style.top = "0";
+    page.fixed = true;
 };
 画布.ondragover = (e) => {
     if (e.target != 画布)
