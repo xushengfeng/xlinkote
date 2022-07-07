@@ -587,7 +587,7 @@ class 图层 {
         document.documentElement.style.setProperty("--zest-index", String(this.z.length - 1));
     }
     push(el) {
-        el.id = el.id === "undefined" ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
+        el.id = el.id === "undefined" || !el.id ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
         this.reflash(el);

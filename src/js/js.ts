@@ -624,7 +624,7 @@ class 图层 {
     }
 
     push(el: x) {
-        el.id = el.id === "undefined" ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
+        el.id = el.id === "undefined" || !el.id ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
         this.reflash(el);
