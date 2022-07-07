@@ -7,6 +7,7 @@
     --blur: blur(10px);
     --bg1: #ffffff;
     --icon-color: none;
+    --zest-index: 0;
 }
 
 .icon {
@@ -275,6 +276,9 @@ x-x > #x-x_bar > input:nth-child(1) {
 }
 x-x > #x-x_bar > input[list="tags"] {
     width: 50px;
+}
+x-x:focus-within {
+    z-index: calc(var(--zest-index) + 1) !important;
 }
 
 x-page {
