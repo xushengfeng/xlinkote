@@ -384,6 +384,20 @@ async function write_file(text) {
         await writable.write(text);
         await writable.close();
     }
+    else if (window.showSaveFilePicker) {
+        fileHandle = await window.showSaveFilePicker({
+            suggestedName: document.querySelector("h1")?.innerText || `xlinkote`,
+            types: [
+                {
+                    description: "xlinkote 文件",
+                    accept: { "text/*": [".xln"] },
+                },
+            ],
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(text);
+        await writable.close();
+    }
     else {
         let a = document.createElement("a");
         let blob = new Blob([text]);
