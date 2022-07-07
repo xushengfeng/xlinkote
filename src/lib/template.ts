@@ -91,6 +91,7 @@ class x extends HTMLElement {
         d.onclick = () => {
             this.remove();
             selected_el = selected_el.filter((el) => el != this);
+            z.remove(this);
         };
     }
 }
