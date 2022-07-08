@@ -326,6 +326,8 @@ function set_data(l: {
 }
 
 function render_data(data: data) {
+    O.innerHTML = "";
+    z.z = [];
     for (const x of data) {
         try {
             let el = <x>document.createElement("x-x");
