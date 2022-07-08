@@ -665,3 +665,6 @@ document.getElementById("层按钮").onclick = (e) => {
             break;
     }
 };
+document.getElementById("侧栏").onclick = () => {
+    document.getElementById("main").classList.toggle("侧栏");
+};

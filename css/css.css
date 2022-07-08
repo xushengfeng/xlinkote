@@ -27,8 +27,12 @@ body {
 body > #main {
     height: 100vh;
     display: grid;
-    grid-template-columns: min-content auto;
+    grid-template-columns: 0 auto;
     grid-template-rows: min-content auto auto;
+}
+
+.侧栏 {
+    grid-template-columns: 164px auto !important;
 }
 
 body > #main > #nav {
