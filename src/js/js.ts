@@ -717,7 +717,7 @@ var dav_o = {
     password: "",
 };
 
-const client = window.WebDAV.createClient(dav_o.url, {
+var client = window.WebDAV.createClient(dav_o.url, {
     username: dav_o.username,
     password: dav_o.password,
 });
@@ -741,9 +741,10 @@ async function get_all_xln() {
 
 async function get_xln_value(path: string) {
     const str = await client.getFileContents(path, { format: "text" });
-    return str;
+    let o = JSON.parse(<string>str);
+    set_data(o);
 }
 
-async function put_xln_value(path: string, str: string) {
-    client.putFileContents(path, str);
+async function put_xln_value(path: string) {
+    client.putFileContents(path, JSON.stringify(get_data()));
 }
