@@ -575,9 +575,16 @@ class 图层 {
             r.value = i;
             if (this.z[i] == el)
                 r.checked = true;
+            let t = document.createElement("input");
+            t.type = "text";
             let l = document.createElement("label");
             l.append(r);
-            l.append(this.z[i].id);
+            t.value = this.z[i].id;
+            l.append(t);
+            t.onchange = () => {
+                this.z[i].id = t.value;
+                this.reflash(this.z[i]);
+            };
             div.append(l);
             div.onclick = () => {
                 this.聚焦元素 = this.z[i];
@@ -604,8 +611,8 @@ class 图层 {
     focus(el) {
         this.聚焦元素 = el;
         for (let l of document.getElementById("层").querySelectorAll("label")) {
-            if (el.id == l.innerText)
-                l.querySelector("input").checked = true;
+            if (el.id == l.querySelector("input[type='text']").value)
+                l.querySelector("input[type='radio']").checked = true;
         }
     }
     get(el) {
