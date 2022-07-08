@@ -9,6 +9,7 @@ declare interface Window {
     markdownitContainer: any;
     TurndownService: any;
     html2canvas: any;
+    WebDAV: any;
 }
 
 declare const mathSymbols: any;

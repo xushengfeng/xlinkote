@@ -668,3 +668,35 @@ document.getElementById("层按钮").onclick = (e) => {
 document.getElementById("侧栏").onclick = () => {
     document.getElementById("main").classList.toggle("侧栏");
 };
+var dav_o = {
+    url: "",
+    username: "",
+    password: "",
+};
+const client = window.WebDAV.createClient(dav_o.url, {
+    username: dav_o.username,
+    password: dav_o.password,
+});
+async function get_all_xln() {
+    let l = [];
+    get_dir("/test");
+    async function get_dir(path) {
+        const directoryItems = await client.getDirectoryContents(path);
+        for (let i of directoryItems) {
+            if (i.type == "file" && i.basename.match(/\.xln$/)) {
+                l.push(i);
+            }
+            if (i.type == "directory") {
+                get_dir(i.filename);
+            }
+        }
+    }
+    return l;
+}
+async function get_xln_value(path) {
+    const str = await client.getFileContents(path, { format: "text" });
+    return str;
+}
+async function put_xln_value(path, str) {
+    client.putFileContents(path, str);
+}

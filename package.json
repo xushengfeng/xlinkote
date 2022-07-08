@@ -1,5 +1,5 @@
 {
-  "name":"xlinkote",
+  "name": "xlinkote",
   "author": {
     "email": "xushengfeng_zg@163.com",
     "name": "xsf"
@@ -14,6 +14,7 @@
     "markdown-it-container": "^3.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "mathjax": "^3.2.2",
-    "turndown": "^7.1.1"
+    "turndown": "^7.1.1",
+    "webdav": "^4.10.0"
   }
 }
