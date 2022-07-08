@@ -18,33 +18,6 @@
     filter: var(--icon-color);
 }
 
-html {
-}
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: #ddd;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #ccc;
-}
-::-webkit-scrollbar-track {
-    background: #0000;
-}
-::-webkit-scrollbar-button {
-    border-radius: 10px;
-    height: 8px;
-    width: 8px;
-    background-color: #ddd;
-}
-::-webkit-scrollbar-corner {
-    background-color: #0000;
-}
-
 body {
     margin: 0;
     overflow: hidden;
@@ -60,8 +33,6 @@ body {
 }
 
 #nav {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
     position: relative;
     z-index: 2;
     grid-area: 1 / 1 / 2 / 3;
@@ -119,14 +90,11 @@ body {
 #层按钮 > div {
     width: 16px;
     height: 16px;
-    background-color: #eee;
-    border-radius: 50%;
 }
 
 #画布 {
     flex-grow: 1;
     position: relative;
-    background-color: var(--bg1);
     overflow: hidden;
     grid-area: 2 / 2 / 4 / 3;
 }
@@ -144,7 +112,6 @@ body {
 }
 #选择 > div {
     position: absolute;
-    border: 1px solid #000;
 }
 
 /* 导航 */
@@ -157,13 +124,10 @@ body {
 #导航 > div {
     width: 16px;
     height: 16px;
-    background-color: #eee;
-    border-radius: 50%;
     border: none;
     margin-left: 8px;
     cursor: pointer;
     position: relative;
-    outline: none;
 }
 #导航 > div > .icon {
     width: 16px;
@@ -193,16 +157,10 @@ x-sinppet {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
 }
 x-sinppet > div:nth-child(1) {
     width: 16px;
     min-height: 16px;
-    background-color: var(--bg-color1);
-    border-radius: 4px;
-    cursor: pointer;
 }
 x-sinppet > div:nth-child(2) {
     overflow: auto;
@@ -218,20 +176,12 @@ x-sinppet > div:nth-child(2) {
 
 .add_tag {
     position: absolute;
-    outline: none;
-    padding: 0;
-    border: none;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
 }
 
 x-x {
     position: absolute;
     display: block;
     width: max-content;
-    min-width: 1em;
 }
 
 x-x:hover > #x-x_bar {
@@ -255,73 +205,11 @@ x-x > #x-x_bar {
 x-x > #x-x_bar > div {
     width: 16px;
     height: 16px;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-    margin-right: 4px;
-}
-x-x > #x-x_bar > input {
-    border: none;
-    padding: 0;
-    outline: none;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    margin-right: 4px;
-    box-shadow: var(--shadow1);
-}
-x-x > #x-x_bar > input:nth-child(1) {
-    width: 100px;
-}
-x-x > #x-x_bar > input[list="tags"] {
-    width: 50px;
 }
 x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;
 }
 
-x-page {
-    position: absolute;
-    top: 0;
-    width: 100vw;
-    box-sizing: border-box;
-}
-x-page > #x-page_bar {
-    display: flex;
-    position: absolute;
-    bottom: -16px;
-    transition: var(--transition);
-}
-x-page > #x-page_bar > * {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-    height: 16px;
-}
-x-page > #x-page_bar > div {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
-}
-x-page > #x-page_bar > select {
-    border: none;
-    padding: 0;
-    outline: none;
-    margin-right: 4px;
-}
-x-page > #x-page_bar > input {
-    border: none;
-    padding: 0;
-    outline: none;
-    margin-right: 4px;
-    width: 300px;
-}
-
-.x-x_selected {
-    outline: 1px solid #0000ff;
-}
 
 x-md {
     position: relative;
@@ -330,8 +218,6 @@ x-md {
 #t_md {
     width: 16px;
     height: 16px;
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
 }
 x-md > textarea {
     position: absolute;
@@ -340,12 +226,6 @@ x-md > textarea {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-    outline: none;
-    border: none;
 }
 
 .show_md {
@@ -371,25 +251,16 @@ x-graph > div:not(#t_md) {
 x-graph > textarea {
     opacity: 0;
     pointer-events: none;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-    outline: none;
-    border: none;
 }
 
 x-pro {
     display: inline-block;
     width: 40px;
     height: 16px;
-    background-color: var(--bg-color3);
-    border-radius: 4px;
     overflow: hidden;
     position: relative;
 }
 x-pro > div {
-    background-color: #000;
     height: 100%;
 }
 x-pro > span {
@@ -400,7 +271,6 @@ x-pro > span {
     width: 100%;
     text-align: center;
     mix-blend-mode: difference;
-    color: #fff;
 }
 
 @media (any-pointer: coarse) {

@@ -1,0 +1,166 @@
+:root {
+    --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    --bg-color1: rgba(235, 235, 235, 0.6);
+    --bg-color2: rgba(255, 255, 255, 0.6);
+    --bg-color3: #ddd;
+    --shadow1: 0 0 4px #3333;
+    --blur: blur(10px);
+    --bg1: #ffffff;
+    --icon-color: none;
+    --zest-index: 0;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #ddd;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+}
+::-webkit-scrollbar-track {
+    background: #0000;
+}
+::-webkit-scrollbar-button {
+    border-radius: 10px;
+    height: 8px;
+    width: 8px;
+    background-color: #ddd;
+}
+::-webkit-scrollbar-corner {
+    background-color: #0000;
+}
+
+
+#层按钮 > div {
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+#画布 {
+    background-color: var(--bg1);
+}
+
+/* 画布 */
+#选择 > div {
+    border: 1px solid #000;
+}
+
+/* 导航 */
+#导航 > div {
+    background-color: #eee;
+    border-radius: 50%;
+    outline: none;
+}
+x-sinppet {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
+x-sinppet > div:nth-child(1) {
+    background-color: var(--bg-color1);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add_tag {
+    outline: none;
+    padding: 0;
+    border: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
+
+x-x {
+    min-width: 1em;
+}
+
+x-x > #x-x_bar > div {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    margin-right: 4px;
+}
+x-x > #x-x_bar > input {
+    border: none;
+    padding: 0;
+    outline: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    margin-right: 4px;
+    box-shadow: var(--shadow1);
+}
+x-x > #x-x_bar > input:nth-child(1) {
+    width: 100px;
+}
+x-x > #x-x_bar > input[list="tags"] {
+    width: 50px;
+}
+x-x:focus-within {
+    z-index: calc(var(--zest-index) + 1) !important;
+}
+
+
+.x-x_selected {
+    outline: 1px solid #0000ff;
+}
+
+#t_md {
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
+x-md > textarea {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    outline: none;
+    border: none;
+}
+
+
+x-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+x-graph > div:not(#t_md) {
+    width: 500px;
+    height: 500px;
+}
+
+x-graph > textarea {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    outline: none;
+    border: none;
+}
+
+x-pro {
+    background-color: var(--bg-color3);
+    border-radius: 4px;
+}
+x-pro > div {
+    background-color: #000;
+}
+x-pro > span {
+    color: #fff;
+}
+
+@media (any-pointer: coarse) {
+}
+
+@media screen and (max-width: 420px) {
+}
+
+@media (prefers-color-scheme: dark) {
+}
