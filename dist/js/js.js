@@ -679,12 +679,21 @@ var client = window.WebDAV.createClient(dav_o.url, {
 });
 async function get_all_xln() {
     let l = [];
+    document.getElementById("webdav_files").innerHTML = "";
+    document.getElementById("webdav_files").parentElement.open = true;
     get_dir("/test");
     async function get_dir(path) {
         const directoryItems = await client.getDirectoryContents(path);
         for (let i of directoryItems) {
             if (i.type == "file" && i.basename.match(/\.xln$/)) {
                 l.push(i);
+                let tr = document.createElement("tr");
+                let n = document.createElement("td");
+                n.innerText = i.basename;
+                let p = document.createElement("td");
+                p.innerText = i.filename;
+                tr.append(n, p);
+                document.getElementById("webdav_files").append(tr);
             }
             if (i.type == "directory") {
                 get_dir(i.filename);
