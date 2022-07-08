@@ -34,23 +34,22 @@
     background-color: #0000;
 }
 
-
-#层按钮 > div {
+body > #main > #层容器 > #层按钮 > div {
     background-color: #eee;
     border-radius: 50%;
 }
 
-#画布 {
+body > #main > #画布 {
     background-color: var(--bg1);
 }
 
 /* 画布 */
-#选择 > div {
+body > #main > #画布 > #选择 > div {
     border: 1px solid #000;
 }
 
 /* 导航 */
-#导航 > div {
+body > #main > #画布 > #导航 > div {
     background-color: #eee;
     border-radius: 50%;
     outline: none;
@@ -107,7 +106,6 @@ x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;
 }
 
-
 .x-x_selected {
     outline: 1px solid #0000ff;
 }
@@ -124,7 +122,6 @@ x-md > textarea {
     outline: none;
     border: none;
 }
-
 
 x-graph {
     display: flex;
