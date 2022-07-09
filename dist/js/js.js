@@ -722,11 +722,14 @@ async function put_xln_value() {
 }
 document.getElementById("偏好设置").onclick = () => {
     document.getElementById("设置").style.display = "block";
+    show_setting();
 };
 document.getElementById("设置").querySelector("#close").onclick = () => {
     document.getElementById("设置").style.display = "";
+    save_setting();
 };
-function get_setting() {
+var store = JSON.parse(localStorage.getItem("config"));
+function save_setting() {
     let o = {};
     for (let f of document.getElementById("设置").querySelectorAll("form")) {
         o[f.name] = {};
@@ -735,9 +738,10 @@ function get_setting() {
             o[f.name][v[0]] = v[1];
         }
     }
+    store = o;
     localStorage.setItem("config", JSON.stringify(o));
 }
-function set_setting() {
+function show_setting() {
     let setting = JSON.parse(localStorage.getItem("config"));
     for (let f in setting) {
         let fel = document.querySelector(`form[name="${f}"]`);
