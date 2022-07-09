@@ -375,7 +375,7 @@ async function file_load() {
         file = upload_i.files[0];
     }
     file_name = file.name.replace(/\.xln$/, "");
-    document.title = `${file_name} - xlinkote`;
+    document.title = get_title();
     let reader = new FileReader();
     reader.onload = () => {
         let o = JSON.parse(reader.result);
@@ -391,9 +391,12 @@ var file_name = "";
 function get_file_name() {
     return file_name || document.querySelector("h1")?.innerText || `xlinkote`;
 }
+function get_title() {
+    return `${file_name} - xlinkote`;
+}
 async function write_file(text) {
     saved = true;
-    document.title = file_name;
+    document.title = get_title();
     if (fileHandle && (await fileHandle.requestPermission({ mode: "readwrite" })) === "granted") {
         const writable = await fileHandle.createWritable();
         await writable.write(text);
@@ -426,7 +429,7 @@ async function write_file(text) {
 function data_changed() {
     if (saved) {
         saved = false;
-        document.title = `・` + document.title;
+        document.title = `● ` + get_title();
     }
 }
 document.getElementById("toggle_md").onclick = () => {
@@ -703,7 +706,7 @@ async function get_all_xln() {
                     e.stopPropagation();
                     get_xln_value(i.filename);
                     file_name = i.basename.replace(/\.xln$/, "");
-                    document.title = file_name;
+                    document.title = get_title();
                     document.getElementById("webdav_files").parentElement.open = false;
                 };
             }
