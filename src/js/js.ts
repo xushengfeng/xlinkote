@@ -315,7 +315,7 @@ function set_data(l: {
     };
     集: Array<{ name: string; data: data }>;
 }) {
-    dav_file_path = l.meta.url;
+    if (l.meta.url) dav_file_path = l.meta.url;
     集 = l.集;
     O.innerHTML = "";
     for (const p of l.集) {
