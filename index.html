@@ -75,21 +75,23 @@
     </div>
     <div id="设置">
         <div id="close"></div>
-        <fieldset>
-            <legend>云（WebDAV）</legend>
-            网址<br><input type="text" name="" id="">
-            <br>
-            用户名<br><input type="text">
-            <br>
-            密码<br><input type="text">
-            <br>
-            同步间隔<br>
-            <select name="" id="">
-                <option value="">手动</option>
-                <option value="">5</option>
-                <option value="">10</option>
-            </select>
-        </fieldset>
+        <form name="webdav">
+            <fieldset>
+                <legend>云（WebDAV）</legend>
+                网址<br><input type="text" name="网址">
+                <br>
+                用户名<br><input type="text" name="用户名">
+                <br>
+                密码<br><input type="text" name="密码">
+                <br>
+                同步间隔<br>
+                <select name="webdav_同步间隔" id="">
+                    <option value="0">手动</option>
+                    <option value="1">5</option>
+                    <option value="10">10</option>
+                </select>
+            </fieldset>
+        </form>
     </div>
 </body>
 

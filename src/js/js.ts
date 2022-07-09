@@ -778,3 +778,25 @@ document.getElementById("偏好设置").onclick = () => {
 (<HTMLDivElement>document.getElementById("设置").querySelector("#close")).onclick = () => {
     document.getElementById("设置").style.display = "";
 };
+
+function get_setting() {
+    let o = {};
+    for (let f of document.getElementById("设置").querySelectorAll("form")) {
+        o[f.name] = {};
+        let form = new FormData(f);
+        for (let v of form) {
+            console.log(v);
+            o[f.name][v[0]] = v[1];
+        }
+    }
+    return o;
+}
+
+function set_setting(setting: object) {
+    for (let f in setting) {
+        let fel = document.querySelector(`form[name="${f}"]`);
+        for (let k in setting[f]) {
+            fel[k].value = setting[f][k];
+        }
+    }
+}
