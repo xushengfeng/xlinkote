@@ -160,7 +160,7 @@ body > #设置 {
     top: 0vh;
     left: 0vw;
     display: none;
-    z-index: calc(var(--zest-index) + 2);
+    z-index: calc(var(--zest-index) + 9);
 }
 
 body > #设置 > #close {
