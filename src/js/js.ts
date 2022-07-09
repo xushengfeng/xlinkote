@@ -770,3 +770,11 @@ async function put_xln_value() {
     let path = dav_file_path || document.querySelector("h1")?.innerText || `xlinkote`;
     client.putFileContents(path, JSON.stringify(get_data()));
 }
+
+document.getElementById("偏好设置").onclick = () => {
+    document.getElementById("设置").style.display = "block";
+};
+
+(<HTMLDivElement>document.getElementById("设置").querySelector("#close")).onclick = () => {
+    document.getElementById("设置").style.display = "";
+};
