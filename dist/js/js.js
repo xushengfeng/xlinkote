@@ -694,6 +694,11 @@ async function get_all_xln() {
                 p.innerText = i.filename;
                 tr.append(n, p);
                 document.getElementById("webdav_files").append(tr);
+                tr.onclick = (e) => {
+                    e.stopPropagation();
+                    get_xln_value(i.filename);
+                    document.getElementById("webdav_files").parentElement.open = false;
+                };
             }
             if (i.type == "directory") {
                 get_dir(i.filename);
@@ -702,11 +707,16 @@ async function get_all_xln() {
     }
     return l;
 }
+document.getElementById("从云加载").onclick = get_all_xln;
+var dav_file_path = "";
 async function get_xln_value(path) {
+    dav_file_path = path;
     const str = await client.getFileContents(path, { format: "text" });
     let o = JSON.parse(str);
     set_data(o);
 }
-async function put_xln_value(path) {
+document.getElementById("同步到云").onclick = put_xln_value;
+async function put_xln_value() {
+    let path = dav_file_path || document.querySelector("h1")?.innerText || `xlinkote`;
     client.putFileContents(path, JSON.stringify(get_data()));
 }
