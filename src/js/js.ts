@@ -418,6 +418,10 @@ document.getElementById("保存文件").onclick = () => {
 var saved = true;
 var file_name = "";
 
+function get_file_name() {
+    return file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+}
+
 async function write_file(text: string) {
     saved = true;
     document.title = file_name;
@@ -427,7 +431,7 @@ async function write_file(text: string) {
         await writable.close();
     } else if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
-            suggestedName: file_name || document.querySelector("h1")?.innerText || `xlinkote`,
+            suggestedName: get_file_name(),
             types: [
                 {
                     description: "xlinkote 文件",
@@ -441,7 +445,7 @@ async function write_file(text: string) {
     } else {
         let a = document.createElement("a");
         let blob = new Blob([text]);
-        let name = file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+        let name = get_file_name();
         a.download = `${name}.xln`;
         a.href = URL.createObjectURL(blob);
         a.click();
@@ -594,7 +598,7 @@ function to_canvas() {
     window.html2canvas(画布).then(function (canvas: HTMLCanvasElement) {
         let url = canvas.toDataURL();
         let a = document.createElement("a");
-        let name = file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+        let name = get_file_name();
         a.download = `${name}.png`;
         a.href = url;
         a.click();
@@ -775,7 +779,7 @@ async function get_xln_value(path: string) {
 document.getElementById("同步到云").onclick = put_xln_value;
 
 async function put_xln_value() {
-    let path = dav_file_path || document.querySelector("h1")?.innerText || `xlinkote`;
+    let path = dav_file_path || `/${get_file_name()}.xln`;
     client.putFileContents(path, JSON.stringify(get_data()));
 }
 
