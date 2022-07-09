@@ -153,6 +153,23 @@ body > #上下文菜单 {
     pointer-events: all !important;
 }
 
+body > #设置 {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0vh;
+    left: 0vw;
+    display: none;
+}
+
+body > #设置 > #close {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 x-sinppet {
     width: 16px;
     height: 16px;
