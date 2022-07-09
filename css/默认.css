@@ -34,6 +34,13 @@
     background-color: #0000;
 }
 
+body > #main > #nav dialog {
+    border: none;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
+
 body > #main > #层容器 > #层按钮 > div {
     background-color: #eee;
     border-radius: 50%;
