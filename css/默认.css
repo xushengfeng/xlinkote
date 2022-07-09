@@ -83,6 +83,19 @@ body > #main > #画布 > #导航 > div {
     border-radius: 50%;
     outline: none;
 }
+
+body > #设置 {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+}
+
+body > #设置 > #close {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
+
 x-sinppet {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
