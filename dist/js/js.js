@@ -708,9 +708,11 @@ async function get_all_xln() {
 }
 document.getElementById("从云加载").onclick = get_all_xln;
 var dav_file_path = "";
+var now_dav_data = "";
 async function get_xln_value(path) {
     dav_file_path = path;
     const str = await client.getFileContents(path, { format: "text" });
+    now_dav_data = str;
     let o = JSON.parse(str);
     set_data(o);
 }
@@ -718,6 +720,16 @@ document.getElementById("同步到云").onclick = put_xln_value;
 async function put_xln_value() {
     let path = dav_file_path || document.querySelector("h1")?.innerText || `xlinkote`;
     client.putFileContents(path, JSON.stringify(get_data()));
+}
+var auto_put_xln_t = NaN;
+function auto_put_xln() {
+    if (store.webdav.自动上传) {
+        auto_put_xln_t = setTimeout(() => {
+            if (now_dav_data != JSON.stringify(get_data())) {
+                put_xln_value();
+            }
+        }, Number(store.webdav.自动上传) * 60 * 1000);
+    }
 }
 document.getElementById("偏好设置").onclick = () => {
     document.getElementById("设置").style.display = "block";
@@ -745,6 +757,8 @@ function arter_save_setting() {
         username: store.webdav.用户名,
         password: store.webdav.密码,
     });
+    clearTimeout(auto_put_xln_t);
+    auto_put_xln();
 }
 function show_setting() {
     let setting = JSON.parse(localStorage.getItem("config"));
