@@ -725,7 +725,7 @@ async function get_all_xln() {
     let l = [];
     document.getElementById("webdav_files").innerHTML = "";
     (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = true;
-    get_dir("/test");
+    get_dir("/");
     async function get_dir(path: string) {
         const directoryItems = await client.getDirectoryContents(path);
         for (let i of directoryItems) {
