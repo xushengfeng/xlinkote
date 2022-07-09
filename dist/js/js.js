@@ -732,13 +732,13 @@ function get_setting() {
         o[f.name] = {};
         let form = new FormData(f);
         for (let v of form) {
-            console.log(v);
             o[f.name][v[0]] = v[1];
         }
     }
-    return o;
+    localStorage.setItem("config", JSON.stringify(o));
 }
-function set_setting(setting) {
+function set_setting() {
+    let setting = JSON.parse(localStorage.getItem("config"));
     for (let f in setting) {
         let fel = document.querySelector(`form[name="${f}"]`);
         for (let k in setting[f]) {
