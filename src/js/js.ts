@@ -285,6 +285,7 @@ function get_data() {
     let l = {
         meta: {
             focus_page,
+            url: dav_file_path,
         },
         集,
     };
@@ -310,9 +311,11 @@ type data = Array<{ id: string; style: string; values: object; fixed: boolean }>
 function set_data(l: {
     meta: {
         focus_page: string;
+        url: string;
     };
     集: Array<{ name: string; data: data }>;
 }) {
+    dav_file_path = l.meta.url;
     集 = l.集;
     O.innerHTML = "";
     for (const p of l.集) {
