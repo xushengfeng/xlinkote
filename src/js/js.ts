@@ -769,6 +769,7 @@ async function get_xln_value(path: string) {
     now_dav_data = str;
     let o = JSON.parse(<string>str);
     set_data(o);
+    if (fileHandle) fileHandle = null;
 }
 
 document.getElementById("同步到云").onclick = put_xln_value;
