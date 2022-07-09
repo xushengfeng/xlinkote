@@ -1,3 +1,8 @@
+var store = JSON.parse(localStorage.getItem("config"));
+if (!store) {
+    save_setting();
+}
+
 document.getElementById("tabs").onclick = (e) => {
     document.querySelectorAll("#tabs > div").forEach((el, i) => {
         if (el == e.target) {
@@ -711,15 +716,9 @@ document.getElementById("侧栏").onclick = () => {
     document.getElementById("main").classList.toggle("侧栏");
 };
 
-var dav_o = {
-    url: "",
-    username: "",
-    password: "",
-};
-
-var client = window.WebDAV.createClient(dav_o.url, {
-    username: dav_o.username,
-    password: dav_o.password,
+var client = window.WebDAV.createClient(store.webdav.网址, {
+    username: store.webdav.用户名,
+    password: store.webdav.密码,
 });
 
 async function get_all_xln() {
@@ -781,8 +780,6 @@ document.getElementById("偏好设置").onclick = () => {
     save_setting();
 };
 
-var store = JSON.parse(localStorage.getItem("config"));
-
 function save_setting() {
     let o = {};
     for (let f of document.getElementById("设置").querySelectorAll("form")) {
@@ -794,6 +791,15 @@ function save_setting() {
     }
     store = o;
     localStorage.setItem("config", JSON.stringify(o));
+
+    arter_save_setting();
+}
+
+function arter_save_setting() {
+    client = window.WebDAV.createClient(store.webdav.网址, {
+        username: store.webdav.用户名,
+        password: store.webdav.密码,
+    });
 }
 
 function show_setting() {
