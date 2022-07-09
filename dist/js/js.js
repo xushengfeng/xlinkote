@@ -397,7 +397,7 @@ async function write_file(text) {
     }
     else if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
-            suggestedName: document.querySelector("h1")?.innerText || `xlinkote`,
+            suggestedName: file_name || document.querySelector("h1")?.innerText || `xlinkote`,
             types: [
                 {
                     description: "xlinkote 文件",
@@ -698,6 +698,8 @@ async function get_all_xln() {
                 tr.onclick = (e) => {
                     e.stopPropagation();
                     get_xln_value(i.filename);
+                    file_name = i.basename.replace(/\.xln$/, "");
+                    document.title = file_name;
                     document.getElementById("webdav_files").parentElement.open = false;
                 };
             }
