@@ -7,7 +7,7 @@ document.getElementById("tabs").onclick = (e) => {
         if (el == e.target) {
             document.querySelectorAll("#items > div").forEach((iel, j) => {
                 if (i == j) {
-                    iel.style.width = "100%";
+                    iel.style.width = "100vw";
                 }
                 else {
                     iel.style.width = "0";
@@ -98,9 +98,10 @@ var mouse = (e) => {
 var o_touch_e;
 document.ontouchstart = (e) => {
     let el = e.changedTouches[0].target;
-    if (el == document.querySelector("#画布") ||
-        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
-        ![].slice.call(document.querySelectorAll("x-sinppet *")).includes(el)) {
+    if (!画布.contains(el))
+        return;
+    if (!(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
+        !document.querySelector("x-sinppet").contains(el)) {
         o_touch_e = e;
         o_rect = { x: O.offsetLeft, y: O.offsetTop };
         document.getElementById("画布").style.cursor = "move";
