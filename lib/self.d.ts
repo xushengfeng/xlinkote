@@ -1,16 +1,20 @@
-declare interface Window {
-    markdownit: any;
-    showOpenFilePicker: any;
-    showDirectoryPicker: any;
-    showSaveFilePicker: any;
-    MathJax: any;
-    markdownitTaskLists: any;
-    JXG: any;
-    markdownitContainer: any;
-    TurndownService: any;
-    html2canvas: any;
-    WebDAV: any;
-    CryptoJS: any;
-}
+import Fuse from "../node_modules/fuse.js/dist/fuse";
 
-declare const mathSymbols: any;
+declare global {
+    interface Window {
+        markdownit: any;
+        showOpenFilePicker: any;
+        showDirectoryPicker: any;
+        showSaveFilePicker: any;
+        MathJax: any;
+        markdownitTaskLists: any;
+        JXG: any;
+        markdownitContainer: any;
+        TurndownService: any;
+        html2canvas: any;
+        WebDAV: any;
+        CryptoJS: any;
+        Fuse: Fuse;
+    }
+    const mathSymbols: any;
+}

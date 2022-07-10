@@ -895,9 +895,15 @@ function search(s: string, type: "str" | "regex") {
     switch (type) {
         case "str":
             for (let t of document.querySelectorAll("textarea")) {
-                let l = s_i(s, t.value);
-                if (l.length != 0) {
-                    result.push({ el: t, l });
+                let tl = t.value.split("\n");
+                const fuse = new window.Fuse([t.value], {
+                    includeMatches: true,
+                    findAllMatches: true,
+                    useExtendedSearch: true,
+                });
+                let fr = fuse.search(s);
+                if (fr[0].matches.length != 0) {
+                    result.push({ el: t, l: fr[0].matches, type: "str" });
                 }
             }
             break;
@@ -912,9 +918,8 @@ function search(s: string, type: "str" | "regex") {
                 let rl = Array.from(new Set(t.value.match(r)));
                 let l = [];
                 for (let i of rl) {
-                    l.push(s_i(i, t.value));
+                    l.push({ value: i, indices: s_i(i, t.value).map((v) => [v, v + i.length]) });
                 }
-                l = l.flat();
                 if (l.length != 0) {
                     result.push({ el: t, l });
                 }
