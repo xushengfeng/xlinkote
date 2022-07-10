@@ -744,7 +744,6 @@ document.getElementById("从云加载").onclick = get_all_xln;
 var dav_file_path = "";
 var now_dav_data = "";
 async function get_xln_value(path) {
-    dav_file_path = path;
     let str = await client.getFileContents(path, { format: "text" });
     let o;
     try {
@@ -761,6 +760,7 @@ async function get_xln_value(path) {
     set_data(o);
     if (fileHandle)
         fileHandle = null;
+    dav_file_path = path;
 }
 document.getElementById("同步到云").onclick = put_xln_value;
 async function put_xln_value() {
