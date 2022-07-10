@@ -745,6 +745,11 @@ async function get_xln_value(path) {
         if (store.webdav.加密密钥) {
             let bytes = window.CryptoJS.AES.decrypt(str, store.webdav.加密密钥);
             str = bytes.toString(window.CryptoJS.enc.Utf8);
+            if (!str) {
+                let password = prompt("密钥错误，请输入其他密钥");
+                let bytes = window.CryptoJS.AES.decrypt(str, password);
+                str = bytes.toString(window.CryptoJS.enc.Utf8);
+            }
             o = JSON.parse(str);
         }
     }
