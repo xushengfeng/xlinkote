@@ -176,7 +176,7 @@ document.getElementById("画布").onwheel = (e) => {
         let el = e.target;
         if (el.tagName == "TEXTAREA")
             return;
-        if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el))
+        if (document.querySelector("x-sinppet").contains(el))
             return;
         if (e.shiftKey && !e.deltaX) {
             if (fxsd == 0 || fxsd == 2)

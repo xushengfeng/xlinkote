@@ -187,7 +187,7 @@ document.getElementById("画布").onwheel = (e) => {
     } else {
         let el = <HTMLElement>e.target;
         if (el.tagName == "TEXTAREA") return;
-        if ([].slice.call(document.querySelectorAll("x-sinppet *")).includes(el)) return;
+        if (document.querySelector("x-sinppet").contains(el)) return;
         if (e.shiftKey && !e.deltaX) {
             if (fxsd == 0 || fxsd == 2) O.style.left = O.offsetLeft - e.deltaY + "px";
         } else {
