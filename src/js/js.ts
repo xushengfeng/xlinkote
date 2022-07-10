@@ -901,10 +901,30 @@ function search(s: string, type: "str" | "regex") {
                 }
             }
             break;
+        case "regex":
+            for (let t of document.querySelectorAll("textarea")) {
+                let r: RegExp;
+                try {
+                    r = eval("/" + s + "/g");
+                } catch (error) {
+                    console.error(error);
+                }
+                let rl = Array.from(new Set(t.value.match(r)));
+                let l = [];
+                for (let i of rl) {
+                    l.push(s_i(i, t.value));
+                }
+                l = l.flat();
+                if (l.length != 0) {
+                    result.push({ el: t, l });
+                }
+            }
+            break;
     }
 
     function s_i(t: string, st: string) {
         let l = [];
+        if (t == "") return l;
         let n = 0;
         while (st.indexOf(t, n) != -1) {
             n = st.indexOf(t, n);
