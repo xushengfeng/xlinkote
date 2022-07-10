@@ -365,18 +365,12 @@ window.MathJax = {
     },
 };
 
-var upload_i = <HTMLInputElement>document.getElementById("upload_i");
-var upload_d = <HTMLInputElement>document.getElementById("upload_d");
-
 var fileHandle;
 
 if (window.showOpenFilePicker) {
-    document.getElementById("上传文件").onclick = file_load;
+    document.getElementById("绑定文件").onclick = file_load;
 } else {
-    document.getElementById("上传文件").onclick = () => {
-        upload_i.click();
-    };
-    upload_i.onchange = file_load;
+    document.getElementById("绑定文件").style.display = "none";
 }
 
 async function file_load() {
@@ -396,8 +390,6 @@ async function file_load() {
         if (fileHandle.kind != "file") return;
         fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
-    } else {
-        file = upload_i.files[0];
     }
     file_name = file.name.replace(/\.xln$/, "");
     document.title = get_title();
