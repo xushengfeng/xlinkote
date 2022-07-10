@@ -817,7 +817,7 @@ async function get_xln_value(path: string) {
     dav_file_path = path;
 }
 
-document.getElementById("同步到云").onclick = put_xln_value;
+document.getElementById("上传到云").onclick = put_xln_value;
 
 async function put_xln_value() {
     let path = dav_file_path;
