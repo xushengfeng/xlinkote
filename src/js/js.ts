@@ -273,6 +273,8 @@ document.onkeydown = (e) => {
 
 var 集 = [{ name: "xlinkote", data: [] }];
 
+var id = crypto.randomUUID();
+
 var focus_page = "xlinkote";
 
 function get_data() {
@@ -280,6 +282,7 @@ function get_data() {
         meta: {
             focus_page,
             url: dav_file_path,
+            UUID: id,
         },
         集,
     };
@@ -306,10 +309,12 @@ function set_data(l: {
     meta: {
         focus_page: string;
         url: string;
+        UUID: string;
     };
     集: Array<{ name: string; data: data }>;
 }) {
     if (l.meta.url) dav_file_path = l.meta.url;
+    id = l.meta.UUID || crypto.randomUUID();
     集 = l.集;
     O.innerHTML = "";
     for (const p of l.集) {
@@ -435,20 +440,27 @@ async function write_file(text: string) {
 }
 
 var request = indexedDB.open("files", 2);
+var db_store_name = "files";
+var db: IDBDatabase;
+
+request.onsuccess = (event) => {
+    db = (<any>event.target).result;
+};
 request.onerror = (event) => {
-    // 错误处理
+    console.error(new Error((<any>event.target).error));
 };
 request.onupgradeneeded = (event) => {
-    var db = (<any>event.target).result;
-
-    var objectStore = db.createObjectStore("customers", { keyPath: "UUID" });
-
-    // 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
-    objectStore.transaction.oncomplete = (event) => {
-        var customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
-        customerObjectStore.add(get_data());
-    };
+    db = (<any>event.target).result;
+    db.createObjectStore(db_store_name, { keyPath: "meta.UUID" });
 };
+
+function db_put(obj: object) {
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    let r = customerObjectStore.put(obj);
+    r.onerror = (event) => {
+        console.error(new Error((<any>event.target).error));
+    };
+}
 
 async function download_file(text: string) {
     if (window.showSaveFilePicker) {
@@ -479,6 +491,7 @@ function data_changed() {
     if (saved) {
         saved = false;
         write_file(JSON.stringify(get_data()));
+        db_put(get_data());
     }
 }
 
