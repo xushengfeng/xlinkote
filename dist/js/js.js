@@ -400,6 +400,19 @@ async function write_file(text) {
         await writable.close();
     }
 }
+var request = indexedDB.open("files", 2);
+request.onerror = (event) => {
+    // 错误处理
+};
+request.onupgradeneeded = (event) => {
+    var db = event.target.result;
+    var objectStore = db.createObjectStore("customers", { keyPath: "UUID" });
+    // 使用事务的 oncomplete 事件确保在插入数据前对象仓库已经创建完毕
+    objectStore.transaction.oncomplete = (event) => {
+        var customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
+        customerObjectStore.add(get_data());
+    };
+};
 async function download_file(text) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
