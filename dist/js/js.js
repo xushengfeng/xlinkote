@@ -243,12 +243,6 @@ document.onkeydown = (e) => {
                 document.getElementById("归位").click();
             }
             break;
-        case "s":
-            if (e.ctrlKey) {
-                e.preventDefault();
-                document.getElementById("保存文件").click();
-            }
-            break;
         case "/":
             if (e.ctrlKey) {
                 e.preventDefault();
@@ -383,8 +377,8 @@ async function file_load() {
     };
     reader.readAsText(file);
 }
-document.getElementById("保存文件").onclick = () => {
-    write_file(JSON.stringify(get_data()));
+document.getElementById("导出文件").onclick = () => {
+    download_file(JSON.stringify(get_data()));
 };
 var saved = true;
 var file_name = "";
@@ -405,7 +399,9 @@ async function write_file(text) {
         await writable.write(text);
         await writable.close();
     }
-    else if (window.showSaveFilePicker) {
+}
+async function download_file(text) {
+    if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
             suggestedName: get_file_name(),
             types: [
@@ -432,7 +428,7 @@ async function write_file(text) {
 function data_changed() {
     if (saved) {
         saved = false;
-        document.title = `● ` + get_title();
+        write_file(JSON.stringify(get_data()));
     }
 }
 document.getElementById("toggle_md").onclick = () => {
