@@ -830,14 +830,13 @@ function search(s, type) {
     switch (type) {
         case "str":
             for (let t of document.querySelectorAll("textarea")) {
-                let tl = t.value.split("\n");
                 const fuse = new window.Fuse([t.value], {
                     includeMatches: true,
                     findAllMatches: true,
                     useExtendedSearch: true,
                 });
                 let fr = fuse.search(s);
-                if (fr[0].matches.length != 0) {
+                if (fr[0]?.matches?.length) {
                     result.push({ el: t, l: fr[0].matches, type: "str" });
                 }
             }
