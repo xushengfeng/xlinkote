@@ -889,3 +889,29 @@ function show_setting() {
         }
     }
 }
+
+function search(s: string, type: "str" | "regex") {
+    let result = [];
+    switch (type) {
+        case "str":
+            for (let t of document.querySelectorAll("textarea")) {
+                let l = s_i(s, t.value);
+                if (l.length != 0) {
+                    result.push({ el: t, l });
+                }
+            }
+            break;
+    }
+
+    function s_i(t: string, st: string) {
+        let l = [];
+        let n = 0;
+        while (st.indexOf(t, n) != -1) {
+            n = st.indexOf(t, n);
+            l.push(n);
+            n++;
+        }
+        return l;
+    }
+    return result;
+}
