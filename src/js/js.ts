@@ -426,6 +426,10 @@ function get_title() {
     return `${file_name} - xlinkote`;
 }
 
+function set_title(t: string) {
+    document.title = `${t} - xlinkote`;
+}
+
 async function write_file(text: string) {
     saved = true;
     document.title = get_title();
@@ -783,7 +787,12 @@ async function get_xln_value(path: string) {
 document.getElementById("同步到云").onclick = put_xln_value;
 
 async function put_xln_value() {
-    let path = dav_file_path || `/${get_file_name()}.xln`;
+    let path = dav_file_path;
+    if (!path) {
+        let n = window.prompt("上传的文件名", get_file_name());
+        set_title(n);
+        path = `/${n}.xln`;
+    }
     client.putFileContents(path, JSON.stringify(get_data()));
 }
 
