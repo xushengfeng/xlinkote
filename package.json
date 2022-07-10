@@ -8,6 +8,7 @@
   "homepage": "https://github.com/xushengfeng/xlinkote/",
   "license": "GPL-3.0",
   "dependencies": {
+    "crypto-js": "^4.1.1",
     "html2canvas": "^1.4.1",
     "jsxgraph": "^1.4.4",
     "markdown-it": "^13.0.1",

@@ -10,6 +10,7 @@ declare interface Window {
     TurndownService: any;
     html2canvas: any;
     WebDAV: any;
+    CryptoJS: any;
 }
 
 declare const mathSymbols: any;

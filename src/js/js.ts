@@ -804,9 +804,18 @@ var now_dav_data = "";
 
 async function get_xln_value(path: string) {
     dav_file_path = path;
-    const str = await client.getFileContents(path, { format: "text" });
+    let str = await client.getFileContents(path, { format: "text" });
+    let o: any;
+    try {
+        o = JSON.parse(<string>str);
+    } catch (e) {
+        if (store.webdav.加密密钥) {
+            let bytes = window.CryptoJS.AES.decrypt(str, store.webdav.加密密钥);
+            str = bytes.toString(window.CryptoJS.enc.Utf8);
+            o = JSON.parse(<string>str);
+        }
+    }
     now_dav_data = str;
-    let o = JSON.parse(<string>str);
     set_data(o);
     if (fileHandle) fileHandle = null;
 }
@@ -820,7 +829,11 @@ async function put_xln_value() {
         set_title(n);
         path = `/${n}.xln`;
     }
-    client.putFileContents(path, JSON.stringify(get_data()));
+    let t = JSON.stringify(get_data());
+    if (store.webdav.加密密钥) {
+        t = window.CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
+    }
+    client.putFileContents(path, t);
 }
 
 var auto_put_xln_t = NaN;
