@@ -481,7 +481,10 @@ async function download_file(text: string) {
 
 function data_changed() {
     if (saved) {
+        document.title = `● ` + get_title();
         saved = false;
+    }
+    if (file_name) {
         write_file(JSON.stringify(get_data()));
         db_put(get_data());
     }
@@ -615,7 +618,7 @@ document.getElementById("新建画板").onclick = () => {
 };
 
 window.onbeforeunload = () => {
-    if (!saved) return true;
+    if (!file_name) return true;
 };
 
 function to_canvas() {
