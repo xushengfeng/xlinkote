@@ -3,9 +3,9 @@ if (!store) {
     save_setting();
 }
 document.getElementById("tabs").onclick = (e) => {
-    document.querySelectorAll("#tabs > div").forEach((el, i) => {
+    document.querySelectorAll("#nav > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
-            document.querySelectorAll("#items > div").forEach((iel, j) => {
+            document.querySelectorAll("#nav > #items > div").forEach((iel, j) => {
                 if (i == j) {
                     iel.style.width = "100vw";
                 }
@@ -593,6 +593,20 @@ function to_canvas() {
 document.getElementById("新建集").onclick = () => {
     window.open(location.href);
 };
+document.getElementById("侧栏").onclick = (e) => {
+    document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
+        if (el == e.target) {
+            document.querySelectorAll("#侧栏 > #items > div").forEach((iel, j) => {
+                if (i == j) {
+                    iel.style.height = "100%";
+                }
+                else {
+                    iel.style.height = "0";
+                }
+            });
+        }
+    });
+};
 class 图层 {
     constructor() {
         this.z = [];
@@ -697,8 +711,8 @@ document.getElementById("层按钮").onclick = (e) => {
             break;
     }
 };
-document.getElementById("侧栏").onclick = () => {
-    document.getElementById("main").classList.toggle("侧栏");
+document.getElementById("切换侧栏").onclick = () => {
+    document.getElementById("main").classList.toggle("侧栏显示");
 };
 var client = window.WebDAV.createClient(store.webdav.网址, {
     username: store.webdav.用户名,

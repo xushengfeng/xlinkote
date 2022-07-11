@@ -28,10 +28,10 @@ body > #main {
     height: 100vh;
     display: grid;
     grid-template-columns: 0 auto;
-    grid-template-rows: min-content auto auto;
+    grid-template-rows: min-content auto;
 }
 
-.侧栏 {
+.侧栏显示 {
     grid-template-columns: 164px auto !important;
 }
 
@@ -78,21 +78,35 @@ body > #main > #nav #upload_i {
     display: none;
 }
 
-body > #main > #集 {
+.侧栏 {
     grid-area: 2 / 1 / 3 / 2;
+    display: flex;
 }
 
-body > #main > #层容器 {
+.侧栏 > #tabs {
+    width: 32px;
+}
+
+.侧栏 > #tabs > div {
+    width: 32px;
+    height: 32px;
+}
+
+.侧栏 > #items {
+    flex-grow: 1;
+}
+
+.层容器 {
     overflow: auto;
 }
 
-body > #main > #层容器 > #层按钮 {
+.层容器 > #层按钮 {
     display: flex;
     position: sticky;
     top: 0;
 }
 
-body > #main > #层容器 > #层按钮 > div {
+.层容器 > #层按钮 > div {
     width: 16px;
     height: 16px;
 }
@@ -101,7 +115,7 @@ body > #main > #画布 {
     flex-grow: 1;
     position: relative;
     overflow: hidden;
-    grid-area: 2 / 2 / 4 / 3;
+    grid-area: 2 / 2 / 3 / 3;
 }
 
 /* 画布 */
