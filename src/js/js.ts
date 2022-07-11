@@ -283,6 +283,7 @@ function get_data() {
             focus_page,
             url: dav_file_path,
             UUID: id,
+            file_name,
         },
         集,
     };
@@ -310,11 +311,13 @@ function set_data(l: {
         focus_page: string;
         url: string;
         UUID: string;
+        file_name: string;
     };
     集: Array<{ name: string; data: data }>;
 }) {
     if (l.meta.url) dav_file_path = l.meta.url;
     id = l.meta.UUID || crypto.randomUUID();
+    file_name = l.meta.file_name;
     集 = l.集;
     O.innerHTML = "";
     for (const p of l.集) {
@@ -464,7 +467,7 @@ function db_get() {
             div.onclick = () => {
                 set_data(f);
             };
-            div.innerText = f.filename || "";
+            div.innerText = f.file_name || "";
             document.getElementById("文件").append(div);
         }
     };
