@@ -416,6 +416,21 @@ function db_put(obj) {
         console.error(new Error(event.target.error));
     };
 }
+function db_get() {
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    let r = customerObjectStore.getAll();
+    r.onsuccess = () => {
+        for (let i = r.result.length - 1; i >= 0; i--) {
+            const f = r.result[i];
+            let div = document.createElement("div");
+            div.onclick = () => {
+                set_data(f);
+            };
+            div.innerText = f.filename || "";
+            document.getElementById("文件").append(div);
+        }
+    };
+}
 async function download_file(text) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
