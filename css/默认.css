@@ -45,6 +45,10 @@ body > #main > #层容器 > #层按钮 > div {
     background-color: #eee;
     border-radius: 50%;
 }
+.层容器 > #层 > div > label > input[type="text"] {
+    border: none;
+    outline: none;
+}
 
 body > #main > #画布 {
     background-color: var(--bg1);

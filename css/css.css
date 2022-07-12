@@ -107,6 +107,7 @@ body > #main > #nav #upload_i {
 
 .侧栏 > #items {
     flex-grow: 1;
+    overflow: hidden;
 }
 
 .侧栏 > #items > div:nth-child(1) {
@@ -133,6 +134,12 @@ body > #main > #nav #upload_i {
 .层容器 > #层按钮 > div {
     width: 16px;
     height: 16px;
+}
+.层容器 > #层 > div > label {
+    display: flex;
+}
+.层容器 > #层 > div > label > input[type="text"] {
+    width: 100%;
 }
 
 body > #main > #画布 {
