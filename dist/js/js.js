@@ -285,11 +285,7 @@ function get_data() {
     return l;
 }
 function set_data(l) {
-    if (l.meta.url)
-        集.meta.url = l.meta.url;
-    集.meta.UUID = l.meta.UUID || crypto.randomUUID();
-    集.meta.file_name = l.meta.file_name;
-    集.数据 = l.数据;
+    集 = l;
     O.innerHTML = "";
     for (const p of l.数据) {
         let div = document.createElement("div");
