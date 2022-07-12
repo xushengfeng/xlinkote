@@ -271,22 +271,18 @@ document.onkeydown = (e) => {
     }
 };
 
-var 集 = [{ name: "xlinkote", data: [] }];
-
-var id = crypto.randomUUID();
-
-var focus_page = "xlinkote";
+var 集 = {
+    meta: {
+        focus_page: "xlinkote",
+        url: "",
+        UUID: crypto.randomUUID(),
+        file_name: "",
+    },
+    数据: [{ name: "xlinkote", data: [] }],
+};
 
 function get_data() {
-    let l = {
-        meta: {
-            focus_page,
-            url: dav_file_path,
-            UUID: id,
-            file_name,
-        },
-        集,
-    };
+    let l = 集;
     let data = [];
     for (let i of O.childNodes) {
         let el = <x>i;
@@ -298,8 +294,8 @@ function get_data() {
         }
         data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
     }
-    for (let p of 集) {
-        if (p.name == focus_page) p.data = data;
+    for (let p of 集.数据) {
+        if (p.name == 集.meta.focus_page) p.data = data;
     }
     return l;
 }
@@ -313,24 +309,24 @@ function set_data(l: {
         UUID: string;
         file_name: string;
     };
-    集: Array<{ name: string; data: data }>;
+    数据: Array<{ name: string; data: data }>;
 }) {
-    if (l.meta.url) dav_file_path = l.meta.url;
-    id = l.meta.UUID || crypto.randomUUID();
-    file_name = l.meta.file_name;
-    集 = l.集;
+    if (l.meta.url) 集.meta.url = l.meta.url;
+    集.meta.UUID = l.meta.UUID || crypto.randomUUID();
+    集.meta.file_name = l.meta.file_name;
+    集.数据 = l.数据;
     O.innerHTML = "";
-    for (const p of l.集) {
+    for (const p of l.数据) {
         let div = document.createElement("div");
         document.getElementById("集").append(div);
         div.innerText = p.name;
         div.onclick = () => {
             render_data(p.data);
-            focus_page = p.name;
+            集.meta.focus_page = p.name;
         };
         if (l.meta.focus_page == p.name) {
             render_data(p.data);
-            focus_page = p.name;
+            集.meta.focus_page = p.name;
         }
     }
 }
@@ -394,7 +390,7 @@ async function file_load() {
         fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
     }
-    file_name = file.name.replace(/\.xln$/, "");
+    集.meta.file_name = file.name.replace(/\.xln$/, "");
     document.title = get_title();
 
     let reader = new FileReader();
@@ -410,14 +406,13 @@ document.getElementById("导出文件").onclick = () => {
 };
 
 var saved = true;
-var file_name = "";
 
 function get_file_name() {
-    return file_name || document.querySelector("h1")?.innerText || `xlinkote`;
+    return 集.meta.file_name || document.querySelector("h1")?.innerText || `xlinkote`;
 }
 
 function get_title() {
-    return `${file_name} - xlinkote`;
+    return `${集.meta.file_name} - xlinkote`;
 }
 
 function set_title(t: string) {
@@ -543,7 +538,7 @@ function data_changed() {
         document.title = `● ` + get_title();
         saved = false;
     }
-    if (file_name) {
+    if (集.meta.file_name) {
         write_file(JSON.stringify(get_data()));
         db_put(get_data());
     }
@@ -677,7 +672,7 @@ document.getElementById("新建画板").onclick = () => {
 };
 
 window.onbeforeunload = () => {
-    if (!file_name) return true;
+    if (!集.meta.file_name) return true;
 };
 
 function to_canvas() {
@@ -851,7 +846,7 @@ async function get_all_xln() {
                 tr.onclick = (e) => {
                     e.stopPropagation();
                     get_xln_value(i.filename);
-                    file_name = i.basename.replace(/\.xln$/, "");
+                    集.meta.file_name = i.basename.replace(/\.xln$/, "");
                     document.title = get_title();
                     (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = false;
                 };
@@ -865,8 +860,6 @@ async function get_all_xln() {
 }
 
 document.getElementById("从云加载").onclick = get_all_xln;
-
-var dav_file_path = "";
 
 var now_dav_data = "";
 
@@ -890,13 +883,13 @@ async function get_xln_value(path: string) {
     now_dav_data = str;
     set_data(o);
     if (fileHandle) fileHandle = null;
-    dav_file_path = path;
+    集.meta.url = path;
 }
 
 document.getElementById("上传到云").onclick = put_xln_value;
 
 async function put_xln_value() {
-    let path = dav_file_path;
+    let path = 集.meta.url;
     if (!path) {
         let n = window.prompt("上传的文件名", get_file_name());
         set_title(n);
