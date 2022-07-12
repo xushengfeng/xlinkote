@@ -423,7 +423,7 @@ function db_get() {
             div.onclick = () => {
                 set_data(f);
             };
-            div.innerText = f.file_name || "";
+            div.innerText = f.meta.file_name || "";
             document.getElementById("文件").append(div);
         }
     };
