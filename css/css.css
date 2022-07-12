@@ -94,6 +94,14 @@ body > #main > #nav #upload_i {
 .侧栏 > #tabs > div {
     width: 32px;
     height: 32px;
+    position: relative;
+}
+
+.侧栏 > #tabs > div > .icon {
+    width: 28px;
+    height: 28px;
+    left: 2px;
+    top: 2px;
 }
 
 .侧栏 > #items {
