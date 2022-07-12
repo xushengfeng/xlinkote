@@ -85,6 +85,7 @@ body > #main > #nav #upload_i {
 .侧栏 {
     grid-area: 2 / 1 / 3 / 2;
     display: flex;
+    overflow: hidden;
 }
 
 .侧栏 > #tabs {
@@ -106,6 +107,17 @@ body > #main > #nav #upload_i {
 
 .侧栏 > #items {
     flex-grow: 1;
+}
+
+.侧栏 > #items > div:nth-child(1) {
+    height: 100%;
+}
+.侧栏 > #items > div:not(:nth-child(1)) {
+    height: 0;
+}
+
+.侧栏 > #items > div {
+    overflow: auto;
 }
 
 .层容器 {
