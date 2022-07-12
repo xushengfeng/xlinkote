@@ -78,6 +78,10 @@ body > #main > #nav #upload_i {
     display: none;
 }
 
+.db_load {
+    display: none;
+}
+
 .侧栏 {
     grid-area: 2 / 1 / 3 / 2;
     display: flex;

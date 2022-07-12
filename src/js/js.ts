@@ -473,6 +473,46 @@ function db_get() {
     };
 }
 
+function db_download() {
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    let r = customerObjectStore.getAll();
+    r.onsuccess = () => {
+        let t = JSON.stringify(r.result);
+        let a = document.createElement("a");
+        let blob = new Blob([t]);
+        a.download = `xlinkote_db.json`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        URL.revokeObjectURL(String(blob));
+    };
+}
+
+function db_load(t: string) {
+    let o = JSON.parse(t);
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    for (let obj of o) {
+        let r = customerObjectStore.put(obj);
+        r.onerror = (event) => {
+            console.error(new Error((<any>event.target).error));
+        };
+    }
+}
+
+document.getElementById("加载数据库").onclick = () => {
+    document.getElementById("db_load").click();
+};
+
+document.getElementById("db_load").onchange = () => {
+    let file = (<HTMLInputElement>document.getElementById("db_load")).files[0];
+    let reader = new FileReader();
+    reader.onload = () => {
+        db_load(<string>reader.result);
+    };
+    reader.readAsText(file);
+};
+
+document.getElementById("下载数据库").onclick = db_download;
+
 async function download_file(text: string) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
