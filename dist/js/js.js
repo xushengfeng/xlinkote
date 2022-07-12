@@ -287,6 +287,7 @@ function get_data() {
 function set_data(l) {
     集 = l;
     O.innerHTML = "";
+    document.getElementById("集").innerHTML = "";
     for (const p of l.数据) {
         let div = document.createElement("div");
         document.getElementById("集").append(div);
