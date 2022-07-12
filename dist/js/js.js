@@ -396,6 +396,7 @@ var db_store_name = "files";
 var db;
 request.onsuccess = (event) => {
     db = event.target.result;
+    db_get();
 };
 request.onerror = (event) => {
     console.error(new Error(event.target.error));
@@ -415,6 +416,7 @@ function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
+        document.getElementById("文件").innerHTML = "";
         for (let i = r.result.length - 1; i >= 0; i--) {
             const f = r.result[i];
             let div = document.createElement("div");
