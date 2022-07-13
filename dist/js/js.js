@@ -288,7 +288,7 @@ function set_data(l) {
     集 = l;
     O.innerHTML = "";
     document.getElementById("集").innerHTML = "";
-    for (const p of l.数据) {
+    for (const p of 集.数据) {
         let div = document.createElement("input");
         div.type = "text";
         document.getElementById("集").append(div);
@@ -297,7 +297,12 @@ function set_data(l) {
             render_data(p.data);
             集.meta.focus_page = p.name;
         };
-        if (l.meta.focus_page == p.name) {
+        div.onchange = () => {
+            集.meta.focus_page = div.value;
+            p.name = div.value;
+            data_changed();
+        };
+        if (集.meta.focus_page == p.name) {
             render_data(p.data);
             集.meta.focus_page = p.name;
         }
