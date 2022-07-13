@@ -255,14 +255,15 @@ document.onkeydown = (e) => {
             break;
     }
 };
+let pname = `画布${crypto.randomUUID().slice(0, 7)}`;
 var 集 = {
     meta: {
-        focus_page: "xlinkote",
+        focus_page: pname,
         url: "",
         UUID: crypto.randomUUID(),
         file_name: "",
     },
-    数据: [{ name: "xlinkote", data: [] }],
+    数据: [{ name: pname, data: [] }],
 };
 function get_data() {
     let l = 集;
@@ -673,6 +674,12 @@ function to_canvas() {
 }
 document.getElementById("新建集").onclick = () => {
     window.open(location.href);
+};
+document.getElementById("新建画布").onclick = () => {
+    let name = `画布${crypto.randomUUID().slice(0, 7)}`;
+    集.数据.push({ name, data: [] });
+    集.meta.focus_page = name;
+    set_data(集);
 };
 document.getElementById("侧栏").onclick = (e) => {
     document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
