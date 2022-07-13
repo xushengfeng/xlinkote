@@ -476,12 +476,24 @@ function db_get() {
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
         document.getElementById("文件").innerHTML = "";
+        let new_t = document.createElement("input");
+        new_t.type = "text";
+        new_t = rename_el(new_t);
+        new_t.onchange = () => {
+            if (new_t.value) {
+                集.meta.file_name = new_t.value;
+                data_changed();
+            }
+        };
+        new_t.value = `新建集${crypto.randomUUID().slice(0, 7)}`;
+        document.getElementById("文件").append(new_t);
         for (let i = r.result.length - 1; i >= 0; i--) {
             const f = r.result[i];
             let t = document.createElement("input");
             t.type = "text";
             t = rename_el(t);
             t.onclick = () => {
+                new_t.remove();
                 set_data(f);
             };
             t.onchange = () => {
