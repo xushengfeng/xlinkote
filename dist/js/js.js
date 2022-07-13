@@ -806,6 +806,7 @@ document.getElementById("层按钮").onclick = (e) => {
             break;
     }
 };
+set_data(集);
 document.getElementById("切换侧栏").onclick = () => {
     document.getElementById("main").classList.toggle("侧栏显示");
 };
