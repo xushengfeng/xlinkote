@@ -292,6 +292,7 @@ function rename_el() {
     el.onkeydown = (e) => {
         if (e.key == "F2") {
             el.readOnly = false;
+            el.select();
         }
     };
     el.onblur = () => {
