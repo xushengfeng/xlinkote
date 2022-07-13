@@ -342,9 +342,19 @@ function set_data(l: {
             data_changed();
         };
         div.onchange = () => {
-            集.meta.focus_page = div.value;
-            p.name = div.value;
+            if (div.value) {
+                集.meta.focus_page = div.value;
+                p.name = div.value;
+            } else {
+                div.remove();
+                集.数据 = 集.数据.filter((d) => d != p);
+                if (集.数据.length == 0) {
+                    集.数据.push({ name: pname, data: [] });
+                }
+                集.meta.focus_page = 集.数据[0].name;
+            }
             data_changed();
+            set_data(集);
         };
         if (集.meta.focus_page == p.name) {
             render_data(p.data);
