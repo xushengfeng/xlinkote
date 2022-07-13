@@ -289,9 +289,10 @@ function set_data(l) {
     O.innerHTML = "";
     document.getElementById("集").innerHTML = "";
     for (const p of l.数据) {
-        let div = document.createElement("div");
+        let div = document.createElement("input");
+        div.type = "text";
         document.getElementById("集").append(div);
-        div.innerText = p.name;
+        div.value = p.name;
         div.onclick = () => {
             render_data(p.data);
             集.meta.focus_page = p.name;
@@ -420,12 +421,13 @@ function db_get() {
         document.getElementById("文件").innerHTML = "";
         for (let i = r.result.length - 1; i >= 0; i--) {
             const f = r.result[i];
-            let div = document.createElement("div");
-            div.onclick = () => {
+            let t = document.createElement("input");
+            t.type = "text";
+            t.onclick = () => {
                 set_data(f);
             };
-            div.innerText = f.meta.file_name || "";
-            document.getElementById("文件").append(div);
+            t.value = f.meta.file_name || "";
+            document.getElementById("文件").append(t);
         }
     };
 }

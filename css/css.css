@@ -121,6 +121,16 @@ body > #main > #nav #upload_i {
     overflow: auto;
 }
 
+.侧栏 > #items > #文件 > input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.侧栏 > #items > #集 > input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .层容器 {
     overflow: auto;
 }

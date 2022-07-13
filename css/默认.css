@@ -41,6 +41,15 @@ body > #main > #nav dialog {
     border-radius: 4px;
 }
 
+.侧栏 > #items > #文件 > input {
+    border: none;
+    outline: none;
+}
+
+.侧栏 > #items > #集 > input {
+    border: none;
+    outline: none;
+}
 body > #main > #层容器 > #层按钮 > div {
     background-color: #eee;
     border-radius: 50%;
