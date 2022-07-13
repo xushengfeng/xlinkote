@@ -284,7 +284,9 @@ function get_data() {
     }
     return l;
 }
-function rename_el(el) {
+function rename_el() {
+    let el = document.createElement("input");
+    el.type = "text";
     el.readOnly = true;
     el.onkeydown = (e) => {
         if (e.key == "F2") {
@@ -301,9 +303,7 @@ function set_data(l) {
     O.innerHTML = "";
     document.getElementById("集").innerHTML = "";
     for (const p of 集.数据) {
-        let div = document.createElement("input");
-        div.type = "text";
-        div = rename_el(div);
+        let div = rename_el();
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
@@ -437,9 +437,7 @@ function db_get() {
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
         document.getElementById("文件").innerHTML = "";
-        let new_t = document.createElement("input");
-        new_t.type = "text";
-        new_t = rename_el(new_t);
+        let new_t = rename_el();
         new_t.onchange = () => {
             if (new_t.value) {
                 集.meta.file_name = new_t.value;
@@ -450,9 +448,7 @@ function db_get() {
         document.getElementById("文件").append(new_t);
         for (let i = r.result.length - 1; i >= 0; i--) {
             const f = r.result[i];
-            let t = document.createElement("input");
-            t.type = "text";
-            t = rename_el(t);
+            let t = rename_el();
             t.onclick = () => {
                 new_t.remove();
                 set_data(f);
@@ -709,9 +705,7 @@ class 图层 {
             r.value = i;
             if (this.z[i] == el)
                 r.checked = true;
-            let t = document.createElement("input");
-            t.type = "text";
-            t = rename_el(t);
+            let t = rename_el();
             t.value = this.z[i].id;
             t.onclick = () => {
                 r.checked = true;
