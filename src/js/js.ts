@@ -343,7 +343,7 @@ function render_data(data: data) {
             let el = <x>document.createElement("x-x");
             el.fixed = x.fixed;
             el.id = x.id;
-            z.push(el);
+            z.push(el, true);
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
@@ -724,7 +724,7 @@ class 图层 {
 
     聚焦元素 = <x>null;
 
-    reflash(el: x) {
+    reflash(el: x, nosave?: boolean) {
         document.getElementById("层").innerHTML = "";
         for (let i in this.z) {
             this.z[i].style.zIndex = i;
@@ -754,14 +754,14 @@ class 图层 {
         }
         document.documentElement.style.setProperty("--zest-index", String(this.z.length - 1));
 
-        data_changed();
+        if (!nosave) data_changed();
     }
 
-    push(el: x) {
+    push(el: x, nosave?: boolean) {
         el.id = el.id === "undefined" || !el.id ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
-        this.reflash(el);
+        this.reflash(el, nosave);
     }
 
     remove(el: x) {
