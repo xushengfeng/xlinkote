@@ -170,7 +170,8 @@ class markdown extends HTMLElement {
         var text = this.childNodes[1];
         if (v) {
             text.classList.add("show_md");
-            text.focus();
+            if (v != "cr")
+                text.focus();
         }
         else {
             text.classList.remove("show_md");

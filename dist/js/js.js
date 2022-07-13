@@ -338,7 +338,7 @@ function render_data(data) {
                 el.append(eel);
                 eel.value = x.values[i].value;
                 if (x.values[i].edit)
-                    eel.edit = true;
+                    eel.edit = "cr";
             }
         }
         catch (e) {

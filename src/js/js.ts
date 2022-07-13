@@ -365,7 +365,7 @@ function render_data(data: data) {
                 let eel = <markdown>document.createElement(i);
                 el.append(eel);
                 eel.value = x.values[i].value;
-                if (x.values[i].edit) eel.edit = true;
+                if (x.values[i].edit) eel.edit = "cr";
             }
         } catch (e) {
             console.error(e);
