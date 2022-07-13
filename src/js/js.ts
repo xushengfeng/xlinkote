@@ -349,6 +349,8 @@ function set_data(l: {
             集.meta.focus_page = p.name;
         }
     }
+
+    data_changed();
 }
 
 function render_data(data: data) {
