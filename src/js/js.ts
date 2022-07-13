@@ -302,6 +302,19 @@ function get_data() {
 
 type data = Array<{ id: string; style: string; values: object; fixed: boolean }>;
 
+function rename_el(el: HTMLInputElement) {
+    el.readOnly = true;
+    el.onkeydown = (e) => {
+        if (e.key == "F2") {
+            el.readOnly = false;
+        }
+    };
+    el.onblur = () => {
+        el.readOnly = true;
+    };
+    return el;
+}
+
 function set_data(l: {
     meta: {
         focus_page: string;
@@ -317,6 +330,7 @@ function set_data(l: {
     for (const p of 集.数据) {
         let div = document.createElement("input");
         div.type = "text";
+        div = rename_el(div);
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
@@ -466,6 +480,7 @@ function db_get() {
             const f = r.result[i];
             let t = document.createElement("input");
             t.type = "text";
+            t = rename_el(t);
             t.onclick = () => {
                 set_data(f);
             };
@@ -737,6 +752,7 @@ class 图层 {
             if (this.z[i] == el) r.checked = true;
             let t = document.createElement("input");
             t.type = "text";
+            t = rename_el(t);
             t.value = this.z[i].id;
             t.onclick = () => {
                 r.checked = true;
