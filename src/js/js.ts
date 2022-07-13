@@ -336,8 +336,10 @@ function set_data(l: {
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
+            get_data(); /* 获取画布并保存到集 */
             render_data(p.data);
             集.meta.focus_page = p.name;
+            data_changed();
         };
         div.onchange = () => {
             集.meta.focus_page = div.value;
@@ -732,6 +734,7 @@ document.getElementById("新建集").onclick = () => {
 };
 
 document.getElementById("新建画布").onclick = () => {
+    get_data(); /* 保存之前的画布 */
     let name = `画布${crypto.randomUUID().slice(0, 7)}`;
     集.数据.push({ name, data: [] });
     集.meta.focus_page = name;
