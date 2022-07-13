@@ -194,6 +194,8 @@ class markdown extends HTMLElement {
             text.classList.remove("show_md");
             text.blur();
         }
+
+        data_changed();
     }
 
     get edit() {
