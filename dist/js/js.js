@@ -431,6 +431,10 @@ function db_get() {
             t.onclick = () => {
                 set_data(f);
             };
+            t.onchange = () => {
+                集.meta.file_name = t.value;
+                data_changed();
+            };
             t.value = f.meta.file_name || "";
             document.getElementById("文件").append(t);
         }
