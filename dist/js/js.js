@@ -462,6 +462,7 @@ function db_load(t) {
             console.error(new Error(event.target.error));
         };
     }
+    db_get();
 }
 document.getElementById("加载数据库").onclick = () => {
     document.getElementById("db_load").click();
