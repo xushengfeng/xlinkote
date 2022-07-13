@@ -195,7 +195,7 @@ class markdown extends HTMLElement {
             text.blur();
         }
 
-        data_changed();
+        if (v != "cr") data_changed();
     }
 
     get edit() {
