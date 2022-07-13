@@ -696,6 +696,7 @@ class 图层 {
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
         document.documentElement.style.setProperty("--zest-index", String(this.z.length - 1));
+        data_changed();
     }
     push(el) {
         el.id = el.id === "undefined" || !el.id ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
