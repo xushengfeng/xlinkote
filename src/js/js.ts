@@ -463,7 +463,7 @@ async function write_file(text: string) {
     }
 }
 
-var request = indexedDB.open("files", 2);
+var request = indexedDB.open("files");
 var db_store_name = "files";
 var db: IDBDatabase;
 
