@@ -673,15 +673,16 @@ class 图层 {
                 r.checked = true;
             let t = document.createElement("input");
             t.type = "text";
-            let l = document.createElement("label");
-            l.append(r);
             t.value = this.z[i].id;
-            l.append(t);
+            t.onclick = () => {
+                r.checked = true;
+            };
             t.onchange = () => {
                 this.z[i].id = t.value;
                 this.reflash(this.z[i]);
             };
-            div.append(l);
+            div.append(r);
+            div.append(t);
             div.onclick = () => {
                 this.聚焦元素 = this.z[i];
             };

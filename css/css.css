@@ -135,10 +135,10 @@ body > #main > #nav #upload_i {
     width: 16px;
     height: 16px;
 }
-.层容器 > #层 > div > label {
+.层容器 > #层 > div {
     display: flex;
 }
-.层容器 > #层 > div > label > input[type="text"] {
+.层容器 > #层 > div > input[type="text"] {
     width: 100%;
 }
 
