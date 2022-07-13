@@ -446,8 +446,7 @@ function db_get() {
         };
         new_t.value = `新建集${crypto.randomUUID().slice(0, 7)}`;
         document.getElementById("文件").append(new_t);
-        for (let i = r.result.length - 1; i >= 0; i--) {
-            const f = r.result[i];
+        for (let f of r.result) {
             let t = rename_el();
             t.onclick = () => {
                 new_t.remove();
