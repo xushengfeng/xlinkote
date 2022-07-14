@@ -22,7 +22,8 @@ var md = window
             }
         },
         marker: "+",
-    });
+    })
+    .use(window.markdownitEmoji);
 
 var defaultRender =
     md.renderer.rules.heading_open ||

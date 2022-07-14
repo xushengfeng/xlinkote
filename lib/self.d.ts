@@ -8,6 +8,7 @@ declare global {
         showSaveFilePicker: any;
         MathJax: any;
         markdownitTaskLists: any;
+        markdownitEmoji: any;
         JXG: any;
         markdownitContainer: any;
         TurndownService: any;

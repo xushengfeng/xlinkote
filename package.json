@@ -14,6 +14,7 @@
     "jsxgraph": "^1.4.4",
     "markdown-it": "^13.0.1",
     "markdown-it-container": "^3.0.0",
+    "markdown-it-emoji": "^2.0.2",
     "markdown-it-task-lists": "^2.1.1",
     "mathjax": "^3.2.2",
     "turndown": "^7.1.1",
