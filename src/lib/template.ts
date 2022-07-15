@@ -134,6 +134,8 @@ class markdown extends HTMLElement {
             }, 0);
 
             if (text.selectionStart == text.selectionEnd) {
+                if (text.value.charAt(text.selectionStart - 1) == "\n") {
+                }
                 let l_l = [
                     ["(", ")"],
                     ["[", "]"],
@@ -158,8 +160,26 @@ class markdown extends HTMLElement {
         text.onkeydown = (e) => {
             if (e.key == "Enter") {
                 data_changed();
+                let last_line_start = text.value.lastIndexOf("\n", text.selectionStart) + 1;
+                let last_line = text.value.slice(last_line_start, text.selectionStart);
+                let l_task = last_line.match(/^ *[-+*] +\[[x\s]\] +/i);
+                if (l_task) {
+                    e.preventDefault();
+                    text.setRangeText("\n" + l_task[0]);
+                    text.selectionStart += l_task[0].length + 1;
+                    text.selectionEnd += l_task[0].length + 1;
+                } else {
+                    let l_l = last_line.match(/^ *[-+*] +/);
+                    if (l_l) {
+                        e.preventDefault();
+                        text.setRangeText("\n" + l_l[0]);
+                        text.selectionStart += l_l[0].length + 1;
+                        text.selectionEnd += l_l[0].length + 1;
+                    }
+                }
             }
         };
+        // text.addEventListener("keyup",(e)=>{})
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             let l_i = text_get_line(text);
