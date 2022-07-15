@@ -177,6 +177,14 @@ class markdown extends HTMLElement {
                         text.selectionEnd += l_l[0].length + 1;
                     }
                 }
+                let l_n = last_line.match(/^ *\d+\. +/);
+                if (l_n) {
+                    e.preventDefault();
+                    let t = "\n" + l_n[0].replace(/\d+/, (n) => String(Number(n) + 1));
+                    text.setRangeText(t);
+                    text.selectionStart += t.length;
+                    text.selectionEnd += t.length;
+                }
             }
         };
         // text.addEventListener("keyup",(e)=>{})
