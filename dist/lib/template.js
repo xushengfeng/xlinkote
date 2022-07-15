@@ -112,6 +112,25 @@ class markdown extends HTMLElement {
                 parse = l;
                 this.index = line_el(l);
             }, 0);
+            if (text.selectionStart == text.selectionEnd) {
+                let l_l = [
+                    ["(", ")"],
+                    ["[", "]"],
+                    ["{", "}"],
+                    ["<", ">"],
+                    ["'", "'"],
+                    ['"', '"'],
+                    ["$", "$"],
+                    ["*", "*"],
+                    ["~", "~"],
+                ];
+                for (let i of l_l) {
+                    if (text.value.charAt(text.selectionStart - 1) == i[0] &&
+                        text.value.charAt(text.selectionStart) != i[1]) {
+                        text.setRangeText(i[1]);
+                    }
+                }
+            }
         };
         text.onkeydown = (e) => {
             if (e.key == "Enter") {
