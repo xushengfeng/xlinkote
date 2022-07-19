@@ -6,6 +6,9 @@ class x extends HTMLElement {
 
     fixed = false;
 
+    mousemove;
+    mouseup;
+
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
@@ -37,17 +40,21 @@ class x extends HTMLElement {
             }
         });
 
-        document.addEventListener("mousemove", (e) => {
+        var mousemove = (e: MouseEvent) => {
             mouse(e);
             if (o_e) move = true;
-        });
-        document.addEventListener("mouseup", (e) => {
+        };
+        document.addEventListener("mousemove", mousemove);
+        this.mousemove = mousemove;
+        var mouseup = (e: MouseEvent) => {
             mouse(e);
             o_e = null;
             move = false;
             document.getElementById("画布").style.cursor = "auto";
             o_rects = [];
-        });
+        };
+        document.addEventListener("mouseup", mouseup);
+        this.mouseup = mouseup;
         var mouse = (e: MouseEvent) => {
             if (o_e) {
                 if (o_rects.length != 0) {
@@ -93,6 +100,11 @@ class x extends HTMLElement {
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
         };
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener("mousemove", this.mousemove);
+        document.removeEventListener("mouseup", this.mouseup);
     }
 }
 
