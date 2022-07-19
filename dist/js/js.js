@@ -211,7 +211,6 @@ function creat_x_x(x, y) {
     var md = document.createElement("x-md");
     xel.append(md);
     md.edit = true;
-    data_changed();
 }
 function add_event(el) {
     el.onkeydown = (e) => {
@@ -309,7 +308,6 @@ function set_data(l) {
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
-            get_data(); /* 获取画布并保存到集 */
             render_data(p.data);
             集.meta.focus_page = p.name;
             data_changed();
@@ -663,12 +661,11 @@ document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");
     xel.style.left = -O.offsetLeft + "px";
     xel.style.top = -O.offsetTop + "px";
-    z.push(xel);
     let draw = document.createElement("x-draw");
     draw.setAttribute("width", String(画布.offsetWidth));
     draw.setAttribute("height", String(画布.offsetHeight));
     xel.append(draw);
-    data_changed();
+    z.push(xel);
 };
 window.onbeforeunload = () => {
     if (!集.meta.file_name)

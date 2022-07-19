@@ -45,6 +45,7 @@ class x extends HTMLElement {
             move = false;
             document.getElementById("画布").style.cursor = "auto";
             o_rects = [];
+            data_changed();
         };
         document.addEventListener("mouseup", mouseup);
         this.mouseup = mouseup;
