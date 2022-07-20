@@ -897,7 +897,7 @@ async function put_xln_value() {
 }
 var auto_put_xln_t = NaN;
 function auto_put_xln() {
-    if (store.webdav.自动上传) {
+    if (Number(store.webdav.自动上传)) {
         auto_put_xln_t = setTimeout(() => {
             if (now_dav_data != JSON.stringify(get_data())) {
                 put_xln_value();
