@@ -843,7 +843,6 @@ async function get_all_xln() {
                 tr.onclick = (e) => {
                     e.stopPropagation();
                     get_xln_value(i.filename);
-                    集.meta.file_name = i.basename.replace(/\.xln$/, "");
                     document.title = get_title();
                     document.getElementById("webdav_files").parentElement.open = false;
                 };
