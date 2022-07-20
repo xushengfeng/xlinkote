@@ -886,6 +886,8 @@ async function put_xln_value() {
     let path = 集.meta.url;
     if (!path) {
         let n = window.prompt("上传的文件名", get_file_name());
+        if (!n)
+            return;
         set_title(n);
         path = `/${n}.xln`;
     }
