@@ -830,6 +830,7 @@ async function get_all_xln() {
     async function get_dir(path) {
         const directoryItems = await client.getDirectoryContents(path);
         for (let i of directoryItems) {
+            i.filename = path + i.basename;
             if (i.type == "file" && i.basename.match(/\.xln$/)) {
                 l.push(i);
                 let tr = document.createElement("tr");
