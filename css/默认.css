@@ -40,6 +40,11 @@ body > #main > #nav dialog {
     backdrop-filter: var(--blur);
     border-radius: 4px;
 }
+body > #main > #nav dialog > #close_webdav_files {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
 
 .侧栏 > #items > #文件 > input {
     border: none;

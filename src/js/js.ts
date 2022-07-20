@@ -918,6 +918,11 @@ async function get_all_xln() {
     return l;
 }
 
+document.getElementById("close_webdav_files").onclick = (e) => {
+    e.stopPropagation();
+    (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = false;
+};
+
 document.getElementById("从云加载").onclick = get_all_xln;
 
 var now_dav_data = "";

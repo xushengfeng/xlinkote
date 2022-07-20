@@ -131,6 +131,12 @@ body > #main > #nav #upload_i {
     box-sizing: border-box;
 }
 
+dialog > #close_webdav_files {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
 .层容器 {
     overflow: auto;
 }
