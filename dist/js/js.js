@@ -526,11 +526,18 @@ request.onupgradeneeded = (event) => {
     db = event.target.result;
     db.createObjectStore(db_store_name, { keyPath: "meta.UUID" });
 };
+var db_writing = false;
 function db_put(obj) {
+    if (db_writing)
+        return;
+    db_writing = true;
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.put(obj);
     r.onerror = (event) => {
         console.error(new Error(event.target.error));
+    };
+    r.onsuccess = () => {
+        db_writing = false;
     };
 }
 function db_get() {
