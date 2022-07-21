@@ -19,6 +19,107 @@ document.getElementById("tabs").onclick = (e) => {
     });
 };
 document.getElementById("文件").click();
+if (window.showOpenFilePicker) {
+    document.getElementById("绑定文件").onclick = file_load;
+}
+else {
+    document.getElementById("绑定文件").style.display = "none";
+}
+document.getElementById("导出文件").onclick = () => {
+    download_file(JSON.stringify(get_data()));
+};
+document.getElementById("从云加载").onclick = get_all_xln;
+document.getElementById("close_webdav_files").onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById("webdav_files").parentElement.open = false;
+};
+document.getElementById("上传到云").onclick = put_xln_value;
+document.getElementById("加载数据库").onclick = () => {
+    document.getElementById("db_load").click();
+};
+document.getElementById("下载数据库").onclick = db_download;
+document.getElementById("新建集").onclick = () => {
+    window.open(location.href);
+};
+document.getElementById("新建画布").onclick = () => {
+    get_data(); /* 保存之前的画布 */
+    let name = `画布${crypto.randomUUID().slice(0, 7)}`;
+    集.数据.push({ name, data: [] });
+    集.meta.focus_page = name;
+    set_data(集);
+};
+document.getElementById("偏好设置").onclick = () => {
+    document.getElementById("设置").style.display = "block";
+    show_setting();
+};
+document.getElementById("设置").querySelector("#close").onclick = () => {
+    document.getElementById("设置").style.display = "";
+    save_setting();
+};
+document.getElementById("新建元素").onclick = () => {
+    creat_x_x(-O.offsetLeft, -O.offsetTop);
+};
+document.getElementById("删除元素").onclick = () => {
+    for (let i of selected_el) {
+        i.remove();
+    }
+    if (focus_md)
+        focus_md.remove();
+};
+document.getElementById("新建页").onclick = () => {
+    let page = document.createElement("x-x");
+    z.push(page);
+    page.fixed = true;
+};
+document.getElementById("新建画板").onclick = () => {
+    let xel = document.createElement("x-x");
+    xel.style.left = -O.offsetLeft + "px";
+    xel.style.top = -O.offsetTop + "px";
+    let draw = document.createElement("x-draw");
+    draw.setAttribute("width", String(画布.offsetWidth));
+    draw.setAttribute("height", String(画布.offsetHeight));
+    xel.append(draw);
+    z.push(xel);
+};
+document.getElementById("侧栏").onclick = (e) => {
+    document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
+        if (el == e.target) {
+            document.querySelectorAll("#侧栏 > #items > div").forEach((iel, j) => {
+                if (i == j) {
+                    iel.style.height = "100%";
+                }
+                else {
+                    iel.style.height = "0";
+                }
+            });
+        }
+    });
+};
+document.getElementById("切换侧栏").onclick = () => {
+    document.getElementById("main").classList.toggle("侧栏显示");
+};
+document.getElementById("层按钮").onclick = (e) => {
+    let el = z.聚焦元素;
+    switch (e.target.id) {
+        case "底层":
+            z.底层(el);
+            break;
+        case "下一层":
+            z.下一层(el);
+            break;
+        case "上一层":
+            z.上一层(el);
+            break;
+        case "顶层":
+            z.顶层(el);
+            break;
+    }
+};
+document.getElementById("toggle_md").onclick = () => {
+    if (focus_md) {
+        focus_md.edit = !focus_md.edit;
+    }
+};
 // 画布
 var 画布 = document.getElementById("画布");
 var O = document.getElementById("O");
@@ -362,12 +463,6 @@ window.MathJax = {
 };
 // 绑定文件
 var fileHandle;
-if (window.showOpenFilePicker) {
-    document.getElementById("绑定文件").onclick = file_load;
-}
-else {
-    document.getElementById("绑定文件").style.display = "none";
-}
 async function file_load() {
     let file;
     if (window.showOpenFilePicker) {
@@ -396,9 +491,6 @@ async function file_load() {
     };
     reader.readAsText(file);
 }
-document.getElementById("导出文件").onclick = () => {
-    download_file(JSON.stringify(get_data()));
-};
 var saved = true;
 function get_file_name() {
     return 集.meta.file_name || document.querySelector("h1")?.innerText || `xlinkote`;
@@ -493,9 +585,6 @@ function db_load(t) {
     }
     db_get();
 }
-document.getElementById("加载数据库").onclick = () => {
-    document.getElementById("db_load").click();
-};
 document.getElementById("db_load").onchange = () => {
     let file = document.getElementById("db_load").files[0];
     let reader = new FileReader();
@@ -504,7 +593,6 @@ document.getElementById("db_load").onchange = () => {
     };
     reader.readAsText(file);
 };
-document.getElementById("下载数据库").onclick = db_download;
 async function download_file(text) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
@@ -540,27 +628,7 @@ function data_changed() {
         db_put(get_data());
     }
 }
-document.getElementById("toggle_md").onclick = () => {
-    if (focus_md) {
-        focus_md.edit = !focus_md.edit;
-    }
-};
 var focus_md = null;
-document.getElementById("新建元素").onclick = () => {
-    creat_x_x(-O.offsetLeft, -O.offsetTop);
-};
-document.getElementById("删除元素").onclick = () => {
-    for (let i of selected_el) {
-        i.remove();
-    }
-    if (focus_md)
-        focus_md.remove();
-};
-document.getElementById("新建页").onclick = () => {
-    let page = document.createElement("x-x");
-    z.push(page);
-    page.fixed = true;
-};
 // 拖放
 画布.ondragover = (e) => {
     if (e.target != 画布)
@@ -653,16 +721,6 @@ document.getElementById("新建页").onclick = () => {
         c?.clip();
     }
 };
-document.getElementById("新建画板").onclick = () => {
-    let xel = document.createElement("x-x");
-    xel.style.left = -O.offsetLeft + "px";
-    xel.style.top = -O.offsetTop + "px";
-    let draw = document.createElement("x-draw");
-    draw.setAttribute("width", String(画布.offsetWidth));
-    draw.setAttribute("height", String(画布.offsetHeight));
-    xel.append(draw);
-    z.push(xel);
-};
 window.onbeforeunload = () => {
     if (!集.meta.file_name)
         return true;
@@ -681,30 +739,6 @@ function to_canvas() {
         a.click();
     });
 }
-document.getElementById("新建集").onclick = () => {
-    window.open(location.href);
-};
-document.getElementById("新建画布").onclick = () => {
-    get_data(); /* 保存之前的画布 */
-    let name = `画布${crypto.randomUUID().slice(0, 7)}`;
-    集.数据.push({ name, data: [] });
-    集.meta.focus_page = name;
-    set_data(集);
-};
-document.getElementById("侧栏").onclick = (e) => {
-    document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
-        if (el == e.target) {
-            document.querySelectorAll("#侧栏 > #items > div").forEach((iel, j) => {
-                if (i == j) {
-                    iel.style.height = "100%";
-                }
-                else {
-                    iel.style.height = "0";
-                }
-            });
-        }
-    });
-};
 class 图层 {
     constructor() {
         this.z = [];
@@ -794,27 +828,7 @@ class 图层 {
     }
 }
 var z = new 图层();
-document.getElementById("层按钮").onclick = (e) => {
-    let el = z.聚焦元素;
-    switch (e.target.id) {
-        case "底层":
-            z.底层(el);
-            break;
-        case "下一层":
-            z.下一层(el);
-            break;
-        case "上一层":
-            z.上一层(el);
-            break;
-        case "顶层":
-            z.顶层(el);
-            break;
-    }
-};
 set_data(集);
-document.getElementById("切换侧栏").onclick = () => {
-    document.getElementById("main").classList.toggle("侧栏显示");
-};
 // 云
 var client = window.WebDAV.createClient(store.webdav.网址, {
     username: store.webdav.用户名,
@@ -852,11 +866,6 @@ async function get_all_xln() {
     }
     return l;
 }
-document.getElementById("close_webdav_files").onclick = (e) => {
-    e.stopPropagation();
-    document.getElementById("webdav_files").parentElement.open = false;
-};
-document.getElementById("从云加载").onclick = get_all_xln;
 var now_dav_data = "";
 async function get_xln_value(path) {
     let str = await client.getFileContents(path, { format: "text" });
@@ -882,7 +891,6 @@ async function get_xln_value(path) {
         fileHandle = null;
     集.meta.url = path;
 }
-document.getElementById("上传到云").onclick = put_xln_value;
 async function put_xln_value() {
     let path = 集.meta.url;
     if (!path) {
@@ -910,14 +918,6 @@ function auto_put_xln() {
     }
 }
 // 设置
-document.getElementById("偏好设置").onclick = () => {
-    document.getElementById("设置").style.display = "block";
-    show_setting();
-};
-document.getElementById("设置").querySelector("#close").onclick = () => {
-    document.getElementById("设置").style.display = "";
-    save_setting();
-};
 function save_setting() {
     let o = {};
     for (let f of document.getElementById("设置").querySelectorAll("form")) {
