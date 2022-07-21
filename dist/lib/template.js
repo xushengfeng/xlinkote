@@ -134,6 +134,7 @@ class markdown extends HTMLElement {
                     text.setRangeText("\n" + l_task[0]);
                     text.selectionStart += l_task[0].length + 1;
                     text.selectionEnd += l_task[0].length + 1;
+                    text.dispatchEvent(new Event("input"));
                 }
                 else {
                     let l_l = last_line.match(/^ *[-+*] +/);
@@ -142,6 +143,7 @@ class markdown extends HTMLElement {
                         text.setRangeText("\n" + l_l[0]);
                         text.selectionStart += l_l[0].length + 1;
                         text.selectionEnd += l_l[0].length + 1;
+                        text.dispatchEvent(new Event("input"));
                     }
                 }
                 let l_n = last_line.match(/^ *\d+\. +/);
@@ -151,6 +153,7 @@ class markdown extends HTMLElement {
                     text.setRangeText(t);
                     text.selectionStart += t.length;
                     text.selectionEnd += t.length;
+                    text.dispatchEvent(new Event("input"));
                 }
             }
             else {
@@ -173,6 +176,7 @@ class markdown extends HTMLElement {
                         text.setRangeText(i[0] + t + i[1]);
                         text.selectionStart = s + i[0].length;
                         text.selectionEnd = s + i[0].length + t.length;
+                        text.dispatchEvent(new Event("input"));
                     }
                 }
             }
