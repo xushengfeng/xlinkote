@@ -592,7 +592,7 @@ function db_get() {
         for (let f of r.result) {
             let t = rename_el();
             t.onclick = () => {
-                new_t.remove();
+                if (!集.meta.file_name) new_t.remove();
                 set_data(f);
             };
             t.onchange = () => {
