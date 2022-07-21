@@ -1,7 +1,9 @@
+// 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
 if (!store) {
     save_setting();
 }
+// 工具栏
 document.getElementById("tabs").onclick = (e) => {
     document.querySelectorAll("#nav > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
@@ -17,6 +19,7 @@ document.getElementById("tabs").onclick = (e) => {
     });
 };
 document.getElementById("文件").click();
+// 画布
 var 画布 = document.getElementById("画布");
 var O = document.getElementById("O");
 var o_e;
@@ -190,6 +193,7 @@ document.getElementById("画布").onwheel = (e) => {
         }
     }
 };
+// 上下文菜单
 var menu = document.getElementById("上下文菜单");
 document.oncontextmenu = (e) => {
     e.preventDefault();
@@ -212,20 +216,7 @@ function creat_x_x(x, y) {
     xel.append(md);
     md.edit = true;
 }
-function add_event(el) {
-    el.onkeydown = (e) => {
-        let eeel = e.target;
-        let xel = eeel.parentElement;
-        if ((e.key == "Backspace" || e.key == "Delete") && (eeel?.value == "" || eeel?.innerText == "")) {
-            xel.remove();
-        }
-        if (e.key == "Enter") {
-            e.preventDefault();
-            let x = xel.offsetLeft, y = xel.offsetTop + xel.offsetHeight;
-            creat_x_x(x, y);
-        }
-    };
-}
+// 快捷键
 document.onkeydown = (e) => {
     switch (e.key) {
         case "F11":
@@ -254,6 +245,7 @@ document.onkeydown = (e) => {
             break;
     }
 };
+// 文件数据
 let pname = `画布${crypto.randomUUID().slice(0, 7)}`;
 var 集 = {
     meta: {
@@ -368,6 +360,7 @@ window.MathJax = {
         enableMenu: false,
     },
 };
+// 绑定文件
 var fileHandle;
 if (window.showOpenFilePicker) {
     document.getElementById("绑定文件").onclick = file_load;
@@ -425,6 +418,7 @@ async function write_file(text) {
         await writable.close();
     }
 }
+// 数据库
 var request = indexedDB.open("files");
 var db_store_name = "files";
 var db;
@@ -567,6 +561,7 @@ document.getElementById("新建页").onclick = () => {
     z.push(page);
     page.fixed = true;
 };
+// 拖放
 画布.ondragover = (e) => {
     if (e.target != 画布)
         return;
@@ -636,6 +631,7 @@ document.getElementById("新建页").onclick = () => {
         md.value = turndownService.turndown(html);
     }
 };
+// 画板
 画布.onpointerdown = (e) => {
     let cl = document.querySelectorAll("x-draw");
     for (let c of cl) {
@@ -671,6 +667,7 @@ window.onbeforeunload = () => {
     if (!集.meta.file_name)
         return true;
 };
+// 导出
 function to_canvas() {
     for (let m of document.querySelectorAll("mjx-assistive-mml")) {
         m.remove();
@@ -818,6 +815,7 @@ set_data(集);
 document.getElementById("切换侧栏").onclick = () => {
     document.getElementById("main").classList.toggle("侧栏显示");
 };
+// 云
 var client = window.WebDAV.createClient(store.webdav.网址, {
     username: store.webdav.用户名,
     password: store.webdav.密码,
@@ -911,6 +909,7 @@ function auto_put_xln() {
         }, Number(store.webdav.自动上传) * 60 * 1000);
     }
 }
+// 设置
 document.getElementById("偏好设置").onclick = () => {
     document.getElementById("设置").style.display = "block";
     show_setting();
@@ -949,6 +948,7 @@ function show_setting() {
         }
     }
 }
+// 搜索
 function search(s, type) {
     let result = [];
     switch (type) {
