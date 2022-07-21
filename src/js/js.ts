@@ -470,6 +470,7 @@ function render_data(data: data) {
             el.fixed = x.fixed;
             el.id = x.id;
             z.push(el, true);
+            el.setAttribute("style", x.style);
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
