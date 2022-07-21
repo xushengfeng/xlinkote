@@ -77,6 +77,7 @@ class x extends HTMLElement {
         };
         style.oninput = () => {
             this.setAttribute("style", style.value);
+            data_changed();
         };
         f.onclick = () => {
             this.fixed = !this.fixed;
