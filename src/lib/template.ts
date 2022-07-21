@@ -148,30 +148,6 @@ class markdown extends HTMLElement {
                 parse = l;
                 this.index = line_el(l);
             }, 0);
-
-            if (text.selectionStart == text.selectionEnd) {
-                if (text.value.charAt(text.selectionStart - 1) == "\n") {
-                }
-                let l_l = [
-                    ["(", ")"],
-                    ["[", "]"],
-                    ["{", "}"],
-                    ["<", ">"],
-                    ["'", "'"],
-                    ['"', '"'],
-                    ["$", "$"],
-                    ["*", "*"],
-                    ["~", "~"],
-                ];
-                for (let i of l_l) {
-                    if (
-                        text.value.charAt(text.selectionStart - 1) == i[0] &&
-                        text.value.charAt(text.selectionStart) != i[1]
-                    ) {
-                        text.setRangeText(i[1]);
-                    }
-                }
-            }
         };
         text.onkeydown = (e) => {
             if (e.key == "Enter") {
@@ -200,6 +176,27 @@ class markdown extends HTMLElement {
                     text.setRangeText(t);
                     text.selectionStart += t.length;
                     text.selectionEnd += t.length;
+                }
+            } else {
+                let l_l = [
+                    ["(", ")"],
+                    ["[", "]"],
+                    ["{", "}"],
+                    ["<", ">"],
+                    ["'", "'"],
+                    ['"', '"'],
+                    ["$", "$"],
+                    ["*", "*"],
+                    ["~", "~"],
+                ];
+                for (let i of l_l) {
+                    if (e.key == i[0] && text.value.charAt(text.selectionStart) != i[1]) {
+                        e.preventDefault();
+                        let t = text.value.slice(text.selectionStart, text.selectionEnd);
+                        let s = text.selectionStart;
+                        text.setRangeText(i[0] + t + i[1]);
+                        text.selectionStart = text.selectionEnd = s + i[0].length + t.length;
+                    }
                 }
             }
         };
