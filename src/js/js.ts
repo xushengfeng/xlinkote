@@ -768,6 +768,8 @@ var focus_md = null;
         if (c) (<draw>c).points = { x: NaN, y: NaN };
         (<draw>c)?.clip();
     }
+
+    data_changed();
 };
 
 window.onbeforeunload = () => {

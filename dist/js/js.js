@@ -722,6 +722,7 @@ var focus_md = null;
             c.points = { x: NaN, y: NaN };
         c?.clip();
     }
+    data_changed();
 };
 window.onbeforeunload = () => {
     if (!集.meta.file_name)
