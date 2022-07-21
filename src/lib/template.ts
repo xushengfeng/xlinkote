@@ -195,7 +195,8 @@ class markdown extends HTMLElement {
                         let t = text.value.slice(text.selectionStart, text.selectionEnd);
                         let s = text.selectionStart;
                         text.setRangeText(i[0] + t + i[1]);
-                        text.selectionStart = text.selectionEnd = s + i[0].length + t.length;
+                        text.selectionStart = s + i[0].length;
+                        text.selectionEnd = s + i[0].length + t.length;
                     }
                 }
             }
