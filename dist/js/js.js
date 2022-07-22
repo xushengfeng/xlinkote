@@ -915,6 +915,7 @@ async function put_xln_value() {
         set_title(n);
         path = `/${n}.xln`;
         集.meta.url = path;
+        data_changed();
     }
     let t = JSON.stringify(get_data());
     if (store.webdav.加密密钥) {
