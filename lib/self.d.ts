@@ -15,6 +15,7 @@ declare global {
         html2canvas: any;
         WebDAV: any;
         CryptoJS: any;
+        pako: any;
         Fuse: Fuse;
     }
     const mathSymbols: any;

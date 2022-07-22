@@ -897,6 +897,7 @@ async function get_xln_value(path) {
                 let bytes = window.CryptoJS.AES.decrypt(str, password);
                 str = bytes.toString(window.CryptoJS.enc.Utf8);
             }
+            str = 解压(str);
             o = JSON.parse(str);
         }
     }
@@ -919,6 +920,7 @@ async function put_xln_value() {
     }
     let t = JSON.stringify(get_data());
     if (store.webdav.加密密钥) {
+        t = 压缩(t);
         t = window.CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
     }
     client.putFileContents(path, t);
@@ -932,6 +934,19 @@ function auto_put_xln() {
             }
         }, Number(store.webdav.自动上传) * 60 * 1000);
     }
+}
+function 压缩(t) {
+    let c = window.pako.deflate(t);
+    return String.fromCharCode.apply(null, c);
+}
+function 解压(t) {
+    let arr = [];
+    for (var i = 0, j = t.length; i < j; ++i) {
+        arr.push(t.charCodeAt(i));
+    }
+    let tmpUint8Array = new Uint8Array(arr);
+    let r = window.pako.inflate(tmpUint8Array, { to: "string" });
+    return r;
 }
 // 设置
 function save_setting() {
