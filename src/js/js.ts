@@ -926,7 +926,11 @@ async function get_all_xln() {
                 };
             }
             if (i.type == "directory") {
-                get_dir(i.filename);
+                try {
+                    get_dir(i.filename);
+                } catch (error) {
+                    continue;
+                }
             }
         }
     }
