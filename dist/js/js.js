@@ -454,6 +454,25 @@ function render_data(data) {
         }
     }
 }
+function json2md(obj) {
+    function add_com(t) {
+        return `<!-- ${t} -->\n`;
+    }
+    let t = "";
+    t += add_com(JSON.stringify({ meta: obj.meta }));
+    for (let i of obj.数据) {
+        t += add_com(i.name);
+        for (let d of i.data) {
+            t += add_com(JSON.stringify({ id: d.id, style: d.style, fixed: d.fixed }));
+            for (let x in d.values) {
+                t += add_com(x);
+                t += d.values[x].value + "\n";
+            }
+        }
+    }
+    return t;
+}
+function md2json(t) { }
 window.MathJax = {
     tex: {
         inlineMath: [["$", "$"]],

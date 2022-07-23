@@ -486,6 +486,35 @@ function render_data(data: data) {
     }
 }
 
+function json2md(obj: {
+    meta: {
+        focus_page: string;
+        url: string;
+        UUID: string;
+        file_name: string;
+    };
+    数据: Array<{ name: string; data: data }>;
+}) {
+    function add_com(t: string) {
+        return `<!-- ${t} -->\n`;
+    }
+    let t = "";
+    t += add_com(JSON.stringify({ meta: obj.meta }));
+    for (let i of obj.数据) {
+        t += add_com(i.name);
+        for (let d of i.data) {
+            t += add_com(JSON.stringify({ id: d.id, style: d.style, fixed: d.fixed }));
+            for (let x in d.values) {
+                t += add_com(x);
+                t += d.values[x].value + "\n";
+            }
+        }
+    }
+    return t;
+}
+
+function md2json(t: string) {}
+
 window.MathJax = {
     tex: {
         inlineMath: [["$", "$"]],
