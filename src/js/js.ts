@@ -26,7 +26,7 @@ if (window.showOpenFilePicker) {
     document.getElementById("绑定文件").style.display = "none";
 }
 document.getElementById("导出文件").onclick = () => {
-    download_file(JSON.stringify(get_data()));
+    download_file(json2md(get_data()));
 };
 
 document.getElementById("从云加载").onclick = get_all_xln;
@@ -574,9 +574,9 @@ async function file_load() {
         [fileHandle] = await window.showOpenFilePicker({
             types: [
                 {
-                    description: "xlinkote文件",
+                    description: "markdown 文件",
                     accept: {
-                        "text/*": [".xln"],
+                        "text/*": [".md"],
                     },
                 },
             ],
@@ -586,12 +586,12 @@ async function file_load() {
         fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
     }
-    集.meta.file_name = file.name.replace(/\.xln$/, "");
+    集.meta.file_name = file.name.replace(/\.md$/, "");
     document.title = get_title();
 
     let reader = new FileReader();
     reader.onload = () => {
-        let o = JSON.parse(<string>reader.result);
+        let o = md2json(<string>reader.result) as any;
         set_data(o);
     };
     reader.readAsText(file);
@@ -723,8 +723,8 @@ async function download_file(text: string) {
             suggestedName: get_file_name(),
             types: [
                 {
-                    description: "xlinkote 文件",
-                    accept: { "text/*": [".xln"] },
+                    description: "markdown 文件",
+                    accept: { "text/*": [".md"] },
                 },
             ],
         });
@@ -735,7 +735,7 @@ async function download_file(text: string) {
         let a = document.createElement("a");
         let blob = new Blob([text]);
         let name = get_file_name();
-        a.download = `${name}.xln`;
+        a.download = `${name}.md`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
@@ -748,7 +748,7 @@ function data_changed() {
         saved = false;
     }
     if (集.meta.file_name) {
-        write_file(JSON.stringify(get_data()));
+        write_file(json2md(get_data()));
         db_put(get_data());
     }
 }
