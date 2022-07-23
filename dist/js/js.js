@@ -472,7 +472,52 @@ function json2md(obj) {
     }
     return t;
 }
-function md2json(t) { }
+function md2json(t) {
+    function rm_com(t) {
+        t = t.replace(/<!-- (.*?) -->/, "$1");
+        return t;
+    }
+    let l = t.split("\n");
+    console.log(l);
+    let obj = {};
+    obj["meta"] = JSON.parse(rm_com(l[0]));
+    obj["数据"] = [];
+    let last_type = false;
+    let zy;
+    for (let i = 1; i < l.length; i++) {
+        const element = l[i];
+        if (element.match(/<!-- (.*?) -->/)) {
+            try {
+                // 自由元素相关属性
+                let o_v = JSON.parse(rm_com(element));
+                if (!obj["数据"][obj["数据"].length - 1]?.data)
+                    obj["数据"][obj["数据"].length - 1]["data"] = [];
+                obj["数据"][obj["数据"].length - 1].data.push(o_v);
+                last_type = "o_v";
+            }
+            catch (e) {
+                if (last_type == "tag_name" || last_type === false) {
+                    // 画布名
+                    obj["数据"].push({ name: rm_com(element) });
+                    last_type = "name";
+                }
+                else {
+                    zy = obj["数据"][obj["数据"].length - 1].data;
+                    zy[zy.length - 1]["values"] = {};
+                    zy[zy.length - 1]["values"][rm_com(element)] = "";
+                    last_type = "tag_name";
+                }
+            }
+        }
+        else {
+            for (let i in zy[zy.length - 1]["values"]) {
+                // 空则空，否则添加换行符，确保开始无换行，中间换行
+                zy[zy.length - 1]["values"][i] += zy[zy.length - 1]["values"][i] && "\n" + element;
+            }
+        }
+    }
+    return obj;
+}
 window.MathJax = {
     tex: {
         inlineMath: [["$", "$"]],
