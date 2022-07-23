@@ -477,8 +477,24 @@ function md2json(t) {
         t = t.replace(/<!-- (.*?) -->/, "$1");
         return t;
     }
+    if (!t.match(/<!-- (.*?) -->/))
+        return {
+            meta: { focus_page: "上传的md", url: "", UUID: crypto.randomUUID(), file_name: "" },
+            数据: [
+                {
+                    name: "上传的md",
+                    data: [
+                        {
+                            id: "上传的md",
+                            style: `left: 0px; top: 0px; z-index: ${z.z.length};`,
+                            values: { "X-MD": { value: t, edit: true } },
+                            fixed: false,
+                        },
+                    ],
+                },
+            ],
+        };
     let l = t.split("\n");
-    console.log(l);
     let obj = {};
     obj["meta"] = JSON.parse(rm_com(l[0]));
     obj["数据"] = [];
