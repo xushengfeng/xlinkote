@@ -59,7 +59,7 @@ body > #main > #nav > #items > div {
     white-space: nowrap;
 }
 body > #main > #nav > #items > div:nth-child(1) {
-    width: 100%;
+    width: 100vw;
 }
 body > #main > #nav > #items > div:not(:nth-child(1)) {
     width: 0;
