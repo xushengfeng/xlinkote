@@ -152,22 +152,20 @@ class markdown extends HTMLElement {
         text.onkeydown = (e) => {
             if (e.key == "Enter") {
                 data_changed();
-                let last_line_start = text.value.lastIndexOf("\n", text.selectionStart) + 1;
+                let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
                 let last_line = text.value.slice(last_line_start, text.selectionStart);
                 let l_task = last_line.match(/^ *[-+*] +\[[x\s]\] +/i);
                 if (l_task) {
                     e.preventDefault();
                     text.setRangeText("\n" + l_task[0]);
-                    text.selectionStart += l_task[0].length + 1;
-                    text.selectionEnd += l_task[0].length + 1;
+                    text.selectionStart = text.selectionEnd += l_task[0].length + 1;
                     text.dispatchEvent(new Event("input"));
                 } else {
                     let l_l = last_line.match(/^ *[-+*] +/);
                     if (l_l) {
                         e.preventDefault();
                         text.setRangeText("\n" + l_l[0]);
-                        text.selectionStart += l_l[0].length + 1;
-                        text.selectionEnd += l_l[0].length + 1;
+                        text.selectionStart = text.selectionEnd += l_l[0].length + 1;
                         text.dispatchEvent(new Event("input"));
                     }
                 }
@@ -176,8 +174,7 @@ class markdown extends HTMLElement {
                     e.preventDefault();
                     let t = "\n" + l_n[0].replace(/\d+/, (n) => String(Number(n) + 1));
                     text.setRangeText(t);
-                    text.selectionStart += t.length;
-                    text.selectionEnd += t.length;
+                    text.selectionStart = text.selectionEnd += t.length;
                     text.dispatchEvent(new Event("input"));
                 }
             } else {
