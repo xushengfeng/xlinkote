@@ -255,6 +255,7 @@ function line_el(l: Array<any>) {
             i.tag = i.content.match(/<(.*?)>/)?.[1] || "";
             i.nesting = 1;
         }
+        if (i.type == "mathjax_block") i.nesting = 1;
         if (i.type == "container_spoiler_open") {
             i.tag = "details";
         }
@@ -272,6 +273,7 @@ function line_el(l: Array<any>) {
         }
         line2el.push([t.join(">"), null, i.map]);
         if (i.type == "html_block") n--;
+        if (i.type == "mathjax_block") n--;
     }
     return line2el;
 }
