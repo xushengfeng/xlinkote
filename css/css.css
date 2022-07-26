@@ -55,7 +55,6 @@ body > #main > #nav > #items {
 body > #main > #nav > #items > div {
     display: flex;
     overflow-x: scroll;
-    transition: var(--transition);
     white-space: nowrap;
 }
 body > #main > #nav > #items > div:nth-child(1) {
