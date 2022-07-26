@@ -231,6 +231,13 @@ function line_el(l) {
             n += i.nesting;
             continue;
         }
+        if (i.type == "html_block") {
+            i.tag = i.content.match(/<(.*?)>/)?.[1] || "";
+            i.nesting = 1;
+        }
+        if (i.type == "container_spoiler_open") {
+            i.tag = "details";
+        }
         n += i.nesting;
         el_n.slice(0, n + 1);
         if (i.type == "inline")
@@ -249,6 +256,8 @@ function line_el(l) {
             t.push(`${el_path[e]}:nth-of-type(${el_n[e][el_path[e]]})`);
         }
         line2el.push([t.join(">"), null, i.map]);
+        if (i.type == "html_block")
+            n--;
     }
     return line2el;
 }
