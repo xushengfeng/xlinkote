@@ -309,6 +309,33 @@ document.getElementById("画布").onwheel = (e) => {
     }
 };
 
+// 自由元素移动
+let free_o_e: MouseEvent;
+let free_o_rects = [];
+document.addEventListener("mousemove", (e: MouseEvent) => {
+    free_mouse(e);
+    if (free_o_e) move = true;
+});
+document.addEventListener("mouseup", (e: MouseEvent) => {
+    free_mouse(e);
+    free_o_e = null;
+    move = false;
+    document.getElementById("画布").style.cursor = "auto";
+    free_o_rects = [];
+
+    data_changed();
+});
+var free_mouse = (e: MouseEvent) => {
+    if (free_o_e) {
+        for (const xel of free_o_rects) {
+            let x = xel.x + (e.clientX - free_o_e.clientX) / zoom,
+                y = xel.y + (e.clientY - free_o_e.clientY) / zoom;
+            xel.el.style.left = x + "px";
+            xel.el.style.top = y + "px";
+        }
+    }
+};
+
 // 上下文菜单
 var menu = document.getElementById("上下文菜单");
 document.oncontextmenu = (e) => {

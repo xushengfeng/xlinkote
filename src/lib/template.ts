@@ -6,9 +6,6 @@ class x extends HTMLElement {
 
     fixed = false;
 
-    mousemove;
-    mouseup;
-
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
@@ -21,59 +18,21 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
-        var o_e: MouseEvent;
-        var o_rect: { x: number; y: number };
-        var o_rects = [];
-
         this.addEventListener("mousedown", (e) => {
             if (e.button != 2) return;
             if (this.fixed) return;
-            o_e = e;
-            o_rect = { x: this.offsetLeft, y: this.offsetTop };
+            free_o_e = e;
             document.getElementById("画布").style.cursor = "move";
 
             if (selected_el.length != 0 && selected_el.includes(this)) {
-                o_rects = [];
+                free_o_rects = [];
                 for (const el of selected_el) {
-                    o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                    free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
                 }
+            } else {
+                free_o_rects = [{ el: this, x: this.offsetLeft, y: this.offsetTop }];
             }
         });
-
-        var mousemove = (e: MouseEvent) => {
-            mouse(e);
-            if (o_e) move = true;
-        };
-        document.addEventListener("mousemove", mousemove);
-        this.mousemove = mousemove;
-        var mouseup = (e: MouseEvent) => {
-            mouse(e);
-            o_e = null;
-            move = false;
-            document.getElementById("画布").style.cursor = "auto";
-            o_rects = [];
-
-            data_changed();
-        };
-        document.addEventListener("mouseup", mouseup);
-        this.mouseup = mouseup;
-        var mouse = (e: MouseEvent) => {
-            if (o_e) {
-                if (o_rects.length != 0) {
-                    for (const xel of o_rects) {
-                        let x = xel.x + (e.clientX - o_e.clientX) / zoom,
-                            y = xel.y + (e.clientY - o_e.clientY) / zoom;
-                        xel.el.style.left = x + "px";
-                        xel.el.style.top = y + "px";
-                    }
-                } else {
-                    let x = o_rect.x + (e.clientX - o_e.clientX) / zoom,
-                        y = o_rect.y + (e.clientY - o_e.clientY) / zoom;
-                    this.style.left = x + "px";
-                    this.style.top = y + "px";
-                }
-            }
-        };
 
         this.onclick = () => {
             z.focus(this);
@@ -104,11 +63,6 @@ class x extends HTMLElement {
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
         };
-    }
-
-    disconnectedCallback() {
-        document.removeEventListener("mousemove", this.mousemove);
-        document.removeEventListener("mouseup", this.mouseup);
     }
 }
 
