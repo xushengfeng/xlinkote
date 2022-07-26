@@ -259,7 +259,7 @@ function line_el(l: Array<any>) {
             i.tag = "details";
         }
         n += i.nesting;
-        el_n.slice(0, n + 1);
+        el_n = el_n.slice(0, n + 1);
         if (i.type == "inline") continue;
         if (n == -1) continue;
         if (!el_n[n]) el_n[n] = {};
