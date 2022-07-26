@@ -157,7 +157,7 @@ class markdown extends HTMLElement {
                 }
             }
             if (index_i) {
-                let el = s.querySelectorAll(`#h > ${index_i[0]}`)[index_i[1] - 1];
+                let el = s.querySelector(`#h > ${index_i[0]}`);
                 let x = el.offsetLeft, y = el.offsetTop + el.offsetHeight;
                 O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
                 O.style.top = O.offsetTop - (y - text.offsetTop) + "px";
@@ -225,31 +225,30 @@ function line_el(l) {
     let o = {};
     let line2el = [];
     let list = false;
+    let el_n = [], n = -1, el_path = [];
     for (let i of l) {
-        if (i.type == "container_spoiler_open")
-            list = true;
-        if (i.type == "container_spoiler_close")
-            list = false;
-        if (i.type.includes("_open") || i.type.includes("_block")) {
-            let tag = i.tag;
-            if (tag == "p") {
-                if (list)
-                    continue;
-            }
-            if (i.type == "html_block") {
-                tag = i.content.match(/<(.*?)>/)?.[1] || "";
-            }
-            if (i.type == "container_spoiler_open") {
-                tag = "details";
-            }
-            if (o[tag]) {
-                o[tag]++;
-            }
-            else {
-                o[tag] = 1;
-            }
-            line2el.push([tag, o[tag], i.map]);
+        if (i.nesting == -1) {
+            n += i.nesting;
+            continue;
         }
+        n += i.nesting;
+        el_n.slice(0, n + 1);
+        if (i.type == "inline")
+            continue;
+        if (n == -1)
+            continue;
+        if (!el_n[n])
+            el_n[n] = {};
+        if (i.nesting != -1)
+            el_n[n][i.tag] = (el_n[n]?.[i.tag] || 0) + i.nesting;
+        el_path[n] = i.tag;
+        if (i.tag == "p" && el_path?.[n - 1] == "li")
+            continue;
+        let t = [];
+        for (let e = 0; e <= n; e++) {
+            t.push(`${el_path[e]}:nth-of-type(${el_n[e][el_path[e]]})`);
+        }
+        line2el.push([t.join(">"), null, i.map]);
     }
     return line2el;
 }
@@ -268,7 +267,7 @@ function text_get_line(text) {
 // 获取元素->行
 function el_line(text, index, s, iel) {
     for (let l_i of index) {
-        let el = s.querySelectorAll(`#h > ${l_i[0]}`)[l_i[1] - 1];
+        let el = s.querySelector(`#h > ${l_i[0]}`);
         if (el == iel || el.contains(iel))
             return Number(l_i[2][1]);
     }
