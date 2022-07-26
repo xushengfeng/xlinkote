@@ -146,9 +146,9 @@ class markdown extends HTMLElement {
             let l_i = text_get_line(text);
             let index_i;
             for (let i = 0; i < this.index.length; i++) {
-                if (this.index[i][2][0] <= l_i && l_i <= this.index[i][2][1]) {
+                if (this.index[i][2][0] <= l_i && l_i < this.index[i][2][1]) {
                     index_i = this.index[i];
-                    break;
+                    // break;
                 }
                 else if (i != 0 && this.index[i - 1][2][1] <= l_i && l_i <= this.index[i][2][0]) {
                     // 空行处无map
@@ -260,15 +260,20 @@ function text_get_line(text) {
         if (value[t] == "\n")
             line++;
         if (Number(t) + 1 == text.selectionStart)
-            return line;
+            return line - 1;
     }
-    return 1;
+    return 0;
 }
 // 获取元素->行
 function el_line(text, index, s, iel) {
     for (let l_i of index) {
         let el = s.querySelector(`#h > ${l_i[0]}`);
-        if (el == iel || el.contains(iel))
+        if (el == iel)
+            return Number(l_i[2][1]);
+    }
+    for (let l_i of index) {
+        let el = s.querySelector(`#h > ${l_i[0]}`);
+        if (el.contains(iel))
             return Number(l_i[2][1]);
     }
 }
