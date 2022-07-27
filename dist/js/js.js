@@ -154,6 +154,15 @@ document.onmousedown = (e) => {
         menu.classList.remove("上下文菜单展示");
 };
 document.onmousemove = (e) => {
+    let el = e.target;
+    if (el == 画布) {
+        画布.style.cursor = "crosshair";
+    }
+    else {
+        if (画布.style.cursor == "crosshair") {
+            画布.style.cursor = "";
+        }
+    }
     mouse(e);
     if (o_e)
         move = true;
