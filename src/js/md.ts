@@ -4,7 +4,7 @@ var md = window
         linkify: true,
         typographer: true,
     })
-    .use(window.markdownitTaskLists)
+    .use(window.markdownitTaskLists, { enabled: true })
     .use(window.markdownitContainer, "spoiler", {
         validate: function (params) {
             return params.trim().match(/^(.*)$/);

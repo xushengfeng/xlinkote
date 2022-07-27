@@ -195,10 +195,17 @@ class markdown extends HTMLElement {
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
             if (el.tagName == "TEXTAREA") return;
+            if ((<HTMLInputElement>el).type == "checkbox") {
+                // 待办与源文本同步
+                let ln = el_line(text, this.index, s, el.parentElement)[0];
+                let l = text.value.split("\n");
+                l[ln] = l[ln].replace(/(^ *[-+*] +\[)[x\s](\] +)/, `$1${(<HTMLInputElement>el).checked ? "x" : " "}$2`);
+                text.value = l.join("\n");
+            }
             if (!this.edit) return;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
-            let line = el_line(text, this.index, s, el);
+            let line = el_line(text, this.index, s, el)[1];
             text_set_line(text, line);
             text.focus();
         };
@@ -298,11 +305,11 @@ function el_line(
 ) {
     for (let l_i of index) {
         let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
-        if (el == iel) return Number(l_i[2][1]);
+        if (el == iel) return l_i[2];
     }
     for (let l_i of index) {
         let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
-        if (el.contains(iel)) return Number(l_i[2][1]);
+        if (el.contains(iel)) return l_i[2];
     }
 }
 
