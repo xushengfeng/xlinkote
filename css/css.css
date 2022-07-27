@@ -303,16 +303,14 @@ x-md {
 }
 x-md > textarea {
     position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    display: none;
     top: 0;
     left: 0;
     width: 100%;
 }
 
 .show_md {
-    opacity: 1 !important;
-    pointer-events: all !important;
+    display: inline-block;
 }
 
 .contains-task-list {
