@@ -17,6 +17,7 @@ declare global {
         CryptoJS: any;
         pako: any;
         Fuse: Fuse;
+        mermaid: any;
     }
     const mathSymbols: any;
 }

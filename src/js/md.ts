@@ -51,6 +51,17 @@ md.renderer.rules.em_open = function (tokens, idx, options, env, self) {
     }
     return defaultRender(tokens, idx, options, env, self);
 };
+let f = md.renderer.rules.fence;
+md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+    if (tokens[idx].info == "mermaid") {
+        let o = "";
+        window.mermaid.mermaidAPI.render("graphDiv", tokens[idx].content, (svg) => {
+            o = svg;
+        });
+        return o;
+    }
+    return f(tokens, idx, options, env, self);
+};
 
 var mathjax_cache = {};
 function get_svg(c: string) {
