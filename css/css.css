@@ -288,6 +288,11 @@ x-x > #x-x_bar {
 x-x > #x-x_bar > div {
     width: 16px;
     height: 16px;
+    position: relative;
+}
+x-x > #x-x_bar > div > .icon {
+    width: 16px;
+    height: 16px;
 }
 x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;

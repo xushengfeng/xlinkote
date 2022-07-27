@@ -11,7 +11,9 @@ class x extends HTMLElement {
         bar.id = "x-x_bar";
         var style = document.createElement("input");
         var f = document.createElement("div");
+        f.innerHTML = `<img src="./assets/icons/ding.svg" class="icon">`;
         var d = document.createElement("div");
+        d.innerHTML = `<img src="./assets/icons/close.svg" class="icon">`;
 
         bar.append(style);
         bar.append(f);
