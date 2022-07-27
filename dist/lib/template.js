@@ -297,11 +297,13 @@ function el_line(text, index, s, iel) {
         if (el == iel)
             return l_i[2];
     }
+    let o = null;
     for (let l_i of index) {
         let el = s.querySelector(`#h > ${l_i[0]}`);
         if (el.contains(iel))
-            return l_i[2];
+            o = l_i[2];
     }
+    return o;
 }
 // 定位到行
 function text_set_line(text, n) {

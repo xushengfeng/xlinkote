@@ -312,10 +312,12 @@ function el_line(
         let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
         if (el == iel) return l_i[2];
     }
+    let o = null;
     for (let l_i of index) {
         let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
-        if (el.contains(iel)) return l_i[2];
+        if (el.contains(iel)) o = l_i[2];
     }
+    return o;
 }
 
 // 定位到行
