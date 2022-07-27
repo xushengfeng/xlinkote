@@ -245,7 +245,7 @@ function line_el(l) {
             continue;
         }
         if (i.type == "html_block") {
-            i.tag = i.content.match(/<(.*?)>/)?.[1] || "";
+            i.tag = i.content.match(/<(\S*?)>/)?.[1] || "";
             i.nesting = 1;
         }
         if (i.type == "mathjax_block")
@@ -315,6 +315,19 @@ function text_set_line(text, n) {
         if (value[t] == "\n")
             line++;
     }
+}
+function set_el_text_value(el, value) {
+    let pel = el.parentElement;
+    while (pel && el.parentElement != document.body) {
+        if ("X-MD" == pel.tagName)
+            break;
+        pel = pel.parentElement;
+    }
+    let ln = el_line(null, pel.index, pel.querySelector("#h"), el);
+    let l = pel.querySelector("textarea").value.split("\n");
+    let r = new RegExp(`(<${el.tagName.toLowerCase()}.*?value=)(.*?)([>\s"])`);
+    l[ln[0]] = l[ln[0]].replace(r, `$1${value}$3`);
+    pel.querySelector("textarea").value = l.join("\n");
 }
 // 几何图形
 class graph extends HTMLElement {
