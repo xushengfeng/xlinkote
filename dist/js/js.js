@@ -282,7 +282,11 @@ function zoom_o(z) {
 document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
-        zoom += -e.deltaY / 500;
+        let ozoom = zoom, dzoom = -e.deltaY / 500;
+        zoom += dzoom;
+        let dx = e.clientX - O.getBoundingClientRect().x, dy = e.clientY - O.getBoundingClientRect().y;
+        O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
+        O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
         zoom_o(zoom);
     }
     else {
@@ -303,6 +307,10 @@ document.getElementById("画布").onwheel = (e) => {
         }
     }
 };
+var now_mouse_e = null;
+document.addEventListener("mousemove", (e) => {
+    now_mouse_e = e;
+});
 // 自由元素移动
 let free_o_e;
 let free_o_rects = [];
@@ -376,6 +384,11 @@ document.onkeydown = (e) => {
             }
             break;
         case "0":
+            let ozoom = zoom, dzoom = 1 - zoom;
+            zoom += dzoom;
+            let dx = now_mouse_e.clientX - O.getBoundingClientRect().x, dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
+            O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
+            O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
             zoom_o(1);
             break;
     }
