@@ -16,6 +16,8 @@
     left: 0;
     top: 0;
     filter: var(--icon-color);
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 body {
