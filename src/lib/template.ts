@@ -205,7 +205,12 @@ class markdown extends HTMLElement {
             if (!this.edit) return;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
-            let line = el_line(text, this.index, s, el)[1];
+            let line = NaN;
+            if (el.tagName == "LI") {
+                line = el_line(text, this.index, s, el)[0] + 1;
+            } else {
+                line = el_line(text, this.index, s, el)[1];
+            }
             text_set_line(text, line);
             text.focus();
         };
