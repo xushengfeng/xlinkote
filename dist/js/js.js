@@ -641,7 +641,7 @@ function db_get() {
         load_dav.onclick = () => {
             get_all_xln(r.result);
         };
-        let d = document.createElement("div");
+        let new_d = document.createElement("div");
         let new_t = rename_el();
         new_t.onchange = () => {
             if (new_t.value) {
@@ -651,14 +651,14 @@ function db_get() {
         };
         new_t.value = `新建集${crypto.randomUUID().slice(0, 7)}`;
         let dav = document.createElement("div");
-        d.append(dav, new_t);
-        document.getElementById("文件").append(d);
+        new_d.append(dav, new_t);
+        document.getElementById("文件").append(new_d);
         for (let f of r.result) {
             let d = document.createElement("div");
             let t = rename_el();
             t.onclick = () => {
                 if (!集.meta.file_name)
-                    new_t.remove();
+                    new_d.remove();
                 set_data(f);
             };
             t.onchange = () => {
