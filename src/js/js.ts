@@ -1047,7 +1047,7 @@ async function get_all_xln(r) {
         let new_t = document.getElementById("文件").querySelector("div:nth-child(2)") as HTMLElement;
         let d = document.createElement("div");
         let t = rename_el();
-        t.value = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") || "";
+        t.value = fi.basename.replace(/\.xln$/, "") || "";
         let dav = document.createElement("div");
         d.append(dav, t);
         document.getElementById("文件").append(d);
