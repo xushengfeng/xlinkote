@@ -58,6 +58,7 @@ body > #main > #nav > #items > div {
     display: flex;
     overflow-x: scroll;
     white-space: nowrap;
+    height: 24px;
 }
 body > #main > #nav > #items > div:nth-child(1) {
     width: 100vw;
@@ -74,6 +75,14 @@ body > #main > #nav > #items > div > div {
 body > #main > #nav > #items > div > div,
 body > #main > #nav > #tabs > div {
     cursor: pointer;
+    position: relative;
+    min-width: 24px;
+    height: 24px;
+}
+body > #main > #nav > #items > div > div > .icon,
+body > #main > #nav > #tabs > div > .icon {
+    width: 24px;
+    height: 24px;
 }
 body > #main > #nav #upload_i {
     display: none;
@@ -231,6 +240,11 @@ body > #设置 > #close {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+body > #设置 > #close>.icon {
+    width: 16px;
+    height: 16px;
 }
 
 x-sinppet {
