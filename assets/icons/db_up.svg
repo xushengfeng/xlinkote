@@ -5,7 +5,7 @@
    width="240"
    height="240"
    id="svg5"
-   sodipodi:docname="db_up.svg"
+   sodipodi:docname="db_down.svg"
    version="1.1"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,7 +26,7 @@
      width="512px"
      inkscape:zoom="2.2627417"
      inkscape:cx="229.58873"
-     inkscape:cy="212.35301"
+     inkscape:cy="177.88155"
      inkscape:window-width="1920"
      inkscape:window-height="1031"
      inkscape:window-x="0"
@@ -79,7 +79,7 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       d="m 200,170 -30,30 -30,-30"
+       d="m 200,150 -30,-30 -30,30"
        id="path1096"
        sodipodi:nodetypes="ccc" />
     <path
@@ -87,12 +87,18 @@
        d="M 40,40 V 80 H 200 V 40 Z"
        id="path454" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
-       d="M 150,140 H 40 v -40 h 160 v 40 h -10"
-       id="path1010" />
+       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 120,140 H 40 v -40 h 160"
+       id="path1010"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 120,160 H 40 v 40 h 110"
+       id="path1012"
+       sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
-       d="M 120,160 H 40 v 40 h 100"
-       id="path1012" />
+       d="m 190,200 h 10 v -30"
+       id="path455" />
   </g>
 </svg>
