@@ -72,7 +72,8 @@ document.getElementById("新建画板").onclick = () => {
     xel.append(draw);
     z.push(xel);
 };
-document.getElementById("侧栏").onclick = (e) => {
+var 侧栏 = document.getElementById("侧栏");
+侧栏.onclick = (e) => {
     document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
             document.querySelectorAll("#侧栏 > #items > div").forEach((iel, j) => {
@@ -87,7 +88,7 @@ document.getElementById("侧栏").onclick = (e) => {
     });
 };
 document.getElementById("切换侧栏").onclick = () => {
-    document.getElementById("侧栏").classList.toggle("侧栏显示");
+    侧栏.classList.toggle("侧栏显示");
 };
 document.getElementById("层按钮").onclick = (e) => {
     let el = z.聚焦元素;
