@@ -188,6 +188,8 @@ class markdown extends HTMLElement {
                 let l = text.value.split("\n");
                 l[ln] = l[ln].replace(/(^ *[-+*] +\[)[x\s](\] +)/, `$1${el.checked ? "x" : " "}$2`);
                 text.value = l.join("\n");
+                this._value = text.value;
+                data_changed();
             }
             if (!this.edit)
                 return;
