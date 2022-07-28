@@ -665,6 +665,8 @@ function db_get() {
                 data_changed();
             };
             t.value = f.meta.file_name || "";
+            if (f.meta.url)
+                t.title = f.meta.url;
             let dav = document.createElement("div");
             d.append(dav, t);
             document.getElementById("文件").append(d);
@@ -976,6 +978,7 @@ async function get_all_xln(r) {
         let d = document.createElement("div");
         let t = rename_el();
         t.value = fi.basename.replace(/\.xln$/, "") || "";
+        t.title = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "");
         let dav = document.createElement("div");
         d.append(dav, t);
         document.getElementById("文件").append(d);
