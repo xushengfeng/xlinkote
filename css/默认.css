@@ -45,7 +45,11 @@ body > #main > #nav dialog > #close_webdav_files {
     backdrop-filter: var(--blur);
     border-radius: 4px;
 }
-
+.侧栏 {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    transition: var(--transition);
+}
 .侧栏 > #items > #文件 > div > input {
     border: none;
     outline: none;
