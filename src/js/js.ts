@@ -694,6 +694,7 @@ function db_get() {
     r.onsuccess = () => {
         document.getElementById("文件").innerHTML = "";
         let load_dav = document.createElement("div");
+        load_dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
         document.getElementById("文件").append(load_dav);
         load_dav.onclick = () => {
             get_all_xln(r.result);
@@ -1039,6 +1040,7 @@ async function get_all_xln(r) {
                     get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
                     document.title = get_title();
                 };
+                dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
                 dav_files = dav_files.filter((v) => v != fi);
                 break;
             }
@@ -1051,6 +1053,7 @@ async function get_all_xln(r) {
         t.value = fi.basename.replace(/\.xln$/, "") || "";
         t.title = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "");
         let dav = document.createElement("div");
+        dav.innerHTML = `<img src="./assets/icons/cloud.svg" class="icon">`;
         d.append(dav, t);
         document.getElementById("文件").append(d);
         t.onclick = dav.onclick = () => {

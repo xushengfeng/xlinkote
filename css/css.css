@@ -133,6 +133,12 @@ body > #main > #nav #upload_i {
 
 .侧栏 > #items > #文件 > div:nth-child(1) {
     height: 16px;
+    position: relative;
+    cursor: pointer;
+}
+.侧栏 > #items > #文件 > div:nth-child(1) > .icon {
+    height: 16px;
+    width: 16px;
 }
 .侧栏 > #items > #文件 > div {
     display: flex;
@@ -143,6 +149,11 @@ body > #main > #nav #upload_i {
     width: 16px;
     height: 16px;
     position: relative;
+    cursor: pointer;
+}
+.侧栏 > #items > #文件 > div > div > .icon {
+    width: 16px;
+    height: 16px;
 }
 .侧栏 > #items > #文件 > div > input {
     width: calc(100% - 16px);
