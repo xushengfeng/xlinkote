@@ -10,20 +10,6 @@ function uuid() {
     });
 }
 // 工具栏
-document.getElementById("tabs").onclick = (e) => {
-    document.querySelectorAll("#nav > #tabs > div").forEach((el, i) => {
-        if (el == e.target) {
-            document.querySelectorAll("#nav > #items > div").forEach((iel, j) => {
-                if (i == j) {
-                    iel.style.width = "100vw";
-                }
-                else {
-                    iel.style.width = "0";
-                }
-            });
-        }
-    });
-};
 document.getElementById("文件").click();
 if (window.showOpenFilePicker) {
     document.getElementById("绑定文件").onclick = file_load;

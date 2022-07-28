@@ -131,6 +131,19 @@ body > #main > #nav #upload_i {
     overflow: auto;
 }
 
+.侧栏 > #items > div > div,
+.侧栏 > #tabs > div {
+    cursor: pointer;
+    position: relative;
+    min-width: 24px;
+    height: 24px;
+}
+.侧栏 > #items > div > div > .icon,
+.侧栏 > #tabs > div > .icon {
+    width: 24px;
+    height: 24px;
+}
+
 .侧栏 > #items > #文件 > div:nth-child(1) {
     height: 16px;
     position: relative;
