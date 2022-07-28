@@ -956,7 +956,7 @@ async function get_all_xln(r) {
         let dav;
         for (let el of document.getElementById("文件").querySelectorAll("input")) {
             if (el.value == f.meta.file_name) {
-                dav = el;
+                dav = el.previousElementSibling;
                 break;
             }
         }
