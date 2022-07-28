@@ -28,6 +28,10 @@ else {
 document.getElementById("导出文件").onclick = () => {
     download_file(json2md(get_data()));
 };
+document.getElementById("从云加载").onclick = () => {
+    if (集.meta.url)
+        get_xln_value(集.meta.url);
+};
 document.getElementById("上传到云").onclick = put_xln_value;
 document.getElementById("加载数据库").onclick = () => {
     document.getElementById("db_load").click();
