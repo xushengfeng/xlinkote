@@ -131,8 +131,21 @@ body > #main > #nav #upload_i {
     overflow: auto;
 }
 
-.侧栏 > #items > #文件 > input {
+.侧栏 > #items > #文件 > div:nth-child(1) {
+    height: 16px;
+}
+.侧栏 > #items > #文件 > div {
+    display: flex;
     width: 100%;
+    align-items: center;
+}
+.侧栏 > #items > #文件 > div > div {
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+.侧栏 > #items > #文件 > div > input {
+    width: calc(100% - 16px);
     box-sizing: border-box;
 }
 
@@ -242,7 +255,7 @@ body > #设置 > #close {
     top: 0;
 }
 
-body > #设置 > #close>.icon {
+body > #设置 > #close > .icon {
     width: 16px;
     height: 16px;
 }

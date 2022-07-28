@@ -46,7 +46,7 @@ body > #main > #nav dialog > #close_webdav_files {
     border-radius: 4px;
 }
 
-.侧栏 > #items > #文件 > input {
+.侧栏 > #items > #文件 > div > input {
     border: none;
     outline: none;
 }

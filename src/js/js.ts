@@ -29,11 +29,6 @@ document.getElementById("导出文件").onclick = () => {
     download_file(json2md(get_data()));
 };
 
-document.getElementById("从云加载").onclick = get_all_xln;
-document.getElementById("close_webdav_files").onclick = (e) => {
-    e.stopPropagation();
-    (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = false;
-};
 document.getElementById("上传到云").onclick = put_xln_value;
 
 document.getElementById("加载数据库").onclick = () => {
@@ -695,6 +690,12 @@ function db_get() {
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
         document.getElementById("文件").innerHTML = "";
+        let load_dav = document.createElement("div");
+        document.getElementById("文件").append(load_dav);
+        load_dav.onclick = () => {
+            get_all_xln(r.result);
+        };
+        let d = document.createElement("div");
         let new_t = rename_el();
         new_t.onchange = () => {
             if (new_t.value) {
@@ -703,8 +704,11 @@ function db_get() {
             }
         };
         new_t.value = `新建集${crypto.randomUUID().slice(0, 7)}`;
-        document.getElementById("文件").append(new_t);
+        let dav = document.createElement("div");
+        d.append(dav, new_t);
+        document.getElementById("文件").append(d);
         for (let f of r.result) {
+            let d = document.createElement("div");
             let t = rename_el();
             t.onclick = () => {
                 if (!集.meta.file_name) new_t.remove();
@@ -715,7 +719,9 @@ function db_get() {
                 data_changed();
             };
             t.value = f.meta.file_name || "";
-            document.getElementById("文件").append(t);
+            let dav = document.createElement("div");
+            d.append(dav, t);
+            document.getElementById("文件").append(d);
         }
     };
 }
@@ -1008,41 +1014,46 @@ var client = window.WebDAV.createClient(store.webdav.网址, {
     password: store.webdav.密码,
 });
 
-async function get_all_xln() {
-    let l = [];
-    document.getElementById("webdav_files").innerHTML = "";
-    (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = true;
-    get_dir("/");
-    async function get_dir(path: string) {
-        const directoryItems = await client.getDirectoryContents(path);
-        for (let i of directoryItems) {
-            i.filename = path + i.basename;
-            if (i.type == "file" && i.basename.match(/\.xln$/)) {
-                l.push(i);
-                let tr = document.createElement("tr");
-                let n = document.createElement("td");
-                n.innerText = i.basename;
-                let p = document.createElement("td");
-                p.innerText = i.filename;
-                tr.append(n, p);
-                document.getElementById("webdav_files").append(tr);
-                tr.onclick = (e) => {
-                    e.stopPropagation();
-                    get_xln_value(i.filename);
-                    document.title = get_title();
-                    (<HTMLDialogElement>document.getElementById("webdav_files").parentElement).open = false;
-                };
+async function get_all_xln(r) {
+    let dav_files = (await client.getDirectoryContents("/", { deep: true, glob: "**.xln" })) as any[];
+    let rp = await client.getDirectoryContents("/");
+    let 删除路径 = "";
+    let rplf = rp[rp.length - 1];
+    let b = new RegExp(`${rplf.basename}$`);
+    删除路径 = rplf.filename.replace(b, "");
+    for (let f of r) {
+        let dav: HTMLElement;
+        for (let el of document.getElementById("文件").querySelectorAll("input")) {
+            if (el.value == f.meta.file_name) {
+                dav = el;
+                break;
             }
-            if (i.type == "directory") {
-                try {
-                    get_dir(i.filename);
-                } catch (error) {
-                    continue;
-                }
+        }
+        for (let fi of dav_files) {
+            if ("/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") == f.meta.url) {
+                dav.onclick = () => {
+                    get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
+                    document.title = get_title();
+                };
+                dav_files = dav_files.filter((v) => v != fi);
+                break;
             }
         }
     }
-    return l;
+    for (let fi of dav_files) {
+        let new_t = document.getElementById("文件").querySelector("div:nth-child(2)") as HTMLElement;
+        let d = document.createElement("div");
+        let t = rename_el();
+        t.value = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") || "";
+        let dav = document.createElement("div");
+        d.append(dav, t);
+        document.getElementById("文件").append(d);
+        t.onclick = dav.onclick = () => {
+            if (!集.meta.file_name) new_t.remove();
+            get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
+            document.title = get_title();
+        };
+    }
 }
 
 var now_dav_data = "";
