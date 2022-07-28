@@ -139,6 +139,7 @@ body > #main > #nav #upload_i {
 .侧栏 > #items > #文件 > div:nth-child(1) > .icon {
     height: 16px;
     width: 16px;
+    left: calc(50% - 8px);
 }
 .侧栏 > #items > #文件 > div {
     display: flex;
