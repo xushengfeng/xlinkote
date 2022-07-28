@@ -48,7 +48,7 @@ document.getElementById("新建集").onclick = () => {
 document.getElementById("新建画布").onclick = () => {
     get_data(); /* 保存之前的画布 */
     let name = `画布${crypto.randomUUID().slice(0, 7)}`;
-    集.数据.push({ name, data: [] });
+    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
     集.meta.focus_page = name;
     set_data(集);
 };
@@ -290,6 +290,7 @@ document.getElementById("归位").onclick = () => {
     setTimeout(() => {
         O.style.transition = "";
     }, 400);
+    data_changed();
 };
 
 var zoom = 1;
@@ -321,6 +322,7 @@ document.getElementById("画布").onwheel = (e) => {
             if (fxsd == 0 || fxsd == 1) O.style.top = O.offsetTop - e.deltaY + "px";
         }
     }
+    data_changed();
 };
 
 var now_mouse_e = null;
@@ -416,6 +418,7 @@ document.onkeydown = (e) => {
             O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
             O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
             zoom_o(1);
+            data_changed();
             break;
     }
 };
@@ -429,7 +432,7 @@ var 集 = {
         UUID: crypto.randomUUID(),
         file_name: "",
     },
-    数据: [{ name: pname, data: [] }],
+    数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
 };
 
 function get_data() {
@@ -446,7 +449,10 @@ function get_data() {
         data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
     }
     for (let p of 集.数据) {
-        if (p.name == 集.meta.focus_page) p.data = data;
+        if (p.name == 集.meta.focus_page) {
+            p.data = data;
+            p.p = { x: O.offsetLeft, y: O.offsetTop, zoom };
+        }
     }
     return l;
 }
@@ -476,7 +482,7 @@ function set_data(l: {
         UUID: string;
         file_name: string;
     };
-    数据: Array<{ name: string; data: data }>;
+    数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
 }) {
     集 = l;
     O.innerHTML = "";
@@ -486,7 +492,7 @@ function set_data(l: {
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
-            render_data(p.data);
+            render_data(p);
             集.meta.focus_page = p.name;
             data_changed();
         };
@@ -498,7 +504,7 @@ function set_data(l: {
                 div.remove();
                 集.数据 = 集.数据.filter((d) => d != p);
                 if (集.数据.length == 0) {
-                    集.数据.push({ name: pname, data: [] });
+                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
                 }
                 集.meta.focus_page = 集.数据[0].name;
             }
@@ -506,7 +512,7 @@ function set_data(l: {
             set_data(集);
         };
         if (集.meta.focus_page == p.name) {
-            render_data(p.data);
+            render_data(p);
             集.meta.focus_page = p.name;
         }
     }
@@ -514,10 +520,10 @@ function set_data(l: {
     data_changed();
 }
 
-function render_data(data: data) {
+function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
     O.innerHTML = "";
     z.z = [];
-    for (const x of data) {
+    for (const x of inputdata.data) {
         try {
             let el = <x>document.createElement("x-x");
             el.fixed = x.fixed;
@@ -537,6 +543,9 @@ function render_data(data: data) {
             console.error(e);
         }
     }
+    O.style.left = (inputdata?.p?.x || 0) + "px";
+    O.style.top = (inputdata?.p?.y || 0) + "px";
+    zoom_o(inputdata?.p?.zoom || 1);
 }
 
 function json2md(obj: {
