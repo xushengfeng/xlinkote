@@ -3,6 +3,12 @@ var store = JSON.parse(localStorage.getItem("config"));
 if (!store) {
     save_setting();
 }
+function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        var r = (Math.random() * 16) | 0, v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
 // 工具栏
 document.getElementById("tabs").onclick = (e) => {
     document.querySelectorAll("#nav > #tabs > div").forEach((el, i) => {
@@ -42,7 +48,7 @@ document.getElementById("新建集").onclick = () => {
 };
 document.getElementById("新建画布").onclick = () => {
     get_data(); /* 保存之前的画布 */
-    let name = `画布${crypto.randomUUID().slice(0, 7)}`;
+    let name = `画布${uuid().slice(0, 7)}`;
     集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
     集.meta.focus_page = name;
     set_data(集);
@@ -396,12 +402,12 @@ document.onkeydown = (e) => {
     }
 };
 // 文件数据
-let pname = `画布${crypto.randomUUID().slice(0, 7)}`;
+let pname = `画布${uuid().slice(0, 7)}`;
 var 集 = {
     meta: {
         focus_page: pname,
         url: "",
-        UUID: crypto.randomUUID(),
+        UUID: uuid(),
         file_name: "",
     },
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
@@ -520,7 +526,7 @@ function json2md(obj) {
 function md2json(t) {
     if (!t.match(/<!-- (.*?) -->/))
         return {
-            meta: { focus_page: "上传的md", url: "", UUID: crypto.randomUUID(), file_name: "" },
+            meta: { focus_page: "上传的md", url: "", UUID: uuid(), file_name: "" },
             数据: [
                 {
                     name: "上传的md",
@@ -649,7 +655,7 @@ function db_get() {
                 data_changed();
             }
         };
-        new_t.value = `新建集${crypto.randomUUID().slice(0, 7)}`;
+        new_t.value = `新建集${uuid().slice(0, 7)}`;
         let dav = document.createElement("div");
         new_d.append(dav, new_t);
         document.getElementById("文件").append(new_d);
@@ -890,7 +896,7 @@ class 图层 {
             data_changed();
     }
     push(el, nosave) {
-        el.id = el.id === "undefined" || !el.id ? `${crypto.randomUUID().slice(0, 7)}` : el.id;
+        el.id = el.id === "undefined" || !el.id ? `${uuid().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
         this.reflash(el, nosave);
