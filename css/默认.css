@@ -58,9 +58,8 @@ body > #main > #nav dialog > #close_webdav_files {
     border: none;
     outline: none;
 }
-body > #main > #层容器 > #层按钮 > div {
-    background-color: #eee;
-    border-radius: 50%;
+.侧栏 > #items > #层容器 > div:nth-child(1) {
+    background-color: var(--bg1);
 }
 .层容器 > #层 > div > input[type="text"] {
     border: none;
