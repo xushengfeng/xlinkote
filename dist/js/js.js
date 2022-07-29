@@ -93,6 +93,16 @@ document.getElementById("切换侧栏").onclick = () => {
 document.getElementById("handle").onclick = () => {
     侧栏.classList.toggle("侧栏显示");
 };
+for (let el of document.querySelectorAll(".tools")) {
+    for (let i of el.children) {
+        for (let u of document.querySelectorAll("#nav > #items > div >div")) {
+            if (i.id == u.id) {
+                let x = i;
+                x.style.display = "none";
+            }
+        }
+    }
+}
 document.getElementById("层按钮").onclick = (e) => {
     let el = z.聚焦元素;
     switch (e.target.id) {
