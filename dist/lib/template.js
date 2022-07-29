@@ -69,6 +69,7 @@ class markdown extends HTMLElement {
         var s = document.createElement("div");
         s.id = "h";
         var text = document.createElement("textarea");
+        this.text = text;
         this.append(s);
         this.append(text);
         var l = md.parse(text.value, {
