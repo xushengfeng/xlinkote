@@ -131,17 +131,6 @@ body > #main > #nav #upload_i {
     overflow: auto;
 }
 
-.侧栏 > #items > div > div {
-    cursor: pointer;
-    position: relative;
-    min-width: 24px;
-    height: 24px;
-}
-.侧栏 > #items > div > div > .icon {
-    width: 24px;
-    height: 24px;
-}
-
 .侧栏 > #items > #文件 > div:nth-child(1) {
     height: 16px;
     position: relative;
@@ -177,6 +166,48 @@ body > #main > #nav #upload_i {
     box-sizing: border-box;
 }
 
+.侧栏 > #items > #层容器 {
+    display: flex;
+    flex-direction: column;
+}
+.侧栏 > #items > #层容器 > div:nth-child(1) > div {
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+    position: relative;
+    float: left;
+}
+.侧栏 > #items > #层容器 > div:nth-child(1) > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+}
+
+.侧栏 > #items > #工具 > div {
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+    position: relative;
+    float: left;
+}
+.侧栏 > #items > #工具 > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+}
+
+.侧栏 > #items > #markdown > div {
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+    position: relative;
+    float: left;
+}
+.侧栏 > #items > #markdown > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+}
 dialog > #close_webdav_files {
     width: 16px;
     height: 16px;
