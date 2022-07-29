@@ -867,15 +867,20 @@ async function download_file(text: string) {
     }
 }
 
+var save_timeout = NaN,
+    save_dt = 200;
 function data_changed() {
-    if (saved) {
-        document.title = `● ` + get_title();
-        saved = false;
-    }
-    if (集.meta.file_name) {
-        write_file(json2md(get_data()));
-        db_put(get_data());
-    }
+    clearTimeout(save_timeout);
+    save_timeout = setTimeout(() => {
+        if (saved) {
+            document.title = `● ` + get_title();
+            saved = false;
+        }
+        if (集.meta.file_name) {
+            write_file(json2md(get_data()));
+            db_put(get_data());
+        }
+    }, save_dt);
 }
 
 var focus_md = null;
