@@ -96,7 +96,7 @@ body > #main > #nav #upload_i {
     z-index: calc(var(--zest-index) + 99);
 }
 .侧栏显示 {
-    transform: translateX(0%) !important;
+    transform: translateX(0%);
 }
 
 .侧栏 > #tabs {
@@ -496,7 +496,7 @@ x-pro > span {
         z-index: calc(var(--zest-index) + 99);
     }
     .侧栏显示 {
-        transform: translateY(0%) !important;
+        transform: translateY(0%);
     }
     .侧栏 > #items {
         width: 100%;
