@@ -10,6 +10,9 @@
     --icon-p-b-size: 32px;
     --icon-size: 24px;
     --icon-margin: 4px;
+    --item-height: 24px;
+    --item-icon: 24px;
+    --item-icon-margin: 0;
     --zest-index: 0;
 }
 
@@ -132,35 +135,42 @@ body > #main > #nav #upload_i {
 }
 
 .侧栏 > #items > #文件 > div:nth-child(1) {
-    height: 16px;
+    height: var(--icon-p-b-size);
     position: relative;
     cursor: pointer;
 }
 .侧栏 > #items > #文件 > div:nth-child(1) > .icon {
-    height: 16px;
-    width: 16px;
-    left: calc(50% - 8px);
+    height: var(--icon-size);
+    width: var(--icon-size);
+    top: var(--icon-margin);
+    left: calc(50% - var(--icon-size) / 2);
 }
 .侧栏 > #items > #文件 > div {
     display: flex;
     width: 100%;
     align-items: center;
+    height: var(--item-height);
 }
 .侧栏 > #items > #文件 > div > div {
-    width: 16px;
-    height: 16px;
+    width: var(--item-height);
+    height: var(--item-height);
     position: relative;
     cursor: pointer;
 }
 .侧栏 > #items > #文件 > div > div > .icon {
-    width: 16px;
-    height: 16px;
+    width: var(--item-icon);
+    height: var(--item-icon);
+    left: var(--item-icon-margin);
+    top: var(--item-icon-margin);
 }
 .侧栏 > #items > #文件 > div > input {
-    width: calc(100% - 16px);
+    width: calc(100% - var(--item-height));
     box-sizing: border-box;
 }
 
+.侧栏 > #items > #集 > * {
+    height: var(--item-height);
+}
 .侧栏 > #items > #集 > input {
     width: 100%;
     box-sizing: border-box;
@@ -230,6 +240,7 @@ dialog > #close_webdav_files {
 }
 .层容器 > #层 > div {
     display: flex;
+    height: var(--item-height);
 }
 .层容器 > #层 > div > input[type="text"] {
     width: 100%;
@@ -446,6 +457,9 @@ x-pro > span {
         --icon-p-b-size: 48px;
         --icon-size: 28px;
         --icon-margin: 10px;
+        --item-height: 36px;
+        --item-icon: 24px;
+        --item-icon-margin: 6px;
     }
     #导航 > div {
         width: 32px;
