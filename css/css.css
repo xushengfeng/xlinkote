@@ -36,24 +36,19 @@ body > #main > #nav {
     position: relative;
     z-index: 2;
     grid-area: 1 / 1 / 2 / 2;
-}
-body > #main > #nav > #tabs {
-    display: flex;
-    align-items: center;
-}
-body > #main > #nav > #tabs > div {
-    margin: 0 4px;
+    outline: 1px solid #eee;
 }
 body > #main > #nav > #items {
-    width: 100%;
+    width: 100vw;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
 }
 body > #main > #nav > #items > div {
     display: flex;
     overflow-x: scroll;
     white-space: nowrap;
-    height: 24px;
+    height: 32px;
 }
 body > #main > #nav > #items > div:nth-child(1) {
     width: 100vw;
@@ -65,19 +60,16 @@ body > #main > #nav > #items > div::-webkit-scrollbar {
     display: none;
 }
 body > #main > #nav > #items > div > div {
-    margin: 0 4px;
-}
-body > #main > #nav > #items > div > div,
-body > #main > #nav > #tabs > div {
     cursor: pointer;
     position: relative;
-    min-width: 24px;
-    height: 24px;
+    min-width: 32px;
+    height: 32px;
 }
-body > #main > #nav > #items > div > div > .icon,
-body > #main > #nav > #tabs > div > .icon {
+body > #main > #nav > #items > div > div > .icon {
     width: 24px;
     height: 24px;
+    left: 4px;
+    top: 4px;
 }
 body > #main > #nav #upload_i {
     display: none;
@@ -92,8 +84,8 @@ body > #main > #nav #upload_i {
     overflow: hidden;
     position: fixed;
     left: 0;
-    top: 24px;
-    height: calc(100vh - 24px);
+    top: 32px;
+    height: calc(100vh - 32px);
     transform: translateX(-100%);
     z-index: calc(var(--zest-index) + 99);
 }
@@ -114,10 +106,10 @@ body > #main > #nav #upload_i {
 }
 
 .侧栏 > #tabs > div > .icon {
-    width: 28px;
-    height: 28px;
-    left: 2px;
-    top: 2px;
+    width: 24px;
+    height: 24px;
+    left: 4px;
+    top: 4px;
 }
 
 .侧栏 > #items {
@@ -136,15 +128,13 @@ body > #main > #nav #upload_i {
     overflow: auto;
 }
 
-.侧栏 > #items > div > div,
-.侧栏 > #tabs > div {
+.侧栏 > #items > div > div {
     cursor: pointer;
     position: relative;
     min-width: 24px;
     height: 24px;
 }
-.侧栏 > #items > div > div > .icon,
-.侧栏 > #tabs > div > .icon {
+.侧栏 > #items > div > div > .icon {
     width: 24px;
     height: 24px;
 }
@@ -418,10 +408,32 @@ x-pro > span {
 }
 
 @media (any-pointer: coarse) {
-    #items > div > div,
-    #tabs > div {
-        padding: 8px !important;
-        margin: 0 !important;
+    body > #main > #nav > #items > div {
+        height: 48px;
+    }
+    #nav > #items > div > div {
+        min-width: 48px !important;
+        height: 48px !important;
+    }
+    body > #main > #nav > #items > div > div > .icon {
+        width: 28px;
+        height: 28px;
+        left: 10px;
+        top: 10px;
+    }
+    .侧栏 {
+        top: 48px;
+        height: calc(100vh - 48px);
+    }
+    .侧栏 > #tabs > div {
+        width: 48px !important;
+        height: 48px !important;
+    }
+    .侧栏 > #tabs > div > .icon {
+        width: 28px;
+        height: 28px;
+        left: 10px;
+        top: 10px;
     }
     #导航 > div {
         width: 32px;
@@ -468,13 +480,10 @@ x-pro > span {
     .侧栏 > #handle {
         width: 32px;
         height: 4px;
-        background-color: #eee;
-        border-radius: 2px;
         margin: 8px auto;
     }
     .侧栏 > #tabs {
-        width: 32px;
-        display: flex;
+        width: 100%;
         flex-direction: row;
     }
 }

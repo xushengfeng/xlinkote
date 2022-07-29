@@ -46,9 +46,8 @@ body > #main > #nav dialog > #close_webdav_files {
     border-radius: 4px;
 }
 .侧栏 {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    transition: var(--transition);
+    background-color: var(--bg1);
+    transition: var(--transition) transform;
 }
 .侧栏 > #items > #文件 > div > input {
     border: none;
@@ -219,6 +218,16 @@ x-pro > span {
 }
 
 @media screen and (max-width: 420px) {
+}
+
+@media all and (orientation: portrait) {
+    .侧栏 {
+        border-radius: 32px 32px 0 0;
+    }
+    .侧栏 > #handle {
+        background-color: #eee;
+        border-radius: 2px;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
