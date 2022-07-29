@@ -128,10 +128,62 @@ document.getElementById("顶层").onclick = () => {
     z.顶层(z.聚焦元素);
 };
 
+// markdown
 document.getElementById("toggle_md").onclick = () => {
     if (focus_md) {
         focus_md.edit = !focus_md.edit;
     }
+};
+function set_md_v(s: string, e: string) {
+    let text = <HTMLTextAreaElement>focus_md.querySelector("textarea");
+    if (text.tagName != "TEXTAREA") return;
+    let sn = text.selectionStart,
+        en = text.selectionEnd;
+    let select_text = text.value.slice(sn, en);
+    text.setRangeText(s + select_text + e);
+    text.selectionStart = sn + s.length;
+    text.selectionEnd = en + s.length + e.length;
+    text.dispatchEvent(new InputEvent("input"));
+}
+
+document.getElementById("md_h1").onclick = () => {
+    set_md_v("# ", "");
+};
+document.getElementById("md_h2").onclick = () => {
+    set_md_v("## ", "");
+};
+document.getElementById("md_h3").onclick = () => {
+    set_md_v("### ", "");
+};
+document.getElementById("md_h4").onclick = () => {
+    set_md_v("#### ", "");
+};
+document.getElementById("md_h5").onclick = () => {
+    set_md_v("##### ", "");
+};
+document.getElementById("md_h6").onclick = () => {
+    set_md_v("###### ", "");
+};
+document.getElementById("md_list").onclick = () => {
+    set_md_v("- ", "");
+};
+document.getElementById("md_task").onclick = () => {
+    set_md_v("- [ ] ", "");
+};
+document.getElementById("md_b").onclick = () => {
+    set_md_v("**", "**");
+};
+document.getElementById("md_i").onclick = () => {
+    set_md_v("*", "*");
+};
+document.getElementById("md_s").onclick = () => {
+    set_md_v("~~", "~~");
+};
+document.getElementById("md_link").onclick = () => {
+    set_md_v("[]()", "");
+};
+document.getElementById("md_img").onclick = () => {
+    set_md_v("~[]()", "");
 };
 
 // 画布
