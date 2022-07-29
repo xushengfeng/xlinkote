@@ -465,6 +465,13 @@ x-pro > span {
     .侧栏显示 {
         transform: translateY(0%) !important;
     }
+    .侧栏 > #handle {
+        width: 32px;
+        height: 4px;
+        background-color: #eee;
+        border-radius: 2px;
+        margin: 8px auto;
+    }
     .侧栏 > #tabs {
         width: 32px;
         display: flex;

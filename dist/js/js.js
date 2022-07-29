@@ -90,6 +90,9 @@ var 侧栏 = document.getElementById("侧栏");
 document.getElementById("切换侧栏").onclick = () => {
     侧栏.classList.toggle("侧栏显示");
 };
+document.getElementById("handle").onclick = () => {
+    侧栏.classList.toggle("侧栏显示");
+};
 document.getElementById("层按钮").onclick = (e) => {
     let el = z.聚焦元素;
     switch (e.target.id) {
