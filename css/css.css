@@ -180,6 +180,10 @@ body > #main > #nav #upload_i {
     display: flex;
     flex-direction: column;
 }
+.侧栏 > #items > #层容器 > div:nth-child(1) {
+    position: sticky;
+    top: 0;
+}
 .侧栏 > #items > #层容器 > div:nth-child(1) > div {
     width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
