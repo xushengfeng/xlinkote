@@ -62,6 +62,12 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     }
     return f(tokens, idx, options, env, self);
 };
+md.renderer.rules.image = function (tokens, idx, options, env, self) {
+    let value = tokens[idx].attrGet("src");
+    let b = 集.assets?.[value]?.base64;
+    if (b) tokens[idx].attrSet("src", b);
+    return defaultRender(tokens, idx, options, env, self);
+};
 
 var mathjax_cache = {};
 function get_svg(c: string) {
