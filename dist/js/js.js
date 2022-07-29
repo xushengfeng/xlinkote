@@ -868,6 +868,11 @@ function put_datatransfer(data, x, y) {
                     md.value = reader.result;
                 };
             }
+            let reader = new FileReader();
+            reader.readAsDataURL(f);
+            reader.onload = () => {
+                put_assets("", reader.result);
+            };
         }
     }
     else {
@@ -900,6 +905,15 @@ document.getElementById("paste").onpaste = (e) => {
     e.preventDefault();
     put_datatransfer(e.clipboardData, now_mouse_e.offsetX - O.offsetLeft, now_mouse_e.offsetY - O.offsetTop);
 };
+// 资源
+function put_assets(url, base64) {
+    let id = uuid().slice(0, 7);
+    let sha = "";
+    if (base64)
+        sha = window.CryptoJS.SHA256(base64).toString();
+    集.assets[id] = { url, base64, sha };
+    return id;
+}
 // 画板
 画布.onpointerdown = (e) => {
     let cl = document.querySelectorAll("x-draw");
