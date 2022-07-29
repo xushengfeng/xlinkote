@@ -223,7 +223,7 @@ x-pro > span {
     .侧栏 {
         border-radius: 32px 32px 0 0;
     }
-    .侧栏 > #handle {
+    .侧栏 > #handle > div {
         background-color: #eee;
         border-radius: 2px;
     }
