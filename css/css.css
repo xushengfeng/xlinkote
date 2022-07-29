@@ -109,6 +109,7 @@ body > #main > #nav #upload_i {
     width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
     position: relative;
+    cursor: pointer;
 }
 
 .侧栏 > #tabs > div > .icon {
@@ -190,6 +191,7 @@ body > #main > #nav #upload_i {
     height: var(--icon-p-b-size);
     position: relative;
     float: left;
+    cursor: pointer;
 }
 .侧栏 > #items > #层容器 > div:nth-child(1) > div > .icon {
     width: var(--icon-size);
@@ -203,6 +205,7 @@ body > #main > #nav #upload_i {
     height: var(--icon-p-b-size);
     position: relative;
     float: left;
+    cursor: pointer;
 }
 .侧栏 > #items > #工具 > div > .icon {
     width: var(--icon-size);
@@ -216,6 +219,7 @@ body > #main > #nav #upload_i {
     height: var(--icon-p-b-size);
     position: relative;
     float: left;
+    cursor: pointer;
 }
 .侧栏 > #items > #markdown > div > .icon {
     width: var(--icon-size);
