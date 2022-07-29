@@ -819,20 +819,11 @@ function data_changed() {
     }, save_dt);
 }
 var focus_md = null;
-// 拖放
-画布.ondragover = (e) => {
-    if (e.target != 画布)
-        return;
-    e.preventDefault();
-};
-画布.ondrop = (e) => {
-    if (e.target != 画布)
-        return;
-    e.preventDefault();
-    if (e.dataTransfer.files.length != 0) {
-        for (let f of e.dataTransfer.files) {
+// 拖放和粘贴
+function put_datatransfer(data, x, y) {
+    if (data.files.length != 0) {
+        for (let f of data.files) {
             let type = f.type.split("/")[0];
-            let x = e.offsetX - O.offsetLeft, y = e.offsetY - O.offsetTop;
             let xel = document.createElement("x-x");
             xel.style.left = x / zoom + "px";
             xel.style.top = y / zoom + "px";
@@ -877,17 +868,32 @@ var focus_md = null;
         }
     }
     else {
-        let x = e.offsetX - O.offsetLeft, y = e.offsetY - O.offsetTop;
         let xel = document.createElement("x-x");
         xel.style.left = x / zoom + "px";
         xel.style.top = y / zoom + "px";
         z.push(xel);
-        let html = e.dataTransfer.getData("text/html");
+        let html = data.getData("text/html");
         let turndownService = new window.TurndownService({ headingStyle: "atx" });
         let md = document.createElement("x-md");
         xel.append(md);
         md.value = turndownService.turndown(html);
     }
+}
+画布.ondragover = (e) => {
+    if (e.target != 画布)
+        return;
+    e.preventDefault();
+};
+画布.ondrop = (e) => {
+    if (e.target != 画布)
+        return;
+    e.preventDefault();
+    put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
+};
+画布.onpaste = (e) => {
+    if (e.target.tagName == "TEXTAREA")
+        return;
+    put_datatransfer(e.clipboardData, now_mouse_e.offsetX - O.offsetLeft, now_mouse_e.offsetY - O.offsetTop);
 };
 // 画板
 画布.onpointerdown = (e) => {
