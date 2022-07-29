@@ -103,22 +103,17 @@ for (let el of document.querySelectorAll(".tools")) {
         }
     }
 }
-document.getElementById("层按钮").onclick = (e) => {
-    let el = z.聚焦元素;
-    switch (e.target.id) {
-        case "底层":
-            z.底层(el);
-            break;
-        case "下一层":
-            z.下一层(el);
-            break;
-        case "上一层":
-            z.上一层(el);
-            break;
-        case "顶层":
-            z.顶层(el);
-            break;
-    }
+document.getElementById("底层").onclick = () => {
+    z.底层(z.聚焦元素);
+};
+document.getElementById("下一层").onclick = () => {
+    z.下一层(z.聚焦元素);
+};
+document.getElementById("上一层").onclick = () => {
+    z.上一层(z.聚焦元素);
+};
+document.getElementById("顶层").onclick = () => {
+    z.顶层(z.聚焦元素);
 };
 document.getElementById("toggle_md").onclick = () => {
     if (focus_md) {

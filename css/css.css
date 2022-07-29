@@ -232,16 +232,6 @@ dialog > #close_webdav_files {
     overflow: auto;
 }
 
-.层容器 > #层按钮 {
-    display: flex;
-    position: sticky;
-    top: 0;
-}
-
-.层容器 > #层按钮 > div {
-    width: 16px;
-    height: 16px;
-}
 .层容器 > #层 > div {
     display: flex;
     height: var(--item-height);
