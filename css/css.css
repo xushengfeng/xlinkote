@@ -121,6 +121,7 @@ body > #main > #nav #upload_i {
 .侧栏 > #items {
     flex-grow: 1;
     overflow: hidden;
+    width: 192px;
 }
 
 .侧栏 > #items > div:nth-child(1) {
@@ -496,6 +497,9 @@ x-pro > span {
     }
     .侧栏显示 {
         transform: translateY(0%) !important;
+    }
+    .侧栏 > #items {
+        width: 100%;
     }
     .侧栏 > #handle {
         width: 32px;
