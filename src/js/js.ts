@@ -500,7 +500,18 @@ document.onkeydown = (e) => {
 
 // 文件数据
 let pname = `画布${uuid().slice(0, 7)}`;
-var 集 = {
+type 集type = {
+    meta: {
+        focus_page: string;
+        url: string;
+        UUID: string;
+        file_name: string;
+    };
+    数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
+    assets: { [key: string]: { url: string; base64: string; sha: string } };
+};
+
+var 集: 集type = {
     meta: {
         focus_page: pname,
         url: "",
@@ -508,6 +519,7 @@ var 集 = {
         file_name: "",
     },
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+    assets: {},
 };
 
 function get_data() {
@@ -550,15 +562,7 @@ function rename_el() {
     return el;
 }
 
-function set_data(l: {
-    meta: {
-        focus_page: string;
-        url: string;
-        UUID: string;
-        file_name: string;
-    };
-    数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
-}) {
+function set_data(l: 集type) {
     集 = l;
     O.innerHTML = "";
     document.getElementById("集").innerHTML = "";
@@ -623,15 +627,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
     zoom_o(inputdata?.p?.zoom || 1);
 }
 
-function json2md(obj: {
-    meta: {
-        focus_page: string;
-        url: string;
-        UUID: string;
-        file_name: string;
-    };
-    数据: Array<{ name: string; data: data }>;
-}) {
+function json2md(obj: 集type) {
     let t = JSON.stringify(obj, (k, v) => {
         if (k == "value") {
             return ` -->\n${v}\n<!-- `;
