@@ -152,8 +152,7 @@ document.getElementById("toggle_md").onclick = () => {
     }
 };
 function set_md_v(s: string, e: string) {
-    let text = <HTMLTextAreaElement>focus_md.querySelector("textarea");
-    if (text.tagName != "TEXTAREA") return;
+    let text = focus_md.text;
     let sn = text.selectionStart,
         en = text.selectionEnd;
     let select_text = text.value.slice(sn, en);
@@ -880,7 +879,7 @@ function data_changed() {
     }, save_dt);
 }
 
-var focus_md = null;
+var focus_md: markdown = null;
 
 // 拖放和粘贴
 function put_datatransfer(data: DataTransfer, x: number, y: number) {

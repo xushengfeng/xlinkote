@@ -143,9 +143,7 @@ document.getElementById("toggle_md").onclick = () => {
     }
 };
 function set_md_v(s, e) {
-    let text = focus_md.querySelector("textarea");
-    if (text.tagName != "TEXTAREA")
-        return;
+    let text = focus_md.text;
     let sn = text.selectionStart, en = text.selectionEnd;
     let select_text = text.value.slice(sn, en);
     text.setRangeText(s + select_text + e);
