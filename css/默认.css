@@ -34,6 +34,9 @@
     background-color: #0000;
 }
 
+body > #main > #nav {
+    background-color: var(--bg1);
+}
 body > #main > #nav dialog {
     border: none;
     background-color: var(--bg-color2);
