@@ -831,22 +831,21 @@ function put_datatransfer(data, x, y) {
             xel.style.left = x / zoom + "px";
             xel.style.top = y / zoom + "px";
             z.push(xel);
-            if (type == "image") {
-                let img = document.createElement("x-img");
-                xel.append(img);
+            if (type == "image" || type == "video") {
                 let reader = new FileReader();
                 reader.readAsDataURL(f);
                 reader.onload = () => {
-                    img.src = reader.result;
-                };
-            }
-            else if (type == "video") {
-                let video = document.createElement("x-video");
-                xel.append(video);
-                let reader = new FileReader();
-                reader.readAsDataURL(f);
-                reader.onload = () => {
-                    video.src = reader.result;
+                    let id = put_assets("", reader.result);
+                    if (type == "image") {
+                        let img = document.createElement("x-img");
+                        xel.append(img);
+                        img.value = id;
+                    }
+                    else if (type == "video") {
+                        let video = document.createElement("x-video");
+                        xel.append(video);
+                        video.value = id;
+                    }
                 };
             }
             else if (f.type == "text/html") {
@@ -868,11 +867,6 @@ function put_datatransfer(data, x, y) {
                     md.value = reader.result;
                 };
             }
-            let reader = new FileReader();
-            reader.readAsDataURL(f);
-            reader.onload = () => {
-                put_assets("", reader.result);
-            };
         }
     }
     else {

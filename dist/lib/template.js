@@ -483,14 +483,18 @@ class img extends HTMLElement {
         super();
     }
     connectedCallback() {
-        var v = this.getAttribute("src");
+        this._value = this.getAttribute("value");
         var img = document.createElement("img");
         this.append(img);
-        if (v)
-            img.src = v;
+        if (集.assets[this._value])
+            img.src = 集.assets[this._value].base64;
     }
-    set src(s) {
-        this.querySelector("img").src = s;
+    get value() {
+        return this._value;
+    }
+    set value(s) {
+        this._value = s;
+        this.querySelector("img").src = 集.assets[s].base64;
     }
 }
 window.customElements.define("x-img", img);
@@ -499,14 +503,18 @@ class video extends HTMLElement {
         super();
     }
     connectedCallback() {
-        var v = this.getAttribute("src");
+        this._value = this.getAttribute("value");
         var video = document.createElement("video");
         this.append(video);
-        if (v)
-            video.src = v;
+        if (集.assets[this._value])
+            video.src = 集.assets[this._value].base64;
     }
-    set src(s) {
-        this.querySelector("video").src = s;
+    get value() {
+        return this._value;
+    }
+    set value(s) {
+        this._value = s;
+        this.querySelector("video").src = 集.assets[s].base64;
     }
 }
 window.customElements.define("x-video", video);

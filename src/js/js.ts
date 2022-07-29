@@ -891,21 +891,20 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
             xel.style.left = x / zoom + "px";
             xel.style.top = y / zoom + "px";
             z.push(xel);
-            if (type == "image") {
-                let img = <img>document.createElement("x-img");
-                xel.append(img);
+            if (type == "image" || type == "video") {
                 let reader = new FileReader();
                 reader.readAsDataURL(f);
                 reader.onload = () => {
-                    img.src = reader.result;
-                };
-            } else if (type == "video") {
-                let video = <video>document.createElement("x-video");
-                xel.append(video);
-                let reader = new FileReader();
-                reader.readAsDataURL(f);
-                reader.onload = () => {
-                    video.src = reader.result;
+                    let id = put_assets("", reader.result as string);
+                    if (type == "image") {
+                        let img = <img>document.createElement("x-img");
+                        xel.append(img);
+                        img.value = id;
+                    } else if (type == "video") {
+                        let video = <video>document.createElement("x-video");
+                        xel.append(video);
+                        video.value = id;
+                    }
                 };
             } else if (f.type == "text/html") {
                 let md = <markdown>document.createElement("x-md");
@@ -925,11 +924,6 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
                     md.value = <string>reader.result;
                 };
             }
-            let reader = new FileReader();
-            reader.readAsDataURL(f);
-            reader.onload = () => {
-                put_assets("", reader.result as string);
-            };
         }
     } else {
         let xel = <x>document.createElement("x-x");
