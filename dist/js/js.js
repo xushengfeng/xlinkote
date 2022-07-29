@@ -248,6 +248,8 @@ document.onmouseup = (e) => {
     o_e = null;
     if (!move && e.button == 2)
         context_menu(e);
+    if (!move)
+        document.getElementById("paste").focus();
     move = false;
     document.getElementById("画布").style.cursor = "auto";
     画布.style.userSelect = "auto";
@@ -890,9 +892,11 @@ function put_datatransfer(data, x, y) {
     e.preventDefault();
     put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
 };
-画布.onpaste = (e) => {
-    if (e.target.tagName == "TEXTAREA")
-        return;
+document.getElementById("paste").oninput = (e) => {
+    e.preventDefault();
+};
+document.getElementById("paste").onpaste = (e) => {
+    e.preventDefault();
     put_datatransfer(e.clipboardData, now_mouse_e.offsetX - O.offsetLeft, now_mouse_e.offsetY - O.offsetTop);
 };
 // 画板
