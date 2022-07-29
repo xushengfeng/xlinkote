@@ -7,6 +7,9 @@
     --blur: blur(10px);
     --bg1: #ffffff;
     --icon-color: none;
+    --icon-p-b-size: 32px;
+    --icon-size: 24px;
+    --icon-margin: 4px;
     --zest-index: 0;
 }
 
@@ -48,7 +51,7 @@ body > #main > #nav > #items > div {
     display: flex;
     overflow-x: scroll;
     white-space: nowrap;
-    height: 32px;
+    height: var(--icon-p-b-size);
 }
 body > #main > #nav > #items > div:nth-child(1) {
     width: 100vw;
@@ -62,14 +65,14 @@ body > #main > #nav > #items > div::-webkit-scrollbar {
 body > #main > #nav > #items > div > div {
     cursor: pointer;
     position: relative;
-    min-width: 32px;
-    height: 32px;
+    min-width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
 }
 body > #main > #nav > #items > div > div > .icon {
-    width: 24px;
-    height: 24px;
-    left: 4px;
-    top: 4px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
 }
 body > #main > #nav #upload_i {
     display: none;
@@ -84,8 +87,8 @@ body > #main > #nav #upload_i {
     overflow: hidden;
     position: fixed;
     left: 0;
-    top: 32px;
-    height: calc(100vh - 32px);
+    top: var(--icon-p-b-size);
+    height: calc(100vh - var(--icon-p-b-size));
     transform: translateX(-100%);
     z-index: calc(var(--zest-index) + 99);
 }
@@ -94,22 +97,22 @@ body > #main > #nav #upload_i {
 }
 
 .侧栏 > #tabs {
-    width: 32px;
+    width: var(--icon-p-b-size);
     display: flex;
     flex-direction: column;
 }
 
 .侧栏 > #tabs > div {
-    width: 32px;
-    height: 32px;
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
     position: relative;
 }
 
 .侧栏 > #tabs > div > .icon {
-    width: 24px;
-    height: 24px;
-    left: 4px;
-    top: 4px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
 }
 
 .侧栏 > #items {
@@ -408,32 +411,10 @@ x-pro > span {
 }
 
 @media (any-pointer: coarse) {
-    body > #main > #nav > #items > div {
-        height: 48px;
-    }
-    #nav > #items > div > div {
-        min-width: 48px !important;
-        height: 48px !important;
-    }
-    body > #main > #nav > #items > div > div > .icon {
-        width: 28px;
-        height: 28px;
-        left: 10px;
-        top: 10px;
-    }
-    .侧栏 {
-        top: 48px;
-        height: calc(100vh - 48px);
-    }
-    .侧栏 > #tabs > div {
-        width: 48px !important;
-        height: 48px !important;
-    }
-    .侧栏 > #tabs > div > .icon {
-        width: 28px;
-        height: 28px;
-        left: 10px;
-        top: 10px;
+    :root {
+        --icon-p-b-size: 48px;
+        --icon-size: 28px;
+        --icon-margin: 10px;
     }
     #导航 > div {
         width: 32px;
