@@ -42,36 +42,23 @@ body > #main > #nav {
     position: relative;
     z-index: 2;
     grid-area: 1 / 1 / 2 / 2;
-    outline: 1px solid #eee;
-}
-body > #main > #nav > #items {
     width: 100vw;
     display: flex;
     align-items: center;
     box-sizing: border-box;
-}
-body > #main > #nav > #items > div {
-    display: flex;
-    overflow-x: scroll;
-    white-space: nowrap;
     height: var(--icon-p-b-size);
+    overflow-x: scroll;
 }
-body > #main > #nav > #items > div:nth-child(1) {
-    width: 100vw;
-}
-body > #main > #nav > #items > div:not(:nth-child(1)) {
-    width: 0;
-}
-body > #main > #nav > #items > div::-webkit-scrollbar {
+body > #main > #nav::-webkit-scrollbar {
     display: none;
 }
-body > #main > #nav > #items > div > div {
+body > #main > #nav > div {
     cursor: pointer;
     position: relative;
     min-width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
 }
-body > #main > #nav > #items > div > div > .icon {
+body > #main > #nav > div > .icon {
     width: var(--icon-size);
     height: var(--icon-size);
     left: var(--icon-margin);
