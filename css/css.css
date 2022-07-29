@@ -235,7 +235,7 @@ body > #main > #画布 > #选择 > div {
 
 /* 导航 */
 body > #main > #画布 > #导航 {
-    position: fixed;
+    position: absolute;
     right: 10px;
     bottom: 10px;
     display: flex;
