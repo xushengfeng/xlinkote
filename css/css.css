@@ -241,6 +241,7 @@ body > #main > #画布 {
     position: relative;
     overflow: hidden;
     grid-area: 2 / 1 / 3 / 2;
+    touch-action: none;
 }
 
 /* 画布 */
