@@ -492,7 +492,7 @@ x-pro > span {
         height: calc(100vh * (2 / 3));
         width: 100vw;
         transform: translateY(100%);
-        z-index: calc(var(--zest-index) + 99);
+        z-index: calc(var(--zest-index) + 8);
     }
     .侧栏显示 {
         transform: translateY(0%);
