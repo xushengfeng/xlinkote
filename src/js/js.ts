@@ -797,6 +797,7 @@ function db_get() {
             t.onclick = () => {
                 if (!集.meta.file_name) new_d.remove();
                 set_data(f);
+                侧栏.classList.remove("侧栏显示");
             };
             t.onchange = () => {
                 集.meta.file_name = t.value;
@@ -1131,6 +1132,7 @@ async function get_all_xln(r) {
                 dav.onclick = () => {
                     get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
                     document.title = get_title();
+                    侧栏.classList.remove("侧栏显示");
                 };
                 dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
                 dav_files = dav_files.filter((v) => v != fi);
@@ -1152,6 +1154,7 @@ async function get_all_xln(r) {
             if (!集.meta.file_name) new_t.remove();
             get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
             document.title = get_title();
+            侧栏.classList.remove("侧栏显示");
         };
     }
 }
