@@ -79,7 +79,7 @@ body > #main > #nav > div:nth-child(2) {
     display: flex;
     align-items: center;
 }
-body > #main > #nav #search{
+body > #main > #nav #search {
     flex-grow: 1;
 }
 
@@ -293,6 +293,18 @@ body > #main > #画布 > #paste {
     opacity: 0;
     pointer-events: none;
 }
+
+body > #搜索结果 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-height: 600px;
+    overflow: auto;
+}
+body > #搜索结果 > div > span > span {
+    color: #f55;
+}
+
 body > #上下文菜单 {
     position: absolute;
     top: 0;

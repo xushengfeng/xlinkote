@@ -110,6 +110,11 @@ body > #main > #画布 > #导航 > div {
     outline: none;
 }
 
+body > #搜索结果 {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+}
+
 body > #设置 {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);

@@ -1234,3 +1234,38 @@ function search(s, type) {
     }
     return result;
 }
+var search_el = document.getElementById("search");
+var search_r = document.getElementById("搜索结果");
+search_el.oninput = () => {
+    let l = search(search_el.value, "str");
+    console.log(l);
+    show_search_l(l);
+    let r = search_el.getBoundingClientRect();
+    let x = r.x, w = r.width, y = r.y + r.height;
+    if (window.matchMedia("(orientation: portrait)").matches) {
+        search_r.style.left = "0";
+        search_r.style.top = r.y - 4 - search_r.offsetHeight + "px";
+        search_r.style.width = "100vw";
+    }
+    else {
+        search_r.style.left = x + "px";
+        search_r.style.top = y + 4 + "px";
+        search_r.style.width = w + "px";
+    }
+};
+function show_search_l(l) {
+    search_r.innerHTML = "";
+    for (let i of l) {
+        for (let j of i.l) {
+            for (let k of j.indices) {
+                let div = document.createElement("div");
+                let p = document.createElement("span");
+                let h = document.createElement("span");
+                h.innerText = j.value.slice(k[0], k[1] + 1);
+                p.append(j.value.slice(0, k[0]), h, j.value.slice(k[1] + 1));
+                div.append(p);
+                search_r.append(div);
+            }
+        }
+    }
+}
