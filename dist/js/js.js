@@ -1273,6 +1273,7 @@ function show_search_l(l) {
                     let x = el.parentElement.parentElement.offsetLeft, y = el.parentElement.parentElement.offsetTop;
                     O.style.left = -x + "px";
                     O.style.top = -y + "px";
+                    show_search_l([]);
                 };
             }
         }
