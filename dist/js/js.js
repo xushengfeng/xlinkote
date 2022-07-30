@@ -249,8 +249,6 @@ document.onmouseup = (e) => {
     o_e = null;
     if (!move && e.button == 2)
         context_menu(e);
-    if (!move)
-        document.getElementById("paste").focus();
     move = false;
     document.getElementById("画布").style.cursor = "auto";
     画布.style.userSelect = "auto";
