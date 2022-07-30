@@ -26,6 +26,10 @@
     -webkit-user-drag: none;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -33,7 +37,7 @@ body {
     height: 100%;
 }
 body > #main {
-    height: 100vh;
+    height: 100%;
     display: grid;
     grid-template-rows: min-content auto;
 }
