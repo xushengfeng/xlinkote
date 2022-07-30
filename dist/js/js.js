@@ -91,6 +91,9 @@ document.getElementById("切换侧栏").onclick = () => {
     侧栏.classList.toggle("侧栏显示");
 };
 var handle_e, handle_e1, handle_a;
+document.getElementById("handle").onclick = () => {
+    侧栏.classList.toggle("侧栏显示");
+};
 document.getElementById("handle").ontouchstart = (e) => {
     handle_e = e;
     侧栏.style.transition = "0s";
