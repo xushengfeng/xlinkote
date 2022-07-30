@@ -907,27 +907,27 @@ function put_assets(url, base64) {
     return id;
 }
 // 画板
+var focus_draw_el = null;
 画布.onpointerdown = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        c?.draw(e);
+    let el = e.target;
+    if (el.parentElement.tagName == "X-DRAW") {
+        el.parentElement?.draw(e);
+        focus_draw_el = el.parentElement;
     }
 };
 画布.onpointermove = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        c?.draw(e);
+    if (focus_draw_el) {
+        focus_draw_el.draw(e);
     }
 };
 画布.onpointerup = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        c?.draw(e);
-        if (c)
-            c.points = { x: NaN, y: NaN };
-        c?.clip();
+    if (focus_draw_el) {
+        focus_draw_el.draw(e);
+        focus_draw_el.points = { x: NaN, y: NaN };
+        focus_draw_el.clip();
+        focus_draw_el = null;
+        data_changed();
     }
-    data_changed();
 };
 window.onbeforeunload = () => {
     if (!集.meta.file_name)

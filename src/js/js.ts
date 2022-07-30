@@ -966,28 +966,28 @@ function put_assets(url: string, base64: string) {
 }
 
 // 画板
+var focus_draw_el = null;
 画布.onpointerdown = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        (<draw>c)?.draw(e);
+    let el = e.target as HTMLElement;
+    if (el.parentElement.tagName == "X-DRAW") {
+        (<draw>el.parentElement)?.draw(e);
+        focus_draw_el = el.parentElement;
     }
 };
 
 画布.onpointermove = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        (<draw>c)?.draw(e);
+    if (focus_draw_el) {
+        (<draw>focus_draw_el).draw(e);
     }
 };
 画布.onpointerup = (e) => {
-    let cl = document.querySelectorAll("x-draw");
-    for (let c of cl) {
-        (<draw>c)?.draw(e);
-        if (c) (<draw>c).points = { x: NaN, y: NaN };
-        (<draw>c)?.clip();
+    if (focus_draw_el) {
+        (<draw>focus_draw_el).draw(e);
+        (<draw>focus_draw_el).points = { x: NaN, y: NaN };
+        (<draw>focus_draw_el).clip();
+        focus_draw_el = null;
+        data_changed();
     }
-
-    data_changed();
 };
 
 window.onbeforeunload = () => {
