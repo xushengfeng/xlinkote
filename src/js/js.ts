@@ -890,7 +890,7 @@ function data_changed() {
 
 var focus_md: markdown = null;
 
-// 拖放和粘贴
+// 拖放
 function put_datatransfer(data: DataTransfer, x: number, y: number) {
     if (data.files.length != 0) {
         for (let f of data.files) {
@@ -954,13 +954,6 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
     if (e.target != 画布) return;
     e.preventDefault();
     put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
-};
-document.getElementById("paste").oninput = (e) => {
-    e.preventDefault();
-};
-document.getElementById("paste").onpaste = (e) => {
-    e.preventDefault();
-    put_datatransfer(e.clipboardData, now_mouse_e.offsetX - O.offsetLeft, now_mouse_e.offsetY - O.offsetTop);
 };
 
 // 资源
