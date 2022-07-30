@@ -502,6 +502,9 @@ x-pro > span {
     body > #main > #nav {
         flex-direction: column-reverse;
     }
+    body > #main > #nav #切换侧栏 {
+        transform: rotate(-90deg);
+    }
     body > #main > #画布 {
         grid-area: 1 / 1 / 2 / 2;
     }
