@@ -119,7 +119,7 @@ document.getElementById("handle").ontouchend = (e) => {
 };
 for (let el of document.querySelectorAll(".tools")) {
     for (let i of el.children) {
-        for (let u of document.querySelectorAll("#nav >div")) {
+        for (let u of document.querySelectorAll("#nav > div > div")) {
             if (i.id == u.id) {
                 let x = i;
                 x.style.display = "none";

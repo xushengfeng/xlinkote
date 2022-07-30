@@ -48,28 +48,39 @@ body > #main > #nav {
     grid-area: 1 / 1 / 2 / 2;
     width: 100vw;
     display: flex;
+}
+body > #main > #nav > div:nth-child(1) {
+    display: flex;
     align-items: center;
     box-sizing: border-box;
     height: var(--icon-p-b-size);
     overflow-x: scroll;
 }
-body > #main > #nav::-webkit-scrollbar {
+body > #main > #nav > div:nth-child(1)::-webkit-scrollbar {
     display: none;
 }
-body > #main > #nav > div {
+body > #main > #nav > div:nth-child(1) > div {
     cursor: pointer;
     position: relative;
     min-width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
 }
-body > #main > #nav > div > .icon {
+body > #main > #nav > div:nth-child(1) > div > .icon {
     width: var(--icon-size);
     height: var(--icon-size);
     left: var(--icon-margin);
     top: var(--icon-margin);
 }
-body > #main > #nav #upload_i {
+body > #main > #nav > div:nth-child(1) #upload_i {
     display: none;
+}
+body > #main > #nav > div:nth-child(2) {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+body > #main > #nav #search{
+    flex-grow: 1;
 }
 
 .db_load {
@@ -478,6 +489,9 @@ x-pro > span {
     }
     body > #main > #nav {
         grid-area: 2 / 1 / 3 / 2;
+    }
+    body > #main > #nav {
+        flex-direction: column-reverse;
     }
     body > #main > #画布 {
         grid-area: 1 / 1 / 2 / 2;

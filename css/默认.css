@@ -3,6 +3,7 @@
     --bg-color1: rgba(235, 235, 235, 0.6);
     --bg-color2: rgba(255, 255, 255, 0.6);
     --bg-color3: #ddd;
+    --bg-color4: #F5F5F5;
     --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
     --bg1: #ffffff;
@@ -38,16 +39,14 @@ body > #main > #nav {
     background-color: var(--bg1);
     outline: 1px solid #eee;
 }
-body > #main > #nav dialog {
+body > #main > #nav #search{
     border: none;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-}
-body > #main > #nav dialog > #close_webdav_files {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
+    padding: 0 4px;
+    margin: 4px;
+    outline: none;
+    height: 24px;
+    border-radius: 8px;
+    background-color: var(--bg-color4);
 }
 .侧栏 {
     background-color: var(--bg1);
