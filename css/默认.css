@@ -53,6 +53,9 @@ body > #main > #nav dialog > #close_webdav_files {
     background-color: var(--bg1);
     transition: var(--transition) transform;
 }
+.侧栏显示 {
+    box-shadow: 0 0 8px #0003;
+}
 .侧栏 > #items > #文件 > div > input {
     border: none;
     outline: none;
