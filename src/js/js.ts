@@ -1353,6 +1353,13 @@ function show_search_l(l) {
                 p.append(j.value.slice(0, k[0]), h, j.value.slice(k[1] + 1));
                 div.append(p);
                 search_r.append(div);
+                div.onclick = () => {
+                    let el = <HTMLTextAreaElement>i.el;
+                    let x = el.parentElement.parentElement.offsetLeft,
+                        y = el.parentElement.parentElement.offsetTop;
+                    O.style.left = -x + "px";
+                    O.style.top = -y + "px";
+                };
             }
         }
     }
