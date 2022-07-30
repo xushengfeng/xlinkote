@@ -720,16 +720,20 @@ class draw extends HTMLElement {
         min_y--;
         max_x++;
         max_y++;
+        let dx = 36,
+            dy = 36;
         for (let c of this.querySelectorAll("canvas")) {
-            let img = c.getContext("2d").getImageData(min_x, min_y, max_x - min_x, max_y - min_y);
-            c.width = max_x - min_x;
-            c.height = max_y - min_y;
+            let img = c
+                .getContext("2d")
+                .getImageData(min_x - dx, min_y - dy, max_x - min_x + 2 * dx, max_y - min_y + 2 * dy);
+            c.width = max_x - min_x + 2 * dx;
+            c.height = max_y - min_y + 2 * dy;
             c.getContext("2d").putImageData(img, 0, 0);
         }
         if (this.parentElement.tagName == "X-X") {
             let pel = this.parentElement;
-            pel.style.left = pel.offsetLeft + min_x + "px";
-            pel.style.top = pel.offsetTop + min_y + "px";
+            pel.style.left = pel.offsetLeft + min_x - dx + "px";
+            pel.style.top = pel.offsetTop + min_y - dy + "px";
         }
     }
 }
