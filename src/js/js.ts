@@ -298,7 +298,13 @@ document.ontouchstart = (e) => {
     let el = <HTMLElement>e.changedTouches[0].target;
     if (!画布.contains(el)) return;
     if (
-        !(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
+        !(
+            el.isContentEditable ||
+            el.tagName == "INPUT" ||
+            el.tagName == "SELECT" ||
+            el.tagName == "TEXTAREA" ||
+            el.parentElement.tagName == "X-DRAW"
+        ) &&
         !document.querySelector("x-sinppet").contains(el)
     ) {
         o_touch_e = e;

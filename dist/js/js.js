@@ -288,7 +288,11 @@ document.ontouchstart = (e) => {
     let el = e.changedTouches[0].target;
     if (!画布.contains(el))
         return;
-    if (!(el.isContentEditable || el.tagName == "INPUT" || el.tagName == "SELECT" || el.tagName == "TEXTAREA") ||
+    if (!(el.isContentEditable ||
+        el.tagName == "INPUT" ||
+        el.tagName == "SELECT" ||
+        el.tagName == "TEXTAREA" ||
+        el.parentElement.tagName == "X-DRAW") &&
         !document.querySelector("x-sinppet").contains(el)) {
         o_touch_e = e;
         o_rect = { x: O.offsetLeft, y: O.offsetTop };
