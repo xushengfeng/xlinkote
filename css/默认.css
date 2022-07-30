@@ -3,7 +3,7 @@
     --bg-color1: rgba(235, 235, 235, 0.6);
     --bg-color2: rgba(255, 255, 255, 0.6);
     --bg-color3: #ddd;
-    --bg-color4: #F5F5F5;
+    --bg-color4: #f5f5f5;
     --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
     --bg1: #ffffff;
@@ -39,7 +39,7 @@ body > #main > #nav {
     background-color: var(--bg1);
     outline: 1px solid #eee;
 }
-body > #main > #nav #search{
+body > #main > #nav #search {
     border: none;
     padding: 0 4px;
     margin: 4px;
@@ -113,6 +113,16 @@ body > #main > #画布 > #导航 > div {
 body > #搜索结果 {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
+    box-shadow: var(--shadow1);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+body > #搜索结果 > div {
+    margin: 4px;
+    cursor: pointer;
+}
+body > #搜索结果 > div > span > span {
+    color: #f55;
 }
 
 body > #设置 {
