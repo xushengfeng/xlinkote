@@ -1271,14 +1271,14 @@ function search(s: string, type: "str" | "regex") {
     switch (type) {
         case "str":
             for (let t of document.querySelectorAll("textarea")) {
-                const fuse = new window.Fuse([t.value], {
+                const fuse = new window.Fuse(t.value.split("\n"), {
                     includeMatches: true,
                     findAllMatches: true,
                     useExtendedSearch: true,
                 });
                 let fr = fuse.search(s);
-                if (fr[0]?.matches?.length) {
-                    result.push({ el: t, l: fr[0].matches, type: "str" });
+                for (let i of fr) {
+                    result.push({ el: t, l: i.matches, n: i.refIndex, type: "str" });
                 }
             }
             break;
