@@ -1043,6 +1043,11 @@ class 图层 {
             div.append(t);
             div.onclick = () => {
                 this.聚焦元素 = this.z[i];
+                for (let x of this.z) {
+                    x.classList.remove("x-x_selected");
+                }
+                this.z[i].classList.add("x-x_selected");
+                selected_el.push(<x>this.z[i]);
             };
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
