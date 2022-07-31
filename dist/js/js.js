@@ -736,6 +736,13 @@ function db_get() {
         new_t.value = `新建集${uuid().slice(0, 7)}`;
         let dav = document.createElement("div");
         new_d.append(dav, new_t);
+        new_d.onclick = () => {
+            let fn = prompt("文件名");
+            if (fn) {
+                集.meta.file_name = new_t.value = fn;
+                data_changed();
+            }
+        };
         document.getElementById("文件").append(new_d);
         for (let f of r.result) {
             let d = document.createElement("div");
