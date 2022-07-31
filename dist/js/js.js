@@ -39,12 +39,13 @@ document.getElementById("新建画布").onclick = () => {
     集.meta.focus_page = name;
     set_data(集);
 };
+var 设置_el = document.getElementById("设置");
 document.getElementById("偏好设置").onclick = () => {
-    document.getElementById("设置").style.display = "block";
+    设置_el.style.display = "block";
     show_setting();
 };
-document.getElementById("设置").querySelector("#close").onclick = () => {
-    document.getElementById("设置").style.display = "";
+设置_el.querySelector("#close").onclick = () => {
+    设置_el.style.display = "";
     save_setting();
 };
 document.getElementById("新建元素").onclick = () => {
@@ -1180,7 +1181,7 @@ function 解压(t) {
 // 设置
 function save_setting() {
     let o = {};
-    for (let f of document.getElementById("设置").querySelectorAll("form")) {
+    for (let f of 设置_el.querySelectorAll("form")) {
         o[f.name] = {};
         let form = new FormData(f);
         for (let v of form) {
