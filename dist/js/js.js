@@ -347,6 +347,7 @@ document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";
     O.style.left = "0px";
     O.style.top = "0px";
+    zoom_o(1);
     setTimeout(() => {
         O.style.transition = "";
     }, 400);
