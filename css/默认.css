@@ -67,6 +67,10 @@ body > #main > #nav #search {
 .侧栏 > #items > #层容器 > div:nth-child(1) {
     background-color: var(--bg1);
 }
+.层容器 > textarea {
+    outline: none;
+    border: none;
+}
 .层容器 > #层 > div > input[type="text"] {
     border: none;
     outline: none;

@@ -9,13 +9,13 @@ class x extends HTMLElement {
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
-        var style = document.createElement("input");
+        var xywh = document.createElement("input");
         var f = document.createElement("div");
         f.innerHTML = `<img src="./assets/icons/ding.svg" class="icon">`;
         var d = document.createElement("div");
         d.innerHTML = `<img src="./assets/icons/close.svg" class="icon">`;
 
-        bar.append(style);
+        bar.append(xywh);
         bar.append(f);
         bar.append(d);
         this.append(bar);
@@ -44,14 +44,18 @@ class x extends HTMLElement {
             z.focus(this);
         };
 
-        style.value = this.getAttribute("style");
+        xywh.value = `${this.offsetLeft}, ${this.offsetTop}, ${this.offsetWidth}, ${this.offsetHeight}`;
 
-        style.onfocus = () => {
-            style.value = this.getAttribute("style");
+        xywh.onfocus = () => {
+            xywh.value = `${this.offsetLeft}, ${this.offsetTop}, ${this.offsetWidth}, ${this.offsetHeight}`;
         };
 
-        style.oninput = () => {
-            this.setAttribute("style", style.value);
+        xywh.oninput = () => {
+            let l = xywh.value.split(",").map((v) => Number(v));
+            this.style.left = l[0] + "px";
+            this.style.top = l[1] + "px";
+            this.style.width = l[2] + "px";
+            this.style.height = l[3] + "px";
 
             data_changed();
         };

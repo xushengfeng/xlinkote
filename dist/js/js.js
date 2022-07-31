@@ -985,6 +985,7 @@ class 图层 {
                 }
                 this.z[i].classList.add("x-x_selected");
                 selected_el.push(this.z[i]);
+                el_style.value = this.z[i].getAttribute("style");
             };
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
@@ -1045,6 +1046,10 @@ class 图层 {
     }
 }
 var z = new 图层();
+var el_style = document.getElementById("el_style");
+el_style.oninput = () => {
+    z.聚焦元素.setAttribute("style", el_style.value);
+};
 set_data(集);
 // 云
 var client = window.WebDAV.createClient(store.webdav.网址, {
