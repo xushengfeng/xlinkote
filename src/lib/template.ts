@@ -213,7 +213,6 @@ class markdown extends HTMLElement {
                 this._value = text.value;
                 data_changed();
             }
-            if (!this.edit) return;
             text.style.left = el.offsetLeft + "px";
             text.style.top = el.offsetTop + el.offsetHeight + "px";
             let line = NaN;
@@ -223,7 +222,7 @@ class markdown extends HTMLElement {
                 line = el_line(text, this.index, s, el)[1];
             }
             text_set_line(text, line);
-            text.focus();
+            if (this.edit) text.focus();
         };
     }
 
