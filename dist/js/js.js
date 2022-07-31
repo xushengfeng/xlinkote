@@ -472,6 +472,10 @@ document.onkeydown = (e) => {
             zoom_o(1);
             data_changed();
             break;
+        case "k":
+            e.preventDefault();
+            search_el.focus();
+            break;
     }
 };
 // 文件数据
