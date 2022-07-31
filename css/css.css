@@ -95,7 +95,7 @@ body > #main > #nav #search {
     top: var(--icon-p-b-size);
     height: calc(100vh - var(--icon-p-b-size));
     transform: translateX(-100%);
-    z-index: calc(var(--zest-index) + 99);
+    z-index: calc(var(--zest-index) + 8);
 }
 .侧栏显示 {
     transform: translateX(0%);
