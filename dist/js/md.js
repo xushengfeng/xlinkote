@@ -183,7 +183,7 @@ md.block.ruler.after("blockquote", "mathjax_block", math_b, {
 const MARKER_OPEN = "[";
 const MARKER_CLOSE = "]";
 const ESCAPE_CHARACTER = "\\";
-const TAG = "t-link";
+const TAG = "x-link";
 function tlink(state, silent) {
     if (silent) {
         return false;
@@ -241,9 +241,8 @@ function tlink(state, silent) {
         return false;
     }
     // start tag
-    let t = state.push("t-link_open", TAG, 1);
+    let t = state.push("x-link_open", TAG, 1);
     t.attrPush(["id", id]);
-    集.links[id] = [];
     // parse inner
     state.pos += 2;
     state.posMax = end;
@@ -251,7 +250,7 @@ function tlink(state, silent) {
     state.pos = end + id_l + 2;
     state.posMax = max;
     // end tag
-    state.push("t-link_close", TAG, -1);
+    state.push("x-link_close", TAG, -1);
     return true;
 }
-md.inline.ruler.before("link", "t-link", tlink);
+md.inline.ruler.before("link", "x-link", tlink);

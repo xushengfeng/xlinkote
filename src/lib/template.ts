@@ -143,7 +143,6 @@ class markdown extends HTMLElement {
             } else {
                 let l_l = [
                     ["(", ")"],
-                    ["[", "]"],
                     ["{", "}"],
                     ["<", ">"],
                     ["'", "'"],
@@ -162,6 +161,9 @@ class markdown extends HTMLElement {
                         text.selectionEnd = s + i[0].length + t.length;
                         text.dispatchEvent(new Event("input"));
                     }
+                }
+                if (e.key == "[" && text.value.charAt(text.selectionStart - 1) == "[") {
+                    text.setRangeText(`#${uuid().slice(0, 7)}]]`);
                 }
             }
         };
@@ -742,3 +744,32 @@ class draw extends HTMLElement {
 }
 
 window.customElements.define("x-draw", draw);
+
+const link_bar = document.getElementById("link_bar");
+const link_ids = document.getElementById("link_ids");
+class link extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        var id = this.getAttribute("id");
+        if (!集.links[id]) 集.links[id] = [];
+        link_ids.innerHTML = "";
+        for (let i in 集.links) {
+            if (i == id) continue;
+            let d = document.createElement("div");
+            let t = document.createElement("span");
+            let idv = document.createElement("span");
+            t.innerText = document.getElementById(i).innerText;
+            idv.innerText = i;
+            d.append(t, idv);
+            link_ids.append(d);
+            d.onclick = () => {
+                集.links[id].push(i);
+            };
+        }
+    }
+}
+
+window.customElements.define("x-link", link);
