@@ -464,7 +464,7 @@ class symbols extends HTMLElement {
             f(el);
         };
         var f = (el: HTMLElement) => {
-            let text = <HTMLTextAreaElement>document.activeElement;
+            let text = focus_md.text;
             if (text.tagName != "TEXTAREA") return;
             if (el.parentElement.id.includes("snippet")) {
                 for (let i in mathSymbols) {
