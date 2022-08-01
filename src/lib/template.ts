@@ -754,9 +754,9 @@ class link extends HTMLElement {
 
     connectedCallback() {
         var id = this.getAttribute("id");
-        if (!集.links[id]) 集.links[id] = [];
+        if (!集.链接[id]) 集.链接[id] = { 值: 1, 目标: [] };
         link_ids.innerHTML = "";
-        for (let i in 集.links) {
+        for (let i in 集.链接) {
             if (i == id) continue;
             let d = document.createElement("div");
             let t = document.createElement("span");
@@ -766,7 +766,8 @@ class link extends HTMLElement {
             d.append(t, idv);
             link_ids.append(d);
             d.onclick = () => {
-                集.links[id].push(i);
+                集.链接[id].目标.push(i);
+                集.链接[i].值++;
             };
         }
     }

@@ -521,7 +521,7 @@ type 集type = {
         file_name: string;
     };
     数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
-    links: { [key: string]: string[] };
+    链接: { [key: string]: { 值: number; 目标: string[] } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
 };
 
@@ -533,7 +533,7 @@ var 集: 集type = {
         file_name: "",
     },
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
-    links: {},
+    链接: {},
     assets: {},
 };
 
