@@ -243,7 +243,7 @@ function tlink(state, silent) {
     // start tag
     let t = state.push("t-link_open", TAG, 1);
     t.attrPush(["id", id]);
-    state;
+    集.links[id] = [];
     // parse inner
     state.pos += 2;
     state.posMax = end;

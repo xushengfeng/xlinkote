@@ -489,6 +489,7 @@ var 集 = {
         file_name: "",
     },
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+    links: {},
     assets: {},
 };
 function get_data() {
