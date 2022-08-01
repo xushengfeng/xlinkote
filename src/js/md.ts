@@ -215,3 +215,83 @@ function math_b(state, startLine, endLine, silent) {
 md.block.ruler.after("blockquote", "mathjax_block", math_b, {
     alt: ["paragraph", "reference", "blockquote", "list"],
 });
+
+// https://github.com/jGleitz/markdown-it-kbd
+const MARKER_OPEN = "[";
+const MARKER_CLOSE = "]";
+const ESCAPE_CHARACTER = "\\";
+const TAG = "t-link";
+function tlink(state, silent: boolean) {
+    if (silent) {
+        return false;
+    }
+
+    const start = state.pos;
+    const max = state.posMax;
+    let now_char = state.src.charAt(start);
+    let next_char = state.src.charAt(start + 1);
+
+    // We are looking for two times the open symbol.
+    if (now_char !== MARKER_OPEN || next_char !== MARKER_OPEN) {
+        return false;
+    }
+
+    // Find the end sequence
+    let openTagCount = 1;
+    let end = -1;
+    let skipNext = false;
+    let id_l = 0;
+    let id = "";
+    for (let i = start + 1; i < max && end === -1; i++) {
+        now_char = next_char;
+        next_char = state.src.charAt(i + 1);
+        if (skipNext) {
+            skipNext = false;
+            continue;
+        }
+        if (now_char === MARKER_CLOSE && next_char === MARKER_CLOSE) {
+            openTagCount -= 1;
+            if (openTagCount == 0) {
+                // Found the end!
+                end = i;
+            }
+            // Skip second marker char, it is already counted.
+            skipNext = true;
+        } else if (now_char === MARKER_OPEN && next_char === MARKER_OPEN) {
+            openTagCount += 1;
+            // Skip second marker char, it is already counted.
+            skipNext = true;
+        } else if (now_char === "\n") {
+            // Found end of line before the end sequence. Thus, ignore our start sequence!
+            return false;
+        } else if (now_char === ESCAPE_CHARACTER) {
+            skipNext = true;
+        } else if (now_char == "#") {
+            end = i;
+            id_l = state.src.indexOf("]", i) - i;
+            id = state.src.slice(i + 1, state.src.indexOf("]", i));
+        }
+    }
+
+    // Input ended before closing sequence.
+    if (end === -1) {
+        return false;
+    }
+
+    // start tag
+    let t = state.push("t-link_open", TAG, 1);
+    t.attrPush(["id", id]);
+    state;
+    // parse inner
+    state.pos += 2;
+    state.posMax = end;
+    state.md.inline.tokenize(state);
+    state.pos = end + id_l + 2;
+    state.posMax = max;
+    // end tag
+    state.push("t-link_close", TAG, -1);
+
+    return true;
+}
+
+md.inline.ruler.before("link", "t-link", tlink);
