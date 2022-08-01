@@ -51,11 +51,11 @@ class x extends HTMLElement {
         };
 
         xywh.oninput = () => {
-            let l = xywh.value.split(",").map((v) => Number(v));
-            this.style.left = l[0] + "px";
-            this.style.top = l[1] + "px";
-            this.style.width = l[2] + "px";
-            this.style.height = l[3] + "px";
+            let l = xywh.value.split(",").map((v) => v.trim());
+            this.style.left = Number(l[0]) ? l[0] + "px" : l[0];
+            this.style.top = Number(l[1]) ? l[1] + "px" : l[1];
+            this.style.width = Number(l[2]) ? l[2] + "px" : l[2];
+            this.style.height = Number(l[3]) ? l[3] + "px" : l[3];
 
             data_changed();
         };
