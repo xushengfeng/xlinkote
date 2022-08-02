@@ -1009,6 +1009,8 @@ class 图层 {
         O.append(el);
         this.z.push(el);
         this.reflash(el, nosave);
+        if (!集.链接)
+            集.链接 = {};
         集.链接[el.id] = { 值: 1, 目标: [] };
     }
     remove(el) {
