@@ -627,6 +627,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
             setTimeout(() => {
                 el.setAttribute("style", x.style);
             }, 0);
+            if (!集.链接[x.id]) 集.链接[x.id] = { 值: 1, 目标: [] };
             for (let i in x.values) {
                 let eel = <markdown>document.createElement(i);
                 el.append(eel);
@@ -1072,6 +1073,7 @@ class 图层 {
         O.append(el);
         this.z.push(el);
         this.reflash(el, nosave);
+        集.链接[el.id] = { 值: 1, 目标: [] };
     }
 
     remove(el: x) {
