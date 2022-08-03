@@ -345,7 +345,9 @@ body > #设置 > #close > .icon {
 }
 
 x-sinppet {
-    height: 200px;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
     float: left;
     overflow: auto;
 }
