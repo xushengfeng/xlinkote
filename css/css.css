@@ -345,29 +345,9 @@ body > #设置 > #close > .icon {
 }
 
 x-sinppet {
-    width: 16px;
-    height: 16px;
-    overflow: hidden;
-    position: fixed;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-x-sinppet > div:nth-child(1) {
-    width: 16px;
-    min-height: 16px;
-}
-x-sinppet > div:nth-child(2) {
+    height: 200px;
+    float: left;
     overflow: auto;
-    display: none;
-}
-.sinppet_h {
-    width: 300px;
-    height: 300px;
-}
-.sinppet_h > div:nth-child(2) {
-    display: block;
 }
 
 .add_tag {
@@ -487,6 +467,12 @@ x-pro > span {
     #导航 > div > .icon {
         width: 32px;
         height: 32px;
+    }
+    x-sinppet > div {
+        zoom: 1.5;
+    }
+    x-sinppet > div > span {
+        margin: 0 4px;
     }
 }
 

@@ -141,17 +141,6 @@ body > #设置 > #close {
     box-shadow: var(--shadow1);
 }
 
-x-sinppet {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-}
-x-sinppet > div:nth-child(1) {
-    background-color: var(--bg-color1);
-    border-radius: 4px;
-    cursor: pointer;
-}
-
 .add_tag {
     outline: none;
     padding: 0;
