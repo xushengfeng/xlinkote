@@ -4,6 +4,8 @@
     --bg-color2: rgba(255, 255, 255, 0.72);
     --bg-color3: #ddd;
     --bg-color4: #f5f5f5;
+    --color5: #eee;
+    --color6: #000;
     --shadow1: 0 0 4px #3333;
     --blur: saturate(180%) blur(20px);
     --bg1: #ffffff;
@@ -37,7 +39,7 @@
 
 body > #main > #nav {
     background-color: var(--bg1);
-    outline: 1px solid #eee;
+    outline: 1px solid var(--color5);
 }
 body > #main > #nav #search {
     border: none;
@@ -53,7 +55,13 @@ body > #main > #nav #search {
     transition: var(--transition) transform;
 }
 .侧栏显示 {
-    box-shadow: 0 0 8px #0003;
+    box-shadow: var(--shadow1);
+}
+
+.侧栏 input,
+.侧栏 textarea {
+    background-color: #0000;
+    color: var(--color6);
 }
 .侧栏 > #items > #文件 > div > input {
     border: none;
@@ -109,7 +117,7 @@ body > #main > #画布 > #选择 > div {
 
 /* 导航 */
 body > #main > #画布 > #导航 > div {
-    background-color: #eee;
+    background-color: var(--color5);
     border-radius: 50%;
     outline: none;
 }
@@ -193,6 +201,7 @@ x-x:focus-within {
 x-md > textarea {
     border-radius: 4px;
     box-shadow: var(--shadow1);
+    background-color: var(--bg1);
     outline: none;
     border: none;
 }
@@ -238,10 +247,24 @@ x-pro > span {
         border-radius: 32px 32px 0 0;
     }
     .侧栏 > #handle > div {
-        background-color: #eee;
+        background-color: var(--bg-color3);
         border-radius: 2px;
     }
 }
 
 @media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color1: rgba(20, 20, 20, 0.6);
+        --bg-color2: rgba(0, 0, 0, 0.72);
+        --bg-color3: #222;
+        --bg-color4: #161616;
+        --color5: #111;
+        --color6: #fff;
+        --shadow1: 0 0 4px #ccc6;
+        --bg1: #000000;
+        --icon-color: invert(1);
+    }
+    x-sinppet {
+        filter: invert(1);
+    }
 }
