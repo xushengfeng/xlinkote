@@ -205,6 +205,12 @@ document.getElementById("md_link").onclick = () => {
 document.getElementById("md_img").onclick = () => {
     set_md_v("~[]()", "");
 };
+document.getElementById("md_mathi").onclick = () => {
+    set_md_v("$", "$");
+};
+document.getElementById("md_mathb").onclick = () => {
+    set_md_v("$$\n", "\n$$");
+};
 
 // 画布
 var 画布 = document.getElementById("画布");
