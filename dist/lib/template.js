@@ -424,14 +424,9 @@ class symbols extends HTMLElement {
                 div.append(span);
             }
         }
-        this.onmousedown = (e) => {
+        this.onclick = (e) => {
             e.stopPropagation();
             f(e.target);
-        };
-        this.ontouchstart = (e) => {
-            e.stopPropagation();
-            let el = e.changedTouches[0].target;
-            f(el);
         };
         var f = (el) => {
             let text = focus_md.text;
