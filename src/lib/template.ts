@@ -571,7 +571,7 @@ class draw extends HTMLElement {
     z = [];
     _drawing = false;
 
-    pen = { color: "#000", gco: "source-over", width: 5 };
+    pen = { color: "#000000", gco: "source-over", width: 5 };
 
     connectedCallback() {
         if (this.getAttribute("value")) {
@@ -652,7 +652,7 @@ class draw extends HTMLElement {
             };
             if (this.points.x)
                 for (let dj = 0; dj < jl; dj += 1) {
-                    let iw = (this.points.p - (dj / jl) * (e.pressure - this.points.p)) * this.pen.width;
+                    let iw = this.points.p * this.pen.width;
                     let ix = x + dj * Math.cos(Math.atan2(this.points.y - y, this.points.x - x));
                     let iy = y + dj * Math.sin(Math.atan2(this.points.y - y, this.points.x - x));
                     d(ix, iy, iw);
