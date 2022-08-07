@@ -252,7 +252,6 @@ document.onmousedown = (e) => {
             画布.style.userSelect = "none";
         }
     }
-    if (e.target != menu) menu.classList.remove("上下文菜单展示");
 };
 
 document.onmousemove = (e) => {
@@ -274,7 +273,6 @@ document.onmouseup = (e) => {
         creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop);
     }
     o_e = null;
-    if (!move && e.button == 2) context_menu(e);
     move = false;
     document.getElementById("画布").style.cursor = "auto";
     画布.style.userSelect = "auto";
@@ -454,24 +452,6 @@ var free_mouse = (e: MouseEvent) => {
         }
     }
 };
-
-// 上下文菜单
-var menu = document.getElementById("上下文菜单");
-document.oncontextmenu = (e) => {
-    e.preventDefault();
-};
-
-function context_menu(e: MouseEvent) {
-    let x = e.offsetX - O.offsetLeft,
-        y = e.offsetY - O.offsetTop;
-    menu.style.left = e.clientX + "px";
-    menu.style.top = e.clientY + "px";
-    menu.classList.add("上下文菜单展示");
-
-    document.getElementById("在此新建").onmousedown = () => {
-        creat_x_x(x, y);
-    };
-}
 
 function creat_x_x(x: number, y: number) {
     let xel = <x>document.createElement("x-x");
