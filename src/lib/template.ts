@@ -642,15 +642,17 @@ class draw extends HTMLElement {
                     let iw = (this.points.p - (dj / jl) * (e.pressure - this.points.p)) * 5;
                     let ix = x + dj * Math.cos(Math.atan2(this.points.y - y, this.points.x - x));
                     let iy = y + dj * Math.sin(Math.atan2(this.points.y - y, this.points.x - x));
-                    ctx.beginPath();
-                    ctx.arc(ix, iy, iw / 2, 0, 2 * Math.PI);
-                    ctx.fillStyle = "#000";
-                    ctx.stroke();
+                    d(ix, iy, iw);
                 }
-            ctx.beginPath();
-            ctx.arc(this.points.x, this.points.y, w / 2, 0, 2 * Math.PI);
-            ctx.fillStyle = "#000";
-            ctx.stroke();
+            d(this.points.x, this.points.y, w);
+            function d(x: number, y: number, w: number) {
+                ctx.beginPath();
+                ctx.arc(x, y, w, 0, 2 * Math.PI);
+                ctx.fillStyle = "#000";
+                ctx.shadowBlur = 1;
+                ctx.shadowColor = "#000";
+                ctx.stroke();
+            }
         }
         this.points = { x, y, p: e.pressure };
     }
