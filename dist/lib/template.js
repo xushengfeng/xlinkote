@@ -589,11 +589,12 @@ class draw extends HTMLElement {
             var d = (x, y, w) => {
                 ctx.beginPath();
                 ctx.arc(x, y, w / 2, 0, 2 * Math.PI);
-                ctx.strokeStyle = this.pen.color;
+                ctx.fillStyle = this.pen.color;
                 ctx.shadowBlur = 1;
                 ctx.shadowColor = this.pen.color;
                 ctx.globalCompositeOperation = this.pen.gco;
-                ctx.stroke();
+                ctx.closePath();
+                ctx.fill();
             };
             if (this.points.x)
                 for (let dj = 0; dj < jl; dj += 1) {
