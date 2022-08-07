@@ -518,7 +518,7 @@ class draw extends HTMLElement {
     constructor() {
         super();
         this.z = [];
-        this.points = { x: NaN, y: NaN };
+        this.points = { x: NaN, y: NaN, p: NaN };
     }
     connectedCallback() {
         if (this.getAttribute("value")) {
@@ -580,13 +580,24 @@ class draw extends HTMLElement {
         }
         // 画
         if (!isNaN(this.points.x)) {
+            let w = e.pressure * 5;
+            let jl = Math.sqrt((this.points.x - x) ** 2 + (this.points.y - y) ** 2);
+            if (this.points.x)
+                for (let dj = 0; dj < jl; dj += 1) {
+                    let iw = (this.points.p - (dj / jl) * (e.pressure - this.points.p)) * 5;
+                    let ix = x + dj * Math.cos(Math.atan2(this.points.y - y, this.points.x - x));
+                    let iy = y + dj * Math.sin(Math.atan2(this.points.y - y, this.points.x - x));
+                    ctx.beginPath();
+                    ctx.arc(ix, iy, iw / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = "#000";
+                    ctx.stroke();
+                }
             ctx.beginPath();
-            ctx.lineWidth = e.pressure * 2;
-            ctx.moveTo(this.points.x, this.points.y);
-            ctx.lineTo(x, y);
+            ctx.arc(this.points.x, this.points.y, w / 2, 0, 2 * Math.PI);
+            ctx.fillStyle = "#000";
             ctx.stroke();
         }
-        this.points = { x, y };
+        this.points = { x, y, p: e.pressure };
     }
     set_v(v) {
         let x = JSON.parse(v);
