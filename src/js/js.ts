@@ -80,6 +80,7 @@ document.getElementById("新建画板").onclick = () => {
     draw.setAttribute("height", String(画布.offsetHeight));
     draw.drawing = true;
     xel.append(draw);
+    focus_draw_el = draw;
 
     z.push(xel);
 };
@@ -1001,6 +1002,7 @@ var focus_draw_el = null;
     if (el.parentElement.tagName == "X-DRAW") {
         (<draw>el.parentElement)?.draw(e);
         focus_draw_el = el.parentElement;
+        (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
     }
 };
 
@@ -1014,6 +1016,18 @@ var focus_draw_el = null;
         (<draw>focus_draw_el).draw(e);
         (<draw>focus_draw_el).points = { x: NaN, y: NaN, p: NaN };
         data_changed();
+    }
+};
+
+(<HTMLInputElement>document.getElementById("penc")).onchange = () => {
+    (<draw>focus_draw_el).pen.color = (<HTMLInputElement>document.getElementById("penc")).value;
+};
+
+document.getElementById("橡皮").onclick = () => {
+    if ((<draw>focus_draw_el).pen.gco == "source-over") {
+        (<draw>focus_draw_el).pen.gco = "destination-out";
+    } else {
+        (<draw>focus_draw_el).pen.gco = "source-over";
     }
 };
 

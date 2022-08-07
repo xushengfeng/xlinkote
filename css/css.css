@@ -96,6 +96,13 @@ body > #main > #nav > div:nth-child(2) > div > .icon {
     left: var(--icon-margin);
     top: var(--icon-margin);
 }
+
+#penc {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
 body > #main > #nav > #search_bar {
     flex-grow: 1;
     display: flex;

@@ -72,6 +72,7 @@ document.getElementById("新建画板").onclick = () => {
     draw.setAttribute("height", String(画布.offsetHeight));
     draw.drawing = true;
     xel.append(draw);
+    focus_draw_el = draw;
     z.push(xel);
 };
 document.getElementById("切换绘画").onclick = () => {
@@ -940,6 +941,7 @@ var focus_draw_el = null;
     if (el.parentElement.tagName == "X-DRAW") {
         el.parentElement?.draw(e);
         focus_draw_el = el.parentElement;
+        document.getElementById("penc").value = focus_draw_el.pen.color;
     }
 };
 画布.onpointermove = (e) => {
@@ -952,6 +954,17 @@ var focus_draw_el = null;
         focus_draw_el.draw(e);
         focus_draw_el.points = { x: NaN, y: NaN, p: NaN };
         data_changed();
+    }
+};
+document.getElementById("penc").onchange = () => {
+    focus_draw_el.pen.color = document.getElementById("penc").value;
+};
+document.getElementById("橡皮").onclick = () => {
+    if (focus_draw_el.pen.gco == "source-over") {
+        focus_draw_el.pen.gco = "destination-out";
+    }
+    else {
+        focus_draw_el.pen.gco = "source-over";
     }
 };
 window.onbeforeunload = () => {

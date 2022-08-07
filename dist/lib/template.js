@@ -519,6 +519,7 @@ class draw extends HTMLElement {
         super();
         this.z = [];
         this._drawing = false;
+        this.pen = { color: "#000", gco: "source-over", width: 5 };
         this.points = { x: NaN, y: NaN, p: NaN };
     }
     connectedCallback() {
@@ -583,24 +584,25 @@ class draw extends HTMLElement {
         }
         // 画
         if (!isNaN(this.points.x)) {
-            let w = e.pressure * 5;
+            let w = e.pressure * this.pen.width;
             let jl = Math.sqrt((this.points.x - x) ** 2 + (this.points.y - y) ** 2);
+            var d = (x, y, w) => {
+                ctx.beginPath();
+                ctx.arc(x, y, w / 2, 0, 2 * Math.PI);
+                ctx.strokeStyle = this.pen.color;
+                ctx.shadowBlur = 1;
+                ctx.shadowColor = this.pen.color;
+                ctx.globalCompositeOperation = this.pen.gco;
+                ctx.stroke();
+            };
             if (this.points.x)
                 for (let dj = 0; dj < jl; dj += 1) {
-                    let iw = (this.points.p - (dj / jl) * (e.pressure - this.points.p)) * 5;
+                    let iw = (this.points.p - (dj / jl) * (e.pressure - this.points.p)) * this.pen.width;
                     let ix = x + dj * Math.cos(Math.atan2(this.points.y - y, this.points.x - x));
                     let iy = y + dj * Math.sin(Math.atan2(this.points.y - y, this.points.x - x));
                     d(ix, iy, iw);
                 }
             d(this.points.x, this.points.y, w);
-            function d(x, y, w) {
-                ctx.beginPath();
-                ctx.arc(x, y, w, 0, 2 * Math.PI);
-                ctx.fillStyle = "#000";
-                ctx.shadowBlur = 1;
-                ctx.shadowColor = "#000";
-                ctx.stroke();
-            }
         }
         this.points = { x, y, p: e.pressure };
     }

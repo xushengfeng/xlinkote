@@ -41,6 +41,11 @@ body > #main > #nav {
     background-color: var(--bg1);
     outline: 1px solid var(--color5);
 }
+
+#penc {
+    border: none;
+}
+
 body > #main > #nav #search {
     border: none;
     padding: 0 4px;
