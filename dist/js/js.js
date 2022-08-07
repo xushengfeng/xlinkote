@@ -70,8 +70,14 @@ document.getElementById("新建画板").onclick = () => {
     let draw = document.createElement("x-draw");
     draw.setAttribute("width", String(画布.offsetWidth));
     draw.setAttribute("height", String(画布.offsetHeight));
+    draw.drawing = true;
     xel.append(draw);
     z.push(xel);
+};
+document.getElementById("切换绘画").onclick = () => {
+    if (focus_draw_el) {
+        focus_draw_el.drawing = !focus_draw_el.drawing;
+    }
 };
 var 侧栏 = document.getElementById("侧栏");
 侧栏.onclick = (e) => {
@@ -945,8 +951,6 @@ var focus_draw_el = null;
     if (focus_draw_el) {
         focus_draw_el.draw(e);
         focus_draw_el.points = { x: NaN, y: NaN, p: NaN };
-        focus_draw_el.clip();
-        focus_draw_el = null;
         data_changed();
     }
 };

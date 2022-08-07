@@ -75,6 +75,28 @@ body > #main > #nav > div:nth-child(1) #upload_i {
     display: none;
 }
 body > #main > #nav > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: var(--icon-p-b-size);
+    overflow-x: scroll;
+}
+body > #main > #nav > div:nth-child(2)::-webkit-scrollbar {
+    display: none;
+}
+body > #main > #nav > div:nth-child(2) > div {
+    cursor: pointer;
+    position: relative;
+    min-width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+}
+body > #main > #nav > div:nth-child(2) > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+}
+body > #main > #nav > #search_bar {
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -416,6 +438,14 @@ x-md > textarea {
 .contains-task-list {
     list-style: none;
     padding-inline-start: 16px;
+}
+
+x-draw > div {
+    width: 16px;
+    height: 16px;
+    position: fixed;
+    right: 0;
+    top: 0;
 }
 
 x-graph {

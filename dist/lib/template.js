@@ -518,6 +518,7 @@ class draw extends HTMLElement {
     constructor() {
         super();
         this.z = [];
+        this._drawing = false;
         this.points = { x: NaN, y: NaN, p: NaN };
     }
     connectedCallback() {
@@ -535,6 +536,8 @@ class draw extends HTMLElement {
         }
     }
     draw(e) {
+        if (!this._drawing)
+            return;
         let canvas = this.main_canvas;
         if (!e.pressure)
             return;
@@ -623,6 +626,14 @@ class draw extends HTMLElement {
     }
     set value(v) {
         this.set_v(v);
+    }
+    get drawing() {
+        return this._drawing;
+    }
+    set drawing(v) {
+        this._drawing = v;
+        if (!v)
+            this.clip();
     }
     clip() {
         let t_c = document.createElement("canvas");
