@@ -640,25 +640,15 @@ class draw extends HTMLElement {
         // 画
         if (!isNaN(this.points.x)) {
             let w = e.pressure * this.pen.width;
-            let jl = Math.sqrt((this.points.x - x) ** 2 + (this.points.y - y) ** 2);
-            var d = (x: number, y: number, w: number) => {
-                ctx.beginPath();
-                ctx.arc(x, y, w / 2, 0, 2 * Math.PI);
-                ctx.fillStyle = this.pen.color;
-                ctx.shadowBlur = 1;
-                ctx.shadowColor = this.pen.color;
-                ctx.globalCompositeOperation = this.pen.gco as GlobalCompositeOperation;
-                ctx.closePath();
-                ctx.fill();
-            };
-            if (this.points.x)
-                for (let dj = 0; dj < jl; dj += 1) {
-                    let iw = this.points.p * this.pen.width;
-                    let ix = x + dj * Math.cos(Math.atan2(this.points.y - y, this.points.x - x));
-                    let iy = y + dj * Math.sin(Math.atan2(this.points.y - y, this.points.x - x));
-                    d(ix, iy, iw);
-                }
-            d(this.points.x, this.points.y, w);
+            ctx.lineJoin = ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(this.points.x, this.points.y);
+            ctx.quadraticCurveTo((x + this.points.x) / 2, (y + this.points.y) / 2, x, y);
+            ctx.strokeStyle = this.pen.color;
+            ctx.globalCompositeOperation = this.pen.gco as GlobalCompositeOperation;
+            ctx.lineWidth = w;
+            ctx.lineTo(x, y);
+            ctx.stroke();
         }
         this.points = { x, y, p: e.pressure };
     }
