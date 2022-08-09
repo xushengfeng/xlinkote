@@ -1266,7 +1266,8 @@ async function put_xln_value() {
         t = 压缩(t);
         t = window.CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
     }
-    client.putFileContents(path, t);
+    let v = await client.putFileContents(path, t);
+    if (v) put_toast("文件上传成功");
 }
 
 var auto_put_xln_t = NaN;
