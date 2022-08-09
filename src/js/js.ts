@@ -157,6 +157,16 @@ document.getElementById("顶层").onclick = () => {
     z.顶层(z.聚焦元素);
 };
 
+const toast = document.getElementById("toast");
+
+function put_toast(t: string) {
+    toast.innerText = t;
+    toast.classList.add("toast_show");
+    setTimeout(() => {
+        toast.classList.remove("toast_show");
+    }, 1000);
+}
+
 // markdown
 document.getElementById("toggle_md").onclick = () => {
     if (focus_md) {
