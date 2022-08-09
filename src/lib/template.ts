@@ -20,15 +20,18 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
+        var bar_hide_t = NaN;
         this.onmouseenter = () => {
             if (模式 == "设计") {
+                clearTimeout(bar_hide_t);
                 bar.classList.add("x-x_bar_show");
             }
         };
-
         this.onmouseleave = () => {
             if (模式 == "设计") {
-                bar.classList.remove("x-x_bar_show");
+                bar_hide_t = setTimeout(() => {
+                    bar.classList.remove("x-x_bar_show");
+                }, 200);
             }
         };
 
