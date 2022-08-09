@@ -35,6 +35,8 @@ class x extends HTMLElement {
                 return;
             if (this.fixed)
                 return;
+            if (bar.contains(e.target))
+                return;
             free_o_e = e;
             document.getElementById("画布").style.cursor = "move";
             if (selected_el.length != 0 && selected_el.includes(this)) {

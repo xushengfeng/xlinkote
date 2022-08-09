@@ -38,6 +38,7 @@ class x extends HTMLElement {
         this.addEventListener("mousedown", (e) => {
             if (模式 != "设计") return;
             if (this.fixed) return;
+            if (bar.contains(e.target as HTMLElement)) return;
             free_o_e = e;
             document.getElementById("画布").style.cursor = "move";
 
