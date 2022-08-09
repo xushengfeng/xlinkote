@@ -275,7 +275,7 @@ document.onmousemove = (e) => {
 };
 document.onmouseup = (e) => {
     mouse(e);
-    if (e.button == 0 && selected_el.length == 0 && move) {
+    if (e.button == 0 && selected_el.length == 0 && move && o_e) {
         if (模式 != "设计")
             return;
         let r = e2rect(o_e, e);
