@@ -73,6 +73,7 @@ document.getElementById("新建画板").onclick = () => {
     draw.drawing = true;
     xel.append(draw);
     focus_draw_el = draw;
+    模式 = "绘制";
     z.push(xel);
 };
 var 侧栏 = document.getElementById("侧栏");
@@ -154,14 +155,20 @@ function put_toast(t) {
 var 模式 = "设计";
 document.getElementById("浏览编辑").onclick = () => {
     模式 = "浏览";
+    if (focus_draw_el) {
+        focus_draw_el.drawing = false;
+    }
 };
 document.getElementById("设计").onclick = () => {
     模式 = "设计";
+    if (focus_draw_el) {
+        focus_draw_el.drawing = false;
+    }
 };
 document.getElementById("绘制").onclick = () => {
     模式 = "绘制";
     if (focus_draw_el) {
-        focus_draw_el.drawing = !focus_draw_el.drawing;
+        focus_draw_el.drawing = true;
     }
 };
 // markdown
@@ -942,7 +949,8 @@ var focus_draw_el = null;
 画布.onpointerdown = (e) => {
     let el = e.target;
     if (el.parentElement.tagName == "X-DRAW") {
-        el.parentElement?.draw(e);
+        if (模式 == "绘制")
+            el.parentElement?.draw(e);
         focus_draw_el = el.parentElement;
         document.getElementById("penc").value = focus_draw_el.pen.color;
     }

@@ -81,6 +81,7 @@ document.getElementById("新建画板").onclick = () => {
     draw.drawing = true;
     xel.append(draw);
     focus_draw_el = draw;
+    模式 = "绘制";
 
     z.push(xel);
 };
@@ -167,14 +168,20 @@ var 模式: "浏览" | "设计" | "绘制" = "设计";
 
 document.getElementById("浏览编辑").onclick = () => {
     模式 = "浏览";
+    if (<draw>focus_draw_el) {
+        (<draw>focus_draw_el).drawing = false;
+    }
 };
 document.getElementById("设计").onclick = () => {
     模式 = "设计";
+    if (<draw>focus_draw_el) {
+        (<draw>focus_draw_el).drawing = false;
+    }
 };
 document.getElementById("绘制").onclick = () => {
     模式 = "绘制";
     if (<draw>focus_draw_el) {
-        (<draw>focus_draw_el).drawing = !(<draw>focus_draw_el).drawing;
+        (<draw>focus_draw_el).drawing = true;
     }
 };
 
@@ -1004,7 +1011,7 @@ var focus_draw_el = null;
 画布.onpointerdown = (e) => {
     let el = e.target as HTMLElement;
     if (el.parentElement.tagName == "X-DRAW") {
-        (<draw>el.parentElement)?.draw(e);
+        if (模式 == "绘制") (<draw>el.parentElement)?.draw(e);
         focus_draw_el = el.parentElement;
         (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
     }
