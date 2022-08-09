@@ -85,12 +85,6 @@ document.getElementById("新建画板").onclick = () => {
     z.push(xel);
 };
 
-document.getElementById("切换绘画").onclick = () => {
-    if (<draw>focus_draw_el) {
-        (<draw>focus_draw_el).drawing = !(<draw>focus_draw_el).drawing;
-    }
-};
-
 var 侧栏 = document.getElementById("侧栏");
 
 侧栏.onclick = (e) => {
@@ -166,6 +160,23 @@ function put_toast(t: string) {
         toast.classList.remove("toast_show");
     }, 1000);
 }
+
+// 模式切换
+
+var 模式: "浏览" | "设计" | "绘制" = "设计";
+
+document.getElementById("浏览编辑").onclick = () => {
+    模式 = "浏览";
+};
+document.getElementById("设计").onclick = () => {
+    模式 = "设计";
+};
+document.getElementById("绘制").onclick = () => {
+    模式 = "绘制";
+    if (<draw>focus_draw_el) {
+        (<draw>focus_draw_el).drawing = !(<draw>focus_draw_el).drawing;
+    }
+};
 
 // markdown
 document.getElementById("toggle_md").onclick = () => {
@@ -250,11 +261,8 @@ fxsd_el.onclick = () => {
 
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
-        if (e.button == 2) {
-            o_e = e;
-            o_rect = { x: O.offsetLeft, y: O.offsetTop };
-            document.getElementById("画布").style.cursor = "move";
-        } else if (e.button == 0) {
+        if (e.button == 0) {
+            if (模式 != "设计") return;
             o_e = e;
             let select = document.createElement("div");
             select_id = select.id = `s${new Date().getTime()}`;
@@ -279,6 +287,7 @@ document.onmousemove = (e) => {
 document.onmouseup = (e) => {
     mouse(e);
     if (e.button == 0 && selected_el.length == 0 && move) {
+        if (模式 != "设计") return;
         let r = e2rect(o_e, e);
         creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop);
     }
@@ -436,6 +445,10 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
     now_mouse_e = e;
 });
 
+画布.oncontextmenu = (e) => {
+    if (模式 != "浏览") e.preventDefault();
+};
+
 // 自由元素移动
 let free_o_e: MouseEvent;
 let free_o_rects = [];
@@ -471,6 +484,7 @@ function creat_x_x(x: number, y: number) {
     var md = document.createElement("x-md");
     xel.append(md);
     (<markdown>md).edit = true;
+    模式 = "浏览";
 }
 
 // 快捷键

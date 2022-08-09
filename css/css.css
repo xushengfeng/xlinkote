@@ -391,9 +391,9 @@ x-x {
     width: max-content;
 }
 
-x-x:hover > #x-x_bar {
-    opacity: 1;
-    pointer-events: all;
+.x-x_bar_show {
+    opacity: 1 !important;
+    pointer-events: all !important;
 }
 
 x-x > * {

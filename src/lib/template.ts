@@ -20,8 +20,20 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
+        this.onmouseenter = () => {
+            if (模式 == "设计") {
+                bar.classList.add("x-x_bar_show");
+            }
+        };
+
+        this.onmouseleave = () => {
+            if (模式 == "设计") {
+                bar.classList.remove("x-x_bar_show");
+            }
+        };
+
         this.addEventListener("mousedown", (e) => {
-            if (e.button != 2) return;
+            if (模式 != "设计") return;
             if (this.fixed) return;
             free_o_e = e;
             document.getElementById("画布").style.cursor = "move";
@@ -113,6 +125,7 @@ class markdown extends HTMLElement {
             }, 0);
         };
         text.onkeydown = (e) => {
+            if (模式 != "浏览") e.preventDefault();
             if (e.key == "Enter") {
                 data_changed();
                 let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
@@ -170,6 +183,7 @@ class markdown extends HTMLElement {
         // text.addEventListener("keyup",(e)=>{})
         // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
+            if (模式 != "浏览") return;
             let l_i = text_get_line(text);
             let index_i: any;
             for (let i = 0; i < this.index.length; i++) {
@@ -194,13 +208,6 @@ class markdown extends HTMLElement {
         };
         this.onclick = text.onfocus = () => {
             focus_md = this;
-        };
-        // 输入框失焦且无内容时删除元素的容器
-        text.onblur = () => {
-            if (text.value == "" && this.parentElement.childElementCount == 2) {
-                this.parentElement.remove();
-                z.remove(<x>this.parentElement);
-            }
         };
         // 点击元素定位到源文本行
         s.onclick = (e) => {
