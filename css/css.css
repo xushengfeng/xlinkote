@@ -374,9 +374,6 @@ body > #toast {
 }
 
 x-sinppet {
-    height: -moz-available;
-    height: -webkit-fill-available;
-    height: fill-available;
     float: left;
     overflow: auto;
 }
