@@ -547,8 +547,11 @@ document.onkeydown = (e) => {
             data_changed();
             break;
         case "k":
-            e.preventDefault();
-            search_el.focus();
+            if (e.ctrlKey) {
+                e.preventDefault();
+                e.preventDefault();
+                search_el.focus();
+            }
             break;
     }
 };
