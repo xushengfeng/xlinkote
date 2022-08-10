@@ -88,6 +88,7 @@ class markdown extends HTMLElement {
     connectedCallback() {
         var s = document.createElement("div");
         s.id = "h";
+        this.h = s;
         var text = document.createElement("textarea");
         this.text = text;
         this.append(s);
@@ -253,6 +254,16 @@ class markdown extends HTMLElement {
     }
     get value() {
         return this._value;
+    }
+    reload() {
+        let s = this.h;
+        let text = this.text;
+        s.innerHTML = md.render(text.value);
+        let l = md.parse(text.value, {
+            references: {},
+        });
+        parse = l;
+        this.index = line_el(l);
     }
 }
 window.customElements.define("x-md", markdown);

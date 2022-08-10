@@ -66,6 +66,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
         tokens[idx].attrSet("src", b);
     return defaultRender(tokens, idx, options, env, self);
 };
+var will_load_math = false;
 var mathjax_cache = {};
 function get_svg(c) {
     let html, ca = mathjax_cache?.[c];
@@ -74,8 +75,36 @@ function get_svg(c) {
         mathjax_cache[c][1] = 2;
     }
     else {
-        html = window.MathJax.tex2svg(c).outerHTML;
-        mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
+        if (window.MathJax.tex2svg) {
+            html = window.MathJax.tex2svg(c).outerHTML;
+            mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
+        }
+        else {
+            html = "<mjx-container></mjx-container>";
+            if (!will_load_math) {
+                let s = document.createElement("script");
+                s.src = "./node/mathjax/es5/tex-svg.js";
+                will_load_math = true;
+                s.onload = reload;
+                document.body.append(s);
+                s.onerror = () => {
+                    let s = document.createElement("script");
+                    s.src = "./node_modules/mathjax/es5/tex-svg.js";
+                    document.body.append(s);
+                    s.onload = reload;
+                };
+            }
+            function reload() {
+                console.log("加载数学组件完成");
+                document.querySelectorAll("mjx-container").forEach((el) => {
+                    画布.querySelectorAll("x-md").forEach((pel) => {
+                        if (pel.contains(el)) {
+                            pel.reload();
+                        }
+                    });
+                });
+            }
+        }
     }
     return html;
 }
