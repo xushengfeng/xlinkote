@@ -232,6 +232,7 @@ class markdown extends HTMLElement {
             text.classList.add("show_md");
             if (v != "cr")
                 text.focus();
+            set_模式("浏览");
         }
         else {
             text.classList.remove("show_md");

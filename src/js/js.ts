@@ -193,10 +193,17 @@ function set_模式(模式: "浏览" | "设计" | "绘制") {
             if (<draw>focus_draw_el) {
                 (<draw>focus_draw_el).drawing = false;
             }
+            document.querySelectorAll("x-md").forEach((el) => {
+                (<markdown>el).edit = false;
+            });
+            break;
         case "绘制":
             if (<draw>focus_draw_el) {
                 (<draw>focus_draw_el).drawing = true;
             }
+            document.querySelectorAll("x-md").forEach((el) => {
+                (<markdown>el).edit = false;
+            });
             break;
     }
 }

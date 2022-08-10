@@ -179,10 +179,17 @@ function set_模式(模式) {
             if (focus_draw_el) {
                 focus_draw_el.drawing = false;
             }
+            document.querySelectorAll("x-md").forEach((el) => {
+                el.edit = false;
+            });
+            break;
         case "绘制":
             if (focus_draw_el) {
                 focus_draw_el.drawing = true;
             }
+            document.querySelectorAll("x-md").forEach((el) => {
+                el.edit = false;
+            });
             break;
     }
 }
