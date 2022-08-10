@@ -42,6 +42,10 @@ body > #main > #nav {
     outline: 1px solid var(--color5);
 }
 
+.模式突出 {
+    background-color: var(--bg-color1);
+}
+
 #penc {
     border: none;
 }

@@ -73,7 +73,7 @@ document.getElementById("新建画板").onclick = () => {
     draw.drawing = true;
     xel.append(draw);
     focus_draw_el = draw;
-    模式 = "绘制";
+    set_模式("绘制");
     z.push(xel);
 };
 var 侧栏 = document.getElementById("侧栏");
@@ -151,26 +151,42 @@ function put_toast(t) {
         toast.classList.remove("toast_show");
     }, 1000);
 }
+var nav = document.getElementById("nav");
 // 模式切换
-var 模式 = "设计";
-document.getElementById("浏览编辑").onclick = () => {
-    模式 = "浏览";
-    if (focus_draw_el) {
-        focus_draw_el.drawing = false;
-    }
+var 模式;
+document.getElementById("浏览").onclick = () => {
+    set_模式("浏览");
 };
 document.getElementById("设计").onclick = () => {
-    模式 = "设计";
-    if (focus_draw_el) {
-        focus_draw_el.drawing = false;
-    }
+    set_模式("设计");
 };
 document.getElementById("绘制").onclick = () => {
-    模式 = "绘制";
-    if (focus_draw_el) {
-        focus_draw_el.drawing = true;
-    }
+    set_模式("绘制");
 };
+function set_模式(模式) {
+    window.模式 = 模式;
+    nav.querySelectorAll("#mode_bar > div").forEach((v) => {
+        v.classList.remove("模式突出");
+    });
+    nav.querySelector(`#${模式}`).classList.add("模式突出");
+    switch (模式) {
+        case "浏览":
+            if (focus_draw_el) {
+                focus_draw_el.drawing = false;
+            }
+            break;
+        case "设计":
+            if (focus_draw_el) {
+                focus_draw_el.drawing = false;
+            }
+        case "绘制":
+            if (focus_draw_el) {
+                focus_draw_el.drawing = true;
+            }
+            break;
+    }
+}
+set_模式("设计");
 // markdown
 document.getElementById("toggle_md").onclick = () => {
     if (focus_md) {
@@ -461,7 +477,7 @@ function creat_x_x(x, y) {
     var md = document.createElement("x-md");
     xel.append(md);
     md.edit = true;
-    模式 = "浏览";
+    set_模式("浏览");
 }
 // 快捷键
 document.onkeydown = (e) => {
