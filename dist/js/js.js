@@ -1228,7 +1228,14 @@ function auto_put_xln() {
 }
 function 压缩(t) {
     let c = window.pako.deflate(t);
-    return String.fromCharCode.apply(null, c);
+    let res = "";
+    let chunk = 8 * 1024;
+    let i;
+    for (i = 0; i < c.length / chunk; i++) {
+        res += String.fromCharCode.apply(null, c.slice(i * chunk, (i + 1) * chunk));
+    }
+    res += String.fromCharCode.apply(null, c.slice(i * chunk));
+    return res;
 }
 function 解压(t) {
     let arr = [];
