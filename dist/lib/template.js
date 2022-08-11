@@ -546,6 +546,8 @@ class draw extends HTMLElement {
         this._drawing = false;
         this.pen = { color: "#000000", gco: "source-over", width: 5 };
         this.points = [{ x: NaN, y: NaN, p: NaN }];
+        this.width = NaN;
+        this.height = NaN;
     }
     connectedCallback() {
         if (this.getAttribute("value")) {
@@ -565,6 +567,8 @@ class draw extends HTMLElement {
             if (this.getAttribute("height"))
                 this.main_svg.setAttribute("height", this.getAttribute("height"));
             this.append(this.main_svg);
+            this.width = Number(this.getAttribute("width"));
+            this.height = Number(this.getAttribute("height"));
             this.z[0] = this.tmp_svg;
         }
     }
@@ -581,19 +585,15 @@ class draw extends HTMLElement {
         // let ctx = this.main_svg.getContext("2d");
         let x = e.offsetX, y = e.offsetY;
         let dd = 100, xx = 100;
-        // // 无限画板
-        // // 向右延伸
-        // if (x > canvas.width - dd) {
-        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        //     canvas.width += xx;
-        //     ctx.putImageData(imageData, 0, 0);
-        // }
-        // // 下
-        // if (y > canvas.height - dd) {
-        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        //     canvas.height += xx;
-        //     ctx.putImageData(imageData, 0, 0);
-        // }
+        // 无限画板
+        // 向右延伸
+        if (x > this.width - dd) {
+            this.width += xx;
+        }
+        // 下
+        if (y > this.height - dd) {
+            this.height += xx;
+        }
         // // 左
         // if (x < dd) {
         //     if (this.parentElement.tagName == "X-X") {
@@ -618,6 +618,10 @@ class draw extends HTMLElement {
         //     this.points.y += xx;
         //     y += xx;
         // }
+        this.main_svg.setAttribute("width", String(this.width));
+        this.main_svg.setAttribute("height", String(this.height));
+        this.tmp_svg.setAttribute("width", String(this.width));
+        this.tmp_svg.setAttribute("height", String(this.height));
         // 画
         if (this.points.length != 1) {
             let ps1 = [], ps2 = [];
