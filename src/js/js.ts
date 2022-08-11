@@ -1052,7 +1052,8 @@ var focus_draw_el = null;
 画布.onpointerup = (e) => {
     if (focus_draw_el) {
         (<draw>focus_draw_el).draw(e);
-        (<draw>focus_draw_el).points = { x: NaN, y: NaN, p: NaN };
+        (<draw>focus_draw_el).points = [{ x: NaN, y: NaN, p: NaN }];
+        (<draw>focus_draw_el).complete();
         data_changed();
     }
 };

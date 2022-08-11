@@ -487,6 +487,15 @@ x-pro > span {
     mix-blend-mode: difference;
 }
 
+x-draw {
+    display: block;
+}
+x-draw > svg:nth-child(2) {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+}
+
 @media (any-pointer: coarse) {
     :root {
         --icon-p-b-size: 48px;

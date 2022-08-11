@@ -593,7 +593,8 @@ class draw extends HTMLElement {
         super();
     }
 
-    main_canvas: HTMLCanvasElement;
+    main_svg: Element;
+    tmp_svg: Element;
     z = [];
     _drawing = false;
 
@@ -603,80 +604,117 @@ class draw extends HTMLElement {
         if (this.getAttribute("value")) {
             this.set_v(this.getAttribute("value"));
         } else {
-            this.main_canvas = document.createElement("canvas");
+            var SVG_NS = "http://www.w3.org/2000/svg";
+            this.tmp_svg = document.createElementNS(SVG_NS, "svg");
 
-            if (this.getAttribute("width")) this.main_canvas.width = Number(this.getAttribute("width"));
-            if (this.getAttribute("height")) this.main_canvas.height = Number(this.getAttribute("height"));
+            if (this.getAttribute("width")) this.tmp_svg.setAttribute("width", this.getAttribute("width"));
+            if (this.getAttribute("height")) this.tmp_svg.setAttribute("height", this.getAttribute("height"));
+            this.append(this.tmp_svg);
 
-            this.append(this.main_canvas);
+            this.main_svg = document.createElementNS(SVG_NS, "svg");
 
-            this.z[0] = this.main_canvas;
+            if (this.getAttribute("width")) this.main_svg.setAttribute("width", this.getAttribute("width"));
+            if (this.getAttribute("height")) this.main_svg.setAttribute("height", this.getAttribute("height"));
+            this.append(this.main_svg);
+            this.z[0] = this.tmp_svg;
         }
     }
 
-    points = { x: NaN, y: NaN, p: NaN };
+    points = [{ x: NaN, y: NaN, p: NaN }];
 
     draw(e: PointerEvent) {
         if (!this._drawing) return;
-        let canvas = this.main_canvas;
+        let canvas = this.tmp_svg;
         if (!e.pressure) return;
-        if (e.target != this.main_canvas) return;
+        if (e.target != this.tmp_svg) return;
         if (e.pointerType == "mouse" && e.buttons == 2) return;
-        let ctx = this.main_canvas.getContext("2d");
+        // let ctx = this.main_svg.getContext("2d");
         let x = e.offsetX,
             y = e.offsetY;
 
         let dd = 100,
             xx = 100;
 
-        // 无限画板
-        if (x > canvas.width - dd) {
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.width += xx;
-            ctx.putImageData(imageData, 0, 0);
-        }
-        if (y > canvas.height - dd) {
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.height += xx;
-            ctx.putImageData(imageData, 0, 0);
-        }
-        if (x < dd) {
-            if (this.parentElement.tagName == "X-X") {
-                let pel = this.parentElement;
-                pel.style.left = pel.offsetLeft - xx + "px";
-            }
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.width += xx;
-            ctx.putImageData(imageData, xx, 0);
-            this.points.x += xx;
-            x += xx;
-        }
-        if (y < dd) {
-            if (this.parentElement.tagName == "X-X") {
-                let pel = this.parentElement;
-                pel.style.top = pel.offsetTop - xx + "px";
-            }
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            canvas.height += xx;
-            ctx.putImageData(imageData, 0, xx);
-            this.points.y += xx;
-            y += xx;
-        }
+        // // 无限画板
+        // // 向右延伸
+        // if (x > canvas.width - dd) {
+        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //     canvas.width += xx;
+        //     ctx.putImageData(imageData, 0, 0);
+        // }
+        // // 下
+        // if (y > canvas.height - dd) {
+        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //     canvas.height += xx;
+        //     ctx.putImageData(imageData, 0, 0);
+        // }
+        // // 左
+        // if (x < dd) {
+        //     if (this.parentElement.tagName == "X-X") {
+        //         let pel = this.parentElement;
+        //         pel.style.left = pel.offsetLeft - xx + "px";
+        //     }
+        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //     canvas.width += xx;
+        //     ctx.putImageData(imageData, xx, 0);
+        //     this.points.x += xx;
+        //     x += xx;
+        // }
+        // // 上
+        // if (y < dd) {
+        //     if (this.parentElement.tagName == "X-X") {
+        //         let pel = this.parentElement;
+        //         pel.style.top = pel.offsetTop - xx + "px";
+        //     }
+        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //     canvas.height += xx;
+        //     ctx.putImageData(imageData, 0, xx);
+        //     this.points.y += xx;
+        //     y += xx;
+        // }
 
         // 画
-        if (!isNaN(this.points.x)) {
-            let w = e.pressure * this.pen.width;
-            ctx.lineJoin = ctx.lineCap = "round";
-            ctx.beginPath();
-            ctx.moveTo(this.points.x, this.points.y);
-            ctx.quadraticCurveTo((x + this.points.x) / 2, (y + this.points.y) / 2, x, y);
-            ctx.strokeStyle = this.pen.color;
-            ctx.globalCompositeOperation = this.pen.gco as GlobalCompositeOperation;
-            ctx.lineWidth = w;
-            ctx.lineTo(x, y);
-            ctx.stroke();
+        if (this.points.length != 1) {
+            let ps1 = [],
+                ps2 = [];
+            let at = `M${this.points[1].x} ${this.points[1].y}`;
+
+            for (let i = 3; i < this.points.length; i++) {
+                let w = this.points[i - 1].p * this.pen.width;
+                let x0 = this.points[i - 2].x,
+                    y0 = this.points[i - 2].y,
+                    x1 = this.points[i - 1].x,
+                    y1 = this.points[i - 1].y,
+                    x2 = this.points[i].x,
+                    y2 = this.points[i].y;
+                let a = Math.atan2(y2 - y0, x2 - x0);
+                let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
+                let p2 = { x: x1 + w * Math.cos(a - Math.PI / 2), y: y1 + w * Math.sin(a - Math.PI / 2) };
+                ps1.push(p1);
+                ps2.push(p2);
+            }
+            let ps = [];
+            for (let i of ps1) {
+                ps.push(i);
+            }
+            for (let i = ps2.length - 1; i >= 0; i--) {
+                ps.push(ps2[i]);
+            }
+            for (let i = 1; i < ps.length - 1; i += 2) {
+                at += `Q${(ps[i].x + ps[i - 1].x) / 2} ${(ps[i].y + ps[i - 1].y) / 2} ${ps[i].x} ${ps[i].y} `;
+            }
+            let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            if (this.points.length != 2) p.setAttribute("d", at);
+
+            this.tmp_svg.innerHTML = "";
+
+            this.tmp_svg.append(p);
         }
-        this.points = { x, y, p: e.pressure };
+        this.points.push({ x, y, p: e.pressure });
+    }
+
+    complete(){
+        this.main_svg.append(this.tmp_svg.childNodes[0])
     }
 
     set_v(v: string) {
@@ -693,7 +731,7 @@ class draw extends HTMLElement {
             };
             this.append(canvas);
         }
-        this.main_canvas = this.querySelector("canvas");
+        this.tmp_svg = this.querySelector("canvas");
         this.z = Array<any>(...this.querySelectorAll("canvas"));
     }
 
@@ -714,65 +752,65 @@ class draw extends HTMLElement {
     }
 
     clip() {
-        let t_c = document.createElement("canvas");
-        t_c.width = this.main_canvas.width;
-        t_c.height = this.main_canvas.height;
-        for (let c of this.querySelectorAll("canvas")) {
-            t_c.getContext("2d").drawImage(c, 0, 0);
-        }
-        let min_x = 0,
-            min_y = 0,
-            max_x = this.main_canvas.width,
-            max_y = this.main_canvas.height,
-            min_x_c = false,
-            min_y_c = false;
-        for (let x = 0; x < this.main_canvas.width; x++) {
-            let c = t_c.getContext("2d").getImageData(x, 0, 1, this.main_canvas.height).data;
-            for (const i of c) {
-                if (i != 0) {
-                    if (!min_x_c) {
-                        min_x = x;
-                        min_x_c = true;
-                    } else {
-                        max_x = x;
-                    }
-                    break;
-                }
-            }
-        }
-        for (let y = 0; y < this.main_canvas.height; y++) {
-            let c = t_c.getContext("2d").getImageData(0, y, this.main_canvas.width, 1).data;
-            for (const i of c) {
-                if (i != 0) {
-                    if (!min_y_c) {
-                        min_y = y;
-                        min_y_c = true;
-                    } else {
-                        max_y = y;
-                    }
-                    break;
-                }
-            }
-        }
-        min_x--;
-        min_y--;
-        max_x++;
-        max_y++;
-        let dx = 36,
-            dy = 36;
-        for (let c of this.querySelectorAll("canvas")) {
-            let img = c
-                .getContext("2d")
-                .getImageData(min_x - dx, min_y - dy, max_x - min_x + 2 * dx, max_y - min_y + 2 * dy);
-            c.width = max_x - min_x + 2 * dx;
-            c.height = max_y - min_y + 2 * dy;
-            c.getContext("2d").putImageData(img, 0, 0);
-        }
-        if (this.parentElement.tagName == "X-X") {
-            let pel = this.parentElement;
-            pel.style.left = pel.offsetLeft + min_x - dx + "px";
-            pel.style.top = pel.offsetTop + min_y - dy + "px";
-        }
+        // let t_c = document.createElement("canvas");
+        // t_c.width = this.tmp_svg.width;
+        // t_c.height = this.tmp_svg.height;
+        // for (let c of this.querySelectorAll("canvas")) {
+        //     t_c.getContext("2d").drawImage(c, 0, 0);
+        // }
+        // let min_x = 0,
+        //     min_y = 0,
+        //     max_x = this.tmp_svg.width,
+        //     max_y = this.tmp_svg.height,
+        //     min_x_c = false,
+        //     min_y_c = false;
+        // for (let x = 0; x < this.tmp_svg.width; x++) {
+        //     let c = t_c.getContext("2d").getImageData(x, 0, 1, this.tmp_svg.height).data;
+        //     for (const i of c) {
+        //         if (i != 0) {
+        //             if (!min_x_c) {
+        //                 min_x = x;
+        //                 min_x_c = true;
+        //             } else {
+        //                 max_x = x;
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
+        // for (let y = 0; y < this.tmp_svg.height; y++) {
+        //     let c = t_c.getContext("2d").getImageData(0, y, this.tmp_svg.width, 1).data;
+        //     for (const i of c) {
+        //         if (i != 0) {
+        //             if (!min_y_c) {
+        //                 min_y = y;
+        //                 min_y_c = true;
+        //             } else {
+        //                 max_y = y;
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
+        // min_x--;
+        // min_y--;
+        // max_x++;
+        // max_y++;
+        // let dx = 36,
+        //     dy = 36;
+        // for (let c of this.querySelectorAll("canvas")) {
+        //     let img = c
+        //         .getContext("2d")
+        //         .getImageData(min_x - dx, min_y - dy, max_x - min_x + 2 * dx, max_y - min_y + 2 * dy);
+        //     c.width = max_x - min_x + 2 * dx;
+        //     c.height = max_y - min_y + 2 * dy;
+        //     c.getContext("2d").putImageData(img, 0, 0);
+        // }
+        // if (this.parentElement.tagName == "X-X") {
+        //     let pel = this.parentElement;
+        //     pel.style.left = pel.offsetLeft + min_x - dx + "px";
+        //     pel.style.top = pel.offsetTop + min_y - dy + "px";
+        // }
     }
 }
 
