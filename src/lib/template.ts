@@ -621,6 +621,9 @@ class draw extends HTMLElement {
             this.height = Number(this.getAttribute("height"));
             this.z[0] = this.tmp_svg;
         }
+        this.ondrag = (e) => {
+            e.preventDefault();
+        };
     }
 
     points = [{ x: NaN, y: NaN, p: NaN }];
