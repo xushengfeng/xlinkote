@@ -546,6 +546,8 @@ class draw extends HTMLElement {
         this._drawing = false;
         this.pen = { color: "#000000", gco: "source-over", width: 5 };
         this.points = [{ x: NaN, y: NaN, p: NaN }];
+        this.ox = 0;
+        this.oy = 0;
         this.width = NaN;
         this.height = NaN;
     }
@@ -575,53 +577,47 @@ class draw extends HTMLElement {
     draw(e) {
         if (!this._drawing)
             return;
-        let canvas = this.tmp_svg;
         if (!e.pressure)
-            return;
-        if (e.target != this.tmp_svg)
             return;
         if (e.pointerType == "mouse" && e.buttons == 2)
             return;
-        // let ctx = this.main_svg.getContext("2d");
-        let x = e.offsetX, y = e.offsetY;
-        let dd = 100, xx = 100;
+        let x = e.clientX - this.getBoundingClientRect().x - this.ox, y = e.clientY - this.getBoundingClientRect().y - this.oy;
+        let dd = 20, xx = 20;
         // 无限画板
         // 向右延伸
-        if (x > this.width - dd) {
+        if (e.clientX > this.getBoundingClientRect().right - dd) {
             this.width += xx;
         }
         // 下
-        if (y > this.height - dd) {
+        if (e.clientY > this.getBoundingClientRect().bottom - dd) {
             this.height += xx;
         }
-        // // 左
-        // if (x < dd) {
-        //     if (this.parentElement.tagName == "X-X") {
-        //         let pel = this.parentElement;
-        //         pel.style.left = pel.offsetLeft - xx + "px";
-        //     }
-        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        //     canvas.width += xx;
-        //     ctx.putImageData(imageData, xx, 0);
-        //     this.points.x += xx;
-        //     x += xx;
-        // }
-        // // 上
-        // if (y < dd) {
-        //     if (this.parentElement.tagName == "X-X") {
-        //         let pel = this.parentElement;
-        //         pel.style.top = pel.offsetTop - xx + "px";
-        //     }
-        //     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        //     canvas.height += xx;
-        //     ctx.putImageData(imageData, 0, xx);
-        //     this.points.y += xx;
-        //     y += xx;
-        // }
+        // 左
+        if (x + this.ox < dd) {
+            if (this.parentElement.tagName == "X-X") {
+                let pel = this.parentElement;
+                pel.style.left = pel.offsetLeft - xx + "px";
+            }
+            this.ox += xx;
+            this.width += xx;
+        }
+        // 上
+        if (y + this.oy < dd) {
+            if (this.parentElement.tagName == "X-X") {
+                let pel = this.parentElement;
+                pel.style.top = pel.offsetTop - xx + "px";
+            }
+            this.oy += xx;
+            this.height += xx;
+        }
         this.main_svg.setAttribute("width", String(this.width));
         this.main_svg.setAttribute("height", String(this.height));
         this.tmp_svg.setAttribute("width", String(this.width));
         this.tmp_svg.setAttribute("height", String(this.height));
+        for (let el of this.main_svg.children) {
+            let t = `translate(${this.ox},${this.oy})`;
+            el.setAttribute("transform", t);
+        }
         // 画
         if (this.points.length != 1) {
             let ps1 = [], ps2 = [];
@@ -646,6 +642,8 @@ class draw extends HTMLElement {
                 at += `Q${(ps[i].x + ps[i - 1].x) / 2} ${(ps[i].y + ps[i - 1].y) / 2} ${ps[i].x} ${ps[i].y} `;
             }
             let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            let t = `translate(${this.ox},${this.oy})`;
+            p.setAttribute("transform", t);
             if (this.points.length != 2)
                 p.setAttribute("d", at);
             this.tmp_svg.innerHTML = "";
