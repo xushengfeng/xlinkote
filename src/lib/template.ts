@@ -598,7 +598,7 @@ class draw extends HTMLElement {
     z = [];
     _drawing = false;
 
-    pen = { color: "#000000", gco: "source-over", width: 5 };
+    pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
 
     connectedCallback() {
         if (this.getAttribute("value")) {
@@ -636,6 +636,8 @@ class draw extends HTMLElement {
         if (e.pointerType == "mouse" && e.buttons == 2) return;
         let x = e.clientX - this.getBoundingClientRect().x - this.ox,
             y = e.clientY - this.getBoundingClientRect().y - this.oy;
+        x = x / zoom;
+        y = y / zoom;
 
         let dd = 20,
             xx = 20;
@@ -685,6 +687,7 @@ class draw extends HTMLElement {
 
             for (let i = 3; i < this.points.length; i++) {
                 let w = this.points[i - 1].p * this.pen.width;
+                if (this.pen.zoom) w = w / zoom;
                 let x0 = this.points[i - 2].x,
                     y0 = this.points[i - 2].y,
                     x1 = this.points[i - 1].x,

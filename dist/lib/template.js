@@ -544,7 +544,7 @@ class draw extends HTMLElement {
         super();
         this.z = [];
         this._drawing = false;
-        this.pen = { color: "#000000", gco: "source-over", width: 5 };
+        this.pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
         this.points = [{ x: NaN, y: NaN, p: NaN }];
         this.ox = 0;
         this.oy = 0;
@@ -582,6 +582,8 @@ class draw extends HTMLElement {
         if (e.pointerType == "mouse" && e.buttons == 2)
             return;
         let x = e.clientX - this.getBoundingClientRect().x - this.ox, y = e.clientY - this.getBoundingClientRect().y - this.oy;
+        x = x / zoom;
+        y = y / zoom;
         let dd = 20, xx = 20;
         // 无限画板
         // 向右延伸
@@ -624,6 +626,8 @@ class draw extends HTMLElement {
             let at = `M${this.points[1].x} ${this.points[1].y}`;
             for (let i = 3; i < this.points.length; i++) {
                 let w = this.points[i - 1].p * this.pen.width;
+                if (this.pen.zoom)
+                    w = w / zoom;
                 let x0 = this.points[i - 2].x, y0 = this.points[i - 2].y, x1 = this.points[i - 1].x, y1 = this.points[i - 1].y, x2 = this.points[i].x, y2 = this.points[i].y;
                 let a = Math.atan2(y2 - y0, x2 - x0);
                 let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
