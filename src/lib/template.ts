@@ -758,65 +758,38 @@ class draw extends HTMLElement {
     }
 
     clip() {
-        // let t_c = document.createElement("canvas");
-        // t_c.width = this.tmp_svg.width;
-        // t_c.height = this.tmp_svg.height;
-        // for (let c of this.querySelectorAll("canvas")) {
-        //     t_c.getContext("2d").drawImage(c, 0, 0);
-        // }
-        // let min_x = 0,
-        //     min_y = 0,
-        //     max_x = this.tmp_svg.width,
-        //     max_y = this.tmp_svg.height,
-        //     min_x_c = false,
-        //     min_y_c = false;
-        // for (let x = 0; x < this.tmp_svg.width; x++) {
-        //     let c = t_c.getContext("2d").getImageData(x, 0, 1, this.tmp_svg.height).data;
-        //     for (const i of c) {
-        //         if (i != 0) {
-        //             if (!min_x_c) {
-        //                 min_x = x;
-        //                 min_x_c = true;
-        //             } else {
-        //                 max_x = x;
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
-        // for (let y = 0; y < this.tmp_svg.height; y++) {
-        //     let c = t_c.getContext("2d").getImageData(0, y, this.tmp_svg.width, 1).data;
-        //     for (const i of c) {
-        //         if (i != 0) {
-        //             if (!min_y_c) {
-        //                 min_y = y;
-        //                 min_y_c = true;
-        //             } else {
-        //                 max_y = y;
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
-        // min_x--;
-        // min_y--;
-        // max_x++;
-        // max_y++;
-        // let dx = 36,
-        //     dy = 36;
-        // for (let c of this.querySelectorAll("canvas")) {
-        //     let img = c
-        //         .getContext("2d")
-        //         .getImageData(min_x - dx, min_y - dy, max_x - min_x + 2 * dx, max_y - min_y + 2 * dy);
-        //     c.width = max_x - min_x + 2 * dx;
-        //     c.height = max_y - min_y + 2 * dy;
-        //     c.getContext("2d").putImageData(img, 0, 0);
-        // }
-        // if (this.parentElement.tagName == "X-X") {
-        //     let pel = this.parentElement;
-        //     pel.style.left = pel.offsetLeft + min_x - dx + "px";
-        //     pel.style.top = pel.offsetTop + min_y - dy + "px";
-        // }
+        let min_x = this.main_svg.children[0].getBoundingClientRect().left,
+            min_y = this.main_svg.children[0].getBoundingClientRect().top,
+            max_x = this.main_svg.children[0].getBoundingClientRect().right,
+            max_y = this.main_svg.children[0].getBoundingClientRect().bottom;
+        let els = this.main_svg.children;
+        for (let el of els) {
+            let b = el.getBoundingClientRect();
+            if (b.left < min_x) min_x = b.left;
+            if (b.top < min_y) min_y = b.top;
+            if (b.right > max_x) max_x = b.right;
+            if (b.bottom > max_y) max_y = b.bottom;
+        }
+        console.log(min_x, min_y, max_x, max_y);
+        let pb = this.getBoundingClientRect();
+        if (this.parentElement.tagName == "X-X") {
+            let pel = this.parentElement;
+            pel.style.left = pel.offsetLeft + (min_x - pb.left) + "px";
+            pel.style.top = pel.offsetTop + (min_y - pb.top) + "px";
+        }
+        this.ox -= min_x - pb.left;
+        this.oy -= min_y - pb.top;
+        for (let el of els) {
+            let t = `translate(${this.ox},${this.oy})`;
+            el.setAttribute("transform", t);
+        }
+
+        this.width = max_x - min_x;
+        this.height = max_y - min_y;
+        this.main_svg.setAttribute("width", String(this.width));
+        this.main_svg.setAttribute("height", String(this.height));
+        this.tmp_svg.setAttribute("width", String(this.width));
+        this.tmp_svg.setAttribute("height", String(this.height));
     }
 }
 
