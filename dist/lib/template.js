@@ -581,9 +581,7 @@ class draw extends HTMLElement {
             return;
         if (e.pointerType == "mouse" && e.buttons == 2)
             return;
-        let x = e.clientX - this.getBoundingClientRect().x - this.ox, y = e.clientY - this.getBoundingClientRect().y - this.oy;
-        x = x / zoom;
-        y = y / zoom;
+        let x = e.clientX / zoom - this.getBoundingClientRect().x / zoom - this.ox, y = e.clientY / zoom - this.getBoundingClientRect().y / zoom - this.oy;
         let dd = 20, xx = 20;
         // 无限画板
         // 向右延伸
