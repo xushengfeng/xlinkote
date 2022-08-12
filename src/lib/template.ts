@@ -717,6 +717,7 @@ class draw extends HTMLElement {
             let t = `translate(${this.ox},${this.oy})`;
             p.setAttribute("transform", t);
             if (this.points.length != 2) p.setAttribute("d", at);
+            p.setAttribute("fill", this.pen.color);
 
             this.tmp_svg.innerHTML = "";
 
