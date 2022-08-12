@@ -593,9 +593,8 @@ class draw extends HTMLElement {
         super();
     }
 
-    main_svg: Element;
-    tmp_svg: Element;
-    z = [];
+    main_svg: SVGSVGElement;
+    tmp_svg: SVGSVGElement;
     _drawing = false;
 
     pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
@@ -604,14 +603,13 @@ class draw extends HTMLElement {
         if (this.getAttribute("value")) {
             this.set_v(this.getAttribute("value"));
         } else {
-            var SVG_NS = "http://www.w3.org/2000/svg";
-            this.tmp_svg = document.createElementNS(SVG_NS, "svg");
+            this.tmp_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
             if (this.getAttribute("width")) this.tmp_svg.setAttribute("width", this.getAttribute("width"));
             if (this.getAttribute("height")) this.tmp_svg.setAttribute("height", this.getAttribute("height"));
             this.append(this.tmp_svg);
 
-            this.main_svg = document.createElementNS(SVG_NS, "svg");
+            this.main_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
             if (this.getAttribute("width")) this.main_svg.setAttribute("width", this.getAttribute("width"));
             if (this.getAttribute("height")) this.main_svg.setAttribute("height", this.getAttribute("height"));
@@ -619,7 +617,6 @@ class draw extends HTMLElement {
 
             this.width = Number(this.getAttribute("width"));
             this.height = Number(this.getAttribute("height"));
-            this.z[0] = this.tmp_svg;
         }
         this.ondrag = (e) => {
             e.preventDefault();
@@ -732,24 +729,17 @@ class draw extends HTMLElement {
 
     set_v(v: string) {
         let x = JSON.parse(v);
-        this.innerHTML = "";
-        for (let c of x) {
-            let img = new Image();
-            img.src = c;
-            let canvas = document.createElement("canvas");
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                canvas.getContext("2d").drawImage(img, 0, 0);
-            };
-            this.append(canvas);
-        }
-        this.tmp_svg = this.querySelector("canvas");
-        this.z = Array<any>(...this.querySelectorAll("canvas"));
+        this.width = x.w;
+        this.height = x.h;
+        this.main_svg.setAttribute("width", String(this.width));
+        this.main_svg.setAttribute("height", String(this.height));
+        this.tmp_svg.setAttribute("width", String(this.width));
+        this.tmp_svg.setAttribute("height", String(this.height));
+        this.main_svg.innerHTML = x.i;
     }
 
     get value() {
-        return JSON.stringify(this.z.map((v) => v.toDataURL("image/webp")));
+        return JSON.stringify({ i: this.main_svg.innerHTML, w: this.width, h: this.height });
     }
 
     set value(v: string) {
