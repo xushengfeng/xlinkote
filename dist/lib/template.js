@@ -621,7 +621,7 @@ class draw extends HTMLElement {
         // 画
         if (this.points.length != 1) {
             let ps1 = [], ps2 = [];
-            let at = `M${this.points[1].x} ${this.points[1].y}`;
+            let at = `M${this.points[1].x} ${this.points[1].y}Q`;
             let so = (i) => {
                 let w = this.points[i - 1].p * this.pen.width;
                 if (this.pen.zoom)
@@ -645,8 +645,10 @@ class draw extends HTMLElement {
             for (let i = ps2.length - 1; i >= 0; i--) {
                 ps.push(ps2[i]);
             }
-            for (let i = 1; i < ps.length - 1; i += 2) {
-                at += `Q${(ps[i].x + ps[i - 1].x) / 2} ${(ps[i].y + ps[i - 1].y) / 2} ${ps[i].x} ${ps[i].y} `;
+            for (let i = 2; i < ps.length; i += 1) {
+                let a = Math.atan2(ps[i].y - ps[i - 2].y, ps[i].x - ps[i - 2].x);
+                let s = Math.sqrt((ps[i - 1].x - ps[i - 2].x) ** 2 + (ps[i - 1].y - ps[i - 2].y) ** 2);
+                at += `${ps[i - 1].x + (s / 2) * Math.cos(a)} ${ps[i - 1].y + (s / 2) * Math.sin(a)} ${ps[i].x} ${ps[i].y} `;
             }
             let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
             let t = `translate(${this.ox},${this.oy})`;
