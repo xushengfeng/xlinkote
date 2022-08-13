@@ -52,7 +52,7 @@ let f = md.renderer.rules.fence;
 md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     if (tokens[idx].info == "mermaid") {
         let o = "";
-        window.mermaid.mermaidAPI.render("graphDiv", tokens[idx].content, (svg) => {
+        window.mermaid.mermaidAPI.render("mgraph" + String(new Date().getTime()), tokens[idx].content, (svg) => {
             o = svg;
         });
         return o;
