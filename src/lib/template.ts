@@ -727,15 +727,23 @@ class draw extends HTMLElement {
 
             this.tmp_svg.append(p);
         }
-        let a = Math.atan2(this.points[this.points.length - 1].y - y, this.points[this.points.length - 1].x - x);
-        let s = Math.sqrt(
-            (this.points[this.points.length - 1].y - y) ** 2 + (this.points[this.points.length - 1].x - x) ** 2
-        );
-        if (this.points.length == 1) {
+        if (this.points.length == 1 || this.points.length == 2) {
             this.points.push({ x, y, p: e.pressure });
-        }
-        if (s > this.pen.width * (e.pressure + this.points[this.points.length - 1].p)) {
-            this.points.push({ x, y, p: e.pressure });
+        } else {
+            let a1 = Math.atan2(
+                this.points[this.points.length - 1].y - this.points[this.points.length - 2].y,
+                this.points[this.points.length - 1].x - this.points[this.points.length - 2].x
+            );
+            let a2 = Math.atan2(this.points[this.points.length - 1].y - y, this.points[this.points.length - 1].x - x);
+            let s = Math.sqrt(
+                (this.points[this.points.length - 1].y - y) ** 2 + (this.points[this.points.length - 1].x - x) ** 2
+            );
+            if (
+                s > this.pen.width * (e.pressure + this.points[this.points.length - 1].p) ||
+                Math.abs(a1 - a2) < Math.PI / 2
+            ) {
+                this.points.push({ x, y, p: e.pressure });
+            }
         }
     }
 
