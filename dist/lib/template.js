@@ -622,17 +622,22 @@ class draw extends HTMLElement {
         if (this.points.length != 1) {
             let ps1 = [], ps2 = [];
             let at = `M${this.points[1].x} ${this.points[1].y}`;
-            for (let i = 3; i < this.points.length; i++) {
+            let so = (i) => {
                 let w = this.points[i - 1].p * this.pen.width;
                 if (this.pen.zoom)
                     w = w / zoom;
-                let x0 = this.points[i - 2].x, y0 = this.points[i - 2].y, x1 = this.points[i - 1].x, y1 = this.points[i - 1].y, x2 = this.points[i].x, y2 = this.points[i].y;
+                let x0 = this.points[i - 2].x, y0 = this.points[i - 2].y, x1 = this.points[i - 1].x, y1 = this.points[i - 1].y, x2 = this.points?.[i]?.x || x, y2 = this.points?.[i]?.y || y;
                 let a = Math.atan2(y2 - y0, x2 - x0);
                 let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
                 let p2 = { x: x1 + w * Math.cos(a - Math.PI / 2), y: y1 + w * Math.sin(a - Math.PI / 2) };
                 ps1.push(p1);
                 ps2.push(p2);
+            };
+            for (let i = 3; i < this.points.length; i++) {
+                so(i);
             }
+            so(this.points.length);
+            ps1.push({ x, y });
             let ps = [];
             for (let i of ps1) {
                 ps.push(i);
@@ -652,7 +657,14 @@ class draw extends HTMLElement {
             this.tmp_svg.innerHTML = "";
             this.tmp_svg.append(p);
         }
-        this.points.push({ x, y, p: e.pressure });
+        let a = Math.atan2(this.points[this.points.length - 1].y - y, this.points[this.points.length - 1].x - x);
+        let s = Math.sqrt((this.points[this.points.length - 1].y - y) ** 2 + (this.points[this.points.length - 1].x - x) ** 2);
+        if (this.points.length == 1) {
+            this.points.push({ x, y, p: e.pressure });
+        }
+        if (s > this.pen.width * (e.pressure + this.points[this.points.length - 1].p)) {
+            this.points.push({ x, y, p: e.pressure });
+        }
     }
     complete() {
         this.main_svg.append(this.tmp_svg.childNodes[0]);
