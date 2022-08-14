@@ -188,6 +188,7 @@ function set_模式(模式: "浏览" | "设计" | "绘制") {
             if (<draw>focus_draw_el) {
                 (<draw>focus_draw_el).drawing = false;
             }
+            if (O) O.style.pointerEvents = "";
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -196,6 +197,7 @@ function set_模式(模式: "浏览" | "设计" | "绘制") {
             document.querySelectorAll("x-md").forEach((el) => {
                 (<markdown>el).edit = false;
             });
+            if (O) O.style.pointerEvents = "";
             break;
         case "绘制":
             if (<draw>focus_draw_el) {
@@ -204,6 +206,7 @@ function set_模式(模式: "浏览" | "设计" | "绘制") {
             document.querySelectorAll("x-md").forEach((el) => {
                 (<markdown>el).edit = false;
             });
+            if (O) O.style.pointerEvents = "none";
             break;
     }
 }

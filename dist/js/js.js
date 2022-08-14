@@ -174,6 +174,8 @@ function set_模式(模式) {
             if (focus_draw_el) {
                 focus_draw_el.drawing = false;
             }
+            if (O)
+                O.style.pointerEvents = "";
             break;
         case "设计":
             if (focus_draw_el) {
@@ -182,6 +184,8 @@ function set_模式(模式) {
             document.querySelectorAll("x-md").forEach((el) => {
                 el.edit = false;
             });
+            if (O)
+                O.style.pointerEvents = "";
             break;
         case "绘制":
             if (focus_draw_el) {
@@ -190,6 +194,8 @@ function set_模式(模式) {
             document.querySelectorAll("x-md").forEach((el) => {
                 el.edit = false;
             });
+            if (O)
+                O.style.pointerEvents = "none";
             break;
     }
 }
