@@ -739,7 +739,9 @@ class draw extends HTMLElement {
                 (this.points[this.points.length - 1].y - y) ** 2 + (this.points[this.points.length - 1].x - x) ** 2
             );
             if (
-                s > this.pen.width * (e.pressure + this.points[this.points.length - 1].p) ||
+                s >
+                    (this.pen.width * (e.pressure + this.points[this.points.length - 1].p)) /
+                        (this.pen.zoom ? zoom : 1) ||
                 Math.abs(a1 - a2) < Math.PI / 2
             ) {
                 this.points.push({ x, y, p: e.pressure });
