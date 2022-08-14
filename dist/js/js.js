@@ -65,11 +65,11 @@ document.getElementById("新建页").onclick = () => {
 };
 document.getElementById("新建画板").onclick = () => {
     let xel = document.createElement("x-x");
-    xel.style.left = -O.offsetLeft + "px";
-    xel.style.top = -O.offsetTop + "px";
+    xel.style.left = -O.offsetLeft / zoom + "px";
+    xel.style.top = -O.offsetTop / zoom + "px";
     let draw = document.createElement("x-draw");
-    draw.setAttribute("width", String(画布.offsetWidth));
-    draw.setAttribute("height", String(画布.offsetHeight));
+    draw.setAttribute("width", String(画布.offsetWidth / zoom));
+    draw.setAttribute("height", String(画布.offsetHeight / zoom));
     draw.drawing = true;
     xel.append(draw);
     focus_draw_el = draw;
