@@ -713,15 +713,18 @@ class draw extends HTMLElement {
             if (b.bottom > max_y)
                 max_y = b.bottom;
         }
-        console.log(min_x, min_y, max_x, max_y);
+        min_x = min_x / zoom;
+        min_y = min_y / zoom;
+        max_x = max_x / zoom;
+        max_y = max_y / zoom;
         let pb = this.getBoundingClientRect();
         if (this.parentElement.tagName == "X-X") {
             let pel = this.parentElement;
-            pel.style.left = pel.offsetLeft + (min_x - pb.left) + "px";
-            pel.style.top = pel.offsetTop + (min_y - pb.top) + "px";
+            pel.style.left = pel.offsetLeft + (min_x - pb.left / zoom) + "px";
+            pel.style.top = pel.offsetTop + (min_y - pb.top / zoom) + "px";
         }
-        this.ox -= min_x - pb.left;
-        this.oy -= min_y - pb.top;
+        this.ox -= min_x - pb.left / zoom;
+        this.oy -= min_y - pb.top / zoom;
         for (let el of els) {
             let t = `translate(${this.ox},${this.oy})`;
             el.setAttribute("transform", t);
