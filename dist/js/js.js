@@ -49,7 +49,7 @@ document.getElementById("偏好设置").onclick = () => {
     save_setting();
 };
 document.getElementById("新建元素").onclick = () => {
-    creat_x_x(-O.offsetLeft, -O.offsetTop);
+    creat_x_x(-O.offsetLeft, -O.offsetTop, 画布.offsetWidth);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
@@ -308,7 +308,7 @@ document.onmouseup = (e) => {
         if (模式 != "设计")
             return;
         let r = e2rect(o_e, e);
-        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop);
+        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop, r.w);
     }
     o_e = null;
     move = false;
@@ -482,10 +482,11 @@ var free_mouse = (e) => {
         }
     }
 };
-function creat_x_x(x, y) {
+function creat_x_x(x, y, w) {
     let xel = document.createElement("x-x");
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
+    xel.style.width = w / zoom + "px";
     z.push(xel);
     var md = document.createElement("x-md");
     xel.append(md);
