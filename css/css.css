@@ -366,6 +366,7 @@ body > #toast {
     transform: translateX(-50%);
     opacity: 0;
     pointer-events: none;
+    z-index: calc(var(--zest-index) + 8);
 }
 
 .toast_show {
