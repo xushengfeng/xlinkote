@@ -57,7 +57,8 @@ document.getElementById("偏好设置").onclick = () => {
     save_setting();
 };
 document.getElementById("新建元素").onclick = () => {
-    creat_x_x(-O.offsetLeft, -O.offsetTop, 画布.offsetWidth);
+    const margin = 8;
+    creat_x_x(-O.offsetLeft + margin, -O.offsetTop + margin, 画布.offsetWidth - margin * 2);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
