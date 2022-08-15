@@ -44,6 +44,7 @@ document.getElementById("新建画布").onclick = () => {
     集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
     集.meta.focus_page = name;
     set_data(集);
+    data_changed();
 };
 
 var 设置_el = document.getElementById("设置");
@@ -666,8 +667,6 @@ function set_data(l: 集type) {
             集.meta.focus_page = p.name;
         }
     }
-
-    data_changed();
 }
 
 function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
@@ -774,6 +773,7 @@ async function file_load() {
     reader.onload = () => {
         let o = md2json(<string>reader.result) as any;
         set_data(o);
+        data_changed();
     };
     reader.readAsText(file);
 }
@@ -1279,6 +1279,7 @@ async function get_xln_value(path: string) {
     }
     now_dav_data = str;
     set_data(o);
+    data_changed();
     if (fileHandle) fileHandle = null;
     集.meta.url = path;
 }
