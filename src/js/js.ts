@@ -566,6 +566,17 @@ document.onkeydown = (e) => {
                 search_el.focus();
             }
             break;
+        case "z":
+            if (e.ctrlKey) {
+                e.preventDefault();
+                undo(true);
+            }
+            break;
+        case "y":
+            if (e.ctrlKey) {
+                e.preventDefault();
+                undo(false);
+            }
     }
 };
 
@@ -920,6 +931,20 @@ document.getElementById("db_load").onchange = () => {
     reader.readAsText(file);
 };
 
+var undo_stack = [],
+    undo_i = -1;
+
+function undo(v: boolean) {
+    if (v) {
+        undo_i--;
+        if (undo_i < 0) undo_i = 0;
+    } else {
+        undo_i++;
+        if (undo_i >= undo_stack.length) undo_i = undo_stack.length - 1;
+    }
+    set_data(JSON.parse(undo_stack[undo_i]));
+}
+
 async function download_file(text: string) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
@@ -958,6 +983,11 @@ function data_changed() {
             write_file(json2md(get_data()));
             db_put(get_data());
         }
+        if (undo_i != undo_stack.length - 1) {
+            undo_stack.push(undo_stack[undo_i]);
+        }
+        undo_stack.push(JSON.stringify(get_data()));
+        undo_i = undo_stack.length - 1;
     }, save_dt);
 }
 
