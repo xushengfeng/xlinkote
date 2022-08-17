@@ -1190,7 +1190,7 @@ class 图层 {
 
     focus(el: x) {
         this.聚焦元素 = el;
-        for (let l of document.getElementById("层").querySelectorAll("label")) {
+        for (let l of document.getElementById("层").querySelectorAll("div")) {
             if (el.id == (<HTMLInputElement>l.querySelector("input[type='text']")).value)
                 (<HTMLInputElement>l.querySelector("input[type='radio']")).checked = true;
         }
