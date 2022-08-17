@@ -173,15 +173,17 @@ function set_模式(模式) {
     switch (模式) {
         case "浏览":
             if (focus_draw_el) {
-                focus_draw_el.clip();
                 focus_draw_el = null;
             }
             if (O)
                 O.style.pointerEvents = "";
+            if (O)
+                for (let el of O.querySelectorAll("x-draw")) {
+                    el.clip();
+                }
             break;
         case "设计":
             if (focus_draw_el) {
-                focus_draw_el.clip();
                 focus_draw_el = null;
             }
             document.querySelectorAll("x-md").forEach((el) => {
@@ -189,6 +191,10 @@ function set_模式(模式) {
             });
             if (O)
                 O.style.pointerEvents = "";
+            if (O)
+                for (let el of O.querySelectorAll("x-draw")) {
+                    el.clip();
+                }
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
