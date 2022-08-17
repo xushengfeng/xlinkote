@@ -353,6 +353,8 @@ var mouse = (e) => {
     }
 };
 var o_touch_e;
+var o_touch_zoom_e;
+var o_zoom = NaN;
 document.ontouchstart = (e) => {
     let el = e.changedTouches[0].target;
     if (!画布.contains(el))
@@ -363,17 +365,27 @@ document.ontouchstart = (e) => {
         el.tagName == "TEXTAREA" ||
         el.parentElement.tagName == "X-DRAW") &&
         !document.querySelector("x-sinppet").contains(el)) {
-        if (e.changedTouches.length == 1) {
+        if (e.targetTouches.length == 1) {
             o_touch_e = e;
             o_rect = { x: O.offsetLeft, y: O.offsetTop };
             document.getElementById("画布").style.cursor = "move";
         }
+        else if (e.targetTouches.length == 2) {
+            o_touch_zoom_e = e;
+            o_zoom = zoom;
+        }
     }
 };
 document.ontouchmove = (e) => {
-    if (e.changedTouches.length == 1) {
+    if (e.targetTouches.length == 1) {
         touch_move(e);
         if (o_touch_e)
+            move = true;
+    }
+    else if (e.targetTouches.length == 2) {
+        e.preventDefault();
+        touch_zoom(e);
+        if (o_touch_zoom_e)
             move = true;
     }
 };
@@ -387,6 +399,12 @@ document.ontouchend = (e) => {
             document.getElementById(select_id).remove();
         select_id = "";
     }
+    else if (e.targetTouches.length == 2) {
+        touch_zoom(e);
+        o_touch_zoom_e = null;
+        move = false;
+        o_zoom = NaN;
+    }
 };
 var pointer_move = true;
 var touch_move = (e) => {
@@ -397,6 +415,18 @@ var touch_move = (e) => {
                 (fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0);
             O.style.left = x + "px";
             O.style.top = y + "px";
+        }
+    }
+};
+var touch_zoom = (e) => {
+    if (o_touch_zoom_e) {
+        if (pointer_move) {
+            let r0 = Math.sqrt((o_touch_zoom_e.targetTouches[0].clientX - o_touch_zoom_e.targetTouches[1].clientX) ** 2 +
+                (o_touch_zoom_e.targetTouches[0].clientY - o_touch_zoom_e.targetTouches[1].clientY) ** 2);
+            let r1 = Math.sqrt((e.targetTouches[0].clientX - e.targetTouches[1].clientX) ** 2 +
+                (e.targetTouches[0].clientY - e.targetTouches[1].clientY) ** 2);
+            let z = (r1 / r0) * o_zoom;
+            zoom_o(z);
         }
     }
 };
