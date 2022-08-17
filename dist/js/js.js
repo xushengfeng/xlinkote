@@ -72,7 +72,6 @@ document.getElementById("新建画板").onclick = () => {
     let draw = document.createElement("x-draw");
     draw.setAttribute("width", String(画布.offsetWidth / zoom));
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
-    draw.drawing = true;
     xel.append(draw);
     set_模式("绘制");
     z.push(xel);
@@ -174,14 +173,16 @@ function set_模式(模式) {
     switch (模式) {
         case "浏览":
             if (focus_draw_el) {
-                focus_draw_el.drawing = false;
+                focus_draw_el.clip();
+                focus_draw_el = null;
             }
             if (O)
                 O.style.pointerEvents = "";
             break;
         case "设计":
             if (focus_draw_el) {
-                focus_draw_el.drawing = false;
+                focus_draw_el.clip();
+                focus_draw_el = null;
             }
             document.querySelectorAll("x-md").forEach((el) => {
                 el.edit = false;
@@ -190,14 +191,14 @@ function set_模式(模式) {
                 O.style.pointerEvents = "";
             break;
         case "绘制":
-            if (focus_draw_el) {
-                focus_draw_el.drawing = true;
-            }
             document.querySelectorAll("x-md").forEach((el) => {
                 el.edit = false;
             });
             if (O)
                 O.style.pointerEvents = "none";
+            for (let el of O.querySelectorAll("x-draw")) {
+                el.style.pointerEvents = "auto";
+            }
             break;
     }
 }

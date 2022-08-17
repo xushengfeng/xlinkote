@@ -595,7 +595,6 @@ class draw extends HTMLElement {
 
     main_svg: SVGSVGElement;
     tmp_svg: SVGSVGElement;
-    _drawing = false;
 
     pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
 
@@ -631,7 +630,6 @@ class draw extends HTMLElement {
     height = NaN;
 
     draw(e: PointerEvent) {
-        if (!this._drawing) return;
         if (!e.pressure) return;
         if (e.pointerType == "mouse" && e.buttons == 2) return;
         let x = e.clientX / zoom - this.getBoundingClientRect().x / zoom - this.ox,
@@ -770,14 +768,6 @@ class draw extends HTMLElement {
 
     set value(v: string) {
         this.set_v(v);
-    }
-
-    get drawing() {
-        return this._drawing;
-    }
-    set drawing(v) {
-        this._drawing = v;
-        if (!v) this.clip();
     }
 
     clip() {

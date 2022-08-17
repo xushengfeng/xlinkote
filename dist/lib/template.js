@@ -542,7 +542,6 @@ window.customElements.define("x-video", video);
 class draw extends HTMLElement {
     constructor() {
         super();
-        this._drawing = false;
         this.pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
         this.points = [{ x: NaN, y: NaN, p: NaN }];
         this.ox = 0;
@@ -575,8 +574,6 @@ class draw extends HTMLElement {
         };
     }
     draw(e) {
-        if (!this._drawing)
-            return;
         if (!e.pressure)
             return;
         if (e.pointerType == "mouse" && e.buttons == 2)
@@ -692,14 +689,6 @@ class draw extends HTMLElement {
     }
     set value(v) {
         this.set_v(v);
-    }
-    get drawing() {
-        return this._drawing;
-    }
-    set drawing(v) {
-        this._drawing = v;
-        if (!v)
-            this.clip();
     }
     clip() {
         let min_x = this.main_svg.children[0].getBoundingClientRect().left, min_y = this.main_svg.children[0].getBoundingClientRect().top, max_x = this.main_svg.children[0].getBoundingClientRect().right, max_y = this.main_svg.children[0].getBoundingClientRect().bottom;
