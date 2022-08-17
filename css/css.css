@@ -490,6 +490,7 @@ x-pro > span {
 
 x-draw {
     display: block;
+    pointer-events: all;
 }
 x-draw > svg:nth-child(2) {
     position: absolute;
