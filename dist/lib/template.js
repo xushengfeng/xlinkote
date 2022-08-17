@@ -196,7 +196,7 @@ class markdown extends HTMLElement {
             }
         };
         this.onclick = text.onfocus = () => {
-            focus_md = this;
+            z.focus(this.parentElement);
         };
         // 点击元素定位到源文本行
         s.onclick = (e) => {

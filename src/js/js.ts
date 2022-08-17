@@ -82,10 +82,10 @@ document.getElementById("新建画板").onclick = () => {
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
     draw.drawing = true;
     xel.append(draw);
-    focus_draw_el = draw;
     set_模式("绘制");
 
     z.push(xel);
+    z.focus(xel);
 };
 
 var 侧栏 = document.getElementById("侧栏");
@@ -1073,9 +1073,11 @@ var focus_draw_el = null;
 画布.onpointerdown = (e) => {
     let el = e.target as HTMLElement;
     if (el.parentElement.tagName == "X-DRAW") {
-        if (模式 == "绘制") (<draw>el.parentElement)?.draw(e);
-        focus_draw_el = el.parentElement;
-        (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
+        if (模式 == "绘制") {
+            (<draw>el.parentElement)?.draw(e);
+            z.focus(el.parentElement.parentElement as x);
+            (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
+        }
     }
 };
 
@@ -1192,6 +1194,26 @@ class 图层 {
             if (el.id == (<HTMLInputElement>l.querySelector("input[type='text']")).value)
                 (<HTMLInputElement>l.querySelector("input[type='radio']")).checked = true;
         }
+        if (模式 == "浏览")
+            if (el.children[0].tagName == "X-MD") {
+                focus_md = el.children[0] as markdown;
+                focus_draw_el = null;
+            } else if (el.children?.[1]?.tagName == "X-MD") {
+                focus_md = el.children[1] as markdown;
+                focus_draw_el = null;
+            } else {
+                focus_md = null;
+            }
+        if (模式 == "绘制")
+            if (el.children[0].tagName == "X-DRAW") {
+                focus_draw_el = el.children[0] as draw;
+                focus_md = null;
+            } else if (el.children?.[1]?.tagName == "X-DRAW") {
+                focus_draw_el = el.children[1] as draw;
+                focus_md = null;
+            } else {
+                focus_draw_el = null;
+            }
     }
 
     get(el: x) {

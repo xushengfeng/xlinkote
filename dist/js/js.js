@@ -74,9 +74,9 @@ document.getElementById("新建画板").onclick = () => {
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
     draw.drawing = true;
     xel.append(draw);
-    focus_draw_el = draw;
     set_模式("绘制");
     z.push(xel);
+    z.focus(xel);
 };
 var 侧栏 = document.getElementById("侧栏");
 侧栏.onclick = (e) => {
@@ -1014,10 +1014,11 @@ var focus_draw_el = null;
 画布.onpointerdown = (e) => {
     let el = e.target;
     if (el.parentElement.tagName == "X-DRAW") {
-        if (模式 == "绘制")
+        if (模式 == "绘制") {
             el.parentElement?.draw(e);
-        focus_draw_el = el.parentElement;
-        document.getElementById("penc").value = focus_draw_el.pen.color;
+            z.focus(el.parentElement.parentElement);
+            document.getElementById("penc").value = focus_draw_el.pen.color;
+        }
     }
 };
 画布.onpointermove = (e) => {
@@ -1128,6 +1129,30 @@ class 图层 {
             if (el.id == l.querySelector("input[type='text']").value)
                 l.querySelector("input[type='radio']").checked = true;
         }
+        if (模式 == "浏览")
+            if (el.children[0].tagName == "X-MD") {
+                focus_md = el.children[0];
+                focus_draw_el = null;
+            }
+            else if (el.children?.[1]?.tagName == "X-MD") {
+                focus_md = el.children[1];
+                focus_draw_el = null;
+            }
+            else {
+                focus_md = null;
+            }
+        if (模式 == "绘制")
+            if (el.children[0].tagName == "X-DRAW") {
+                focus_draw_el = el.children[0];
+                focus_md = null;
+            }
+            else if (el.children?.[1]?.tagName == "X-DRAW") {
+                focus_draw_el = el.children[1];
+                focus_md = null;
+            }
+            else {
+                focus_draw_el = null;
+            }
     }
     get(el) {
         return this.z.indexOf(el);
