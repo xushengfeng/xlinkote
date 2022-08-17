@@ -1,5 +1,6 @@
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
+var 设置_el = document.getElementById("设置");
 if (!store) {
     save_setting();
 }
@@ -47,7 +48,6 @@ document.getElementById("新建画布").onclick = () => {
     data_changed();
 };
 
-var 设置_el = document.getElementById("设置");
 document.getElementById("偏好设置").onclick = () => {
     设置_el.style.display = "block";
     show_setting();
