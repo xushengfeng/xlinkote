@@ -381,27 +381,33 @@ document.ontouchstart = (e) => {
         ) &&
         !document.querySelector("x-sinppet").contains(el)
     ) {
-        o_touch_e = e;
-        o_rect = { x: O.offsetLeft, y: O.offsetTop };
-        document.getElementById("画布").style.cursor = "move";
+        if (e.changedTouches.length == 1) {
+            o_touch_e = e;
+            o_rect = { x: O.offsetLeft, y: O.offsetTop };
+            document.getElementById("画布").style.cursor = "move";
+        }
     }
 };
 document.ontouchmove = (e) => {
-    pointer(e);
-    if (o_touch_e) move = true;
+    if (e.changedTouches.length == 1) {
+        touch_move(e);
+        if (o_touch_e) move = true;
+    }
 };
 document.ontouchend = (e) => {
-    pointer(e);
-    o_touch_e = null;
-    move = false;
-    document.getElementById("画布").style.cursor = "auto";
-    if (select_id) document.getElementById(select_id).remove();
-    select_id = "";
+    if (e.targetTouches.length == 1) {
+        touch_move(e);
+        o_touch_e = null;
+        move = false;
+        document.getElementById("画布").style.cursor = "auto";
+        if (select_id) document.getElementById(select_id).remove();
+        select_id = "";
+    }
 };
 
 var pointer_move = true;
 
-var pointer = (e: TouchEvent) => {
+var touch_move = (e: TouchEvent) => {
     if (o_touch_e) {
         if (pointer_move) {
             let x =
