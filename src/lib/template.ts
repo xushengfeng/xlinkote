@@ -216,6 +216,9 @@ class markdown extends HTMLElement {
         this.onclick = text.onfocus = () => {
             z.focus(this.parentElement as x);
         };
+        text.onblur = () => {
+            if (模式 == "浏览") this.edit = false;
+        };
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
@@ -238,7 +241,8 @@ class markdown extends HTMLElement {
                 line = el_line(text, this.index, s, el)[1];
             }
             text_set_line(text, line);
-            if (this.edit) text.focus();
+            if (模式 == "浏览") this.edit = true;
+            text.focus();
         };
     }
 
