@@ -1042,6 +1042,11 @@ function add_file(type, text, data, x, y) {
         }
     }
 }
+window.onmessage = (msg) => {
+    console.log(msg.data);
+    if (msg.data.m == "add")
+        add_file(msg.data.type, msg.data.text, msg.data.data, 0, 0);
+};
 // 资源
 function put_assets(url, base64) {
     let id = uuid().slice(0, 7);
