@@ -379,13 +379,12 @@ document.ontouchstart = (e) => {
         ) &&
         !document.querySelector("x-sinppet").contains(el)
     ) {
+        o_touch_e = o_touch_zoom_e = e;
+        o_rect = { x: O.offsetLeft, y: O.offsetTop };
+        o_zoom = zoom;
         if (e.targetTouches.length == 1) {
-            o_touch_e = e;
-            o_rect = { x: O.offsetLeft, y: O.offsetTop };
             document.getElementById("画布").style.cursor = "move";
         } else if (e.targetTouches.length == 2) {
-            o_touch_zoom_e = e;
-            o_zoom = zoom;
         }
     }
 };
@@ -400,18 +399,17 @@ document.ontouchmove = (e) => {
     }
 };
 document.ontouchend = (e) => {
+    o_touch_e = null;
+    move = false;
+    o_touch_zoom_e = null;
+    o_zoom = NaN;
     if (e.targetTouches.length == 1) {
         touch_move(e);
-        o_touch_e = null;
-        move = false;
         document.getElementById("画布").style.cursor = "auto";
         if (select_id) document.getElementById(select_id).remove();
         select_id = "";
     } else if (e.targetTouches.length == 2) {
         touch_zoom(e);
-        o_touch_zoom_e = null;
-        move = false;
-        o_zoom = NaN;
     }
 };
 
@@ -444,6 +442,16 @@ var touch_zoom = (e: TouchEvent) => {
                     (e.targetTouches[0].clientY - e.targetTouches[1].clientY) ** 2
             );
             let z = (r1 / r0) * o_zoom;
+            let p = [
+                (o_touch_zoom_e.targetTouches[0].clientX + o_touch_zoom_e.targetTouches[1].clientX) / 2,
+                (o_touch_zoom_e.targetTouches[0].clientY + o_touch_zoom_e.targetTouches[1].clientY) / 2,
+            ];
+            let ozoom = zoom,
+                dzoom = z - zoom;
+            let dx = p[0] - O.getBoundingClientRect().x,
+                dy = p[1] - O.getBoundingClientRect().y;
+            O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
+            O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
             zoom_o(z);
         }
     }
