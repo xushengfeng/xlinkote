@@ -40,11 +40,7 @@ document.getElementById("新建集").onclick = () => {
 };
 
 document.getElementById("新建画布").onclick = () => {
-    get_data(); /* 保存之前的画布 */
-    let name = `画布${uuid().slice(0, 7)}`;
-    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
-    集.meta.focus_page = name;
-    set_data(集);
+    add_画布();
     data_changed();
 };
 
@@ -1036,6 +1032,15 @@ function data_changed() {
         undo_stack.push(JSON.stringify(get_data()));
         undo_i = undo_stack.length - 1;
     }, save_dt);
+}
+
+function add_画布(xname?: string) {
+    get_data(); /* 保存之前的画布 */
+    let name = xname || `画布${uuid().slice(0, 7)}`;
+    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+    集.meta.focus_page = name;
+    set_data(集);
+    data_changed();
 }
 
 var focus_md: markdown = null;
