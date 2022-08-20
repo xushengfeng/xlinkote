@@ -830,10 +830,12 @@ function db_put(obj) {
         db_writing = false;
     };
 }
+var files;
 function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
+        files = r.result;
         document.getElementById("文件").innerHTML = "";
         let load_dav = document.createElement("div");
         load_dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
