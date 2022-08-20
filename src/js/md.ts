@@ -308,11 +308,11 @@ function tlink(state, silent: boolean) {
 
     // start tag
     let t = state.push("x-link_open", TAG, 1);
-    t.attrPush(["id", id]);
     // parse inner
     state.pos += 2;
     state.posMax = end;
     state.md.inline.tokenize(state);
+    t.attrPush(["id", id || state.tokens[state.tokens.length - 1].content]);
     state.pos = end + id_l + 2;
     state.posMax = max;
     // end tag
