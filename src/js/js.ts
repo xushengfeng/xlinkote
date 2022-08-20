@@ -1018,7 +1018,7 @@ var save_timeout = NaN,
     save_dt = 200;
 function data_changed() {
     clearTimeout(save_timeout);
-    save_timeout = setTimeout(() => {
+    save_timeout = window.setTimeout(() => {
         if (saved) {
             document.title = `● ` + get_title();
             saved = false;
@@ -1404,7 +1404,7 @@ var auto_put_xln_t = NaN;
 
 function auto_put_xln() {
     if (Number(store.webdav.自动上传)) {
-        auto_put_xln_t = setTimeout(() => {
+        auto_put_xln_t = window.setTimeout(() => {
             if (now_dav_data != JSON.stringify(get_data())) {
                 put_xln_value();
             }

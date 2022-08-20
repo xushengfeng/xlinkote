@@ -29,7 +29,7 @@ class x extends HTMLElement {
         };
         this.onmouseleave = () => {
             if (模式 == "设计") {
-                bar_hide_t = setTimeout(() => {
+                bar_hide_t = window.setTimeout(() => {
                     bar.classList.remove("x-x_bar_show");
                 }, 200);
             }
