@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "18.0.0",
     "react-native": "0.69.4",
+    "react-native-share-menu": "^6.0.0",
     "react-native-webview": "^11.23.0"
   },
   "devDependencies": {
