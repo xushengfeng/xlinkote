@@ -1042,54 +1042,23 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
     if (data.files.length != 0) {
         for (let f of data.files) {
             let type = f.type.split("/")[0];
-            let xel = <x>document.createElement("x-x");
-            xel.style.left = x / zoom + "px";
-            xel.style.top = y / zoom + "px";
-            z.push(xel);
-            if (type == "image" || type == "video") {
+            if (type == "text") {
+                let reader = new FileReader();
+                reader.readAsText(f);
+                reader.onload = () => {
+                    add_file(f.type, reader.result as string, null, x, y);
+                };
+            } else {
                 let reader = new FileReader();
                 reader.readAsDataURL(f);
                 reader.onload = () => {
-                    let id = put_assets("", reader.result as string);
-                    if (type == "image") {
-                        let img = <img>document.createElement("x-img");
-                        xel.append(img);
-                        img.value = id;
-                    } else if (type == "video") {
-                        let video = <video>document.createElement("x-video");
-                        xel.append(video);
-                        video.value = id;
-                    }
-                };
-            } else if (f.type == "text/html") {
-                let md = <markdown>document.createElement("x-md");
-                xel.append(md);
-                let reader = new FileReader();
-                reader.readAsText(f);
-                reader.onload = () => {
-                    let turndownService = new window.TurndownService({ headingStyle: "atx" });
-                    md.value = turndownService.turndown(reader.result);
-                };
-            } else if (type == "text") {
-                let md = <markdown>document.createElement("x-md");
-                xel.append(md);
-                let reader = new FileReader();
-                reader.readAsText(f);
-                reader.onload = () => {
-                    md.value = <string>reader.result;
+                    add_file(f.type, null, reader.result as string, x, y);
                 };
             }
         }
     } else {
-        let xel = <x>document.createElement("x-x");
-        xel.style.left = x / zoom + "px";
-        xel.style.top = y / zoom + "px";
-        z.push(xel);
         let html = data.getData("text/html");
-        let turndownService = new window.TurndownService({ headingStyle: "atx" });
-        let md = <markdown>document.createElement("x-md");
-        xel.append(md);
-        md.value = turndownService.turndown(html);
+        add_file("text/html", html, null, x, y);
     }
 }
 
@@ -1102,6 +1071,36 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
     e.preventDefault();
     put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
 };
+
+// 添加文件或文字
+function add_file(type: string, text: string, data: string, x: number, y: number) {
+    let types = type.split("/");
+    let xel = <x>document.createElement("x-x");
+    xel.style.left = x / zoom + "px";
+    xel.style.top = y / zoom + "px";
+    z.push(xel);
+    if (types[0] == "text") {
+        let md = <markdown>document.createElement("x-md");
+        xel.append(md);
+        if (type == "text/html") {
+            let turndownService = new window.TurndownService({ headingStyle: "atx" });
+            md.value = turndownService.turndown(text);
+        } else {
+            md.value = text;
+        }
+    } else if (types[0] == "image" || types[0] == "video") {
+        let id = put_assets("", data);
+        if (types[0] == "image") {
+            let img = <img>document.createElement("x-img");
+            xel.append(img);
+            img.value = id;
+        } else if (types[0] == "video") {
+            let video = <video>document.createElement("x-video");
+            xel.append(video);
+            video.value = id;
+        }
+    }
+}
 
 // 资源
 function put_assets(url: string, base64: string) {

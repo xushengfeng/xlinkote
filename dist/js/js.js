@@ -956,7 +956,7 @@ async function download_file(text) {
 var save_timeout = NaN, save_dt = 200;
 function data_changed() {
     clearTimeout(save_timeout);
-    save_timeout = setTimeout(() => {
+    save_timeout = window.setTimeout(() => {
         if (saved) {
             document.title = `● ` + get_title();
             saved = false;
@@ -978,58 +978,25 @@ function put_datatransfer(data, x, y) {
     if (data.files.length != 0) {
         for (let f of data.files) {
             let type = f.type.split("/")[0];
-            let xel = document.createElement("x-x");
-            xel.style.left = x / zoom + "px";
-            xel.style.top = y / zoom + "px";
-            z.push(xel);
-            if (type == "image" || type == "video") {
+            if (type == "text") {
+                let reader = new FileReader();
+                reader.readAsText(f);
+                reader.onload = () => {
+                    add_file(f.type, reader.result, null, x, y);
+                };
+            }
+            else {
                 let reader = new FileReader();
                 reader.readAsDataURL(f);
                 reader.onload = () => {
-                    let id = put_assets("", reader.result);
-                    if (type == "image") {
-                        let img = document.createElement("x-img");
-                        xel.append(img);
-                        img.value = id;
-                    }
-                    else if (type == "video") {
-                        let video = document.createElement("x-video");
-                        xel.append(video);
-                        video.value = id;
-                    }
-                };
-            }
-            else if (f.type == "text/html") {
-                let md = document.createElement("x-md");
-                xel.append(md);
-                let reader = new FileReader();
-                reader.readAsText(f);
-                reader.onload = () => {
-                    let turndownService = new window.TurndownService({ headingStyle: "atx" });
-                    md.value = turndownService.turndown(reader.result);
-                };
-            }
-            else if (type == "text") {
-                let md = document.createElement("x-md");
-                xel.append(md);
-                let reader = new FileReader();
-                reader.readAsText(f);
-                reader.onload = () => {
-                    md.value = reader.result;
+                    add_file(f.type, null, reader.result, x, y);
                 };
             }
         }
     }
     else {
-        let xel = document.createElement("x-x");
-        xel.style.left = x / zoom + "px";
-        xel.style.top = y / zoom + "px";
-        z.push(xel);
         let html = data.getData("text/html");
-        let turndownService = new window.TurndownService({ headingStyle: "atx" });
-        let md = document.createElement("x-md");
-        xel.append(md);
-        md.value = turndownService.turndown(html);
+        add_file("text/html", html, null, x, y);
     }
 }
 画布.ondragover = (e) => {
@@ -1043,6 +1010,38 @@ function put_datatransfer(data, x, y) {
     e.preventDefault();
     put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
 };
+// 添加文件或文字
+function add_file(type, text, data, x, y) {
+    let types = type.split("/");
+    let xel = document.createElement("x-x");
+    xel.style.left = x / zoom + "px";
+    xel.style.top = y / zoom + "px";
+    z.push(xel);
+    if (types[0] == "text") {
+        let md = document.createElement("x-md");
+        xel.append(md);
+        if (type == "text/html") {
+            let turndownService = new window.TurndownService({ headingStyle: "atx" });
+            md.value = turndownService.turndown(text);
+        }
+        else {
+            md.value = text;
+        }
+    }
+    else if (types[0] == "image" || types[0] == "video") {
+        let id = put_assets("", data);
+        if (types[0] == "image") {
+            let img = document.createElement("x-img");
+            xel.append(img);
+            img.value = id;
+        }
+        else if (types[0] == "video") {
+            let video = document.createElement("x-video");
+            xel.append(video);
+            video.value = id;
+        }
+    }
+}
 // 资源
 function put_assets(url, base64) {
     let id = uuid().slice(0, 7);
@@ -1335,7 +1334,7 @@ async function put_xln_value() {
 var auto_put_xln_t = NaN;
 function auto_put_xln() {
     if (Number(store.webdav.自动上传)) {
-        auto_put_xln_t = setTimeout(() => {
+        auto_put_xln_t = window.setTimeout(() => {
             if (now_dav_data != JSON.stringify(get_data())) {
                 put_xln_value();
             }
