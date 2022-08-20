@@ -1051,8 +1051,42 @@ function add_file(type, text, data, x, y) {
 document.addEventListener("message", (msg) => {
     alert(msg.data);
     const data = JSON.parse(msg.data);
-    if (data.m == "add")
+    if (data.m == "add") {
+        if (集.meta.file_name != "摘录") {
+            // 是否存在摘录文件
+            for (let i of files) {
+                if (i.meta.file_name == "摘录") {
+                    set_data(i);
+                }
+            }
+            // 新建摘录文件
+            if (集.meta.file_name != "摘录") {
+                let j;
+                // 避免影响当前已打开文件
+                if (集.meta.file_name) {
+                    j = {
+                        meta: {
+                            focus_page: "",
+                            url: "",
+                            UUID: uuid(),
+                            file_name: "摘录",
+                        },
+                        数据: [],
+                        链接: {},
+                        assets: {},
+                    };
+                }
+                else {
+                    j = 集;
+                    j.meta.file_name = "摘录";
+                }
+                set_data(j);
+            }
+        }
+        add_画布();
         add_file(data.type, data.text, data.data, 0, 0);
+        data_changed();
+    }
 });
 // 资源
 function put_assets(url, base64) {
