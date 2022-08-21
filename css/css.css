@@ -508,6 +508,26 @@ x-draw > svg:nth-child(2) {
     z-index: -1;
 }
 
+x-record {
+    display: flex;
+}
+x-record > input {
+    display: none;
+}
+.recording {
+    border-radius: 8px;
+}
+x-record > div {
+    width: 16px;
+    height: 16px;
+    background-color: #f00;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+x-record > audio {
+    height: 16px;
+}
+
 @media (any-pointer: coarse) {
     :root {
         --icon-p-b-size: 48px;

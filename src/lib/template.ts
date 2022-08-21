@@ -869,3 +869,60 @@ class link extends HTMLElement {
 }
 
 window.customElements.define("x-link", link);
+
+// 录音
+class record extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        if (!this.id) this.id = uuid().slice(0, 7);
+        let mediaRecorder = null;
+        let i = document.createElement("input");
+        i.type = "checkbox";
+        let b = document.createElement("div");
+        b.onclick = () => {
+            i.checked = !i.checked;
+            if (i.checked) {
+                navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+                    let chunks = [];
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+                    mediaRecorder.onstart = () => {
+                        console.log("开始录制");
+                    };
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        chunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        console.log("录制结束");
+                        let blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
+                        let a = new FileReader();
+                        a.onload = () => {
+                            audio.src = a.result as string;
+                            if (!集.assets[this.id]) 集.assets[this.id] = { url: "", base64: "", sha: "" };
+                            集.assets[this.id].base64 = a.result as string;
+                            集.assets[this.id].sha = window.CryptoJS.SHA256(a.result as string).toString();
+                        };
+                        a.readAsDataURL(blob);
+                        stream.getAudioTracks()[0].stop();
+                    };
+                });
+                b.classList.add("recording");
+            } else {
+                mediaRecorder.stop();
+                b.classList.remove("recording");
+            }
+        };
+        let audio = document.createElement("audio");
+        audio.controls = true;
+        this.append(i);
+        this.append(b);
+        this.append(audio);
+    }
+}
+
+window.customElements.define("x-record", record);

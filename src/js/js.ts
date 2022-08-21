@@ -1200,6 +1200,18 @@ document.getElementById("橡皮").onclick = () => {
     }
 };
 
+document.getElementById("录音").onclick = () => {
+    let x = -O.offsetLeft + 8,
+        y = -O.offsetTop + 8;
+    let xel = <x>document.createElement("x-x");
+    xel.style.left = x / zoom + "px";
+    xel.style.top = y / zoom + "px";
+    z.push(xel);
+    let r = document.createElement("x-record");
+    xel.append(r);
+    set_模式("浏览");
+};
+
 window.onbeforeunload = () => {
     if (!集.meta.file_name) return true;
 };
