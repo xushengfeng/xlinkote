@@ -504,46 +504,6 @@ class progress extends HTMLElement {
     }
 }
 window.customElements.define("x-pro", progress);
-class img extends HTMLElement {
-    constructor() {
-        super();
-    }
-    connectedCallback() {
-        this._value = this.getAttribute("value");
-        var img = document.createElement("img");
-        this.append(img);
-        if (集.assets[this._value])
-            img.src = 集.assets[this._value].base64;
-    }
-    get value() {
-        return this._value;
-    }
-    set value(s) {
-        this._value = s;
-        this.querySelector("img").src = 集.assets[s].base64;
-    }
-}
-window.customElements.define("x-img", img);
-class video extends HTMLElement {
-    constructor() {
-        super();
-    }
-    connectedCallback() {
-        this._value = this.getAttribute("value");
-        var video = document.createElement("video");
-        this.append(video);
-        if (集.assets[this._value])
-            video.src = 集.assets[this._value].base64;
-    }
-    get value() {
-        return this._value;
-    }
-    set value(s) {
-        this._value = s;
-        this.querySelector("video").src = 集.assets[s].base64;
-    }
-}
-window.customElements.define("x-video", video);
 class file extends HTMLElement {
     constructor() {
         super();
