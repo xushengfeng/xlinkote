@@ -488,6 +488,16 @@ x-pro > span {
     mix-blend-mode: difference;
 }
 
+.file > div {
+    width: 64px;
+    height: 64px;
+}
+
+.file > div > .icon {
+    width: 64px;
+    height: 64px;
+}
+
 x-draw {
     display: block;
     pointer-events: all;

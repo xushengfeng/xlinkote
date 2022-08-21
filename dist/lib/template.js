@@ -523,6 +523,7 @@ class file extends HTMLElement {
     set_m() {
         this.div.innerHTML = "";
         if (this._value.r) {
+            this.div.classList.remove("file");
             let f = 集.assets[this._value.id];
             if (!f)
                 return;
@@ -539,7 +540,9 @@ class file extends HTMLElement {
             }
         }
         else {
+            this.div.classList.add("file");
             let i = document.createElement("div");
+            i.innerHTML = `<img src="./assets/icons/file.svg" class="icon">`;
             let file_name_el = document.createElement("p");
             this.div.append(i);
             this.div.append(file_name_el);
