@@ -544,6 +544,52 @@ class video extends HTMLElement {
     }
 }
 window.customElements.define("x-video", video);
+class file extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        this.div = document.createElement("div");
+        this.append(this.div);
+        if (this.getAttribute("value")) {
+            this._value = JSON.parse(this.getAttribute("value"));
+            this.set_m();
+        }
+    }
+    set_m() {
+        this.div.innerHTML = "";
+        if (this._value.r) {
+            let f = 集.assets[this._value.id];
+            if (!f)
+                return;
+            let type = f.base64.match(/data:(.*?);/)[1].split("/");
+            if (type[0] == "image") {
+                let img = document.createElement("img");
+                this.div.append(img);
+                img.src = f.base64;
+            }
+            if (type[0] == "video") {
+                let video = document.createElement("video");
+                this.div.append(video);
+                video.src = f.base64;
+            }
+        }
+        else {
+            let i = document.createElement("div");
+            let file_name_el = document.createElement("p");
+            this.div.append(i);
+            this.div.append(file_name_el);
+        }
+    }
+    get value() {
+        return JSON.stringify(this._value);
+    }
+    set value(s) {
+        this._value = JSON.parse(s);
+        this.set_m();
+    }
+}
+window.customElements.define("x-file", file);
 class draw extends HTMLElement {
     constructor() {
         super();

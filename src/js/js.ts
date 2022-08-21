@@ -1106,15 +1106,9 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         }
     } else if (types[0] == "image" || types[0] == "video") {
         let id = put_assets("", data);
-        if (types[0] == "image") {
-            let img = <img>document.createElement("x-img");
-            xel.append(img);
-            img.value = id;
-        } else if (types[0] == "video") {
-            let video = <video>document.createElement("x-video");
-            xel.append(video);
-            video.value = id;
-        }
+        let file = <file>document.createElement("x-file");
+        xel.append(file);
+        file.value = JSON.stringify({ r: true, id });
     }
 }
 

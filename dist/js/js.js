@@ -1042,16 +1042,9 @@ function add_file(type, text, data, x, y) {
     }
     else if (types[0] == "image" || types[0] == "video") {
         let id = put_assets("", data);
-        if (types[0] == "image") {
-            let img = document.createElement("x-img");
-            xel.append(img);
-            img.value = id;
-        }
-        else if (types[0] == "video") {
-            let video = document.createElement("x-video");
-            xel.append(video);
-            video.value = id;
-        }
+        let file = document.createElement("x-file");
+        xel.append(file);
+        file.value = JSON.stringify({ r: true, id });
     }
 }
 document.addEventListener("message", (msg) => {
