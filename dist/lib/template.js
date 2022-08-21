@@ -509,6 +509,10 @@ class file extends HTMLElement {
         super();
     }
     connectedCallback() {
+        this.ondblclick = () => {
+            this._value.r = !this._value.r;
+            this.set_m();
+        };
         this.div = document.createElement("div");
         this.append(this.div);
         if (this.getAttribute("value")) {
