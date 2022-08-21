@@ -727,6 +727,7 @@ function set_data(l: 集type) {
             集.meta.focus_page = p.name;
         }
     }
+    location.hash = `#${集.meta.UUID}`;
 }
 
 function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
@@ -943,6 +944,14 @@ function db_get() {
             let dav = document.createElement("div");
             d.append(dav, t);
             document.getElementById("文件").append(d);
+        }
+
+        if (`#${集.meta.UUID}` != location.hash) {
+            for (let f of r.result) {
+                if (`#${f.meta.UUID}` == location.hash) {
+                    set_data(f);
+                }
+            }
         }
     };
 }
@@ -1359,7 +1368,7 @@ el_style.oninput = () => {
     z.聚焦元素.setAttribute("style", el_style.value);
 };
 
-set_data(集);
+if (!location.hash) set_data(集);
 
 // 云
 
