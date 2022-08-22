@@ -226,7 +226,7 @@ class markdown extends HTMLElement {
                 line = el_line(text, this.index, s, el)[1];
             }
             text_set_line(text, line);
-            if (模式 == "浏览")
+            if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
                 this.edit = true;
             text.focus();
         };
