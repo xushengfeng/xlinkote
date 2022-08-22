@@ -1595,7 +1595,7 @@ function search(s: string, type: "str" | "regex") {
 
 var search_el = document.getElementById("search") as HTMLInputElement;
 var search_r = document.getElementById("搜索结果");
-search_el.oninput = () => {
+search_el.oninput = search_el.onfocus = () => {
     let l = search(search_el.value, "str");
     console.log(l);
     show_search_l(l);
