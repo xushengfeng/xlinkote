@@ -503,7 +503,7 @@ document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
         let ozoom = zoom,
-            dzoom = -e.deltaY / 500;
+            dzoom = -e.deltaY / (800 / zoom);
         zoom += dzoom;
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;

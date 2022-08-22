@@ -470,7 +470,7 @@ function zoom_o(z) {
 document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
-        let ozoom = zoom, dzoom = -e.deltaY / 500;
+        let ozoom = zoom, dzoom = -e.deltaY / (800 / zoom);
         zoom += dzoom;
         let dx = e.clientX - O.getBoundingClientRect().x, dy = e.clientY - O.getBoundingClientRect().y;
         O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
