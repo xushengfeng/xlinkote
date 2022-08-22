@@ -537,6 +537,7 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
 let free_o_e: MouseEvent;
 let free_o_rects = [];
 document.addEventListener("mousemove", (e: MouseEvent) => {
+    e.preventDefault();
     free_mouse(e);
     if (free_o_e) move = true;
 });
