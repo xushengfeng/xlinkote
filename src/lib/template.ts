@@ -207,8 +207,8 @@ class markdown extends HTMLElement {
                 let el = <HTMLElement>s.querySelector(`#h > ${index_i[0]}`);
                 let x = el.offsetLeft,
                     y = el.offsetTop + el.offsetHeight;
-                O.style.left = O.offsetLeft - (x - text.offsetLeft) + "px";
-                O.style.top = O.offsetTop - (y - text.offsetTop) + "px";
+                O.style.left = get_O_offset().x - (x - text.offsetLeft) + "px";
+                O.style.top = get_O_offset().y - (y - text.offsetTop) + "px";
                 text.style.left = x + "px";
                 text.style.top = y + "px";
             }

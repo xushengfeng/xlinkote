@@ -54,7 +54,7 @@ document.getElementById("偏好设置").onclick = () => {
 };
 document.getElementById("新建元素").onclick = () => {
     const margin = 8;
-    creat_x_x(-O.offsetLeft + margin, -O.offsetTop + margin, 画布.offsetWidth - margin * 2);
+    creat_x_x(-get_O_offset().x + margin, -get_O_offset().y + margin, 画布.offsetWidth - margin * 2);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
@@ -71,8 +71,8 @@ document.getElementById("新建页").onclick = () => {
 
 document.getElementById("新建画板").onclick = () => {
     let xel = <x>document.createElement("x-x");
-    xel.style.left = -O.offsetLeft / zoom + "px";
-    xel.style.top = -O.offsetTop / zoom + "px";
+    xel.style.left = -get_O_offset().x / zoom + "px";
+    xel.style.top = -get_O_offset().y / zoom + "px";
     let draw = document.createElement("x-draw") as draw;
     draw.setAttribute("width", String(画布.offsetWidth / zoom));
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
@@ -328,7 +328,7 @@ document.onmouseup = (e) => {
     if (e.button == 0 && selected_el.length == 0 && move && o_e) {
         if (模式 != "设计") return;
         let r = e2rect(o_e, e);
-        creat_x_x(r.x - O.offsetLeft, r.y - O.offsetTop, r.w);
+        creat_x_x(r.x - get_O_offset().x, r.y - get_O_offset().y, r.w);
     }
     o_e = null;
     move = false;
@@ -380,7 +380,7 @@ document.ontouchstart = (e) => {
         !document.querySelector("x-sinppet").contains(el)
     ) {
         o_touch_e = o_touch_zoom_e = e;
-        o_rect = { x: O.offsetLeft, y: O.offsetTop };
+        o_rect = { x: get_O_offset().x, y: get_O_offset().y };
         o_zoom = zoom;
         if (e.targetTouches.length == 1) {
             document.getElementById("画布").style.cursor = "move";
@@ -523,10 +523,10 @@ document.getElementById("画布").onwheel = (e) => {
         if (el.tagName == "TEXTAREA") return;
         if (document.querySelector("x-sinppet").contains(el)) return;
         if (e.shiftKey && !e.deltaX) {
-            if (fxsd == 0 || fxsd == 2) O.style.left = O.offsetLeft - e.deltaY + "px";
+            if (fxsd == 0 || fxsd == 2) O.style.left = get_O_offset().x - e.deltaY + "px";
         } else {
-            if (fxsd == 0 || fxsd == 2) O.style.left = O.offsetLeft - e.deltaX + "px";
-            if (fxsd == 0 || fxsd == 1) O.style.top = O.offsetTop - e.deltaY + "px";
+            if (fxsd == 0 || fxsd == 2) O.style.left = get_O_offset().x - e.deltaX + "px";
+            if (fxsd == 0 || fxsd == 1) O.style.top = get_O_offset().y - e.deltaY + "px";
         }
     }
     data_changed();
@@ -681,7 +681,7 @@ function get_data() {
     for (let p of 集.数据) {
         if (p.name == 集.meta.focus_page) {
             p.data = data;
-            p.p = { x: O.offsetLeft, y: O.offsetTop, zoom };
+            p.p = { x: get_O_offset().x, y: get_O_offset().y, zoom };
         }
     }
     return l;
@@ -1105,7 +1105,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
 画布.ondrop = (e) => {
     if (e.target != 画布) return;
     e.preventDefault();
-    put_datatransfer(e.dataTransfer, e.offsetX - O.offsetLeft, e.offsetY - O.offsetTop);
+    put_datatransfer(e.dataTransfer, e.offsetX - get_O_offset().x, e.offsetY - get_O_offset().y);
 };
 
 // 添加文件或文字
@@ -1221,8 +1221,8 @@ document.getElementById("橡皮").onclick = () => {
 };
 
 document.getElementById("录音").onclick = () => {
-    let x = -O.offsetLeft + 8,
-        y = -O.offsetTop + 8;
+    let x = -get_O_offset().x + 8,
+        y = -get_O_offset().y + 8;
     let xel = <x>document.createElement("x-x");
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
