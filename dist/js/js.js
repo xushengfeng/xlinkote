@@ -463,9 +463,11 @@ document.getElementById("归位").onclick = () => {
     data_changed();
 };
 var zoom = 1;
+const zoom_el = document.getElementById("缩放");
 function zoom_o(z) {
     zoom = z;
     O.style.transform = `scale(${z})`;
+    zoom_el.innerText = `${(z * 100).toFixed(1)}%`;
 }
 document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
@@ -496,6 +498,7 @@ document.getElementById("画布").onwheel = (e) => {
     }
     data_changed();
 };
+zoom_o(1);
 var now_mouse_e = null;
 document.addEventListener("mousemove", (e) => {
     now_mouse_e = e;

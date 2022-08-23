@@ -96,6 +96,9 @@ body > #main > #nav #search {
 body > #main > #画布 {
     background-color: var(--bg1);
 }
+body > #main > #画布 > #导航 > #缩放 {
+    padding: 0 4px;
+}
 body > #main > #层容器 > #层 input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -127,7 +130,7 @@ body > #main > #画布 > #选择 > div {
 /* 导航 */
 body > #main > #画布 > #导航 > div {
     background-color: var(--color5);
-    border-radius: 50%;
+    border-radius: 8px;
     outline: none;
 }
 
