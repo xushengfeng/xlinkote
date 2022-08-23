@@ -145,11 +145,31 @@ class markdown extends HTMLElement {
                         let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
                         console.log(t);
                         e.dataTransfer.setData("text/markdown", t);
+                        console.log(e.dataTransfer);
                     };
                     el.ondragend = () => {
                         el.draggable = false;
                     };
                     el.insertAdjacentElement("afterbegin", handle);
+
+                    el.ondragover = (e) => {
+                        e.preventDefault();
+                    };
+                    el.ondrop = (e) => {
+                        e.preventDefault();
+                        console.log(e);
+                        let t = "\n" + e.dataTransfer.getData("text/markdown");
+                        if (e.offsetY < el.offsetHeight / 2) {
+                            let l = text.value.split("\n");
+                            l.splice(i[2][0] - 1, 0, t);
+                            text.value = l.join("\n");
+                        } else {
+                            let l = text.value.split("\n");
+                            l.splice(i[2][1], 0, t);
+                            text.value = l.join("\n");
+                        }
+                        text.dispatchEvent(new Event("input"));
+                    };
                 }
             }, 0);
         };
