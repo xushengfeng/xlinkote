@@ -227,6 +227,10 @@ x-md > textarea {
     border: none;
 }
 
+.handle {
+    transition: var(--transition);
+}
+
 x-graph {
     display: flex;
     flex-direction: column;

@@ -440,6 +440,18 @@ x-md > textarea {
     width: 100%;
 }
 
+.handle {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: -20px;
+    top: 0;
+    opacity: 0;
+}
+.handle:hover {
+    opacity: 1;
+}
+
 .show_md {
     display: inline-block;
 }
