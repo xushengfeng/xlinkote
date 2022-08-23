@@ -138,6 +138,17 @@ class markdown extends HTMLElement {
                     <path d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
                   </svg>`;
                     handle.classList.add("handle");
+                    handle.onmousedown = () => {
+                        el.draggable = true;
+                    };
+                    el.ondragstart = (e) => {
+                        let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
+                        console.log(t);
+                        e.dataTransfer.setData("text/markdown", t);
+                    };
+                    el.ondragend = () => {
+                        el.draggable = false;
+                    };
                     el.insertAdjacentElement("afterbegin", handle);
                 }
             }, 0);
