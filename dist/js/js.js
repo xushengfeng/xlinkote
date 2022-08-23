@@ -515,7 +515,8 @@ document.addEventListener("mousemove", (e) => {
 let free_o_e;
 let free_o_rects = [];
 document.addEventListener("mousemove", (e) => {
-    e.preventDefault();
+    if (模式 == "设计")
+        e.preventDefault();
     free_mouse(e);
     if (free_o_e)
         move = true;
