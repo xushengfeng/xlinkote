@@ -426,8 +426,8 @@ var touch_zoom = (e) => {
             ];
             let ozoom = zoom, dzoom = z - zoom;
             let dx = p[0] - O.getBoundingClientRect().x, dy = p[1] - O.getBoundingClientRect().y;
-            O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
-            O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
+            O.style.left = get_O_offset().x - dx * (dzoom / ozoom) + "px";
+            O.style.top = get_O_offset().y - dy * (dzoom / ozoom) + "px";
             zoom_o(z);
         }
     }
@@ -469,14 +469,18 @@ function zoom_o(z) {
     O.style.transform = `scale(${z})`;
     zoom_el.innerText = `${(z * 100).toFixed(1)}%`;
 }
+function get_O_offset() {
+    let ox = O.getBoundingClientRect().x - 画布.getBoundingClientRect().x, oy = O.getBoundingClientRect().y - 画布.getBoundingClientRect().y;
+    return { x: ox, y: oy };
+}
 document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
         let ozoom = zoom, dzoom = -e.deltaY / (800 / zoom);
         zoom += dzoom;
         let dx = e.clientX - O.getBoundingClientRect().x, dy = e.clientY - O.getBoundingClientRect().y;
-        O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
-        O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
+        O.style.left = get_O_offset().x - dx * (dzoom / ozoom) + "px";
+        O.style.top = get_O_offset().y - dy * (dzoom / ozoom) + "px";
         zoom_o(zoom);
     }
     else {
@@ -572,8 +576,8 @@ document.onkeydown = (e) => {
             let ozoom = zoom, dzoom = 1 - zoom;
             zoom += dzoom;
             let dx = now_mouse_e.clientX - O.getBoundingClientRect().x, dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
-            O.style.left = O.offsetLeft - dx * (dzoom / ozoom) + "px";
-            O.style.top = O.offsetTop - dy * (dzoom / ozoom) + "px";
+            O.style.left = get_O_offset().x - dx * (dzoom / ozoom) + "px";
+            O.style.top = get_O_offset().y - dy * (dzoom / ozoom) + "px";
             zoom_o(1);
             data_changed();
             break;
