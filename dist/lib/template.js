@@ -119,6 +119,7 @@ class markdown extends HTMLElement {
                         el.draggable = true;
                     };
                     el.ondragstart = (e) => {
+                        e.stopPropagation();
                         let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
                         console.log(t);
                         e.dataTransfer.setData("text/markdown", t);
@@ -133,6 +134,7 @@ class markdown extends HTMLElement {
                     };
                     el.ondrop = (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         console.log(e);
                         let t = "\n" + e.dataTransfer.getData("text/markdown");
                         if (e.offsetY < el.offsetHeight / 2) {
