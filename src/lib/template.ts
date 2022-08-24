@@ -156,6 +156,18 @@ class markdown extends HTMLElement {
                     el.ondragover = (e) => {
                         e.preventDefault();
                     };
+                    el.ondragenter = (e) => {
+                        e.stopPropagation();
+                        if (e.offsetY < el.offsetHeight / 2) {
+                            el.classList.add("drag_top");
+                        } else {
+                            el.classList.add("drag_bottom");
+                        }
+                    };
+                    el.ondragleave = () => {
+                        el.classList.remove("drag_top");
+                        el.classList.remove("drag_bottom");
+                    };
                     el.ondrop = (e) => {
                         e.preventDefault();
                         e.stopPropagation();

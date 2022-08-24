@@ -231,6 +231,14 @@ x-md > textarea {
     transition: var(--transition);
 }
 
+.drag_top {
+    border-top: 2px var(--bg-color3) solid;
+}
+
+.drag_bottom {
+    border-bottom: 2px var(--bg-color3) solid;
+}
+
 x-graph {
     display: flex;
     flex-direction: column;
