@@ -84,6 +84,73 @@ class markdown extends HTMLElement {
     constructor() {
         super();
         this._value = "";
+        this.drag = () => {
+            let text = this.text;
+            for (let i of this.index) {
+                let el = this.h.querySelector(`:scope > ${i[0]}`);
+                el.style.position = "relative";
+                let handle = document.createElement("div");
+                handle.innerHTML = `<svg width="16" height="16">
+            <path d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
+          </svg>`;
+                handle.classList.add("handle");
+                handle.onmousedown = () => {
+                    el.draggable = true;
+                };
+                el.ondragstart = (e) => {
+                    e.stopPropagation();
+                    let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
+                    console.log(t);
+                    e.dataTransfer.setData("text/markdown", t);
+                    console.log(e.dataTransfer);
+                    if (!e.ctrlKey) {
+                        let l = text.value.split("\n");
+                        l.splice(i[2][0], i[2][1] - i[2][0]);
+                        text.value = l.join("\n");
+                        text.dispatchEvent(new Event("input"));
+                    }
+                };
+                el.ondragend = () => {
+                    el.draggable = false;
+                };
+                el.insertAdjacentElement("afterbegin", handle);
+                el.ondragover = (e) => {
+                    e.preventDefault();
+                };
+                el.ondragenter = (e) => {
+                    e.stopPropagation();
+                    if (e.offsetY < el.offsetHeight / 2) {
+                        el.classList.add("drag_top");
+                    }
+                    else {
+                        el.classList.add("drag_bottom");
+                    }
+                };
+                el.ondragleave = () => {
+                    el.classList.remove("drag_top");
+                    el.classList.remove("drag_bottom");
+                };
+                el.ondrop = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(e);
+                    let t = e.dataTransfer.getData("text/markdown");
+                    let l = text.value.split("\n");
+                    if (e.offsetY < el.offsetHeight / 2) {
+                        if (t[i[2][0]] == "")
+                            t = "\n" + t + "\n";
+                        l.splice(i[2][0] - 1, 0, t);
+                    }
+                    else {
+                        if (t[i[2][1]] == "")
+                            t = "\n" + t + "\n";
+                        l.splice(i[2][1], 0, t);
+                    }
+                    text.value = l.join("\n");
+                    text.dispatchEvent(new Event("input"));
+                };
+            }
+        };
     }
     connectedCallback() {
         var s = document.createElement("div");
@@ -97,6 +164,7 @@ class markdown extends HTMLElement {
             references: {},
         });
         this.index = line_el(l);
+        this.drag();
         text.oninput = () => {
             this._value = text.value;
             data_changed();
@@ -107,70 +175,7 @@ class markdown extends HTMLElement {
                 });
                 parse = l;
                 this.index = line_el(l);
-                for (let i of this.index) {
-                    let el = this.h.querySelector(`:scope > ${i[0]}`);
-                    el.style.position = "relative";
-                    let handle = document.createElement("div");
-                    handle.innerHTML = `<svg width="16" height="16">
-                    <path d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
-                  </svg>`;
-                    handle.classList.add("handle");
-                    handle.onmousedown = () => {
-                        el.draggable = true;
-                    };
-                    el.ondragstart = (e) => {
-                        e.stopPropagation();
-                        let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
-                        console.log(t);
-                        e.dataTransfer.setData("text/markdown", t);
-                        console.log(e.dataTransfer);
-                        if (!e.ctrlKey) {
-                            let l = text.value.split("\n");
-                            l.splice(i[2][0], i[2][1] - i[2][0]);
-                            text.value = l.join("\n");
-                            text.dispatchEvent(new Event("input"));
-                        }
-                    };
-                    el.ondragend = () => {
-                        el.draggable = false;
-                    };
-                    el.insertAdjacentElement("afterbegin", handle);
-                    el.ondragover = (e) => {
-                        e.preventDefault();
-                    };
-                    el.ondragenter = (e) => {
-                        e.stopPropagation();
-                        if (e.offsetY < el.offsetHeight / 2) {
-                            el.classList.add("drag_top");
-                        }
-                        else {
-                            el.classList.add("drag_bottom");
-                        }
-                    };
-                    el.ondragleave = () => {
-                        el.classList.remove("drag_top");
-                        el.classList.remove("drag_bottom");
-                    };
-                    el.ondrop = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log(e);
-                        let t = e.dataTransfer.getData("text/markdown");
-                        let l = text.value.split("\n");
-                        if (e.offsetY < el.offsetHeight / 2) {
-                            if (t[i[2][0]] == "")
-                                t = "\n" + t + "\n";
-                            l.splice(i[2][0] - 1, 0, t);
-                        }
-                        else {
-                            if (t[i[2][1]] == "")
-                                t = "\n" + t + "\n";
-                            l.splice(i[2][1], 0, t);
-                        }
-                        text.value = l.join("\n");
-                        text.dispatchEvent(new Event("input"));
-                    };
-                }
+                this.drag();
             }, 0);
         };
         text.onkeydown = (e) => {
@@ -321,6 +326,7 @@ class markdown extends HTMLElement {
             references: {},
         });
         this.index = line_el(l);
+        this.drag();
     }
     get value() {
         return this._value;
