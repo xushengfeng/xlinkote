@@ -147,6 +147,12 @@ class markdown extends HTMLElement {
                         console.log(t);
                         e.dataTransfer.setData("text/markdown", t);
                         console.log(e.dataTransfer);
+                        if (!e.ctrlKey) {
+                            let l = text.value.split("\n");
+                            l.splice(i[2][0], i[2][1] - i[2][0]);
+                            text.value = l.join("\n");
+                            text.dispatchEvent(new Event("input"));
+                        }
                     };
                     el.ondragend = () => {
                         el.draggable = false;
