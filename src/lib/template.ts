@@ -159,10 +159,12 @@ class markdown extends HTMLElement {
                 let t = e.dataTransfer.getData("text/markdown");
                 let l = text.value.split("\n");
                 if (e.offsetY < el.offsetHeight / 2) {
-                    if (t[i[2][0]] == "") t = "\n" + t + "\n";
-                    l.splice(i[2][0] - 1, 0, t);
+                    if (l[i[2][0]] == "") t = "\n" + t + "\n";
+                    console.log("0" + l[i[2][0]]);
+                    l.splice(i[2][0], 0, t);
                 } else {
-                    if (t[i[2][1]] == "") t = "\n" + t + "\n";
+                    if (l[i[2][1]] == "") t = "\n" + t + "\n";
+                    console.log("1" + l[i[2][1]]);
                     l.splice(i[2][1], 0, t);
                 }
                 text.value = l.join("\n");
