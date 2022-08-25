@@ -771,6 +771,10 @@ class draw extends HTMLElement {
         this.tmp_svg.setAttribute("width", String(this.width));
         this.tmp_svg.setAttribute("height", String(this.height));
         this.main_svg.innerHTML = x.i;
+        let tr = this.main_svg.children[0].getAttribute("transform");
+        tr = tr.replace("translate(", "").replace(")", "");
+        this.ox = Number(tr.split(",")[0]);
+        this.oy = Number(tr.split(",")[1]);
     }
     get value() {
         return JSON.stringify({ i: this.main_svg.innerHTML, w: this.width, h: this.height });
