@@ -10,6 +10,9 @@ function uuid() {
         return v.toString(16);
     });
 }
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
 // 工具栏
 document.getElementById("文件").click();
 if (window.showOpenFilePicker) {

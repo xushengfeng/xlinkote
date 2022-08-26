@@ -1,0 +1,16 @@
+{
+    "name": "xlinkote",
+    "short_name": "xlinkote",
+    "display": "minimal-ui",
+    "start_url": "/",
+    "scope": "/",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "icons": [
+        {
+            "src": "./assets/logo/logo.svg",
+            "sizes": "240x240",
+            "purpose": "any"
+        }
+    ]
+}

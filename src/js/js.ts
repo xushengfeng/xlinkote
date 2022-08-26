@@ -13,6 +13,10 @@ function uuid() {
     });
 }
 
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
+
 // 工具栏
 document.getElementById("文件").click();
 
