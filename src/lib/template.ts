@@ -691,6 +691,10 @@ class draw extends HTMLElement {
 
     connectedCallback() {
         if (this.getAttribute("value")) {
+            this.tmp_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            this.append(this.tmp_svg);
+            this.main_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            this.append(this.main_svg);
             this.set_v(this.getAttribute("value"));
         } else {
             this.tmp_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
