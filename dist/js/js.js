@@ -692,6 +692,7 @@ function set_data(l) {
         }
     }
     location.hash = `#${集.meta.UUID}`;
+    document.title = get_title();
 }
 function render_data(inputdata) {
     O.innerHTML = "";

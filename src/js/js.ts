@@ -744,6 +744,7 @@ function set_data(l: 集type) {
         }
     }
     location.hash = `#${集.meta.UUID}`;
+    document.title = get_title();
 }
 
 function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
