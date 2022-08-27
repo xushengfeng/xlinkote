@@ -162,6 +162,16 @@ class markdown extends HTMLElement {
         this.text = text;
         this.append(s);
         this.append(text);
+        if (this.getAttribute("value")) {
+            let v = this.getAttribute("value");
+            this._value = this.childNodes[1].value = v;
+            this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
+            var l = md.parse(v, {
+                references: {},
+            });
+            this.index = line_el(l);
+            this.drag();
+        }
         var l = md.parse(text.value, {
             references: {},
         });
