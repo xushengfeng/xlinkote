@@ -511,6 +511,12 @@ function el_offset(el: HTMLElement, pel?: HTMLElement) {
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
     return { x: ox, y: oy };
 }
+function el_offset2(el: HTMLElement, pel?: HTMLElement) {
+    if (!pel) pel = el.parentElement;
+    let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
+        oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
+    return { x: ox / zoom, y: oy / zoom };
+}
 
 document.getElementById("画布").onwheel = (e) => {
     if (e.ctrlKey) {
