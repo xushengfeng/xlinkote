@@ -749,30 +749,29 @@ function set_data(l: 集type) {
 function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
     O.innerHTML = "";
     z.z = [];
+    let t = "";
     for (const x of inputdata.data) {
         try {
-            let el = <x>document.createElement("x-x");
-            el.fixed = x.fixed;
-            el.id = x.id;
-            z.push(el, true);
-            el.setAttribute("style", x.style);
-            setTimeout(() => {
-                el.setAttribute("style", x.style);
-            }, 0);
             if (!集.链接[x.id]) 集.链接[x.id] = { 值: 1, 目标: [] };
+            let eels = "";
             for (let i in x.values) {
-                let eel = <markdown>document.createElement(i);
-                el.append(eel);
-                eel.value = x.values[i].value;
-                if (x.values[i].edit) eel.edit = "cr";
+                eels += `<${i} value='${x.values[i].value}'`;
+                if (x.values[i].edit) eels += `edit = "cr"`;
+                eels += `></${i}>`;
             }
+            t += `<x-x id="${x.id}" fixed="${x.fixed}" style="${x.style}">${eels}</x-x>`;
         } catch (e) {
             console.error(e);
         }
     }
+    O.innerHTML = t;
     O.style.left = (inputdata?.p?.x || 0) + "px";
     O.style.top = (inputdata?.p?.y || 0) + "px";
     zoom_o(inputdata?.p?.zoom || 1);
+    for (const el of O.children) {
+        z.z.push(el as x);
+    }
+    z.reflash(O.children[O.children.length - 1] as x, true);
 }
 
 function json2md(obj: 集type) {
@@ -1299,11 +1298,11 @@ class 图层 {
         if (!nosave) data_changed();
     }
 
-    push(el: x, nosave?: boolean) {
+    push(el: x) {
         el.id = el.id === "undefined" || !el.id ? `${uuid().slice(0, 7)}` : el.id;
         O.append(el);
         this.z.push(el);
-        this.reflash(el, nosave);
+        this.reflash(el);
         if (!集.链接) 集.链接 = {};
         集.链接[el.id] = { 值: 1, 目标: [] };
     }
