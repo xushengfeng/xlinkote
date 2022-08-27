@@ -241,6 +241,17 @@ class markdown extends HTMLElement {
                     text.selectionStart = text.selectionEnd += t.length;
                     text.dispatchEvent(new Event("input"));
                 }
+
+                if (e.ctrlKey) {
+                    let xel = <x>document.createElement("x-x");
+                    xel.style.left = this.parentElement.offsetLeft + "px";
+                    xel.style.top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
+                    xel.style.width = this.parentElement.offsetWidth + "px";
+                    z.push(xel);
+                    var md = document.createElement("x-md");
+                    xel.append(md);
+                    (<markdown>md).edit = true;
+                }
             } else {
                 let l_l = [
                     ["(", ")"],
