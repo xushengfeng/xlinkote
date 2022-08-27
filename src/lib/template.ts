@@ -111,14 +111,18 @@ class markdown extends HTMLElement {
         for (let i of this.index) {
             let el = this.h.querySelector(`:scope > ${i[0]}`) as HTMLElement;
             el.style.position = "relative";
-            let handle = document.createElement("div");
-            handle.innerHTML = `<svg width="16" height="16">
+            let handle = el.querySelector(".handle") as HTMLDivElement;
+            if (!handle) {
+                handle = document.createElement("div");
+                handle.innerHTML = `<svg width="16" height="16">
             <path d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
           </svg>`;
-            handle.classList.add("handle");
-            handle.onmousedown = () => {
-                el.draggable = true;
-            };
+                handle.classList.add("handle");
+                handle.onmousedown = () => {
+                    el.draggable = true;
+                };
+                el.insertAdjacentElement("afterbegin", handle);
+            }
             el.ondragstart = (e) => {
                 e.stopPropagation();
                 let t = text.value.split("\n").slice(i[2][0], i[2][1]).join("\n");
@@ -135,7 +139,6 @@ class markdown extends HTMLElement {
             el.ondragend = () => {
                 el.draggable = false;
             };
-            el.insertAdjacentElement("afterbegin", handle);
 
             el.ondragover = (e) => {
                 e.preventDefault();
