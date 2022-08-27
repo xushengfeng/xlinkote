@@ -439,7 +439,6 @@ x-md > textarea {
     left: 0;
     width: 100%;
 }
-
 .handle {
     width: 16px;
     height: 16px;
@@ -448,7 +447,7 @@ x-md > textarea {
     top: 0;
     opacity: 0;
 }
-.handle:hover {
+x-md > #h *:hover > .handle {
     opacity: 1;
 }
 
