@@ -370,6 +370,7 @@ class markdown extends HTMLElement {
         });
         parse = l;
         this.index = line_el(l);
+        this.drag();
     }
 }
 
