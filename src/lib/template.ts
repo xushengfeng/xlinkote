@@ -275,8 +275,8 @@ class markdown extends HTMLElement {
             }
             if (index_i) {
                 let el = <HTMLElement>s.querySelector(`#h > ${index_i[0]}`);
-                let x = el.offsetLeft,
-                    y = el.offsetTop + el.offsetHeight;
+                let x = el_offset(el, this.h).x,
+                    y = el_offset(el, this.h).y + el.offsetHeight;
                 O.style.left = el_offset(O).x - (x - text.offsetLeft) + "px";
                 O.style.top = el_offset(O).y - (y - text.offsetTop) + "px";
                 text.style.left = x + "px";
@@ -302,8 +302,8 @@ class markdown extends HTMLElement {
                 this._value = text.value;
                 data_changed();
             }
-            text.style.left = el.offsetLeft + "px";
-            text.style.top = el.offsetTop + el.offsetHeight + "px";
+            text.style.left = el_offset(el, this.h).x + "px";
+            text.style.top = el_offset(el, this.h).y + el.offsetHeight + "px";
             let line = NaN;
             if (el.tagName == "LI") {
                 line = el_line(text, this.index, s, el)[0] + 1;
