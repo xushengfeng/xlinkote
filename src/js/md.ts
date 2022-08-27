@@ -98,11 +98,16 @@ function get_svg(c: string) {
             }
             function reload() {
                 console.log("加载数学组件完成");
-                画布.querySelectorAll("x-md").forEach((pel) => {
-                    if (pel.querySelector("mjx-container")) {
-                        (<markdown>pel).reload();
-                    }
-                });
+                function l() {
+                    画布.querySelectorAll("x-md").forEach((pel) => {
+                        if (pel.querySelector("mjx-container")) {
+                            (<markdown>pel).reload();
+                        }
+                    });
+                }
+                setTimeout(l, 600);
+                setTimeout(l, 200);
+                l();
             }
         }
     }
