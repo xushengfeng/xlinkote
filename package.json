@@ -30,6 +30,7 @@
     "webdav": "^4.10.0"
   },
   "devDependencies": {
+    "typescript": "^4.8.2",
     "vite": "^3.0.9"
   }
 }
