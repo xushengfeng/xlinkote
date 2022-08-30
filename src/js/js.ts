@@ -1,3 +1,12 @@
+import x_y_svg from "../../assets/icons/x_y.svg";
+import y_svg from "../../assets/icons/y.svg";
+import x_svg from "../../assets/icons/x.svg";
+import cloud_down from "../../assets/icons/cloud_down.svg";
+import cloud from "../../assets/icons/cloud.svg";
+import ding_svg from "../../assets/icons/ding.svg";
+import close_svg from "../../assets/icons/close.svg";
+import file_svg from "../../assets/icons/file.svg";
+
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
 var 设置_el = document.getElementById("设置");
@@ -298,7 +307,7 @@ var fxsd = 0;
 fxsd_el.onclick = () => {
     let o = { 0: 1, 1: 2, 2: 0 };
     fxsd = o[fxsd];
-    let os = { 0: "./assets/icons/x_y.svg", 1: "./assets/icons/y.svg", 2: "./assets/icons/x.svg" };
+    let os = { 0: x_y_svg, 1: y_svg, 2: x_svg };
     fxsd_el.querySelector("img").src = os[fxsd];
 };
 
@@ -925,7 +934,7 @@ function db_get() {
         files = r.result;
         document.getElementById("文件").innerHTML = "";
         let load_dav = document.createElement("div");
-        load_dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
+        load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
         document.getElementById("文件").append(load_dav);
         load_dav.onclick = () => {
             get_all_xln(r.result);
@@ -1426,7 +1435,7 @@ async function get_all_xln(r) {
                     document.title = get_title();
                     侧栏.classList.remove("侧栏显示");
                 };
-                dav.innerHTML = `<img src="./assets/icons/cloud_down.svg" class="icon">`;
+                dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
                 dav_files = dav_files.filter((v) => v != fi);
                 break;
             }
@@ -1439,7 +1448,7 @@ async function get_all_xln(r) {
         t.value = fi.basename.replace(/\.xln$/, "") || "";
         t.title = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "");
         let dav = document.createElement("div");
-        dav.innerHTML = `<img src="./assets/icons/cloud.svg" class="icon">`;
+        dav.innerHTML = `<img src="${cloud}" class="icon">`;
         d.append(dav, t);
         document.getElementById("文件").append(d);
         t.onclick = dav.onclick = () => {
@@ -2017,9 +2026,9 @@ class x extends HTMLElement {
         bar.id = "x-x_bar";
         var xywh = document.createElement("input");
         var f = document.createElement("div");
-        f.innerHTML = `<img src="./assets/icons/ding.svg" class="icon">`;
+        f.innerHTML = `<img src="${ding_svg}" class="icon">`;
         var d = document.createElement("div");
-        d.innerHTML = `<img src="./assets/icons/close.svg" class="icon">`;
+        d.innerHTML = `<img src="${close_svg}" class="icon">`;
 
         bar.append(xywh);
         bar.append(f);
@@ -2660,7 +2669,7 @@ class file extends HTMLElement {
         } else {
             this.div.classList.add("file");
             let i = document.createElement("div");
-            i.innerHTML = `<img src="./assets/icons/file.svg" class="icon">`;
+            i.innerHTML = `<img src="${file_svg}" class="icon">`;
             let file_name_el = document.createElement("p");
             this.div.append(i);
             this.div.append(file_name_el);
