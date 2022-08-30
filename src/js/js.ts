@@ -1120,6 +1120,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
 };
 
 // 添加文件或文字
+import TurndownService from "turndown";
 function add_file(type: string, text: string, data: string, x: number, y: number) {
     let types = type.split("/");
     let xel = <x>document.createElement("x-x");
@@ -1130,7 +1131,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         let md = <markdown>document.createElement("x-md");
         xel.append(md);
         if (type == "text/html") {
-            let turndownService = new window.TurndownService({ headingStyle: "atx" });
+            let turndownService = new TurndownService({ headingStyle: "atx" });
             md.value = turndownService.turndown(text);
         } else {
             md.value = text;
@@ -1183,11 +1184,13 @@ document.addEventListener("message", (msg: any) => {
     }
 });
 
+import CryptoJS from "crypto-js";
+
 // 资源
 function put_assets(url: string, base64: string) {
     let id = uuid().slice(0, 7);
     let sha = "";
-    if (base64) sha = window.CryptoJS.SHA256(base64).toString();
+    if (base64) sha = CryptoJS.SHA256(base64).toString();
     集.assets[id] = { url, base64, sha };
     return id;
 }
@@ -1248,11 +1251,12 @@ window.onbeforeunload = () => {
 };
 
 // 导出
+import html2canvas from "html2canvas";
 function to_canvas() {
     for (let m of document.querySelectorAll("mjx-assistive-mml")) {
         m.remove();
     }
-    window.html2canvas(画布).then(function (canvas: HTMLCanvasElement) {
+    html2canvas(画布).then(function (canvas: HTMLCanvasElement) {
         let url = canvas.toDataURL();
         let a = document.createElement("a");
         let name = get_file_name();
@@ -1393,8 +1397,8 @@ el_style.oninput = () => {
 if (!location.hash) set_data(集);
 
 // 云
-
-var client = window.WebDAV.createClient(store.webdav.网址, {
+import { createClient } from "webdav";
+var client = createClient(store.webdav.网址, {
     username: store.webdav.用户名,
     password: store.webdav.密码,
 });
@@ -1403,6 +1407,7 @@ async function get_all_xln(r) {
     let dav_files = (await client.getDirectoryContents("/", { deep: true, glob: "**.xln" })) as any[];
     let rp = await client.getDirectoryContents("/");
     let 删除路径 = "";
+    // @ts-ignore
     let rplf = rp[rp.length - 1];
     let b = new RegExp(`${rplf.basename}$`);
     删除路径 = rplf.filename.replace(b, "");
@@ -1455,12 +1460,12 @@ async function get_xln_value(path: string) {
         o = JSON.parse(<string>str);
     } catch (e) {
         if (store.webdav.加密密钥) {
-            let bytes = window.CryptoJS.AES.decrypt(str, store.webdav.加密密钥);
-            str = bytes.toString(window.CryptoJS.enc.Utf8);
+            let bytes = CryptoJS.AES.decrypt(str, store.webdav.加密密钥);
+            str = bytes.toString(CryptoJS.enc.Utf8);
             if (!str) {
                 let password = prompt("密钥错误，请输入其他密钥");
-                let bytes = window.CryptoJS.AES.decrypt(str, password);
-                str = bytes.toString(window.CryptoJS.enc.Utf8);
+                let bytes = CryptoJS.AES.decrypt(str, password);
+                str = bytes.toString(CryptoJS.enc.Utf8);
             }
             str = 解压(str);
             o = JSON.parse(<string>str);
@@ -1486,7 +1491,7 @@ async function put_xln_value() {
     let t = JSON.stringify(get_data());
     if (store.webdav.加密密钥) {
         t = 压缩(t);
-        t = window.CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
+        t = CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
     }
     let v = await client.putFileContents(path, t);
     if (v) put_toast("文件上传成功");
@@ -1504,8 +1509,10 @@ function auto_put_xln() {
     }
 }
 
+import pako from "pako";
+
 function 压缩(t: string): string {
-    let c = window.pako.deflate(t);
+    let c = pako.deflate(t);
     let res = "";
     let chunk = 8 * 1024;
     let i: number;
@@ -1523,7 +1530,7 @@ function 解压(t: string): string {
     }
 
     let tmpUint8Array = new Uint8Array(arr);
-    let r = window.pako.inflate(tmpUint8Array, { to: "string" });
+    let r = pako.inflate(tmpUint8Array, { to: "string" });
     return r;
 }
 
@@ -1545,7 +1552,7 @@ function save_setting() {
 }
 
 function arter_save_setting() {
-    client = window.WebDAV.createClient(store.webdav.网址, {
+    client = createClient(store.webdav.网址, {
         username: store.webdav.用户名,
         password: store.webdav.密码,
     });
@@ -1565,12 +1572,13 @@ function show_setting() {
 }
 
 // 搜索
+import Fuse from "fuse.js";
 function search(s: string, type: "str" | "regex") {
     let result = [];
     switch (type) {
         case "str":
             for (let t of document.querySelectorAll("textarea")) {
-                const fuse = new window.Fuse(t.value.split("\n"), {
+                const fuse = new Fuse(t.value.split("\n"), {
                     includeMatches: true,
                     findAllMatches: true,
                     useExtendedSearch: true,
@@ -1663,15 +1671,17 @@ function show_search_l(l) {
 }
 
 // MD
-
-var md = window
-    .markdownit({
-        html: true,
-        linkify: true,
-        typographer: true,
-    })
-    .use(window.markdownitTaskLists, { enabled: true })
-    .use(window.markdownitContainer, "spoiler", {
+import markdownit from "markdown-it";
+import markdownitTaskLists from "markdown-it-task-lists";
+import markdownitContainer from "markdown-it-container";
+import markdownitEmoji from "markdown-it-emoji";
+var md = markdownit({
+    html: true,
+    linkify: true,
+    typographer: true,
+})
+    .use(markdownitTaskLists, { enabled: true })
+    .use(markdownitContainer, "spoiler", {
         validate: function (params) {
             return params.trim().match(/^(.*)$/);
         },
@@ -1689,7 +1699,7 @@ var md = window
         },
         marker: "+",
     })
-    .use(window.markdownitEmoji);
+    .use(markdownitEmoji);
 
 var defaultRender =
     md.renderer.rules.heading_open ||
@@ -1718,10 +1728,11 @@ md.renderer.rules.em_open = function (tokens, idx, options, env, self) {
     return defaultRender(tokens, idx, options, env, self);
 };
 let f = md.renderer.rules.fence;
+import mermaid from "mermaid";
 md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     if (tokens[idx].info == "mermaid") {
         let o = "";
-        window.mermaid.mermaidAPI.render("mgraph" + String(new Date().getTime()), tokens[idx].content, (svg) => {
+        mermaid.mermaidAPI.render("mgraph" + String(new Date().getTime()), tokens[idx].content, (svg) => {
             o = svg;
         });
         return o;
@@ -3007,7 +3018,7 @@ class record extends HTMLElement {
                             audio.src = a.result as string;
                             if (!集.assets[this.id]) 集.assets[this.id] = { url: "", base64: "", sha: "" };
                             集.assets[this.id].base64 = a.result as string;
-                            集.assets[this.id].sha = window.CryptoJS.SHA256(a.result as string).toString();
+                            集.assets[this.id].sha = CryptoJS.SHA256(a.result as string).toString();
                         };
                         a.readAsDataURL(blob);
                         stream.getAudioTracks()[0].stop();
