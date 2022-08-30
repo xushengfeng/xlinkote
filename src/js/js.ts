@@ -2490,6 +2490,7 @@ function set_el_text_value(el: HTMLElement, value: any) {
 }
 
 // 几何图形
+import JXG from "jsxgraph";
 class graph extends HTMLElement {
     constructor() {
         super();
@@ -2512,34 +2513,9 @@ class graph extends HTMLElement {
         this.append(s);
         this.append(text);
 
-        if (window.JXG) {
+        if (JXG) {
             if (text.value)
                 eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
-        } else {
-            let script = document.createElement("script");
-            script.src = "./node_modules/jsxgraph/distrib/jsxgraphcore.js";
-            this.append(script);
-            let style = document.createElement("link");
-            style.href = "./node_modules/jsxgraph/distrib/jsxgraph.css";
-            this.append(style);
-            script.onload = () => {
-                if (text.value)
-                    eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
-            };
-            script.onerror = () => {
-                let script = document.createElement("script");
-                script.src = "./node/jsxgraph/distrib/jsxgraphcore.js";
-                this.append(script);
-                let style = document.createElement("link");
-                style.href = "./node/jsxgraph/distrib/jsxgraph.css";
-                this.append(style);
-                script.onload = () => {
-                    if (text.value)
-                        eval(
-                            this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id)
-                        );
-                };
-            };
         }
 
         b.onclick = () => {

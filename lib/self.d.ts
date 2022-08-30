@@ -6,6 +6,5 @@ declare global {
         showDirectoryPicker: any;
         showSaveFilePicker: any;
         MathJax: any;
-        JXG: any;
     }
 }
