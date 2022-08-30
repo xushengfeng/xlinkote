@@ -178,13 +178,13 @@ document.getElementById("设计").onclick = () => {
 document.getElementById("绘制").onclick = () => {
     set_模式("绘制");
 };
-function set_模式(模式: "浏览" | "设计" | "绘制") {
-    window.模式 = 模式;
+function set_模式(模式x: "浏览" | "设计" | "绘制") {
+    模式 = 模式x;
     nav.querySelectorAll("#mode_bar > div").forEach((v) => {
         v.classList.remove("模式突出");
     });
-    nav.querySelector(`#${模式}`).classList.add("模式突出");
-    switch (模式) {
+    nav.querySelector(`#${模式x}`).classList.add("模式突出");
+    switch (模式x) {
         case "浏览":
             if (<draw>focus_draw_el) {
                 focus_draw_el = null;
@@ -2556,6 +2556,7 @@ class graph extends HTMLElement {
 
 window.customElements.define("x-graph", graph);
 
+import mathSymbols from "../../lib/tex/x.js";
 class symbols extends HTMLElement {
     constructor() {
         super();
