@@ -788,6 +788,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
         z.z.push(el as x);
     }
     z.reflash(O.children[O.children.length - 1] as x, true);
+    l_math();
 }
 
 function json2md(obj: 集type) {
@@ -827,15 +828,6 @@ function md2json(t: string) {
     });
     return obj;
 }
-
-window.MathJax = {
-    tex: {
-        inlineMath: [["$", "$"]],
-    },
-    options: {
-        enableMenu: false,
-    },
-};
 
 // 绑定文件
 var fileHandle;
@@ -1764,40 +1756,49 @@ function get_svg(c: string) {
         html = ca[0];
         mathjax_cache[c][1] = 2;
     } else {
-        if (window.MathJax.tex2svg) {
+        if (window?.MathJax?.tex2svg) {
             html = window.MathJax.tex2svg(c).outerHTML;
             mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
         } else {
             html = "<mjx-container></mjx-container>";
             if (!will_load_math) {
-                let s = document.createElement("script");
-                s.src = "./node/mathjax/es5/tex-svg.js";
-                will_load_math = true;
-                s.onload = reload;
-                document.body.append(s);
-                s.onerror = () => {
-                    let s = document.createElement("script");
-                    s.src = "./node_modules/mathjax/es5/tex-svg.js";
-                    document.body.append(s);
-                    s.onload = reload;
+                window.MathJax = {
+                    tex: {
+                        inlineMath: [["$", "$"]],
+                    },
+                    options: {
+                        enableMenu: false,
+                    },
+                    startup: {
+                        ready: () => {
+                            window.MathJax.startup.defaultReady();
+                            window.MathJax.startup.promise.then(() => {
+                                console.log("MathJax initial typesetting complete");
+                                setTimeout(l_math, 600);
+                                setTimeout(l_math, 200);
+                                l_math();
+                            });
+                        },
+                    },
                 };
-            }
-            function reload() {
-                console.log("加载数学组件完成");
-                function l() {
-                    画布.querySelectorAll("x-md").forEach((pel) => {
-                        if (pel.querySelector("mjx-container")) {
-                            (<markdown>pel).reload();
-                        }
-                    });
-                }
-                setTimeout(l, 600);
-                setTimeout(l, 200);
-                l();
+                (function () {
+                    let s = document.createElement("script");
+                    s.src = "https://unpkg.com/mathjax@3.2.2/es5/tex-svg.js";
+                    s.async = true;
+                    will_load_math = true;
+                    document.body.append(s);
+                })();
             }
         }
     }
     return html;
+}
+function l_math() {
+    画布.querySelectorAll("x-md").forEach((pel) => {
+        if (pel.querySelector("mjx-container")) {
+            (<markdown>pel).reload();
+        }
+    });
 }
 setInterval(() => {
     for (let i in mathjax_cache) {
