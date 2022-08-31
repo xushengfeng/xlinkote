@@ -8,7 +8,7 @@
     "background_color": "#ffffff",
     "icons": [
         {
-            "src": "./assets/logo/logo.svg",
+            "src": "./logo/logo.svg",
             "sizes": "240x240",
             "purpose": "any"
         }
