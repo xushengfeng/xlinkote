@@ -2784,7 +2784,7 @@ class draw extends HTMLElement {
             let at = `M${this.points[1].x} ${this.points[1].y}Q`;
 
             let so = (i: number) => {
-                let w = this.points[i - 1].p * this.pen.width;
+                let w = this.points[i - 1].p * (this.pen.width / 2);
                 if (this.pen.zoom) w = w / zoom;
                 let x0 = this.points[i - 2].x,
                     y0 = this.points[i - 2].y,
@@ -2841,7 +2841,7 @@ class draw extends HTMLElement {
             );
             if (
                 s >
-                    (this.pen.width * (e.pressure + this.points[this.points.length - 1].p)) /
+                    ((this.pen.width / 2) * (e.pressure + this.points[this.points.length - 1].p)) /
                         (this.pen.zoom ? zoom : 1) ||
                 Math.abs(a1 - a2) < Math.PI / 2
             ) {
