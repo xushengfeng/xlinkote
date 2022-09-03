@@ -496,8 +496,8 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
 
 document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";
-    O.style.left = "0px";
-    O.style.top = "0px";
+    O.style.left = `${画布.offsetWidth / 2}px`;
+    O.style.top = `${画布.offsetHeight / 2}px`;
     zoom_o(1);
     setTimeout(() => {
         O.style.transition = "";
@@ -701,7 +701,7 @@ function get_data() {
     for (let p of 集.数据) {
         if (p.name == 集.meta.focus_page) {
             p.data = data;
-            p.p = { x: el_offset(O).x, y: el_offset(O).y, zoom };
+            p.p = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
         }
     }
     return l;
@@ -781,8 +781,8 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
         }
     }
     O.innerHTML = t;
-    O.style.left = (inputdata?.p?.x || 0) + "px";
-    O.style.top = (inputdata?.p?.y || 0) + "px";
+    O.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
+    O.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
     zoom_o(inputdata?.p?.zoom || 1);
     for (const el of O.children) {
         z.z.push(el as x);
