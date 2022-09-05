@@ -247,30 +247,6 @@ function set_md_v(s: string, e: string) {
     text.dispatchEvent(new InputEvent("input"));
 }
 
-document.getElementById("md_h1").onclick = () => {
-    set_md_v("# ", "");
-};
-document.getElementById("md_h2").onclick = () => {
-    set_md_v("## ", "");
-};
-document.getElementById("md_h3").onclick = () => {
-    set_md_v("### ", "");
-};
-document.getElementById("md_h4").onclick = () => {
-    set_md_v("#### ", "");
-};
-document.getElementById("md_h5").onclick = () => {
-    set_md_v("##### ", "");
-};
-document.getElementById("md_h6").onclick = () => {
-    set_md_v("###### ", "");
-};
-document.getElementById("md_list").onclick = () => {
-    set_md_v("- ", "");
-};
-document.getElementById("md_task").onclick = () => {
-    set_md_v("- [ ] ", "");
-};
 document.getElementById("md_b").onclick = () => {
     set_md_v("**", "**");
 };
@@ -289,8 +265,62 @@ document.getElementById("md_img").onclick = () => {
 document.getElementById("md_mathi").onclick = () => {
     set_md_v("$", "$");
 };
-document.getElementById("md_mathb").onclick = () => {
-    set_md_v("$$\n", "\n$$");
+
+var drag_block = false;
+
+document.getElementById("常驻").onpointerdown = (e) => {
+    console.log((<HTMLElement>e.target).id);
+    let v = null;
+    let el_n = "";
+    switch ((<HTMLElement>e.target).id) {
+        case "md_h1":
+            v = "# ";
+            break;
+        case "md_h2":
+            v = "## ";
+            break;
+        case "md_h3":
+            v = "### ";
+            break;
+        case "md_h4":
+            v = "#### ";
+            break;
+        case "md_h5":
+            v = "##### ";
+            break;
+        case "md_h6":
+            v = "###### ";
+            break;
+        case "md_list":
+            v = "- ";
+            break;
+        case "md_task":
+            v = "- [ ] ";
+            break;
+        case "md_mathb":
+            v = "$$\n\n$$";
+            break;
+    }
+    if ((<HTMLElement>e.target).id == "录音") {
+        el_n = "x-record";
+    } else {
+        el_n = "x-md";
+    }
+    let x = e.clientX - O.getBoundingClientRect().x,
+        y = e.clientY - O.getBoundingClientRect().y;
+
+    let xel = <x>document.createElement("x-x");
+    xel.style.left = x / zoom + "px";
+    xel.style.top = y / zoom + "px";
+    z.push(xel);
+    var md = document.createElement(el_n);
+    xel.append(md);
+    set_模式("浏览");
+    if (v) (<markdown>md).value = v;
+    set_模式("设计");
+    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+    free_o_e = e;
+    drag_block = true;
 };
 
 // 画布
@@ -572,6 +602,12 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
     if (free_o_e) move = true;
 });
 document.addEventListener("mouseup", (e: MouseEvent) => {
+    if (drag_block) {
+        set_模式("浏览");
+        free_o_rects[0].el.children[1].edit = true;
+        drag_block = false;
+    }
+
     free_mouse(e);
     free_o_e = null;
     move = false;
@@ -1233,18 +1269,6 @@ document.getElementById("橡皮").onclick = () => {
     } else {
         (<draw>focus_draw_el).pen.gco = "source-over";
     }
-};
-
-document.getElementById("录音").onclick = () => {
-    let x = -el_offset(O).x + 8,
-        y = -el_offset(O).y + 8;
-    let xel = <x>document.createElement("x-x");
-    xel.style.left = x / zoom + "px";
-    xel.style.top = y / zoom + "px";
-    z.push(xel);
-    let r = document.createElement("x-record");
-    xel.append(r);
-    set_模式("浏览");
 };
 
 window.onbeforeunload = () => {

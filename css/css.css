@@ -244,6 +244,20 @@ body > #main > #nav #search {
     left: var(--icon-margin);
     top: var(--icon-margin);
 }
+.侧栏 > #items > #中转站 > #常驻 > div {
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+    position: relative;
+    float: left;
+    cursor: pointer;
+}
+.侧栏 > #items > #中转站 > #常驻 > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+}
+
 dialog > #close_webdav_files {
     width: 16px;
     height: 16px;
