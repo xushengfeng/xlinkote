@@ -642,15 +642,17 @@ document.onkeydown = (e) => {
             }
             break;
         case "0":
-            let ozoom = zoom,
-                dzoom = 1 - zoom;
-            zoom += dzoom;
-            let dx = now_mouse_e.clientX - O.getBoundingClientRect().x,
-                dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
-            O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-            O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
-            zoom_o(1);
-            data_changed();
+            if (e.ctrlKey) {
+                let ozoom = zoom,
+                    dzoom = 1 - zoom;
+                zoom += dzoom;
+                let dx = now_mouse_e.clientX - O.getBoundingClientRect().x,
+                    dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
+                O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
+                O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+                zoom_o(1);
+                data_changed();
+            }
             break;
         case "k":
             if (e.ctrlKey) {
