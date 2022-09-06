@@ -2275,7 +2275,8 @@ class markdown extends HTMLElement {
                     text.dispatchEvent(new Event("input"));
                 }
 
-                if (e.ctrlKey) {
+                if (!e.ctrlKey) {
+                    e.preventDefault();
                     let xel = <x>document.createElement("x-x");
                     xel.style.left = this.parentElement.offsetLeft + "px";
                     xel.style.top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
