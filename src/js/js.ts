@@ -2688,6 +2688,7 @@ class file extends HTMLElement {
             }
             if (type[0] == "video") {
                 let video = document.createElement("video");
+                video.controls = true;
                 this.div.append(video);
                 video.src = f.base64;
             }
