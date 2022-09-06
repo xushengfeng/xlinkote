@@ -82,20 +82,6 @@ document.getElementById("新建页").onclick = () => {
     page.fixed = true;
 };
 
-document.getElementById("新建画板").onclick = () => {
-    let xel = <x>document.createElement("x-x");
-    xel.style.left = -el_offset(O).x / zoom + "px";
-    xel.style.top = -el_offset(O).y / zoom + "px";
-    let draw = document.createElement("x-draw") as draw;
-    draw.setAttribute("width", String(画布.offsetWidth / zoom));
-    draw.setAttribute("height", String(画布.offsetHeight / zoom));
-    xel.append(draw);
-    set_模式("绘制");
-
-    z.push(xel);
-    z.focus(xel);
-};
-
 var 侧栏 = document.getElementById("侧栏");
 
 侧栏.onclick = (e) => {
@@ -199,10 +185,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
                 focus_draw_el = null;
             }
             if (O) O.style.pointerEvents = "";
-            if (O)
-                for (let el of O.querySelectorAll("x-draw")) {
-                    (el as draw).clip();
-                }
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -212,10 +194,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
                 (<markdown>el).edit = false;
             });
             if (O) O.style.pointerEvents = "";
-            if (O)
-                for (let el of O.querySelectorAll("x-draw")) {
-                    (el as draw).clip();
-                }
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -1233,15 +1211,24 @@ function put_assets(url: string, base64: string) {
 }
 
 // 画板
+function new_draw() {
+    let xel = <x>document.createElement("x-x");
+    xel.style.left = -el_offset(O).x / zoom + "px";
+    xel.style.top = -el_offset(O).y / zoom + "px";
+    let draw = document.createElement("x-draw") as draw;
+    draw.setAttribute("width", String(画布.offsetWidth / zoom));
+    draw.setAttribute("height", String(画布.offsetHeight / zoom));
+    xel.append(draw);
+    set_模式("绘制");
+
+    z.push(xel);
+    z.focus(xel);
+}
 var focus_draw_el = null;
 画布.onpointerdown = (e) => {
-    let el = e.target as HTMLElement;
-    if (el.parentElement.tagName == "X-DRAW") {
-        if (模式 == "绘制") {
-            (<draw>el.parentElement)?.draw(e);
-            z.focus(el.parentElement.parentElement as x);
-            (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
-        }
+    if (模式 == "绘制") {
+        new_draw();
+        (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
     }
 };
 
@@ -1255,6 +1242,7 @@ var focus_draw_el = null;
         (<draw>focus_draw_el).draw(e);
         (<draw>focus_draw_el).points = [{ x: NaN, y: NaN, p: NaN }];
         (<draw>focus_draw_el).complete();
+        (<draw>focus_draw_el).clip();
         data_changed();
     }
 };
