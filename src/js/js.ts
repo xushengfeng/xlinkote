@@ -2368,6 +2368,7 @@ class markdown extends HTMLElement {
                 text.value = l.join("\n");
                 this._value = text.value;
                 data_changed();
+                return;
             }
             text.style.left = el_offset2(el, this.h).x + "px";
             text.style.top = el_offset2(el, this.h).y + el.offsetHeight + "px";
