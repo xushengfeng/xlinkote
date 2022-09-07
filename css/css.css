@@ -405,6 +405,8 @@ x-x {
     position: absolute;
     display: block;
     width: max-content;
+    min-width: 0.5rem;
+    min-height: 0.5rem;
 }
 
 .x-x_bar_show {
