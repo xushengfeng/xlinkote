@@ -1155,7 +1155,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         } else {
             md.value = text;
         }
-    } else if (types[0] == "image" || types[0] == "video") {
+    } else {
         let id = put_assets("", data);
         let file = <file>document.createElement("x-file");
         xel.append(file);
@@ -2677,12 +2677,13 @@ class file extends HTMLElement {
     }
 
     set_m() {
+        let f = 集.assets[this._value.id];
+        if (!f) return;
+        let type = f.base64.match(/data:(.*?);/)[1].split("/");
+        if (type[0] != "image" && type[0] != "video") this._value.r = false;
         this.div.innerHTML = "";
         if (this._value.r) {
             this.div.classList.remove("file");
-            let f = 集.assets[this._value.id];
-            if (!f) return;
-            let type = f.base64.match(/data:(.*?);/)[1].split("/");
             if (type[0] == "image") {
                 let img = document.createElement("img");
                 this.div.append(img);
