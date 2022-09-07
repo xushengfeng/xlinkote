@@ -992,6 +992,7 @@ function db_get() {
             for (let f of r.result) {
                 if (`#${f.meta.UUID}` == location.hash) {
                     set_data(f);
+                    new_d.remove();
                 }
             }
         }
