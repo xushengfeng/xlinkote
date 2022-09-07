@@ -2259,19 +2259,18 @@ class markdown extends HTMLElement {
         text.onkeydown = (e) => {
             if (模式 != "浏览") e.preventDefault();
             if (e.key == "Enter") {
+                e.preventDefault();
                 data_changed();
                 let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
                 let last_line = text.value.slice(last_line_start, text.selectionStart);
                 let l_task = last_line.match(/^ *[-+*] +\[[x\s]\] +/i);
                 if (l_task) {
-                    e.preventDefault();
                     text.setRangeText("\n" + l_task[0]);
                     text.selectionStart = text.selectionEnd += l_task[0].length + 1;
                     text.dispatchEvent(new Event("input"));
                 } else {
                     let l_l = last_line.match(/^ *[-+*] +/);
                     if (l_l) {
-                        e.preventDefault();
                         text.setRangeText("\n" + l_l[0]);
                         text.selectionStart = text.selectionEnd += l_l[0].length + 1;
                         text.dispatchEvent(new Event("input"));
@@ -2279,15 +2278,13 @@ class markdown extends HTMLElement {
                 }
                 let l_n = last_line.match(/^ *\d+\. +/);
                 if (l_n) {
-                    e.preventDefault();
                     let t = "\n" + l_n[0].replace(/\d+/, (n) => String(Number(n) + 1));
                     text.setRangeText(t);
                     text.selectionStart = text.selectionEnd += t.length;
                     text.dispatchEvent(new Event("input"));
                 }
 
-                if (!e.ctrlKey) {
-                    e.preventDefault();
+                if (!e.shiftKey) {
                     let xel = <x>document.createElement("x-x");
                     xel.style.left = this.parentElement.offsetLeft + "px";
                     xel.style.top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
@@ -2296,6 +2293,9 @@ class markdown extends HTMLElement {
                     var md = document.createElement("x-md");
                     xel.append(md);
                     (<markdown>md).edit = true;
+                } else {
+                    text.setRangeText("\n");
+                    text.selectionStart = text.selectionEnd = text.selectionStart + 1;
                 }
             } else {
                 let l_l = [
