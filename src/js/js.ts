@@ -27,7 +27,6 @@ if ("serviceWorker" in navigator) {
 }
 
 // 工具栏
-document.getElementById("文件").click();
 
 if (window.showOpenFilePicker) {
     document.getElementById("绑定文件").onclick = file_load;
@@ -937,15 +936,17 @@ function db_put(obj: object) {
 
 var files;
 
+const 文件_el = document.getElementById("文件");
+
 function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
         files = r.result;
-        document.getElementById("文件").innerHTML = "";
+        文件_el.innerHTML = "";
         let load_dav = document.createElement("div");
         load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
-        document.getElementById("文件").append(load_dav);
+        文件_el.append(load_dav);
         load_dav.onclick = () => {
             get_all_xln(r.result);
         };
@@ -967,7 +968,7 @@ function db_get() {
                 data_changed();
             }
         };
-        document.getElementById("文件").append(new_d);
+        文件_el.append(new_d);
         for (let f of r.result) {
             let d = document.createElement("div");
             let t = rename_el();
@@ -984,7 +985,7 @@ function db_get() {
             if (f.meta.url) t.title = f.meta.url;
             let dav = document.createElement("div");
             d.append(dav, t);
-            document.getElementById("文件").append(d);
+            文件_el.append(d);
         }
 
         if (`#${集.meta.UUID}` != location.hash) {
@@ -1430,7 +1431,7 @@ async function get_all_xln(r) {
     删除路径 = rplf.filename.replace(b, "");
     for (let f of r) {
         let dav: HTMLElement;
-        for (let el of document.getElementById("文件").querySelectorAll("input")) {
+        for (let el of 文件_el.querySelectorAll("input")) {
             if (el.value == f.meta.file_name) {
                 dav = el.previousElementSibling as HTMLElement;
                 break;
@@ -1450,7 +1451,7 @@ async function get_all_xln(r) {
         }
     }
     for (let fi of dav_files) {
-        let new_t = document.getElementById("文件").querySelector("div:nth-child(2)") as HTMLElement;
+        let new_t = 文件_el.querySelector("div:nth-child(2)") as HTMLElement;
         let d = document.createElement("div");
         let t = rename_el();
         t.value = fi.basename.replace(/\.xln$/, "") || "";
@@ -1458,7 +1459,7 @@ async function get_all_xln(r) {
         let dav = document.createElement("div");
         dav.innerHTML = `<img src="${cloud}" class="icon">`;
         d.append(dav, t);
-        document.getElementById("文件").append(d);
+        文件_el.append(d);
         t.onclick = dav.onclick = () => {
             if (!集.meta.file_name) new_t.remove();
             get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
