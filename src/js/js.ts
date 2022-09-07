@@ -742,7 +742,9 @@ function rename_el() {
 }
 
 function set_data(l: 集type) {
-    集 = l;
+    for (let i in l) {
+        if (集[i]) 集[i] = l[i];
+    }
     O.innerHTML = "";
     document.getElementById("集").innerHTML = "";
     for (const p of 集.数据) {
