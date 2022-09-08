@@ -2779,74 +2779,78 @@ class draw extends HTMLElement {
         }
 
         // 画
-        if (this.points.length != 1) {
-            let ps1 = [],
-                ps2 = [];
-            let at = `M${this.points[1].x} ${this.points[1].y}Q`;
+        pen_p(this);
 
-            let so = (i: number) => {
-                let w = this.points[i - 1].p * (this.pen.width / 2);
-                if (this.pen.zoom) w = w / zoom;
-                let x0 = this.points[i - 2].x,
-                    y0 = this.points[i - 2].y,
-                    x1 = this.points[i - 1].x,
-                    y1 = this.points[i - 1].y,
-                    x2 = this.points?.[i]?.x || x,
-                    y2 = this.points?.[i]?.y || y;
-                let a = Math.atan2(y2 - y0, x2 - x0);
-                let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
-                let p2 = { x: x1 + w * Math.cos(a - Math.PI / 2), y: y1 + w * Math.sin(a - Math.PI / 2) };
-                ps1.push(p1);
-                ps2.push(p2);
-            };
-            for (let i = 3; i < this.points.length; i++) {
-                so(i);
-            }
-            so(this.points.length);
-            ps1.push({ x, y });
+        function pen_p(d: draw) {
+            if (d.points.length != 1) {
+                let ps1 = [],
+                    ps2 = [];
+                let at = `M${d.points[1].x} ${d.points[1].y}Q`;
 
-            let ps = [];
-            for (let i of ps1) {
-                ps.push(i);
-            }
-            for (let i = ps2.length - 1; i >= 0; i--) {
-                ps.push(ps2[i]);
-            }
-            for (let i = 2; i < ps.length; i += 1) {
-                let a = Math.atan2(ps[i].y - ps[i - 2].y, ps[i].x - ps[i - 2].x);
-                let s = Math.sqrt((ps[i - 1].x - ps[i - 2].x) ** 2 + (ps[i - 1].y - ps[i - 2].y) ** 2);
-                at += `${ps[i - 1].x + (s / 2) * Math.cos(a)} ${ps[i - 1].y + (s / 2) * Math.sin(a)} ${ps[i].x} ${
-                    ps[i].y
-                } `;
-            }
-            let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            let t = `translate(${this.ox},${this.oy})`;
-            p.setAttribute("transform", t);
-            if (this.points.length != 2) p.setAttribute("d", at);
-            p.setAttribute("fill", this.pen.color);
+                let so = (i: number) => {
+                    let w = d.points[i - 1].p * (d.pen.width / 2);
+                    if (d.pen.zoom) w = w / zoom;
+                    let x0 = d.points[i - 2].x,
+                        y0 = d.points[i - 2].y,
+                        x1 = d.points[i - 1].x,
+                        y1 = d.points[i - 1].y,
+                        x2 = d.points?.[i]?.x || x,
+                        y2 = d.points?.[i]?.y || y;
+                    let a = Math.atan2(y2 - y0, x2 - x0);
+                    let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
+                    let p2 = { x: x1 + w * Math.cos(a - Math.PI / 2), y: y1 + w * Math.sin(a - Math.PI / 2) };
+                    ps1.push(p1);
+                    ps2.push(p2);
+                };
+                for (let i = 3; i < d.points.length; i++) {
+                    so(i);
+                }
+                so(d.points.length);
+                ps1.push({ x, y });
 
-            this.tmp_svg.innerHTML = "";
+                let ps = [];
+                for (let i of ps1) {
+                    ps.push(i);
+                }
+                for (let i = ps2.length - 1; i >= 0; i--) {
+                    ps.push(ps2[i]);
+                }
+                for (let i = 2; i < ps.length; i += 1) {
+                    let a = Math.atan2(ps[i].y - ps[i - 2].y, ps[i].x - ps[i - 2].x);
+                    let s = Math.sqrt((ps[i - 1].x - ps[i - 2].x) ** 2 + (ps[i - 1].y - ps[i - 2].y) ** 2);
+                    at += `${ps[i - 1].x + (s / 2) * Math.cos(a)} ${ps[i - 1].y + (s / 2) * Math.sin(a)} ${ps[i].x} ${
+                        ps[i].y
+                    } `;
+                }
+                let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                let t = `translate(${d.ox},${d.oy})`;
+                p.setAttribute("transform", t);
+                if (d.points.length != 2) p.setAttribute("d", at);
+                p.setAttribute("fill", d.pen.color);
 
-            this.tmp_svg.append(p);
-        }
-        if (this.points.length == 1 || this.points.length == 2) {
-            this.points.push({ x, y, p: e.pressure });
-        } else {
-            let a1 = Math.atan2(
-                this.points[this.points.length - 1].y - this.points[this.points.length - 2].y,
-                this.points[this.points.length - 1].x - this.points[this.points.length - 2].x
-            );
-            let a2 = Math.atan2(this.points[this.points.length - 1].y - y, this.points[this.points.length - 1].x - x);
-            let s = Math.sqrt(
-                (this.points[this.points.length - 1].y - y) ** 2 + (this.points[this.points.length - 1].x - x) ** 2
-            );
-            if (
-                s >
-                    ((this.pen.width / 2) * (e.pressure + this.points[this.points.length - 1].p)) /
-                        (this.pen.zoom ? zoom : 1) ||
-                Math.abs(a1 - a2) < Math.PI / 2
-            ) {
-                this.points.push({ x, y, p: e.pressure });
+                d.tmp_svg.innerHTML = "";
+
+                d.tmp_svg.append(p);
+            }
+            if (d.points.length == 1 || d.points.length == 2) {
+                d.points.push({ x, y, p: e.pressure });
+            } else {
+                let a1 = Math.atan2(
+                    d.points[d.points.length - 1].y - d.points[d.points.length - 2].y,
+                    d.points[d.points.length - 1].x - d.points[d.points.length - 2].x
+                );
+                let a2 = Math.atan2(d.points[d.points.length - 1].y - y, d.points[d.points.length - 1].x - x);
+                let s = Math.sqrt(
+                    (d.points[d.points.length - 1].y - y) ** 2 + (d.points[d.points.length - 1].x - x) ** 2
+                );
+                if (
+                    s >
+                        ((d.pen.width / 2) * (e.pressure + d.points[d.points.length - 1].p)) /
+                            (d.pen.zoom ? zoom : 1) ||
+                    Math.abs(a1 - a2) < Math.PI / 2
+                ) {
+                    d.points.push({ x, y, p: e.pressure });
+                }
             }
         }
     }
