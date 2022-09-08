@@ -2768,36 +2768,6 @@ class draw extends HTMLElement {
         if (e.pointerType == "mouse" && e.buttons == 2) return;
         let x = e.clientX / zoom - this.getBoundingClientRect().x / zoom - this.ox,
             y = e.clientY / zoom - this.getBoundingClientRect().y / zoom - this.oy;
-        let dd = 20,
-            xx = 20;
-
-        // 无限画板
-        // 向右延伸
-        if (e.clientX > this.getBoundingClientRect().right - dd) {
-            this.width += xx;
-        }
-        // 下
-        if (e.clientY > this.getBoundingClientRect().bottom - dd) {
-            this.height += xx;
-        }
-        // 左
-        if (x + this.ox < dd) {
-            if (this.parentElement.tagName == "X-X") {
-                let pel = this.parentElement;
-                pel.style.left = pel.offsetLeft - xx + "px";
-            }
-            this.ox += xx;
-            this.width += xx;
-        }
-        // 上
-        if (y + this.oy < dd) {
-            if (this.parentElement.tagName == "X-X") {
-                let pel = this.parentElement;
-                pel.style.top = pel.offsetTop - xx + "px";
-            }
-            this.oy += xx;
-            this.height += xx;
-        }
         this.main_svg.setAttribute("width", String(this.width));
         this.main_svg.setAttribute("height", String(this.height));
         this.tmp_svg.setAttribute("width", String(this.width));
