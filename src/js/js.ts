@@ -2270,12 +2270,14 @@ class markdown extends HTMLElement {
                     text.setRangeText("\n" + l_task[0]);
                     text.selectionStart = text.selectionEnd += l_task[0].length + 1;
                     text.dispatchEvent(new Event("input"));
+                    return;
                 } else {
                     let l_l = last_line.match(/^ *[-+*] +/);
                     if (l_l) {
                         text.setRangeText("\n" + l_l[0]);
                         text.selectionStart = text.selectionEnd += l_l[0].length + 1;
                         text.dispatchEvent(new Event("input"));
+                        return;
                     }
                 }
                 let l_n = last_line.match(/^ *\d+\. +/);
@@ -2284,6 +2286,7 @@ class markdown extends HTMLElement {
                     text.setRangeText(t);
                     text.selectionStart = text.selectionEnd += t.length;
                     text.dispatchEvent(new Event("input"));
+                    return;
                 }
 
                 if (!e.shiftKey) {
