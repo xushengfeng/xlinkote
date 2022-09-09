@@ -2779,7 +2779,7 @@ class draw extends HTMLElement {
         }
 
         // 画
-        pen_p(this);
+        pen_s(this);
 
         function pen_p(d: draw) {
             if (d.points.length != 1) {
@@ -2852,6 +2852,50 @@ class draw extends HTMLElement {
                     d.points.push({ x, y, p: e.pressure });
                 }
             }
+        }
+
+        function pen_s(d: draw) {
+            d.points.push({ x, y, p: e.pressure });
+            if (d.points.length < 2) return;
+            let ps = d.points.slice(1, d.points.length - 1);
+            let at = draw_curve(ps);
+            let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            let t = `translate(${d.ox},${d.oy})`;
+            p.setAttribute("transform", t);
+            p.setAttribute("d", at);
+            p.setAttribute("fill", "none");
+            p.setAttribute("stroke", d.pen.color);
+            p.setAttribute("stroke-width", d.pen.width + "px");
+            p.setAttribute("stroke-linecap", "round");
+            p.setAttribute("stroke-linejoin", "round");
+            d.tmp_svg.innerHTML = "";
+
+            d.tmp_svg.append(p);
+        }
+
+        function draw_curve(p: { x: number; y: number }[]) {
+            let t = 1 / 5;
+            let pc = [];
+            for (let i = 1; i < p.length - 1; i++) {
+                let dx = p[i - 1].x - p[i + 1].x;
+                let dy = p[i - 1].y - p[i + 1].y;
+                pc[i] = [
+                    { x: p[i].x - dx * t, y: p[i].y - dy * t },
+                    { x: p[i].x + dx * t, y: p[i].y + dy * t },
+                ];
+            }
+
+            let d = `M${p[0].x},${p[0].y} Q${pc[1][1].x},${pc[1][1].y}, ${p[1].x},${p[1].y} `;
+            if (p.length > 2) {
+                for (var i = 1; i < p.length - 2; i++) {
+                    d += `C${pc[i][0].x}, ${pc[i][0].y}, ${pc[i + 1][1].x}, ${pc[i + 1][1].y}, ${p[i + 1].x},${
+                        p[i + 1].y
+                    }`;
+                }
+                let n = p.length - 1;
+                d += `Q${pc[n - 1][0].x}, ${pc[n - 1][0].y}, ${p[n].x}, ${p[n].y}`;
+            }
+            return d;
         }
     }
 
