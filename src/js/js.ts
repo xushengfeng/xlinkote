@@ -2779,14 +2779,12 @@ class draw extends HTMLElement {
         }
 
         // 画
-        pen_s(this);
+        pen_p(this);
 
         function pen_p(d: draw) {
             if (d.points.length != 1) {
                 let ps1 = [],
                     ps2 = [];
-                let at = `M${d.points[1].x} ${d.points[1].y}Q`;
-
                 let so = (i: number) => {
                     let w = d.points[i - 1].p * (d.pen.width / 2);
                     if (d.pen.zoom) w = w / zoom;
@@ -2815,13 +2813,7 @@ class draw extends HTMLElement {
                 for (let i = ps2.length - 1; i >= 0; i--) {
                     ps.push(ps2[i]);
                 }
-                for (let i = 2; i < ps.length; i += 1) {
-                    let a = Math.atan2(ps[i].y - ps[i - 2].y, ps[i].x - ps[i - 2].x);
-                    let s = Math.sqrt((ps[i - 1].x - ps[i - 2].x) ** 2 + (ps[i - 1].y - ps[i - 2].y) ** 2);
-                    at += `${ps[i - 1].x + (s / 2) * Math.cos(a)} ${ps[i - 1].y + (s / 2) * Math.sin(a)} ${ps[i].x} ${
-                        ps[i].y
-                    } `;
-                }
+                let at = draw_curve(ps);
                 let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 let t = `translate(${d.ox},${d.oy})`;
                 p.setAttribute("transform", t);
