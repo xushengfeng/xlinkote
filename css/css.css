@@ -429,25 +429,25 @@ x-x:focus-within {
 x-x > .xxhandle {
     position: absolute;
 }
-x-x > .xxhandle:nth-child(1) {
+x-x > div:nth-of-type(1).xxhandle {
     left: 0;
     top: calc(-1 * var(--x-x-handle-w));
     width: 100%;
     height: var(--x-x-handle-w);
 }
-x-x > .xxhandle:nth-child(2) {
+x-x > div:nth-of-type(2).xxhandle {
     top: 0;
     right: calc(-1 * var(--x-x-handle-w));
     width: var(--x-x-handle-w);
     height: 100%;
 }
-x-x > .xxhandle:nth-child(3) {
+x-x > div:nth-of-type(3).xxhandle {
     left: 0;
     bottom: calc(-1 * var(--x-x-handle-w));
     width: 100%;
     height: var(--x-x-handle-w);
 }
-x-x > .xxhandle:nth-child(4) {
+x-x > div:nth-of-type(4).xxhandle {
     top: 0;
     left: calc(-1 * var(--x-x-handle-w));
     width: var(--x-x-handle-w);
