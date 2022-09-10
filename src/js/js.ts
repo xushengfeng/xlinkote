@@ -56,6 +56,27 @@ document.getElementById("新建画布").onclick = () => {
     data_changed();
 };
 
+document.getElementById("导入设置").onclick = () => {
+    let file = document.createElement("input");
+    file.type = "file";
+    file.click();
+    file.oninput = () => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            localStorage.setItem("config", <string>reader.result);
+            show_setting();
+        };
+        reader.readAsText(file.files[0]);
+    };
+};
+document.getElementById("导出设置").onclick = () => {
+    let a = document.createElement("a");
+    let blob = new Blob([localStorage.getItem("config")]);
+    a.download = `xlinkote_config.json`;
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    URL.revokeObjectURL(String(blob));
+};
 document.getElementById("放弃设置").onclick = () => {
     show_setting();
 };
