@@ -1287,7 +1287,7 @@ var focus_draw_el = null;
 画布.onpointerdown = (e) => {
     if (模式 == "绘制") {
         new_draw();
-        (<HTMLInputElement>document.getElementById("penc")).value = (<draw>focus_draw_el).pen.color;
+        penc_el.value = (<draw>focus_draw_el).pen.color;
     }
 };
 
@@ -1306,8 +1306,9 @@ var focus_draw_el = null;
     }
 };
 
-(<HTMLInputElement>document.getElementById("penc")).onchange = () => {
-    (<draw>focus_draw_el).pen.color = (<HTMLInputElement>document.getElementById("penc")).value;
+const penc_el = <HTMLInputElement>document.getElementById("penc");
+penc_el.onchange = () => {
+    (<draw>focus_draw_el).pen.color = penc_el.value;
 };
 
 document.getElementById("橡皮").onclick = () => {
@@ -2801,7 +2802,7 @@ class draw extends HTMLElement {
     main_svg: SVGSVGElement;
     tmp_svg: SVGSVGElement;
 
-    pen = { color: "#000000", gco: "source-over", width: 5, zoom: false };
+    pen = { color: penc_el.value || "#000000", gco: "source-over", width: 5, zoom: false };
 
     connectedCallback() {
         if (this.getAttribute("value")) {
