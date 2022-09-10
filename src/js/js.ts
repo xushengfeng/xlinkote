@@ -496,7 +496,7 @@ function e2rect(e0: MouseEvent, e1: MouseEvent) {
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
 }
 
-var selected_el: Array<HTMLElement> = [];
+var selected_el: x[] = [];
 
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     for (const el of 画布.querySelectorAll("x-x")) {
@@ -509,7 +509,7 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
         };
         if (rect.x <= rr.left && rr.right <= rect.x + rect.w && rect.y <= rr.top && rr.bottom <= rect.y + rect.h) {
             el.classList.add("x-x_selected");
-            selected_el.push(<HTMLElement>el);
+            selected_el.push(<x>el);
         }
     }
 }
@@ -585,7 +585,8 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
 
 // 自由元素移动
 let free_o_e: MouseEvent;
-let free_o_rects = [];
+let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
+let free_o_a = NaN;
 document.addEventListener("mousemove", (e: MouseEvent) => {
     if (模式 == "设计") e.preventDefault();
     free_mouse(e);
@@ -594,7 +595,7 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
 document.addEventListener("mouseup", (e: MouseEvent) => {
     if (drag_block) {
         set_模式("浏览");
-        free_o_rects[0].el.children[1].edit = true;
+        (<markdown>free_o_rects[0].el.children[1]).edit = true;
         drag_block = false;
     }
 
@@ -609,10 +610,40 @@ document.addEventListener("mouseup", (e: MouseEvent) => {
 var free_mouse = (e: MouseEvent) => {
     if (free_o_e) {
         for (const xel of free_o_rects) {
-            let x = xel.x + (e.clientX - free_o_e.clientX) / zoom,
-                y = xel.y + (e.clientY - free_o_e.clientY) / zoom;
-            xel.el.style.left = x + "px";
-            xel.el.style.top = y + "px";
+            let dx = (e.clientX - free_o_e.clientX) / zoom,
+                dy = (e.clientY - free_o_e.clientY) / zoom;
+            let x = NaN,
+                y = NaN,
+                w = NaN,
+                h = NaN;
+            switch (free_o_a) {
+                case -1:
+                    x = xel.x + dx;
+                    y = xel.y + dy;
+                    xel.el.style.left = x + "px";
+                    xel.el.style.top = y + "px";
+                    break;
+                case 0:
+                    y = xel.y + dy;
+                    h = xel.h - dy;
+                    xel.el.style.height = h + "px";
+                    xel.el.style.top = y + "px";
+                    break;
+                case 1:
+                    w = xel.w + dx;
+                    xel.el.style.width = w + "px";
+                    break;
+                case 2:
+                    h = xel.h + dy;
+                    xel.el.style.height = h + "px";
+                    break;
+                case 3:
+                    x = xel.x + dx;
+                    w = xel.w - dx;
+                    xel.el.style.width = w + "px";
+                    xel.el.style.left = x + "px";
+                    break;
+            }
         }
     }
 };
@@ -2088,6 +2119,19 @@ class x extends HTMLElement {
         var d = document.createElement("div");
         d.innerHTML = `<img src="${close_svg}" class="icon">`;
 
+        var x_h = [
+            document.createElement("div"),
+            document.createElement("div"),
+            document.createElement("div"),
+            document.createElement("div"),
+        ];
+
+        for (const i of x_h) {
+            i.classList.add("xxhandle");
+        }
+
+        this.append(...x_h);
+
         bar.append(f);
         bar.append(d);
         this.append(bar);
@@ -2111,7 +2155,9 @@ class x extends HTMLElement {
             if (模式 != "设计") return;
             if (this.fixed) return;
             if (bar.contains(e.target as HTMLElement)) return;
+            if (x_h.includes(e.target as HTMLDivElement)) return;
             free_o_e = e;
+            free_o_a = -1;
             document.getElementById("画布").style.cursor = "move";
 
             if (selected_el.length != 0 && selected_el.includes(this)) {
@@ -2130,6 +2176,17 @@ class x extends HTMLElement {
 
         this.onfocus = () => {
             z.focus(this);
+        };
+
+        this.onpointerdown = (e) => {
+            let el = e.target as HTMLDivElement;
+            if (x_h.includes(el)) {
+                free_o_a = x_h.indexOf(el);
+                free_o_e = e;
+                free_o_rects = [
+                    { el: this, x: this.offsetLeft, y: this.offsetTop, w: this.offsetWidth, h: this.offsetHeight },
+                ];
+            }
         };
 
         f.onclick = () => {

@@ -14,6 +14,7 @@
     --item-icon: 24px;
     --item-icon-margin: 0;
     --zest-index: 0;
+    --x-x-handle-w: 2px;
 }
 
 .icon {
@@ -424,6 +425,34 @@ x-x > #x-x_bar > div > .icon {
 }
 x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;
+}
+x-x > .xxhandle {
+    position: absolute;
+    background-color: #000;
+}
+x-x > .xxhandle:nth-child(1) {
+    left: 0;
+    top: calc(-1 * var(--x-x-handle-w));
+    width: 100%;
+    height: var(--x-x-handle-w);
+}
+x-x > .xxhandle:nth-child(2) {
+    top: 0;
+    right: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: 100%;
+}
+x-x > .xxhandle:nth-child(3) {
+    left: 0;
+    bottom: calc(-1 * var(--x-x-handle-w));
+    width: 100%;
+    height: var(--x-x-handle-w);
+}
+x-x > .xxhandle:nth-child(4) {
+    top: 0;
+    left: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: 100%;
 }
 
 x-md {
