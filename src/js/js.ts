@@ -1333,6 +1333,7 @@ class 图层 {
                 this.z[i].classList.add("x-x_selected");
                 selected_el.push(<x>this.z[i]);
                 el_style.value = this.z[i].getAttribute("style");
+                load_xywh();
             };
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
@@ -1386,6 +1387,7 @@ class 图层 {
             } else {
                 focus_draw_el = null;
             }
+        load_xywh();
     }
 
     get(el: x) {
@@ -1425,6 +1427,21 @@ var el_style = <HTMLTextAreaElement>document.getElementById("el_style");
 el_style.oninput = () => {
     z.聚焦元素.setAttribute("style", el_style.value);
 };
+
+var xywh_el = <HTMLInputElement>document.getElementById("xywh");
+xywh_el.oninput = () => {
+    let l = xywh_el.value.split(",").map((v) => v.trim());
+    z.聚焦元素.style.left = Number(l[0]) ? l[0] + "px" : l[0];
+    z.聚焦元素.style.top = Number(l[1]) ? l[1] + "px" : l[1];
+    z.聚焦元素.style.width = Number(l[2]) ? l[2] + "px" : l[2];
+    z.聚焦元素.style.height = Number(l[3]) ? l[3] + "px" : l[3];
+
+    data_changed();
+};
+function load_xywh() {
+    let fe = z.聚焦元素;
+    xywh_el.value = `${fe.offsetLeft}, ${fe.offsetTop}, ${fe.offsetWidth}, ${fe.offsetHeight}`;
+}
 
 if (!location.hash) set_data(集);
 
@@ -2066,13 +2083,11 @@ class x extends HTMLElement {
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
-        var xywh = document.createElement("input");
         var f = document.createElement("div");
         f.innerHTML = `<img src="${ding_svg}" class="icon">`;
         var d = document.createElement("div");
         d.innerHTML = `<img src="${close_svg}" class="icon">`;
 
-        bar.append(xywh);
         bar.append(f);
         bar.append(d);
         this.append(bar);
@@ -2115,22 +2130,6 @@ class x extends HTMLElement {
 
         this.onfocus = () => {
             z.focus(this);
-        };
-
-        xywh.value = `${this.offsetLeft}, ${this.offsetTop}, ${this.offsetWidth}, ${this.offsetHeight}`;
-
-        xywh.onfocus = () => {
-            xywh.value = `${this.offsetLeft}, ${this.offsetTop}, ${this.offsetWidth}, ${this.offsetHeight}`;
-        };
-
-        xywh.oninput = () => {
-            let l = xywh.value.split(",").map((v) => v.trim());
-            this.style.left = Number(l[0]) ? l[0] + "px" : l[0];
-            this.style.top = Number(l[1]) ? l[1] + "px" : l[1];
-            this.style.width = Number(l[2]) ? l[2] + "px" : l[2];
-            this.style.height = Number(l[3]) ? l[3] + "px" : l[3];
-
-            data_changed();
         };
 
         f.onclick = () => {
