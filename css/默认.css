@@ -199,8 +199,14 @@ x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;
 }
 
-.x-x_selected {
-    outline: 1px solid #0000ff;
+.x-x_selected > .xxhandle {
+    background-color: #0000ff;
+}
+x-x:hover > .xxhandle {
+    background-color: #51516b;
+}
+x-x > .xxhandle:hover {
+    background-color: #0000ff;
 }
 
 #t_md {

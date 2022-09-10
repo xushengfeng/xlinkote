@@ -428,7 +428,6 @@ x-x:focus-within {
 }
 x-x > .xxhandle {
     position: absolute;
-    background-color: #000;
 }
 x-x > .xxhandle:nth-child(1) {
     left: 0;
