@@ -258,10 +258,19 @@ body > #main > #nav #search {
     top: var(--icon-margin);
 }
 
-dialog > #close_webdav_files {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
+.侧栏 > #items > #设置 > div {
+    display: flex;
+}
+.侧栏 > #items > #设置 > div > div {
+    position: relative;
+    width: var(--icon-p-b-size);
+    height: var(--icon-p-b-size);
+}
+.侧栏 > #items > #设置 > div > div > .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    left: var(--icon-margin);
+    top: var(--icon-margin);
 }
 
 .层容器 {
