@@ -61,6 +61,7 @@
             <div><img src="./assets/icons/more.svg" class="icon"></div>
             <div><img src="./assets/icons/md.svg" class="icon"></div>
             <div><img src="./assets/icons/zzz.svg" class="icon"></div>
+            <div id="偏好设置"><img src="./assets/icons/setting.svg" class="icon"></div>
         </div>
         <div id="items">
             <div id="文件"></div>
@@ -89,7 +90,6 @@
                 <div id="下载数据库" title="下载数据库"><img src="./assets/icons/db_down.svg" class="icon"></div>
                 <div id="新建集" title="新建集"><img src="./assets/icons/add_file.svg" class="icon"></div>
                 <div id="新建画布" title="新建画布"><img src="./assets/icons/add_canvas.svg" class="icon"></div>
-                <div id="偏好设置" title="偏好设置"><img src="./assets/icons/setting.svg" class="icon"></div>
                 <div id="切换侧栏" title="切换侧栏"><img src="./assets/icons/side_panel.svg" class="icon"></div>
             </div>
             <div id="markdown" class="tools">
@@ -116,36 +116,40 @@
                     <div id="录音" title="新建录音机"><img src="./assets/icons/record.svg" class="icon"></div>
                 </div>
             </div>
+            <div id="设置">
+                <form name="webdav">
+                    <fieldset>
+                        <legend>云（WebDAV）</legend>
+                        网址<br><input type="url" name="网址" autocomplete="url">
+                        <br>
+                        用户名<br><input type="text" name="用户名" autocomplete="username">
+                        <br>
+                        密码<br><input type="password" name="密码">
+                        <br>
+                        自动上传
+                        <select name="自动上传" id="">
+                            <option value="0">手动</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="30">30</option>
+                            <option value="60">60</option>
+                        </select>
+                        <br>
+                        加密密钥（若要启用，请输入自定义密钥并记住）<br>
+                        <input type="password" name="加密密钥">
+                    </fieldset>
+                </form>
+                <div>
+                    <div id="放弃设置">放弃</div>
+                    <div id="保存设置">保存</div>
+                </div>
+                
+            </div>
         </div>
     </div>
     <div id="搜索结果"></div>
     <div id="上下文菜单">
         <div id="在此新建">在此新建</div>
-    </div>
-    <div id="设置">
-        <div id="close"><img src="./assets/icons/close.svg" class="icon"></div>
-        <form name="webdav">
-            <fieldset>
-                <legend>云（WebDAV）</legend>
-                网址<br><input type="url" name="网址" autocomplete="url">
-                <br>
-                用户名<br><input type="text" name="用户名" autocomplete="username">
-                <br>
-                密码<br><input type="password" name="密码">
-                <br>
-                自动上传<br>
-                <select name="自动上传" id="">
-                    <option value="0">手动</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="30">30</option>
-                    <option value="60">60</option>
-                </select>
-                <br>
-                加密密钥（若要启用，请输入自定义密钥并记住）<br>
-                <input type="password" name="加密密钥">
-            </fieldset>
-        </form>
     </div>
     <div id="toast"></div>
 </body>

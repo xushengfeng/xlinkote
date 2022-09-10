@@ -56,12 +56,10 @@ document.getElementById("新建画布").onclick = () => {
     data_changed();
 };
 
-document.getElementById("偏好设置").onclick = () => {
-    设置_el.style.display = "block";
+document.getElementById("放弃设置").onclick = () => {
     show_setting();
 };
-(<HTMLDivElement>设置_el.querySelector("#close")).onclick = () => {
-    设置_el.style.display = "";
+document.getElementById("保存设置").onclick = () => {
     save_setting();
 };
 document.getElementById("新建元素").onclick = () => {
@@ -1589,6 +1587,7 @@ function show_setting() {
         }
     }
 }
+show_setting();
 
 // 搜索
 import Fuse from "fuse.js";

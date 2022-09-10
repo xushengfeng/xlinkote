@@ -354,29 +354,6 @@ body > #上下文菜单 {
     pointer-events: all !important;
 }
 
-body > #设置 {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0vh;
-    left: 0vw;
-    display: none;
-    z-index: calc(var(--zest-index) + 9);
-}
-
-body > #设置 > #close {
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-body > #设置 > #close > .icon {
-    width: 16px;
-    height: 16px;
-}
-
 body > #toast {
     position: fixed;
     bottom: 16px;

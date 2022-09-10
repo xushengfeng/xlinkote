@@ -149,18 +149,6 @@ body > #搜索结果 > div > span > span {
     color: #f55;
 }
 
-body > #设置 {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-}
-
-body > #设置 > #close {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-}
-
 body > #toast {
     padding: 4px;
     background-color: var(--bg-color2);
