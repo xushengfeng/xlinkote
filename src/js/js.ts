@@ -587,10 +587,11 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
 let free_o_e: MouseEvent;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
 let free_o_a = NaN;
+let free_move = false;
 document.addEventListener("mousemove", (e: MouseEvent) => {
     if (模式 == "设计") e.preventDefault();
     free_mouse(e);
-    if (free_o_e) move = true;
+    if (free_o_e) free_move = true;
 });
 document.addEventListener("mouseup", (e: MouseEvent) => {
     if (drag_block) {
@@ -600,8 +601,16 @@ document.addEventListener("mouseup", (e: MouseEvent) => {
     }
 
     free_mouse(e);
+    if (!free_move && free_o_e) {
+        document.querySelectorAll("x-x").forEach((el: x) => {
+            if (el.contains(e.target as x)) {
+                z.focus(el);
+                return;
+            }
+        });
+    }
     free_o_e = null;
-    move = false;
+    free_move = false;
     document.getElementById("画布").style.cursor = "auto";
     free_o_rects = [];
 
