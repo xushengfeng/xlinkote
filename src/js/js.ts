@@ -2140,8 +2140,9 @@ class x extends HTMLElement {
             document.createElement("div"),
         ];
 
-        for (const i of x_h) {
-            i.classList.add("xxhandle");
+        for (const i in x_h) {
+            x_h[i].classList.add("xxhandle");
+            x_h[i].classList.add(`xxhandle${i}`);
         }
 
         this.append(...x_h);
