@@ -1344,7 +1344,10 @@ class 图层 {
             r.type = "radio";
             r.name = "层";
             r.value = i;
-            if (this.z[i] == el) r.checked = true;
+            if (this.z[i] == el) {
+                r.checked = true;
+                this.focus(el);
+            }
             let t = rename_el();
             t.value = this.z[i].id;
             t.onclick = () => {
@@ -1357,14 +1360,7 @@ class 图层 {
             div.append(r);
             div.append(t);
             div.onclick = () => {
-                this.聚焦元素 = this.z[i];
-                for (let x of this.z) {
-                    x.classList.remove("x-x_selected");
-                }
-                this.z[i].classList.add("x-x_selected");
-                selected_el.push(<x>this.z[i]);
-                el_style.value = this.z[i].getAttribute("style");
-                load_xywh();
+                this.focus(this.z[i]);
             };
             document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
         }
@@ -1418,6 +1414,14 @@ class 图层 {
             } else {
                 focus_draw_el = null;
             }
+
+        selected_el = [];
+        for (let x of this.z) {
+            x.classList.remove("x-x_selected");
+        }
+        el.classList.add("x-x_selected");
+        selected_el.push(el);
+        el_style.value = el.getAttribute("style");
         load_xywh();
     }
 
@@ -2160,23 +2164,15 @@ class x extends HTMLElement {
             free_o_a = -1;
             document.getElementById("画布").style.cursor = "move";
 
-            if (selected_el.length != 0 && selected_el.includes(this)) {
-                free_o_rects = [];
-                for (const el of selected_el) {
-                    free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
-                }
-            } else {
-                free_o_rects = [{ el: this, x: this.offsetLeft, y: this.offsetTop }];
+            if (selected_el.length == 1) {
+                z.focus(this);
+            }
+
+            free_o_rects = [];
+            for (const el of selected_el) {
+                free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
             }
         });
-
-        this.onclick = () => {
-            z.focus(this);
-        };
-
-        this.onfocus = () => {
-            z.focus(this);
-        };
 
         this.onpointerdown = (e) => {
             let el = e.target as HTMLDivElement;
@@ -2424,9 +2420,6 @@ class markdown extends HTMLElement {
                 text.style.left = x + "px";
                 text.style.top = y + "px";
             }
-        };
-        this.onclick = text.onfocus = () => {
-            z.focus(this.parentElement as x);
         };
         text.onblur = () => {
             if (模式 == "浏览") this.edit = false;
