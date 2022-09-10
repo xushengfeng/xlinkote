@@ -94,12 +94,6 @@ document.getElementById("删除元素").onclick = () => {
     if (focus_md) focus_md.remove();
 };
 
-document.getElementById("新建页").onclick = () => {
-    let page = <x>document.createElement("x-x");
-    z.push(page);
-    page.fixed = true;
-};
-
 var 侧栏 = document.getElementById("侧栏");
 
 侧栏.onclick = (e) => {
