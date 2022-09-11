@@ -14,7 +14,9 @@
     --item-icon: 24px;
     --item-icon-margin: 0;
     --zest-index: 0;
-    --x-x-handle-w: calc(2px / var(--zoom));
+    --x-x-handle-w: calc(8px / var(--zoom));
+    --x-x-handle-o: calc(50% - var(--x-x-handle-w) / 2);
+    --x-x-handle-o2: calc(-1 * var(--x-x-handle-w));
     --zoom: 1;
 }
 
@@ -438,54 +440,41 @@ x-x > .xxhandle {
 x-x > .xxhandle > div {
     pointer-events: all;
     position: absolute;
+    width: var(--x-x-handle-w);
+    height: var(--x-x-handle-w);
+    border-radius: 50%;
 }
 .xxhandle > .xxhandle0 {
-    left: 0;
-    top: calc(-1 * var(--x-x-handle-w));
-    width: 100%;
-    height: var(--x-x-handle-w);
+    left: var(--x-x-handle-o);
+    top: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle1 {
-    top: 0;
-    right: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: 100%;
+    top: var(--x-x-handle-o);
+    right: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle2 {
-    left: 0;
-    bottom: calc(-1 * var(--x-x-handle-w));
-    width: 100%;
-    height: var(--x-x-handle-w);
+    left: var(--x-x-handle-o);
+    bottom: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle3 {
-    top: 0;
-    left: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: 100%;
+    top: var(--x-x-handle-o);
+    left: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle4 {
-    right: calc(-1 * var(--x-x-handle-w));
-    top: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: var(--x-x-handle-w);
+    right: var(--x-x-handle-o2);
+    top: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle5 {
-    right: calc(-1 * var(--x-x-handle-w));
-    bottom: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: var(--x-x-handle-w);
+    right: var(--x-x-handle-o2);
+    bottom: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle6 {
-    bottom: calc(-1 * var(--x-x-handle-w));
-    left: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: var(--x-x-handle-w);
+    bottom: var(--x-x-handle-o2);
+    left: var(--x-x-handle-o2);
 }
 .xxhandle > .xxhandle7 {
-    left: calc(-1 * var(--x-x-handle-w));
-    top: calc(-1 * var(--x-x-handle-w));
-    width: var(--x-x-handle-w);
-    height: var(--x-x-handle-w);
+    left: var(--x-x-handle-o2);
+    top: var(--x-x-handle-o2);
 }
 
 x-md {
