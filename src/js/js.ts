@@ -646,25 +646,69 @@ var free_mouse = (e: MouseEvent) => {
                     xel.el.style.top = y + "px";
                     break;
                 case 0:
-                    y = xel.y + dy;
-                    h = xel.h - dy;
-                    xel.el.style.height = h + "px";
-                    xel.el.style.top = y + "px";
+                    c(0, -dy);
                     break;
                 case 1:
-                    w = xel.w + dx;
-                    xel.el.style.width = w + "px";
+                    c(1, dx);
                     break;
                 case 2:
-                    h = xel.h + dy;
-                    xel.el.style.height = h + "px";
+                    c(2, dy);
                     break;
                 case 3:
-                    x = xel.x + dx;
-                    w = xel.w - dx;
-                    xel.el.style.width = w + "px";
-                    xel.el.style.left = x + "px";
+                    c(3, -dx);
                     break;
+                case 4:
+                    // ↗
+                    if (!e.shiftKey) {
+                        c(0, -dy);
+                        c(1, dx);
+                    }
+                    break;
+                case 5:
+                    // ↘
+                    if (!e.shiftKey) {
+                        c(1, dx);
+                        c(2, dy);
+                    }
+                    break;
+                case 6:
+                    // ↙
+                    if (!e.shiftKey) {
+                        c(2, dy);
+                        c(3, -dx);
+                    }
+                    break;
+                case 7:
+                    // ↖
+                    if (!e.shiftKey) {
+                        c(3, -dx);
+                        c(0, -dy);
+                    }
+                    break;
+            }
+            function c(a: number, d: number) {
+                switch (a) {
+                    case 0:
+                        y = xel.y - d;
+                        h = xel.h + d;
+                        xel.el.style.height = h + "px";
+                        xel.el.style.top = y + "px";
+                        break;
+                    case 1:
+                        w = xel.w + d;
+                        xel.el.style.width = w + "px";
+                        break;
+                    case 2:
+                        h = xel.h + d;
+                        xel.el.style.height = h + "px";
+                        break;
+                    case 3:
+                        x = xel.x - d;
+                        w = xel.w + d;
+                        xel.el.style.width = w + "px";
+                        xel.el.style.left = x + "px";
+                        break;
+                }
             }
         }
     }
@@ -2151,6 +2195,10 @@ class x extends HTMLElement {
         d.innerHTML = `<img src="${close_svg}" class="icon">`;
 
         var x_h = [
+            document.createElement("div"),
+            document.createElement("div"),
+            document.createElement("div"),
+            document.createElement("div"),
             document.createElement("div"),
             document.createElement("div"),
             document.createElement("div"),

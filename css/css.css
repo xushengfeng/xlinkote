@@ -463,6 +463,30 @@ x-x > .xxhandle > div {
     width: var(--x-x-handle-w);
     height: 100%;
 }
+.xxhandle > .xxhandle4 {
+    right: calc(-1 * var(--x-x-handle-w));
+    top: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: var(--x-x-handle-w);
+}
+.xxhandle > .xxhandle5 {
+    right: calc(-1 * var(--x-x-handle-w));
+    bottom: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: var(--x-x-handle-w);
+}
+.xxhandle > .xxhandle6 {
+    bottom: calc(-1 * var(--x-x-handle-w));
+    left: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: var(--x-x-handle-w);
+}
+.xxhandle > .xxhandle7 {
+    left: calc(-1 * var(--x-x-handle-w));
+    top: calc(-1 * var(--x-x-handle-w));
+    width: var(--x-x-handle-w);
+    height: var(--x-x-handle-w);
+}
 
 x-md {
     position: relative;
