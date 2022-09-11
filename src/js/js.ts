@@ -173,6 +173,9 @@ function put_toast(t: string, time?: number) {
 
 var nav = document.getElementById("nav");
 
+const 画布 = document.getElementById("画布");
+const O = document.getElementById("O");
+
 // 模式切换
 
 var 模式: "浏览" | "设计" | "绘制";
@@ -200,6 +203,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             if (O) O.style.pointerEvents = "";
 
             blur_all();
+            画布.style.cursor = "auto";
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -209,6 +213,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
                 (<markdown>el).edit = false;
             });
             if (O) O.style.pointerEvents = "";
+            画布.style.cursor = "crosshair";
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -220,6 +225,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             }
 
             blur_all();
+            画布.style.cursor = "crosshair";
             break;
     }
 }
@@ -326,8 +332,6 @@ document.getElementById("常驻").onpointerdown = (e) => {
 };
 
 // 画布
-var 画布 = document.getElementById("画布");
-var O = document.getElementById("O");
 
 var o_e: MouseEvent;
 var o_rect;
@@ -358,13 +362,6 @@ document.onmousedown = (e) => {
 
 document.onmousemove = (e) => {
     let el = e.target as HTMLElement;
-    if (el == 画布) {
-        画布.style.cursor = "crosshair";
-    } else {
-        if (画布.style.cursor == "crosshair") {
-            画布.style.cursor = "";
-        }
-    }
     mouse(e);
     if (o_e) move = true;
 };
@@ -377,7 +374,6 @@ document.onmouseup = (e) => {
     }
     o_e = null;
     move = false;
-    document.getElementById("画布").style.cursor = "auto";
     画布.style.userSelect = "auto";
     if (select_id) document.getElementById(select_id).remove();
     select_id = "";
@@ -428,7 +424,6 @@ document.ontouchstart = (e) => {
         o_rect = { x: el_offset(O).x, y: el_offset(O).y };
         o_zoom = zoom;
         if (e.targetTouches.length == 1) {
-            document.getElementById("画布").style.cursor = "move";
         } else if (e.targetTouches.length == 2) {
         }
     }
@@ -450,7 +445,6 @@ document.ontouchend = (e) => {
     o_zoom = NaN;
     if (e.targetTouches.length == 1) {
         touch_move(e);
-        document.getElementById("画布").style.cursor = "auto";
         if (select_id) document.getElementById(select_id).remove();
         select_id = "";
     } else if (e.targetTouches.length == 2) {
@@ -626,7 +620,6 @@ document.addEventListener("mouseup", (e: MouseEvent) => {
     }
     free_o_e = null;
     free_move = false;
-    document.getElementById("画布").style.cursor = "auto";
     free_o_rects = [];
 
     data_changed();
@@ -2267,6 +2260,7 @@ class x extends HTMLElement {
                 bar_hide_t = window.setTimeout(() => {
                     bar.classList.remove("x-x_bar_show");
                 }, 200);
+                画布.style.cursor = "crosshair";
             }
         };
 
@@ -2277,7 +2271,6 @@ class x extends HTMLElement {
             if (x_h.includes(e.target as HTMLDivElement)) return;
             free_o_e = e;
             free_o_a = -1;
-            document.getElementById("画布").style.cursor = "move";
 
             if (selected_el.length <= 1) {
                 z.focus(this);
@@ -2297,6 +2290,39 @@ class x extends HTMLElement {
                 free_o_rects = [
                     { el: this, x: this.offsetLeft, y: this.offsetTop, w: this.offsetWidth, h: this.offsetHeight },
                 ];
+            }
+        };
+
+        this.onmousemove = (e) => {
+            if (模式 == "设计") {
+                switch (e.target) {
+                    case x_h[0]:
+                        画布.style.cursor = "n-resize";
+                        break;
+                    case x_h[1]:
+                        画布.style.cursor = "e-resize";
+                        break;
+                    case x_h[2]:
+                        画布.style.cursor = "s-resize";
+                        break;
+                    case x_h[3]:
+                        画布.style.cursor = "w-resize";
+                        break;
+                    case x_h[4]:
+                        画布.style.cursor = "ne-resize";
+                        break;
+                    case x_h[5]:
+                        画布.style.cursor = "se-resize";
+                        break;
+                    case x_h[6]:
+                        画布.style.cursor = "sw-resize";
+                        break;
+                    case x_h[7]:
+                        画布.style.cursor = "nw-resize";
+                        break;
+                    default:
+                        画布.style.cursor = "move";
+                }
             }
         };
 

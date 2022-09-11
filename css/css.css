@@ -420,6 +420,7 @@ x-x > #x-x_bar {
     opacity: 0;
     pointer-events: none;
     transition: var(--transition);
+    cursor: pointer !important;
 }
 x-x > #x-x_bar > div {
     width: 16px;
