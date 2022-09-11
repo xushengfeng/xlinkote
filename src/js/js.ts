@@ -1588,7 +1588,11 @@ async function put_xln_value() {
         t = CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
     }
     let v = await client.putFileContents(path, t);
-    if (v) put_toast("文件上传成功");
+    if (v) {
+        put_toast("✅文件上传成功");
+    } else {
+        put_toast("❌文件上传失败");
+    }
 }
 
 var auto_put_xln_t = NaN;
