@@ -428,26 +428,35 @@ x-x:focus-within {
 }
 x-x > .xxhandle {
     position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
-x-x > .xxhandle0 {
+x-x > .xxhandle > div {
+    pointer-events: all;
+    position: absolute;
+}
+.xxhandle > .xxhandle0 {
     left: 0;
     top: calc(-1 * var(--x-x-handle-w));
     width: 100%;
     height: var(--x-x-handle-w);
 }
-x-x > .xxhandle1 {
+.xxhandle > .xxhandle1 {
     top: 0;
     right: calc(-1 * var(--x-x-handle-w));
     width: var(--x-x-handle-w);
     height: 100%;
 }
-x-x > .xxhandle2 {
+.xxhandle > .xxhandle2 {
     left: 0;
     bottom: calc(-1 * var(--x-x-handle-w));
     width: 100%;
     height: var(--x-x-handle-w);
 }
-x-x > .xxhandle3 {
+.xxhandle > .xxhandle3 {
     top: 0;
     left: calc(-1 * var(--x-x-handle-w));
     width: var(--x-x-handle-w);

@@ -2157,11 +2157,14 @@ class x extends HTMLElement {
         ];
 
         for (const i in x_h) {
-            x_h[i].classList.add("xxhandle");
             x_h[i].classList.add(`xxhandle${i}`);
         }
 
-        this.append(...x_h);
+        var h = document.createElement("div");
+
+        h.classList.add("xxhandle");
+        h.append(...x_h);
+        this.append(h);
 
         bar.append(f);
         bar.append(d);

@@ -199,13 +199,13 @@ x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;
 }
 
-.x-x_selected > .xxhandle {
+.x-x_selected > .xxhandle > div {
     background-color: #0000ff;
 }
-x-x:hover > .xxhandle {
+x-x:hover > .xxhandle > div {
     background-color: #51516b;
 }
-x-x > .xxhandle:hover {
+x-x > .xxhandle > div:hover {
     background-color: #0000ff;
 }
 
