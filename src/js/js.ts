@@ -544,6 +544,7 @@ function zoom_o(z: number) {
     zoom = z;
     O.style.transform = `scale(${z})`;
     zoom_el.innerText = `${(z * 100).toFixed(1)}%`;
+    document.documentElement.style.setProperty("--zoom", String(z));
 }
 
 function el_offset(el: HTMLElement, pel?: HTMLElement) {

@@ -14,7 +14,8 @@
     --item-icon: 24px;
     --item-icon-margin: 0;
     --zest-index: 0;
-    --x-x-handle-w: 2px;
+    --x-x-handle-w: calc(2px / var(--zoom));
+    --zoom: 1;
 }
 
 .icon {
