@@ -221,6 +221,26 @@ body > #main > #nav #search {
     top: var(--icon-margin);
 }
 
+.侧栏 > #items > #层容器 > div:nth-child(2) {
+    position: sticky;
+    top: var(--icon-p-b-size);
+}
+.层容器 {
+    overflow: auto;
+}
+
+.层容器 > #层 > div {
+    display: flex;
+    height: var(--item-height);
+}
+.层容器 > #层 > div > input[type="text"] {
+    width: 100%;
+}
+.层容器 > #层 > div > textarea {
+    resize: vertical;
+    width: 100%;
+}
+
 .侧栏 > #items > #工具 > div {
     width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
@@ -277,22 +297,6 @@ body > #main > #nav #search {
     top: var(--icon-margin);
 }
 
-.层容器 {
-    overflow: auto;
-}
-
-.层容器 > textarea {
-    resize: vertical;
-    width: 100%;
-}
-
-.层容器 > #层 > div {
-    display: flex;
-    height: var(--item-height);
-}
-.层容器 > #层 > div > input[type="text"] {
-    width: 100%;
-}
 
 body > #main > #画布 {
     flex-grow: 1;
