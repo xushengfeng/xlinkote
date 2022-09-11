@@ -602,9 +602,11 @@ let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }
 let free_o_a = NaN;
 let free_move = false;
 document.addEventListener("mousemove", (e: MouseEvent) => {
-    if (模式 == "设计") e.preventDefault();
-    free_mouse(e);
-    if (free_o_e) free_move = true;
+    if (模式 == "设计" && free_o_e) {
+        e.preventDefault();
+        free_mouse(e);
+        free_move = true;
+    }
 });
 document.addEventListener("mouseup", (e: MouseEvent) => {
     if (drag_block) {
