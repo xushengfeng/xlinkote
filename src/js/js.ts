@@ -2180,7 +2180,7 @@ class x extends HTMLElement {
             free_o_a = -1;
             document.getElementById("画布").style.cursor = "move";
 
-            if (selected_el.length == 1) {
+            if (selected_el.length <= 1) {
                 z.focus(this);
             }
 
