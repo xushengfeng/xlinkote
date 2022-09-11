@@ -634,10 +634,12 @@ var free_mouse = (e: MouseEvent) => {
         for (const xel of free_o_rects) {
             let dx = (e.clientX - free_o_e.clientX) / zoom,
                 dy = (e.clientY - free_o_e.clientY) / zoom;
-            let x = NaN,
-                y = NaN,
-                w = NaN,
-                h = NaN;
+            let x = xel.x,
+                y = xel.y,
+                w = xel.w,
+                h = xel.h;
+            let a = xel.h / xel.w,
+                a1 = Math.abs(dy / dx) || Infinity;
             switch (free_o_a) {
                 case -1:
                     x = xel.x + dx;
@@ -659,34 +661,54 @@ var free_mouse = (e: MouseEvent) => {
                     break;
                 case 4:
                     // ↗
-                    if (!e.shiftKey) {
+                    if (e.shiftKey) {
+                        let j = dx * w - dy * h;
+                        c(0, (j * h) / (w ** 2 + h ** 2));
+                        c(1, (j * w) / (w ** 2 + h ** 2));
+                    } else {
                         c(0, -dy);
                         c(1, dx);
                     }
                     break;
                 case 5:
                     // ↘
-                    if (!e.shiftKey) {
+                    if (e.shiftKey) {
+                        let j = dx * w + dy * h;
+                        c(1, (j * w) / (w ** 2 + h ** 2));
+                        c(2, (j * h) / (w ** 2 + h ** 2));
+                    } else {
                         c(1, dx);
                         c(2, dy);
                     }
                     break;
                 case 6:
                     // ↙
-                    if (!e.shiftKey) {
+                    if (e.shiftKey) {
+                        let j = -dx * w + dy * h;
+                        c(2, (j * h) / (w ** 2 + h ** 2));
+                        c(3, (j * w) / (w ** 2 + h ** 2));
+                    } else {
                         c(2, dy);
                         c(3, -dx);
                     }
                     break;
                 case 7:
                     // ↖
-                    if (!e.shiftKey) {
+                    if (e.shiftKey) {
+                        let j = -dx * w - dy * h;
+                        c(3, (j * w) / (w ** 2 + h ** 2));
+                        c(0, (j * h) / (w ** 2 + h ** 2));
+                    } else {
                         c(3, -dx);
                         c(0, -dy);
                     }
                     break;
             }
             function c(a: number, d: number) {
+                let x = NaN,
+                    y = NaN,
+                    w = NaN,
+                    h = NaN;
                 switch (a) {
                     case 0:
                         y = xel.y - d;
