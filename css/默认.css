@@ -37,6 +37,16 @@
     background-color: #0000;
 }
 
+input,
+textarea,
+select {
+    outline: none;
+    border: none;
+    background-color: #0000;
+    color: var(--color6);
+    font-size: 1em;
+}
+
 body > #main > #nav {
     background-color: var(--bg1);
     outline: 1px solid var(--color5);
@@ -67,20 +77,6 @@ body > #main > #nav #search {
     box-shadow: var(--shadow1);
 }
 
-.侧栏 input,
-.侧栏 textarea {
-    background-color: #0000;
-    color: var(--color6);
-}
-.侧栏 > #items > #文件 > div > input {
-    border: none;
-    outline: none;
-}
-
-.侧栏 > #items > #集 > input {
-    border: none;
-    outline: none;
-}
 .侧栏 > #items > #层容器 > div:nth-child(1) {
     background-color: var(--bg1);
 }
@@ -90,10 +86,6 @@ body > #main > #nav #search {
 .层容器 > textarea {
     outline: none;
     border: none;
-}
-.层容器 > #层 > div > input[type="text"] {
-    border: none;
-    outline: none;
 }
 
 body > #main > #画布 {
@@ -118,9 +110,7 @@ body > #main > #层容器 > #层 input[type="radio"]:checked {
     border: 6px solid #000;
 }
 body > #main > #层容器 > #层 input[type="text"] {
-    border: none;
     background-color: #0000;
-    outline: none;
     padding: 0;
     vertical-align: middle;
 }
