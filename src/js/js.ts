@@ -709,24 +709,34 @@ var free_mouse = (e: MouseEvent) => {
                     y = NaN,
                     w = NaN,
                     h = NaN;
+                let i = 1,
+                    j = 0;
+                if (e.ctrlKey) {
+                    i = 2;
+                    j = 1;
+                }
                 switch (a) {
                     case 0:
                         y = xel.y - d;
-                        h = xel.h + d;
+                        h = xel.h + i * d;
                         xel.el.style.height = h + "px";
                         xel.el.style.top = y + "px";
                         break;
                     case 1:
-                        w = xel.w + d;
+                        w = xel.w + i * d;
+                        x = xel.x - j * d;
                         xel.el.style.width = w + "px";
+                        xel.el.style.left = x + "px";
                         break;
                     case 2:
-                        h = xel.h + d;
+                        h = xel.h + i * d;
+                        y = xel.y - j * d;
                         xel.el.style.height = h + "px";
+                        xel.el.style.top = y + "px";
                         break;
                     case 3:
                         x = xel.x - d;
-                        w = xel.w + d;
+                        w = xel.w + i * d;
                         xel.el.style.width = w + "px";
                         xel.el.style.left = x + "px";
                         break;
