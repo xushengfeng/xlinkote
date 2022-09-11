@@ -638,8 +638,6 @@ var free_mouse = (e: MouseEvent) => {
                 y = xel.y,
                 w = xel.w,
                 h = xel.h;
-            let a = xel.h / xel.w,
-                a1 = Math.abs(dy / dx) || Infinity;
             switch (free_o_a) {
                 case -1:
                     x = xel.x + dx;
@@ -741,6 +739,10 @@ var free_mouse = (e: MouseEvent) => {
                         xel.el.style.left = x + "px";
                         break;
                 }
+            }
+            if (xel.el == z.聚焦元素) {
+                el_style.value = xel.el.getAttribute("style");
+                load_xywh();
             }
         }
     }
