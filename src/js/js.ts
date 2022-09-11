@@ -162,12 +162,13 @@ document.getElementById("顶层").onclick = () => {
 
 const toast = document.getElementById("toast");
 
-function put_toast(t: string) {
+function put_toast(t: string, time?: number) {
+    if (!time) time = 1;
     toast.innerText = t;
     toast.classList.add("toast_show");
     setTimeout(() => {
         toast.classList.remove("toast_show");
-    }, 1000);
+    }, time * 1000);
 }
 
 var nav = document.getElementById("nav");
@@ -1591,7 +1592,7 @@ async function put_xln_value() {
     if (v) {
         put_toast("✅文件上传成功");
     } else {
-        put_toast("❌文件上传失败");
+        put_toast("❌文件上传失败", 5);
     }
 }
 
