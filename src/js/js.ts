@@ -198,6 +198,8 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
                 focus_draw_el = null;
             }
             if (O) O.style.pointerEvents = "";
+
+            blur_all();
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -216,10 +218,19 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             for (let el of O.querySelectorAll("x-draw")) {
                 (el as draw).style.pointerEvents = "auto";
             }
+
+            blur_all();
             break;
     }
 }
 set_模式("设计");
+
+function blur_all() {
+    selected_el = [];
+    for (let x of z.z) {
+        x.classList.remove("x-x_selected");
+    }
+}
 
 // markdown
 document.getElementById("toggle_md").onclick = () => {
