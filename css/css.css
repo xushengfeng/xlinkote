@@ -16,7 +16,7 @@
     --zest-index: 0;
     --x-x-handle-w: 8px;
     --x-x-handle-o: calc(50% - var(--x-x-handle-w) / 2);
-    --x-x-handle-o2: calc(-1 * var(--x-x-handle-w));
+    --x-x-handle-o2: calc(-0.5 * var(--x-x-handle-w));
     --zoom: 1;
 }
 
