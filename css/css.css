@@ -14,7 +14,7 @@
     --item-icon: 24px;
     --item-icon-margin: 0;
     --zest-index: 0;
-    --x-x-handle-w: calc(8px / var(--zoom));
+    --x-x-handle-w: 8px;
     --x-x-handle-o: calc(50% - var(--x-x-handle-w) / 2);
     --x-x-handle-o2: calc(-1 * var(--x-x-handle-w));
     --zoom: 1;
@@ -297,7 +297,6 @@ body > #main > #nav #search {
     top: var(--icon-margin);
 }
 
-
 body > #main > #画布 {
     flex-grow: 1;
     position: relative;
@@ -419,8 +418,10 @@ x-x > #x-x_bar {
     top: -16px;
     opacity: 0;
     pointer-events: none;
-    transition: var(--transition);
+    transition: opacity var(--transition);
     cursor: pointer !important;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left bottom;
 }
 x-x > #x-x_bar > div {
     width: 16px;
@@ -447,6 +448,7 @@ x-x > .xxhandle > div {
     position: absolute;
     width: var(--x-x-handle-w);
     height: var(--x-x-handle-w);
+    transform: scale(calc(1 / var(--zoom)));
     border-radius: 50%;
 }
 .xxhandle > .xxhandle0 {
