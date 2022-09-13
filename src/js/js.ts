@@ -204,6 +204,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
 
             blur_all();
             画布.style.cursor = "auto";
+            document.documentElement.style.setProperty("--x-x-handle-d", "none");
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -214,6 +215,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             });
             if (O) O.style.pointerEvents = "";
             画布.style.cursor = "crosshair";
+            document.documentElement.style.setProperty("--x-x-handle-d", "block");
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -226,6 +228,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
 
             blur_all();
             画布.style.cursor = "crosshair";
+            document.documentElement.style.setProperty("--x-x-handle-d", "none");
             break;
     }
 }
