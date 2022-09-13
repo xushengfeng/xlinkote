@@ -826,7 +826,7 @@ type 集type = {
         file_name: string;
     };
     数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
-    链接: { [key: string]: { 值: number; 目标: string[] } };
+    链接: { [key: string]: { 目标: { value: number; time: number; key: string }[] } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
 };
 
@@ -927,7 +927,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
     let t = "";
     for (const x of inputdata.data) {
         try {
-            if (!集.链接[x.id]) 集.链接[x.id] = { 值: 1, 目标: [] };
+            if (!集.链接[x.id]) 集.链接[x.id] = { 目标: [] };
             let eels = "";
             for (let i in x.values) {
                 eels += `<${i} value='${x.values[i].value}'`;
@@ -1474,7 +1474,7 @@ class 图层 {
         this.z.push(el);
         this.reflash(el);
         if (!集.链接) 集.链接 = {};
-        集.链接[el.id] = { 值: 1, 目标: [] };
+        集.链接[el.id] = { 目标: [] };
     }
 
     remove(el: x) {
@@ -3179,7 +3179,7 @@ class link extends HTMLElement {
     connectedCallback() {
         var id = this.getAttribute("id");
         if (!集.链接[id]) {
-            集.链接[id] = { 值: 1, 目标: [] };
+            集.链接[id] = { 目标: [] };
             let r = search_el.getBoundingClientRect();
             let x = r.x,
                 w = r.width,
@@ -3204,8 +3204,7 @@ class link extends HTMLElement {
                 d.append(t, idv);
                 search_r.append(d);
                 d.onclick = () => {
-                    集.链接[id].目标.push(i);
-                    集.链接[i].值++;
+                    集.链接[id].目标.push({ time: new Date().getTime(), key: i, value: 1 });
                     search_r.innerHTML = "";
                 };
             }
