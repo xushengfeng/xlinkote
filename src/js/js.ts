@@ -334,6 +334,8 @@ document.getElementById("常驻").onpointerdown = (e) => {
     drag_block = true;
 };
 
+const 临时中转站 = document.getElementById("临时");
+
 // 画布
 
 var o_e: MouseEvent;
