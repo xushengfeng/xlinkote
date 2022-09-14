@@ -615,6 +615,26 @@ document.addEventListener("mouseup", (e: MouseEvent) => {
     }
 
     free_mouse(e);
+
+    if (free_o_e && free_o_a == -1) {
+        for (let i of selected_el) {
+            let values = {};
+            for (let k of i.childNodes) {
+                let eel = <markdown>k;
+                if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
+                values[eel.tagName] = {
+                    value: eel.value,
+                    ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}),
+                };
+            }
+            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), values });
+            z.remove(i);
+            i.remove();
+        }
+        console.log(集.中转站);
+        tmp_s_reflash();
+    }
+
     if (!free_move && free_o_e) {
         document.querySelectorAll("x-x").forEach((el: x) => {
             if (el.contains(e.target as x)) {
@@ -758,6 +778,22 @@ function creat_x_x(x: number, y: number, w: number) {
     xel.append(md);
     (<markdown>md).edit = true;
     set_模式("浏览");
+}
+
+// 中转站
+function tmp_s_reflash() {
+    临时中转站.innerHTML = "";
+    for (let x of 集.中转站) {
+        let div = document.createElement("div");
+        let eels = "";
+        for (let i in x.values) {
+            eels += `<${i} value='${x.values[i].value}'`;
+            if (x.values[i].edit) eels += `edit = "cr"`;
+            eels += `></${i}>`;
+        }
+        div.innerHTML = eels;
+        临时中转站.append(div);
+    }
 }
 
 // 快捷键
