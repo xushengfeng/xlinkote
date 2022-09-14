@@ -823,6 +823,11 @@ function tmp_s_reflash() {
                     free_o_e = e;
                     drag_block = true;
 
+                    集.中转站 = 集.中转站.filter((x) => x != i);
+                    tmp_s_reflash();
+
+                    data_changed();
+
                     return;
                 }
             }
