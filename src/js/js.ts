@@ -988,6 +988,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
     }
     z.reflash(O.children[O.children.length - 1] as x, true);
     l_math();
+    tmp_s_reflash();
 }
 
 function json2md(obj: 集type) {
