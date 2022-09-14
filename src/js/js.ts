@@ -792,6 +792,41 @@ function tmp_s_reflash() {
             eels += `></${i}>`;
         }
         div.innerHTML = eels;
+        div.onpointerdown = (e) => {
+            console.log((<HTMLElement>e.target).id);
+            let id = x.id;
+            let v = null;
+            for (let i of 集.中转站) {
+                if (id == i.id) {
+                    let data = i;
+
+                    let x = e.clientX - O.getBoundingClientRect().x,
+                        y = e.clientY - O.getBoundingClientRect().y;
+
+                    let xel = <x>document.createElement("x-x");
+                    xel.id = data.id;
+
+                    let eels = "";
+                    for (let i in data.values) {
+                        eels += `<${i} value='${data.values[i].value}'`;
+                        if (data.values[i].edit) eels += `edit = "cr"`;
+                        eels += `></${i}>`;
+                    }
+                    xel.style.left = x / zoom + "px";
+                    xel.style.top = y / zoom + "px";
+                    xel.innerHTML = eels;
+                    z.push(xel);
+                    set_模式("浏览");
+                    if (v) (<markdown>md).value = v;
+                    set_模式("设计");
+                    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+                    free_o_e = e;
+                    drag_block = true;
+
+                    return;
+                }
+            }
+        };
         临时中转站.append(div);
     }
 }
