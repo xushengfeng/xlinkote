@@ -930,7 +930,7 @@ function get_data() {
         let values = {};
         for (let k of el.childNodes) {
             let eel = <markdown>k;
-            if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
+            if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
             values[eel.tagName] = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
         }
         data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
@@ -2324,6 +2324,7 @@ class x extends HTMLElement {
         }
 
         var h = document.createElement("div");
+        h.id = "x-x_handle";
 
         h.classList.add("xxhandle");
         h.append(...x_h);
