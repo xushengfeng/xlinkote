@@ -616,7 +616,7 @@ document.addEventListener("mouseup", (e: MouseEvent) => {
 
     free_mouse(e);
 
-    if (free_o_e && free_o_a == -1) {
+    if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
             let values = {};
             for (let k of i.childNodes) {
