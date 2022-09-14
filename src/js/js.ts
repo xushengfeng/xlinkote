@@ -830,6 +830,7 @@ type 集type = {
     数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
     链接: { [key: string]: { 目标: { value: number; time: number; key: string }[] } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
+    中转站: data;
 };
 
 var 集: 集type = {
@@ -842,6 +843,7 @@ var 集: 集type = {
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
     链接: {},
     assets: {},
+    中转站: [],
 };
 
 function get_data() {
@@ -1335,6 +1337,7 @@ document.addEventListener("message", (msg: any) => {
                         数据: [],
                         链接: {},
                         assets: {},
+                        中转站: [],
                     };
                 } else {
                     j = 集;
