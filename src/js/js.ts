@@ -791,7 +791,11 @@ function tmp_s_reflash() {
             if (x.values[i].edit) eels += `edit = "cr"`;
             eels += `></${i}>`;
         }
-        div.innerHTML = eels;
+        let g = document.createElement("div");
+        div.append(g);
+        let t = document.createElement("div");
+        t.innerHTML = eels;
+        div.append(t);
         div.onpointerdown = (e) => {
             console.log((<HTMLElement>e.target).id);
             let id = x.id;
@@ -836,9 +840,19 @@ function tmp_s_reflash() {
                 }
             }
         };
+        g.onclick = () => {
+            x.global = !x.global;
+            if (x.global) {
+                global_x.push(x);
+            } else {
+                global_x = global_x.filter((i) => i != x);
+            }
+        };
         临时中转站.append(div);
     }
 }
+
+var global_x = [] as data;
 
 // 快捷键
 document.onkeydown = (e) => {
@@ -953,7 +967,7 @@ function get_data() {
     return l;
 }
 
-type data = Array<{ id: string; style: string; values: object; fixed: boolean }>;
+type data = Array<{ id: string; style: string; values: object; fixed: boolean; global?: boolean }>;
 
 function rename_el() {
     let el = document.createElement("input");
