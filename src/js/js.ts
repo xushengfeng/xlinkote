@@ -913,18 +913,23 @@ type 集type = {
     中转站: data;
 };
 
-var 集: 集type = {
-    meta: {
-        focus_page: pname,
-        url: "",
-        UUID: uuid(),
-        file_name: "",
-    },
-    数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
-    链接: { 0: { 目标: [] } },
-    assets: {},
-    中转站: [],
-};
+var 集 = new_集(pname);
+
+function new_集(pname: string): 集type {
+    if (!pname) pname = `画布${uuid().slice(0, 7)}`;
+    return {
+        meta: {
+            focus_page: pname,
+            url: "",
+            UUID: uuid(),
+            file_name: "",
+        },
+        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+        链接: { 0: { 目标: [] } },
+        assets: {},
+        中转站: [],
+    };
+}
 
 function get_data() {
     let l = 集;
