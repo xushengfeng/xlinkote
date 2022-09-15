@@ -921,7 +921,7 @@ var 集: 集type = {
         file_name: "",
     },
     数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
-    链接: {},
+    链接: { 0: { 目标: [] } },
     assets: {},
     中转站: [],
 };
