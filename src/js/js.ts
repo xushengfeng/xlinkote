@@ -413,8 +413,9 @@ var o_touch_e: TouchEvent;
 var o_touch_zoom_e: TouchEvent;
 var o_zoom = NaN;
 document.ontouchstart = (e) => {
+    if (模式 == "绘制") return;
     let el = <HTMLElement>e.changedTouches[0].target;
-    if (!画布.contains(el)) return;
+    if (el != 画布) return;
     if (
         !(
             el.isContentEditable ||
@@ -600,14 +601,14 @@ let free_o_e: MouseEvent;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
 let free_o_a = NaN;
 let free_move = false;
-document.addEventListener("mousemove", (e: MouseEvent) => {
+document.addEventListener("pointermove", (e: PointerEvent) => {
     if (模式 == "设计" && free_o_e) {
         e.preventDefault();
         free_mouse(e);
         free_move = true;
     }
 });
-document.addEventListener("mouseup", (e: MouseEvent) => {
+document.addEventListener("pointerup", (e: PointerEvent) => {
     if (drag_block) {
         set_模式("浏览");
         (<markdown>free_o_rects[0].el.children[1]).edit = true;
@@ -2388,32 +2389,29 @@ class x extends HTMLElement {
             }
         };
 
-        this.addEventListener("mousedown", (e) => {
+        this.onpointerdown = (e) => {
             if (模式 != "设计") return;
             if (this.fixed) return;
-            if (bar.contains(e.target as HTMLElement)) return;
-            if (x_h.includes(e.target as HTMLDivElement)) return;
-            free_o_e = e;
-            free_o_a = -1;
-
-            if (selected_el.length <= 1) {
-                z.focus(this);
-            }
-
-            free_o_rects = [];
-            for (const el of selected_el) {
-                free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
-            }
-        });
-
-        this.onpointerdown = (e) => {
             let el = e.target as HTMLDivElement;
+            if (bar.contains(el)) return;
             if (x_h.includes(el)) {
                 free_o_a = x_h.indexOf(el);
                 free_o_e = e;
                 free_o_rects = [
                     { el: this, x: this.offsetLeft, y: this.offsetTop, w: this.offsetWidth, h: this.offsetHeight },
                 ];
+            } else {
+                free_o_e = e;
+                free_o_a = -1;
+
+                if (selected_el.length <= 1) {
+                    z.focus(this);
+                }
+
+                free_o_rects = [];
+                for (const el of selected_el) {
+                    free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                }
             }
         };
 
