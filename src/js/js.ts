@@ -3326,8 +3326,7 @@ function color_bar() {
         color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: bg0 };
         console.log(color_e);
     };
-    document.addEventListener("pointermove", (e) => {
-        if (!color_e) return;
+    const f = (e: PointerEvent) => {
         if (color_e.t == range) {
             let x = (e.clientX - color_e.c.x + color_e.o.x) / range.offsetWidth;
             if (x < 0) x = 0;
@@ -3354,11 +3353,14 @@ function color_bar() {
         }
         let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
         c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
+    };
+    document.addEventListener("pointermove", (e) => {
+        if (!color_e) return;
+        f(e);
     });
     document.addEventListener("pointerup", (e) => {
+        f(e);
         color_e = null;
-        let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
-        c0.style.backgroundColor = `${hsv.rgb().string()}`;
     });
 }
 
