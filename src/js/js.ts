@@ -1443,27 +1443,20 @@ document.addEventListener("message", (msg: any) => {
                 let j: 集type;
                 // 避免影响当前已打开文件
                 if (集.meta.file_name) {
-                    j = {
-                        meta: {
-                            focus_page: "",
-                            url: "",
-                            UUID: uuid(),
-                            file_name: "摘录",
-                        },
-                        数据: [],
-                        链接: {},
-                        assets: {},
-                        中转站: [],
-                    };
+                    j = new_集("");
                 } else {
                     j = 集;
-                    j.meta.file_name = "摘录";
                 }
+                j.meta.file_name = "摘录";
+                j.中转站.push({
+                    id: uuid().slice(0, 7),
+                    fixed: false,
+                    style: "",
+                    values: { "X-MD": { value: data.text } },
+                });
                 set_data(j);
             }
         }
-        add_画布();
-        add_file(data.type, data.text, data.data, 0, 0);
         data_changed();
     }
 });
