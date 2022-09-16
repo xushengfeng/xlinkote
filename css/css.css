@@ -112,6 +112,7 @@ body > #main > #nav > div:nth-child(1) #upload_i {
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
     border: 1px solid;
+    pointer-events: none;
 }
 .color > .range {
     position: relative;
@@ -122,6 +123,7 @@ body > #main > #nav > div:nth-child(1) #upload_i {
     position: absolute;
     transform: translateX(-50%);
     outline: 1px solid;
+    pointer-events: none;
 }
 
 body > #main > #nav > #search_bar {
