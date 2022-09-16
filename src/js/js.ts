@@ -1232,6 +1232,12 @@ function db_get() {
             let dav = document.createElement("div");
             d.append(dav, t);
             文件_el.append(d);
+
+            global_x = [];
+            if ((f as 集type)?.中转站)
+                for (let x of (f as 集type).中转站) {
+                    if (x.global) global_x.push(x);
+                }
         }
 
         if (`#${集.meta.UUID}` != location.hash) {
