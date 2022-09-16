@@ -291,7 +291,7 @@ body > #main > #nav #search {
 }
 .侧栏 > #items > #中转站 > #临时 {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .侧栏 > #items > #中转站 > #临时 > div {
     position: relative;
