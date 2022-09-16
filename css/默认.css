@@ -88,6 +88,15 @@ body > #main > #nav #search {
     border: none;
 }
 
+.侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar > div {
+    background-color: var(--bg-color1);
+    border-radius: 4px;
+    margin-right: 4px;
+}
+.buttom_a{
+    background-color: var(--bg-color3) !important;
+}
+
 body > #main > #画布 {
     background-color: var(--bg1);
 }

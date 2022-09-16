@@ -791,12 +791,19 @@ function tmp_s_reflash() {
             if (x.values[i].edit) eels += `edit = "cr"`;
             eels += `></${i}>`;
         }
+        let bar = document.createElement("div");
+        bar.classList.add("tmp_s_bar");
+        div.append(bar);
+        let h = document.createElement("div");
+        bar.append(h);
         let g = document.createElement("div");
-        div.append(g);
+        g.innerHTML = `<img src="${ding_svg}" class="icon">`;
+        if (x.global) g.classList.add("buttom_a");
+        bar.append(g);
         let t = document.createElement("div");
         t.innerHTML = eels;
         div.append(t);
-        div.onpointerdown = (e) => {
+        h.onpointerdown = (e) => {
             console.log((<HTMLElement>e.target).id);
             let id = x.id;
             let v = null;
@@ -844,8 +851,10 @@ function tmp_s_reflash() {
             x.global = !x.global;
             if (x.global) {
                 global_x.push(x);
+                g.classList.add("buttom_a");
             } else {
                 global_x = global_x.filter((i) => i != x);
+                g.classList.remove("buttom_a");
             }
         };
         临时中转站.append(div);
