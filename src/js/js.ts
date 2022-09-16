@@ -2851,7 +2851,7 @@ function set_el_text_value(el: HTMLElement, value: any) {
 }
 
 // 几何图形
-import JXG from "jsxgraph";
+import JXG, { boards } from "jsxgraph";
 class graph extends HTMLElement {
     constructor() {
         super();
@@ -3280,6 +3280,87 @@ class draw extends HTMLElement {
 }
 
 window.customElements.define("x-draw", draw);
+
+// 色彩选择器
+import color from "color";
+color_bar();
+var color_e: { o: { x: number; y: number }; c: { x: number; y: number }; t: HTMLElement } = null;
+function color_bar() {
+    const hsva = { h: 0, s: 0, l: 0, a: 0 };
+
+    const pel = document.getElementById("penc");
+    const broad = document.createElement("div");
+    const bg0 = document.createElement("div");
+    const pb = document.createElement("div");
+    const range = document.createElement("div");
+    const pr = document.createElement("div");
+    const c0 = document.createElement("div");
+
+    pel.classList.add("color");
+
+    broad.classList.add("broad");
+    range.classList.add("range");
+
+    broad.append(bg0);
+    bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(0,100%,50%) 100%)`;
+    pel.append(broad);
+
+    pb.classList.add("color_pointer");
+    bg0.append(pb);
+
+    range.style.background = `linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%)`;
+    range.style.height = "20px";
+    pel.append(range);
+
+    pr.classList.add("color_range_p");
+    range.append(pr);
+
+    pel.append(c0);
+    c0.style.width = "20px";
+    c0.style.height = "20px";
+
+    range.onpointerdown = (e) => {
+        color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
+    };
+    bg0.onpointerdown = (e) => {
+        color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: bg0 };
+        console.log(color_e);
+    };
+    document.addEventListener("pointermove", (e) => {
+        if (!color_e) return;
+        if (color_e.t == range) {
+            let x = (e.clientX - color_e.c.x + color_e.o.x) / range.offsetWidth;
+            if (x < 0) x = 0;
+            if (x > 1) x = 1;
+            pr.style.left = x * range.offsetWidth + "px";
+            let h = Math.round(360 * x);
+            if (h < 0) h = 0;
+            if (h >= 360) h = 0;
+            console.log(h);
+            hsva.h = h;
+            bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(${h},100%,50%) 100%)`;
+        } else if (color_e.t == bg0) {
+            let x = (e.clientX - color_e.c.x + color_e.o.x) / bg0.offsetWidth;
+            let y = (e.clientY - color_e.c.y + color_e.o.y) / bg0.offsetHeight;
+            console.log(x, y);
+            if (x < 0) x = 0;
+            if (x > 1) x = 1;
+            if (y < 0) y = 0;
+            if (y > 1) y = 1;
+            pb.style.left = x * bg0.offsetWidth + "px";
+            pb.style.top = y * bg0.offsetHeight + "px";
+            hsva.s = x * 100;
+            hsva.l = (1 - y) * 100;
+        }
+        let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
+        c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
+    });
+    document.addEventListener("pointerup", (e) => {
+        color_e = null;
+        let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
+        c0.style.backgroundColor = `${hsv.rgb().string()}`;
+    });
+}
 
 const link_bar = document.getElementById("link_bar");
 const link_ids = document.getElementById("link_ids");

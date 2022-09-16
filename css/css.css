@@ -61,7 +61,7 @@ body > #main > #nav > div:nth-child(3) {
     align-items: center;
     box-sizing: border-box;
     height: var(--icon-p-b-size);
-    overflow-x: scroll;
+    /* overflow-x: auto; */
 }
 body > #main > #nav > div:nth-child(1)::-webkit-scrollbar,
 body > #main > #nav > div:nth-child(2)::-webkit-scrollbar,
@@ -89,9 +89,39 @@ body > #main > #nav > div:nth-child(1) #upload_i {
 }
 
 #penc {
+    width: 500px;
+    height: 500px;
+    padding: 0;
+}
+
+.color > .broad {
     width: 100%;
     height: 100%;
-    padding: 0;
+    position: relative;
+}
+.color > .broad > div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+}
+.color > .broad .color_pointer {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+    border: 1px solid;
+}
+.color > .range {
+    position: relative;
+}
+.color > .range > .color_range_p {
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    transform: translateX(-50%);
+    outline: 1px solid;
 }
 
 body > #main > #nav > #search_bar {
