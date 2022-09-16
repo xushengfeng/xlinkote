@@ -415,7 +415,7 @@ var o_zoom = NaN;
 document.ontouchstart = (e) => {
     if (模式 == "绘制") return;
     let el = <HTMLElement>e.changedTouches[0].target;
-    if (el != 画布) return;
+    if (模式 == "设计" && el != 画布) return;
     if (
         !(
             el.isContentEditable ||
