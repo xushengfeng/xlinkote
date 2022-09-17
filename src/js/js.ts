@@ -1630,6 +1630,13 @@ class 图层 {
         selected_el.push(el);
         el_style.value = el.getAttribute("style");
         load_xywh();
+
+        if (模式 == "设计") {
+            let d = el.querySelector("x-draw") as draw;
+            if (d) {
+                penc_el.value = d.pen.color;
+            }
+        }
     }
 
     get(el: x) {
