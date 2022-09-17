@@ -1509,10 +1509,10 @@ var focus_draw_el = null;
     }
 };
 
-const penc_el = <HTMLInputElement>document.getElementById("penc");
-penc_el.onchange = () => {
+const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
+penc_el.addEventListener("input", () => {
     (<draw>focus_draw_el).pen.color = penc_el.value;
-};
+});
 
 document.getElementById("橡皮").onclick = () => {
     if ((<draw>focus_draw_el).pen.gco == "source-over") {
