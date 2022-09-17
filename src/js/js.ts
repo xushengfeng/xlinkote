@@ -3518,6 +3518,8 @@ class xdraw_width extends HTMLElement {
             f(e);
             color_e = null;
         });
+
+        this.set_v(5);
     }
 
     set_v(c: number) {
