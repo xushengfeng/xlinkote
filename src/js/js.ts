@@ -934,7 +934,7 @@ type 集type = {
         file_name: string;
     };
     数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
-    链接: { [key: string]: { 目标: { value: number; time: number; key: string }[] } };
+    链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
 };
@@ -951,7 +951,7 @@ function new_集(pname: string): 集type {
             file_name: "",
         },
         数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
-        链接: { 0: { 目标: [] } },
+        链接: { 0: {} },
         assets: {},
         中转站: [],
     };
@@ -1042,10 +1042,7 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
     let t = "";
     for (const x of inputdata.data) {
         try {
-            if (!集.链接[x.id]) {
-                集.链接[x.id] = { 目标: [] };
-                集.链接[0].目标.push({ key: x.id, time: new Date().getTime(), value: 1 });
-            }
+            link(x.id).add();
             let eels = "";
             for (let i in x.values) {
                 eels += `<${i} value='${x.values[i].value}'`;
@@ -1606,8 +1603,7 @@ class 图层 {
         O.append(el);
         this.z.push(el);
         this.reflash(el);
-        if (!集.链接) 集.链接 = {};
-        集.链接[el.id] = { 目标: [] };
+        link(el.id).add();
     }
 
     remove(el: x) {
@@ -1980,6 +1976,52 @@ function show_search_l(l) {
             }
         }
     }
+}
+
+function link(key0: string) {
+    let t = new Date().getTime();
+    // key1存在，作用于边，否则作用于点
+    return {
+        add: (key1?: string) => {
+            if (key1) {
+                link(key0).add();
+                link(key1).add();
+                link(key0).value(key1);
+            } else {
+                if (集.链接[key0]) return;
+                集.链接[key0] = {};
+                集.链接[0][key0] = { value: 1, time: t };
+            }
+        },
+        rm: (key1?: string) => {
+            if (key1) {
+                delete 集.链接[key0][key1];
+                delete 集.链接[key1][key0];
+            } else {
+                delete 集.链接[0][key0];
+                for (let i in 集.链接[key0]) {
+                    delete 集.链接[i][key0];
+                }
+                delete 集.链接[key0];
+            }
+        },
+        value(key1?: string) {
+            if (key1) {
+                // 尝试正向、反向寻找边的值，否则新建
+                if (集.链接[key0][key1].value !== undefined) {
+                    集.链接[key0][key1].value++;
+                    集.链接[key0][key1].time = t;
+                } else if (集.链接[key1][key0].value !== undefined) {
+                    集.链接[key1][key0].value++;
+                    集.链接[key1][key0].time = t;
+                } else {
+                    // 只存储在边的一个方向上，以时间换空间
+                    集.链接[key0][key1].value = 1;
+                    集.链接[key0][key1].time = t;
+                }
+            }
+        },
+    };
 }
 
 // MD
@@ -3591,7 +3633,7 @@ window.customElements.define("x-draw-width", xdraw_width);
 
 const link_bar = document.getElementById("link_bar");
 const link_ids = document.getElementById("link_ids");
-class link extends HTMLElement {
+class xlink extends HTMLElement {
     constructor() {
         super();
     }
@@ -3599,7 +3641,7 @@ class link extends HTMLElement {
     connectedCallback() {
         var id = this.getAttribute("id");
         if (!集.链接[id]) {
-            集.链接[id] = { 目标: [] };
+            link(id).add();
             let r = search_el.getBoundingClientRect();
             let x = r.x,
                 w = r.width,
@@ -3624,7 +3666,7 @@ class link extends HTMLElement {
                 d.append(t, idv);
                 search_r.append(d);
                 d.onclick = () => {
-                    集.链接[id].目标.push({ time: new Date().getTime(), key: i, value: 1 });
+                    link(id).add(i);
                     search_r.innerHTML = "";
                 };
             }
@@ -3637,7 +3679,7 @@ class link extends HTMLElement {
     }
 }
 
-window.customElements.define("x-link", link);
+window.customElements.define("x-link", xlink);
 
 // 录音
 class record extends HTMLElement {
