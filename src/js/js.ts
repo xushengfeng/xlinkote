@@ -1042,7 +1042,10 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
     let t = "";
     for (const x of inputdata.data) {
         try {
-            if (!集.链接[x.id]) 集.链接[x.id] = { 目标: [] };
+            if (!集.链接[x.id]) {
+                集.链接[x.id] = { 目标: [] };
+                集.链接[0].目标.push({ key: x.id, time: new Date().getTime(), value: 1 });
+            }
             let eels = "";
             for (let i in x.values) {
                 eels += `<${i} value='${x.values[i].value}'`;
