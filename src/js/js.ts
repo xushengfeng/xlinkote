@@ -3254,6 +3254,10 @@ class draw extends HTMLElement {
     }
 
     clip() {
+        let w = 0;
+        if (this.main_svg.children[0].getAttribute("stroke-width")) {
+            w = Number(this.main_svg.children[0].getAttribute("stroke-width").match(/\d*/)[0]) / 2;
+        }
         let min_x = this.main_svg.children[0].getBoundingClientRect().left,
             min_y = this.main_svg.children[0].getBoundingClientRect().top,
             max_x = this.main_svg.children[0].getBoundingClientRect().right,
@@ -3266,10 +3270,10 @@ class draw extends HTMLElement {
             if (b.right > max_x) max_x = b.right;
             if (b.bottom > max_y) max_y = b.bottom;
         }
-        min_x = min_x / zoom;
-        min_y = min_y / zoom;
-        max_x = max_x / zoom;
-        max_y = max_y / zoom;
+        min_x = (min_x - w) / zoom;
+        min_y = (min_y - w) / zoom;
+        max_x = (max_x + w) / zoom;
+        max_y = (max_y + w) / zoom;
         let pb = this.getBoundingClientRect();
         if (this.parentElement.tagName == "X-X") {
             let pel = this.parentElement;
