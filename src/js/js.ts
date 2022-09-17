@@ -1486,7 +1486,7 @@ function new_draw() {
     z.push(xel);
     z.focus(xel);
 }
-var focus_draw_el = null;
+var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
     if (模式 == "绘制") {
         new_draw();
@@ -1511,7 +1511,17 @@ var focus_draw_el = null;
 
 const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
 penc_el.addEventListener("input", () => {
-    (<draw>focus_draw_el).pen.color = penc_el.value;
+    let el = z.聚焦元素?.querySelector("x-draw") as draw;
+    if (el && 模式 == "设计") {
+        el.main_svg.querySelectorAll("*").forEach((el) => {
+            if (el.getAttribute("fill")) {
+                el.setAttribute("fill", penc_el.value);
+            }
+            if (el.getAttribute("stroke-width")) {
+                el.setAttribute("stroke-width", penc_el.value);
+            }
+        });
+    }
 });
 
 document.getElementById("橡皮").onclick = () => {
@@ -1607,26 +1617,10 @@ class 图层 {
             if (el.id == (<HTMLInputElement>l.querySelector("input[type='text']")).value)
                 (<HTMLInputElement>l.querySelector("input[type='radio']")).checked = true;
         }
-        if (模式 == "浏览")
-            if (el.children[0].tagName == "X-MD") {
-                focus_md = el.children[0] as markdown;
-                focus_draw_el = null;
-            } else if (el.children?.[1]?.tagName == "X-MD") {
-                focus_md = el.children[1] as markdown;
-                focus_draw_el = null;
-            } else {
-                focus_md = null;
-            }
-        if (模式 == "绘制")
-            if (el.children[0].tagName == "X-DRAW") {
-                focus_draw_el = el.children[0] as draw;
-                focus_md = null;
-            } else if (el.children?.[1]?.tagName == "X-DRAW") {
-                focus_draw_el = el.children[1] as draw;
-                focus_md = null;
-            } else {
-                focus_draw_el = null;
-            }
+        focus_md = null;
+        focus_draw_el = null;
+        if (el.querySelector("x-md")) focus_md = el.querySelector("x-md") as markdown;
+        if (el.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
 
         selected_el = [];
         for (let x of this.z) {
@@ -3399,6 +3393,7 @@ class xcolor extends HTMLElement {
             f(e);
         });
         document.addEventListener("pointerup", (e) => {
+            if (!color_e) return;
             f(e);
             color_e = null;
         });
