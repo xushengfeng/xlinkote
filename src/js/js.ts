@@ -1509,6 +1509,9 @@ var focus_draw_el = null as draw;
     }
 };
 
+document.getElementById("penc").onclick = (e) => {
+    if (e.target == penc_el.parentElement) penc_el.classList.toggle("color_show");
+};
 const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
 penc_el.addEventListener("input", () => {
     let el = z.聚焦元素?.querySelector("x-draw") as draw;
@@ -1522,6 +1525,7 @@ penc_el.addEventListener("input", () => {
             }
         });
     }
+    penc_el.parentElement.style.background = penc_el.value;
 });
 
 document.getElementById("橡皮").onclick = () => {
