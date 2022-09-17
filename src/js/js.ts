@@ -3520,7 +3520,16 @@ class xdraw_width extends HTMLElement {
         });
     }
 
-    set_v(c: number) {}
+    set_v(c: number) {
+        c = Math.min(this.max, Math.max(this.min, c));
+        let v = (this.max - this.min) / this.step;
+        let x = (c - this.min) / (this.max - this.min);
+        x = Math.round(x * v) / v;
+        this.els.pr.style.left = x * this.els.range.offsetWidth + "px";
+
+        this.c = this.min + x * v;
+        this.els.pr.style.width = this.els.pr.style.height = this.c + "px";
+    }
 
     get value() {
         return this.c;
