@@ -3296,6 +3296,8 @@ class xcolor extends HTMLElement {
         pb: null as HTMLElement,
         range: null as HTMLElement,
         pr: null as HTMLElement,
+        arange: null as HTMLElement,
+        par: null as HTMLElement,
         c0: null as HTMLElement,
     };
 
@@ -3305,7 +3307,7 @@ class xcolor extends HTMLElement {
             this.set_v(this.c);
         }
         let color_e: { o: { x: number; y: number }; c: { x: number; y: number }; t: HTMLElement } = null;
-        const hsva = { h: 0, s: 0, l: 0, a: 0 };
+        const hsva = { h: 0, s: 0, l: 0, a: 1 };
 
         const pel = this;
         const broad = (this.els.broad = document.createElement("div"));
@@ -3313,12 +3315,15 @@ class xcolor extends HTMLElement {
         const pb = (this.els.pb = document.createElement("div"));
         const range = (this.els.range = document.createElement("div"));
         const pr = (this.els.pr = document.createElement("div"));
+        const arange = (this.els.arange = document.createElement("div"));
+        const par = (this.els.par = document.createElement("div"));
         const c0 = (this.els.c0 = document.createElement("div"));
 
         pel.classList.add("color");
 
         broad.classList.add("broad");
         range.classList.add("range");
+        arange.classList.add("range");
 
         broad.append(bg0);
         bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(0,100%,50%) 100%)`;
@@ -3334,12 +3339,22 @@ class xcolor extends HTMLElement {
         pr.classList.add("color_range_p");
         range.append(pr);
 
+        arange.style.background = `linear-gradient(to right, white 0%, #0000 100%)`;
+        arange.style.height = "20px";
+        pel.append(arange);
+
+        par.classList.add("color_range_p");
+        arange.append(par);
+
         pel.append(c0);
         c0.style.width = "20px";
         c0.style.height = "20px";
 
         range.onpointerdown = (e) => {
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
+        };
+        arange.onpointerdown = (e) => {
+            color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: arange };
         };
         bg0.onpointerdown = (e) => {
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: bg0 };
@@ -3355,6 +3370,12 @@ class xcolor extends HTMLElement {
                 if (h >= 360) h = 0;
                 hsva.h = h;
                 bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(${h},100%,50%) 100%)`;
+            } else if (color_e.t == arange) {
+                let x = (e.clientX - color_e.c.x + color_e.o.x) / arange.offsetWidth;
+                if (x < 0) x = 0;
+                if (x > 1) x = 1;
+                par.style.left = x * arange.offsetWidth + "px";
+                hsva.a = 1 - x;
             } else if (color_e.t == bg0) {
                 let x = (e.clientX - color_e.c.x + color_e.o.x) / bg0.offsetWidth;
                 let y = (e.clientY - color_e.c.y + color_e.o.y) / bg0.offsetHeight;
@@ -3367,7 +3388,7 @@ class xcolor extends HTMLElement {
                 hsva.s = x * 100;
                 hsva.l = (1 - y) * 100;
             }
-            let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
+            let hsv = color.hsv(hsva.h, hsva.s, hsva.l).alpha(hsva.a);
             c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
             this.c = hsv.hexa();
 
