@@ -2340,6 +2340,12 @@ class x extends HTMLElement {
     fixed = false;
 
     connectedCallback() {
+        var link = document.createElement("div");
+        link.id = "x-x_link";
+        var value = document.createElement("div");
+        link.append(value);
+        this.append(link);
+
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
         var f = document.createElement("div");
@@ -2373,11 +2379,16 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
-        var bar_hide_t = NaN;
+        var bar_hide_t = NaN,
+            link_hide_t = NaN;
         this.onmouseenter = () => {
             if (模式 == "设计") {
                 clearTimeout(bar_hide_t);
                 bar.classList.add("x-x_bar_show");
+            }
+            if (模式 == "浏览") {
+                clearTimeout(link_hide_t);
+                link.classList.add("x-x_link_show");
             }
         };
         this.onmouseleave = () => {
@@ -2386,6 +2397,11 @@ class x extends HTMLElement {
                     bar.classList.remove("x-x_bar_show");
                 }, 200);
                 画布.style.cursor = "crosshair";
+            }
+            if (模式 == "浏览") {
+                link_hide_t = window.setTimeout(() => {
+                    link.classList.remove("x-x_link_show");
+                }, 200);
             }
         };
 

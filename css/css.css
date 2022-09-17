@@ -544,6 +544,21 @@ x-x > * {
     outline: none;
 }
 
+x-x > #x-x_link {
+    display: flex;
+    position: absolute;
+    top: -16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+    cursor: pointer !important;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left bottom;
+}
+.x-x_link_show {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
 x-x > #x-x_bar {
     display: flex;
     position: absolute;

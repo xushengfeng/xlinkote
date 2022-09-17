@@ -190,6 +190,13 @@ x-x {
     min-width: 1em;
 }
 
+x-x > #x-x_link > div {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    margin-right: 4px;
+}
 x-x > #x-x_bar > div {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
