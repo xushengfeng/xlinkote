@@ -3191,7 +3191,7 @@ class draw extends HTMLElement {
             p.setAttribute("d", at);
             p.setAttribute("fill", "none");
             p.setAttribute("stroke", d.pen.color);
-            p.setAttribute("stroke-width", d.pen.width + "px");
+            p.setAttribute("stroke-width", (d.pen.zoom ? d.pen.width / zoom : d.pen.width) + "px");
             p.setAttribute("stroke-linecap", "round");
             p.setAttribute("stroke-linejoin", "round");
             d.tmp_svg.innerHTML = "";
