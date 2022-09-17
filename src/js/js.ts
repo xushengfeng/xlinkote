@@ -3354,15 +3354,14 @@ class xcolor extends HTMLElement {
         pb.classList.add("color_pointer");
         bg0.append(pb);
 
-        range.style.background = `linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%)`;
-        range.style.height = "20px";
         pel.append(range);
 
         pr.classList.add("color_range_p");
         range.append(pr);
 
-        arange.style.background = `linear-gradient(to right, white 0%, #0000 100%)`;
-        arange.style.height = "20px";
+        arange.style.background = this.msk(
+            `linear-gradient(to right, ${color.hsv(hsva.h, hsva.s, hsva.l).hex()} 0%, #0000 100%)`
+        );
         pel.append(arange);
 
         par.classList.add("color_range_p");
@@ -3379,7 +3378,7 @@ class xcolor extends HTMLElement {
         c0.onclick = () => {
             let div = document.createElement("div");
             const v = this.value;
-            div.style.background = v;
+            div.style.background = c0.style.background;
             div.onclick = () => {
                 this.value = v;
             };
@@ -3424,8 +3423,12 @@ class xcolor extends HTMLElement {
                 hsva.s = x * 100;
                 hsva.l = (1 - y) * 100;
             }
+            arange.style.background = this.msk(
+                `linear-gradient(to right, ${color.hsv(hsva.h, hsva.s, hsva.l).hex()} 0%, #0000 100%)`
+            );
             let hsv = color.hsv(hsva.h, hsva.s, hsva.l).alpha(hsva.a);
-            c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
+            c0.style.background = this.msk(`linear-gradient(${hsv.hexa()},${hsv.hexa()})`);
+            pb.style.backgroundColor = `${hsv.rgb().string()}`;
             this.c = hsv.hexa();
 
             ci.innerText = hsv.hexa();
@@ -3441,6 +3444,20 @@ class xcolor extends HTMLElement {
             f(e);
             color_e = null;
         });
+        this.value = "#000";
+    }
+
+    msk(t: string) {
+        return `${t},
+        conic-gradient(
+                rgb(204, 204, 204) 25%,
+                rgb(255, 255, 255) 0deg,
+                rgb(255, 255, 255) 50%,
+                rgb(204, 204, 204) 0deg,
+                rgb(204, 204, 204) 75%,
+                rgb(255, 255, 255) 0deg
+            )
+            0% 0% / 8px 8px`;
     }
 
     set_v(c: string) {
@@ -3453,7 +3470,11 @@ class xcolor extends HTMLElement {
         this.els.pb.style.left = (hsv[1] / 100) * this.els.bg0.offsetWidth + "px";
         this.els.pb.style.top = ((100 - hsv[2]) / 100) * this.els.bg0.offsetHeight + "px";
 
-        this.els.c0.style.backgroundColor = this.els.pb.style.backgroundColor = `${x.hexa()}`;
+        this.els.c0.style.background = this.msk(`linear-gradient(${x.hexa()},${x.hexa()})`);
+        this.els.pb.style.backgroundColor = `${x.hexa()}`;
+        this.els.arange.style.background = this.msk(`linear-gradient(to right, ${x.hex()} 0%, #0000 100%)`);
+
+        this.els.ci.innerText = x.hexa();
     }
 
     get value() {

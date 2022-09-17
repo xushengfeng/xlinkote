@@ -97,18 +97,23 @@ x-color {
     opacity: 0;
     pointer-events: none;
     transition: var(--transition);
-    width: 300px;
-    height: 300px;
     top: var(--icon-p-b-size);
     position: absolute;
+    padding: 8px;
+    border-radius: 8px;
 }
 .color_show {
     opacity: 1;
     pointer-events: all;
 }
+x-color {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 x-color > .broad {
-    width: 100%;
-    height: 100%;
+    width: 300px;
+    height: 300px;
     position: relative;
 }
 x-color > .broad > div {
@@ -128,6 +133,7 @@ x-color > .broad .color_pointer {
 }
 x-color > .range {
     position: relative;
+    height: 20px;
 }
 x-color > .range > .color_range_p {
     width: 2px;
@@ -137,20 +143,26 @@ x-color > .range > .color_range_p {
     outline: 1px solid;
     pointer-events: none;
 }
+x-color > div:nth-child(2) {
+    background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);
+}
 x-color > .color_bar {
     height: 20px;
     display: flex;
     overflow: auto;
+    gap: 4px;
 }
 x-color > .color_bar > div {
     height: 20px;
     width: 20px;
+    border-radius: 4px;
 }
 x-color > .color_bar > div:nth-child(2) {
     width: auto;
     outline: none;
     display: flex;
     align-items: flex-end;
+    user-select: none;
 }
 
 #笔 {
@@ -164,6 +176,8 @@ x-color > .color_bar > div:nth-child(2) {
     opacity: 0;
     pointer-events: none;
     transition: var(--transition);
+    border-radius: 8px;
+    padding: 4px;
 }
 .pen_show {
     opacity: 1 !important;

@@ -97,8 +97,15 @@ body > #main > #nav #search {
     background-color: var(--bg-color3) !important;
 }
 
+x-color {
+    background-color: var(--bg-color2);
+    box-shadow: var(--shadow1);
+    backdrop-filter: var(--blur);
+}
 #笔 > div {
-    background-color: var(--bg1);
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    box-shadow: var(--shadow1);
 }
 x-draw-width > div > div {
     background-color: #000;
