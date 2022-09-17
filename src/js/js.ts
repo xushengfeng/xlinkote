@@ -3473,6 +3473,7 @@ class xcolor extends HTMLElement {
         this.els.c0.style.background = this.msk(`linear-gradient(${x.hexa()},${x.hexa()})`);
         this.els.pb.style.backgroundColor = `${x.hexa()}`;
         this.els.arange.style.background = this.msk(`linear-gradient(to right, ${x.hex()} 0%, #0000 100%)`);
+        this.els.par.style.left = (1 - (hsv?.[3] || 1)) * this.els.arange.offsetWidth + "px";
 
         this.els.ci.innerText = x.hexa();
     }
