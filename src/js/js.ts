@@ -3318,6 +3318,7 @@ class xcolor extends HTMLElement {
         arange: null as HTMLElement,
         par: null as HTMLElement,
         c0: null as HTMLElement,
+        ci: null as HTMLElement,
     };
 
     connectedCallback() {
@@ -3336,7 +3337,9 @@ class xcolor extends HTMLElement {
         const pr = (this.els.pr = document.createElement("div"));
         const arange = (this.els.arange = document.createElement("div"));
         const par = (this.els.par = document.createElement("div"));
+        const cb = document.createElement("div");
         const c0 = (this.els.c0 = document.createElement("div"));
+        const ci = (this.els.ci = document.createElement("div"));
 
         pel.classList.add("color");
 
@@ -3365,9 +3368,23 @@ class xcolor extends HTMLElement {
         par.classList.add("color_range_p");
         arange.append(par);
 
-        pel.append(c0);
-        c0.style.width = "20px";
-        c0.style.height = "20px";
+        pel.append(cb);
+        cb.classList.add("color_bar");
+        cb.append(c0);
+        cb.append(ci);
+        ci.onchange = () => {
+            this.value = ci.innerText;
+        };
+        ci.contentEditable = "true";
+        c0.onclick = () => {
+            let div = document.createElement("div");
+            const v = this.value;
+            div.style.background = v;
+            div.onclick = () => {
+                this.value = v;
+            };
+            ci.after(div);
+        };
 
         range.onpointerdown = (e) => {
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
@@ -3410,6 +3427,8 @@ class xcolor extends HTMLElement {
             let hsv = color.hsv(hsva.h, hsva.s, hsva.l).alpha(hsva.a);
             c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
             this.c = hsv.hexa();
+
+            ci.innerText = hsv.hexa();
 
             this.dispatchEvent(new InputEvent("input"));
         };
