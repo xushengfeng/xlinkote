@@ -96,14 +96,15 @@ body > #main > #nav > div:nth-child(1) #upload_i {
 x-color {
     opacity: 0;
     pointer-events: none;
-}
-.color_show {
-    opacity: 1;
-    pointer-events: all;
+    transition: var(--transition);
     width: 300px;
     height: 300px;
     top: var(--icon-p-b-size);
     position: absolute;
+}
+.color_show {
+    opacity: 1;
+    pointer-events: all;
 }
 x-color > .broad {
     width: 100%;
@@ -143,8 +144,15 @@ x-color > .range > .color_range_p {
 #笔 > div {
     position: absolute;
     width: 300px;
+    top: var(--icon-p-b-size);
     user-select: none;
-    background-color: var(--bg1);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+.pen_show {
+    opacity: 1 !important;
+    pointer-events: all !important;
 }
 x-draw-width > div {
     height: 20px;
@@ -157,10 +165,7 @@ x-draw-width > div > div {
     position: absolute;
     top: 10px;
     transform: translateX(-50%) translateY(-50%);
-    background-color: #000;
     border-radius: 50%;
-    border: 2px var(--bg1) solid;
-    box-shadow: var(--shadow1);
 }
 
 body > #main > #nav > #search_bar {

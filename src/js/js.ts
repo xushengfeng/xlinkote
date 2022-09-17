@@ -1528,12 +1528,13 @@ penc_el.addEventListener("input", () => {
     penc_el.parentElement.style.background = penc_el.value;
 });
 
+const pen_el = document.getElementById("笔").querySelector("div");
 const pen_width_el = document.getElementById("笔").querySelector("x-draw-width") as xdraw_width;
 const pen_zoom_el = document.getElementById("缩放跟随") as HTMLInputElement;
 const pen_type_el = document.getElementById("笔刷");
-document.getElementById("笔").onclick = () => {};
-
-pen_width_el.addEventListener("input", () => {});
+document.getElementById("笔").onclick = (e) => {
+    if (e.target == pen_el.parentElement) pen_el.classList.toggle("pen_show");
+};
 
 window.onbeforeunload = () => {
     if (!集.meta.file_name) return true;

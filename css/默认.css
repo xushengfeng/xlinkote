@@ -93,8 +93,17 @@ body > #main > #nav #search {
     border-radius: 4px;
     margin-right: 4px;
 }
-.buttom_a{
+.buttom_a {
     background-color: var(--bg-color3) !important;
+}
+
+#笔 > div {
+    background-color: var(--bg1);
+}
+x-draw-width > div > div {
+    background-color: #000;
+    border: 2px var(--bg1) solid;
+    box-shadow: var(--shadow1);
 }
 
 body > #main > #画布 {
