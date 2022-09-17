@@ -547,6 +547,8 @@ function zoom_o(z: number) {
     document.documentElement.style.setProperty("--zoom", String(z));
 }
 
+document.getElementById("归位").click();
+
 function el_offset(el: HTMLElement, pel?: HTMLElement) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
