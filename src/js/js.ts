@@ -3386,12 +3386,15 @@ class xcolor extends HTMLElement {
         };
 
         range.onpointerdown = (e) => {
+            e.preventDefault();
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
         };
         arange.onpointerdown = (e) => {
+            e.preventDefault();
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: arange };
         };
         bg0.onpointerdown = (e) => {
+            e.preventDefault();
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: bg0 };
         };
         const f = (e: PointerEvent) => {
@@ -3516,6 +3519,7 @@ class xdraw_width extends HTMLElement {
         range.append(pr);
 
         range.onpointerdown = (e) => {
+            e.preventDefault();
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
         };
         const f = (e: PointerEvent) => {
