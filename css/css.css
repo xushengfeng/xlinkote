@@ -137,6 +137,32 @@ x-color > .range > .color_range_p {
     pointer-events: none;
 }
 
+#笔 {
+    position: relative;
+}
+#笔 > div {
+    position: absolute;
+    width: 300px;
+    user-select: none;
+    background-color: var(--bg1);
+}
+x-draw-width > div {
+    height: 20px;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+}
+x-draw-width > div > div {
+    pointer-events: none;
+    position: absolute;
+    top: 10px;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #000;
+    border-radius: 50%;
+    border: 2px var(--bg1) solid;
+    box-shadow: var(--shadow1);
+}
+
 body > #main > #nav > #search_bar {
     flex-grow: 1;
     display: flex;

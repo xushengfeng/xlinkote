@@ -32,8 +32,23 @@
                 <div id="绘制"><img src="./assets/icons/draw.svg" class="icon"></div>
             </div>
             <div id="draw_bar">
-                <div id="颜色"><div id="penc"><x-color></x-color></div></div>
-                <div id="橡皮"></div>
+                <div id="颜色">
+                    <div id="penc">
+                        <x-color></x-color>
+                    </div>
+                </div>
+                <div id="笔">
+                    <div>
+                        <div id="粗细">
+                            <x-draw-width></x-draw-width>
+                        </div>
+                        <label><input type="checkbox" name="缩放跟随" id="缩放跟随">缩放跟随</label>
+                        <div id="笔刷">
+                            <label><input type="radio" name="笔刷" id="压感" checked>压感</label>
+                            <label><input type="radio" name="笔刷" id="普通">普通</label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="search_bar">
                 <input type="search" id="search" autocomplete="off" spellcheck="false">

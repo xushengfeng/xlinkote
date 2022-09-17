@@ -1528,13 +1528,12 @@ penc_el.addEventListener("input", () => {
     penc_el.parentElement.style.background = penc_el.value;
 });
 
-document.getElementById("橡皮").onclick = () => {
-    if ((<draw>focus_draw_el).pen.gco == "source-over") {
-        (<draw>focus_draw_el).pen.gco = "destination-out";
-    } else {
-        (<draw>focus_draw_el).pen.gco = "source-over";
-    }
-};
+const pen_width_el = document.getElementById("笔").querySelector("x-draw-width") as xdraw_width;
+const pen_zoom_el = document.getElementById("缩放跟随") as HTMLInputElement;
+const pen_type_el = document.getElementById("笔刷");
+document.getElementById("笔").onclick = () => {};
+
+pen_width_el.addEventListener("input", () => {});
 
 window.onbeforeunload = () => {
     if (!集.meta.file_name) return true;
@@ -3053,7 +3052,11 @@ class draw extends HTMLElement {
     main_svg: SVGSVGElement;
     tmp_svg: SVGSVGElement;
 
-    pen = { color: penc_el.value || "#000000", gco: "source-over", width: 5, zoom: false };
+    pen = {
+        color: penc_el.value || "#000000",
+        width: pen_width_el.value,
+        zoom: pen_zoom_el.checked,
+    };
 
     connectedCallback() {
         if (this.getAttribute("value")) {
@@ -3106,7 +3109,11 @@ class draw extends HTMLElement {
         }
 
         // 画
-        pen_p(this);
+        let type = "p";
+        if (pen_type_el.querySelectorAll("input")[0].checked) type = "p";
+        if (pen_type_el.querySelectorAll("input")[1].checked) type = "s";
+        if (type == "p") pen_p(this);
+        if (type == "s") pen_s(this);
 
         function pen_p(d: draw) {
             if (d.points.length != 1) {
@@ -3433,6 +3440,72 @@ class xcolor extends HTMLElement {
 }
 
 window.customElements.define("x-color", xcolor);
+class xdraw_width extends HTMLElement {
+    constructor() {
+        super();
+    }
+    c = NaN;
+    max = 20;
+    min = 1;
+    step = 1;
+    els = {
+        range: null as HTMLElement,
+        pr: null as HTMLElement,
+    };
+
+    connectedCallback() {
+        if (this.getAttribute("value")) {
+            this.c = Number(this.getAttribute("value"));
+            this.set_v(this.c);
+        }
+        let color_e: { o: { x: number; y: number }; c: { x: number; y: number }; t: HTMLElement } = null;
+        const pel = this;
+        const range = (this.els.range = document.createElement("div"));
+        const pr = (this.els.pr = document.createElement("div"));
+
+        pel.append(range);
+
+        range.append(pr);
+
+        range.onpointerdown = (e) => {
+            color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: range };
+        };
+        const f = (e: PointerEvent) => {
+            let x = (e.clientX - color_e.c.x + color_e.o.x) / range.offsetWidth;
+            if (x < 0) x = 0;
+            if (x > 1) x = 1;
+            let v = (this.max - this.min) / this.step;
+            x = Math.round(x * v) / v;
+            pr.style.left = x * range.offsetWidth + "px";
+
+            this.c = this.min + x * v;
+            pr.style.width = pr.style.height = this.c + "px";
+
+            this.dispatchEvent(new InputEvent("input"));
+        };
+        document.addEventListener("pointermove", (e) => {
+            if (!color_e) return;
+            f(e);
+        });
+        document.addEventListener("pointerup", (e) => {
+            if (!color_e) return;
+            f(e);
+            color_e = null;
+        });
+    }
+
+    set_v(c: number) {}
+
+    get value() {
+        return this.c;
+    }
+    set value(s) {
+        this.c = Number(s);
+        this.set_v(s);
+    }
+}
+
+window.customElements.define("x-draw-width", xdraw_width);
 
 const link_bar = document.getElementById("link_bar");
 const link_ids = document.getElementById("link_ids");
