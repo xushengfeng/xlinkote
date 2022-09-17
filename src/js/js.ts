@@ -3289,19 +3289,31 @@ class xcolor extends HTMLElement {
         super();
     }
 
-    c = "#000000";
+    c = "#ffffff";
+    els = {
+        broad: null as HTMLElement,
+        bg0: null as HTMLElement,
+        pb: null as HTMLElement,
+        range: null as HTMLElement,
+        pr: null as HTMLElement,
+        c0: null as HTMLElement,
+    };
 
     connectedCallback() {
+        if (this.getAttribute("value")) {
+            this.c = this.getAttribute("value");
+            this.set_v(this.c);
+        }
         let color_e: { o: { x: number; y: number }; c: { x: number; y: number }; t: HTMLElement } = null;
         const hsva = { h: 0, s: 0, l: 0, a: 0 };
 
         const pel = this;
-        const broad = document.createElement("div");
-        const bg0 = document.createElement("div");
-        const pb = document.createElement("div");
-        const range = document.createElement("div");
-        const pr = document.createElement("div");
-        const c0 = document.createElement("div");
+        const broad = (this.els.broad = document.createElement("div"));
+        const bg0 = (this.els.bg0 = document.createElement("div"));
+        const pb = (this.els.pb = document.createElement("div"));
+        const range = (this.els.range = document.createElement("div"));
+        const pr = (this.els.pr = document.createElement("div"));
+        const c0 = (this.els.c0 = document.createElement("div"));
 
         pel.classList.add("color");
 
@@ -3331,7 +3343,6 @@ class xcolor extends HTMLElement {
         };
         bg0.onpointerdown = (e) => {
             color_e = { o: { x: e.offsetX, y: e.offsetY }, c: { x: e.clientX, y: e.clientY }, t: bg0 };
-            console.log(color_e);
         };
         const f = (e: PointerEvent) => {
             if (color_e.t == range) {
@@ -3342,13 +3353,11 @@ class xcolor extends HTMLElement {
                 let h = Math.round(360 * x);
                 if (h < 0) h = 0;
                 if (h >= 360) h = 0;
-                console.log(h);
                 hsva.h = h;
                 bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(${h},100%,50%) 100%)`;
             } else if (color_e.t == bg0) {
                 let x = (e.clientX - color_e.c.x + color_e.o.x) / bg0.offsetWidth;
                 let y = (e.clientY - color_e.c.y + color_e.o.y) / bg0.offsetHeight;
-                console.log(x, y);
                 if (x < 0) x = 0;
                 if (x > 1) x = 1;
                 if (y < 0) y = 0;
@@ -3361,6 +3370,8 @@ class xcolor extends HTMLElement {
             let hsv = color.hsv(hsva.h, hsva.s, hsva.l);
             c0.style.backgroundColor = pb.style.backgroundColor = `${hsv.rgb().string()}`;
             this.c = hsv.hexa();
+
+            this.dispatchEvent(new InputEvent("input"));
         };
         document.addEventListener("pointermove", (e) => {
             if (!color_e) return;
@@ -3372,11 +3383,25 @@ class xcolor extends HTMLElement {
         });
     }
 
+    set_v(c: string) {
+        let x = color(c);
+        let hsv = x.hsv().array();
+
+        this.els.pr.style.left = (hsv[0] / 360) * this.els.range.offsetWidth + "px";
+        this.els.bg0.style.background = `linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%), linear-gradient(to right, rgb(255, 255, 255) 0%, hsl(${hsv[0]},100%,50%) 100%)`;
+
+        this.els.pb.style.left = (hsv[1] / 100) * this.els.bg0.offsetWidth + "px";
+        this.els.pb.style.top = ((100 - hsv[2]) / 100) * this.els.bg0.offsetHeight + "px";
+
+        this.els.c0.style.backgroundColor = this.els.pb.style.backgroundColor = `${x.hexa()}`;
+    }
+
     get value() {
         return this.c;
     }
     set value(s) {
         this.c = s;
+        this.set_v(s);
     }
 }
 
