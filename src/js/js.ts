@@ -641,8 +641,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 };
             }
             集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), values });
-            z.remove(i);
-            i.remove();
+            if (!e.shiftKey) {
+                z.remove(i);
+                i.remove();
+            }
         }
         console.log(集.中转站);
         tmp_s_reflash();
