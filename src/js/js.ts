@@ -1620,6 +1620,7 @@ class 图层 {
 
     remove(el: x) {
         for (let i in this.z) {
+            link(el.id).rm();
             if (this.z[i] == el) {
                 this.z.splice(Number(i), 1);
                 this.reflash(el);
