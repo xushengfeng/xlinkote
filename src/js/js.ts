@@ -1707,7 +1707,19 @@ function load_xywh() {
     xywh_el.value = `${fe.offsetLeft}, ${fe.offsetTop}, ${fe.offsetWidth}, ${fe.offsetHeight}`;
 }
 
+// url
 if (!location.hash) set_data(集);
+if (location.search) {
+    let p = new URLSearchParams(location.search);
+    if (p.get("src")) {
+        fetch(p.get("src"))
+            .then((v) => v.text())
+            .then((v) => {
+                let o = md2json(v) as any;
+                set_data(o);
+            });
+    }
+}
 
 // 云
 import { createClient } from "webdav";
