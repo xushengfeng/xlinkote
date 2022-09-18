@@ -230,9 +230,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
                 (<markdown>el).edit = false;
             });
             if (O) O.style.pointerEvents = "none";
-            for (let el of O.querySelectorAll("x-draw")) {
-                (el as draw).style.pointerEvents = "auto";
-            }
 
             blur_all();
             画布.style.cursor = "crosshair";
@@ -3340,6 +3337,14 @@ class draw extends HTMLElement {
 
     complete() {
         this.main_svg.append(this.tmp_svg.childNodes[0]);
+        this.pointer_ignore();
+    }
+
+    pointer_ignore() {
+        (this.main_svg.childNodes[0] as SVGPathElement).style.pointerEvents = "all";
+        this.tmp_svg.style.pointerEvents = "none";
+        this.style.pointerEvents = "none";
+        this.parentElement.style.pointerEvents = "none";
     }
 
     set_v(v: string) {
@@ -3355,6 +3360,7 @@ class draw extends HTMLElement {
         tr = tr.replace("translate(", "").replace(")", "");
         this.ox = Number(tr.split(",")[0]);
         this.oy = Number(tr.split(",")[1]);
+        this.pointer_ignore();
     }
 
     get value() {
