@@ -553,7 +553,8 @@ function zoom_o(z: number) {
     document.documentElement.style.setProperty("--zoom", String(z));
 }
 
-document.getElementById("归位").click();
+O.style.left = `${画布.offsetWidth / 2}px`;
+O.style.top = `${画布.offsetHeight / 2}px`;
 
 function el_offset(el: HTMLElement, pel?: HTMLElement) {
     if (!pel) pel = el.parentElement;
