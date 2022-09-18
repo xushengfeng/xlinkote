@@ -3508,11 +3508,13 @@ class xcolor extends HTMLElement {
         document.addEventListener("pointermove", (e) => {
             if (!color_e) return;
             f(e);
+            range.style.cursor = arange.style.cursor = broad.style.cursor = "none";
         });
         document.addEventListener("pointerup", (e) => {
             if (!color_e) return;
             f(e);
             color_e = null;
+            range.style.cursor = arange.style.cursor = broad.style.cursor = "";
         });
         this.value = "#000";
     }
