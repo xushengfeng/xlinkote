@@ -176,6 +176,9 @@ var nav = document.getElementById("nav");
 const 画布 = document.getElementById("画布");
 const O = document.getElementById("O");
 
+const link_value_bar = document.createElement("x-link-value") as link_value;
+画布.append(link_value_bar);
+
 // 模式切换
 
 var 模式: "浏览" | "设计" | "绘制";
@@ -205,6 +208,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             blur_all();
             画布.style.cursor = "auto";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
+            if (link_value_bar) link_value_bar.style.display = "";
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -216,6 +220,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             if (O) O.style.pointerEvents = "";
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
+            if (link_value_bar) link_value_bar.style.display = "none";
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -229,6 +234,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             blur_all();
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
+            if (link_value_bar) link_value_bar.style.display = "none";
             break;
     }
 }
@@ -2005,14 +2011,14 @@ function link(key0: string) {
                 delete 集.链接[key0];
             }
         },
-        value(key1?: string) {
+        value(key1?: string, dv?: number) {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
                 if (集.链接[key0][key1].value !== undefined) {
-                    集.链接[key0][key1].value++;
+                    集.链接[key0][key1].value = Math.max(0, 集.链接[key0][key1].value + (dv || 1));
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0].value !== undefined) {
-                    集.链接[key1][key0].value++;
+                    集.链接[key1][key0].value = Math.max(0, 集.链接[key1][key0].value + (dv || 1));
                     集.链接[key1][key0].time = t;
                 } else {
                     // 只存储在边的一个方向上，以时间换空间
@@ -2023,6 +2029,21 @@ function link(key0: string) {
         },
     };
 }
+
+画布.addEventListener("pointermove", (e) => {
+    let el = e.target as HTMLElement;
+    for (let i in 集.链接[0]) {
+        if (document.getElementById(i).contains(el)) {
+            el = document.getElementById(i);
+            break;
+        }
+    }
+    if (集.链接[el.id]) {
+        link_value_bar.style.left = el_offset(el, 画布).x + "px";
+        link_value_bar.style.top = el_offset(el, document.body).y + "px";
+        link_value_bar.elid = el.id;
+    }
+});
 
 // MD
 import markdownit from "markdown-it";
@@ -2385,12 +2406,6 @@ class x extends HTMLElement {
     fixed = false;
 
     connectedCallback() {
-        var link = document.createElement("div");
-        link.id = "x-x_link";
-        var value = document.createElement("div");
-        link.append(value);
-        this.append(link);
-
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
         var f = document.createElement("div");
@@ -2424,16 +2439,11 @@ class x extends HTMLElement {
         bar.append(d);
         this.append(bar);
 
-        var bar_hide_t = NaN,
-            link_hide_t = NaN;
+        var bar_hide_t = NaN;
         this.onmouseenter = () => {
             if (模式 == "设计") {
                 clearTimeout(bar_hide_t);
                 bar.classList.add("x-x_bar_show");
-            }
-            if (模式 == "浏览") {
-                clearTimeout(link_hide_t);
-                link.classList.add("x-x_link_show");
             }
         };
         this.onmouseleave = () => {
@@ -2442,11 +2452,6 @@ class x extends HTMLElement {
                     bar.classList.remove("x-x_bar_show");
                 }, 200);
                 画布.style.cursor = "crosshair";
-            }
-            if (模式 == "浏览") {
-                link_hide_t = window.setTimeout(() => {
-                    link.classList.remove("x-x_link_show");
-                }, 200);
             }
         };
 
@@ -3680,6 +3685,41 @@ class xlink extends HTMLElement {
 }
 
 window.customElements.define("x-link", xlink);
+class link_value extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    v: HTMLElement;
+    _id: string;
+
+    connectedCallback() {
+        const add_el = document.createElement("div");
+        const down_el = document.createElement("div");
+        this.v = document.createElement("div");
+        this.append(down_el, this.v, add_el);
+
+        add_el.innerText = "+";
+        down_el.innerText = "-";
+        add_el.onclick = () => {
+            link("0").value(this._id, 1);
+            this.v.innerText = String(集.链接[0][this._id].value);
+        };
+        down_el.onclick = () => {
+            link("0").value(this._id, -1);
+            this.v.innerText = String(集.链接[0][this._id].value);
+        };
+    }
+
+    set elid(id: string) {
+        if (集.链接[0][id]) {
+            this._id = id;
+            this.v.innerText = String(集.链接[0][id].value);
+        }
+    }
+}
+
+window.customElements.define("x-link-value", link_value);
 
 // 录音
 class record extends HTMLElement {

@@ -152,6 +152,14 @@ body > #main > #画布 > #导航 > div {
     outline: none;
 }
 
+body > #main > #画布 > x-link-value > div {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    margin-right: 4px;
+}
+
 body > #搜索结果 {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
@@ -190,13 +198,6 @@ x-x {
     min-width: 1em;
 }
 
-x-x > #x-x_link > div {
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-    margin-right: 4px;
-}
 x-x > #x-x_bar > div {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
