@@ -1011,7 +1011,30 @@ function rename_el() {
     return el;
 }
 
+function version_tr(obj): 集type {
+    let v = obj.meta.version || "";
+    switch (v) {
+        case "":
+            if (!obj.链接) obj["链接"] = { 0: {} };
+            if (!obj.链接["0"]) obj.链接[0] = {};
+            if (!obj.assets) obj["asstes"] = {};
+            if (!obj.中转站) obj["中转站"] = [];
+            for (let i in obj.链接) {
+                if (!obj.链接[i].目标) continue;
+                let o = {};
+                for (let m of obj.链接[i].目标) {
+                    o[m.key] = { value: m.value, time: m.time };
+                }
+                obj.链接[i] = o;
+            }
+            obj.meta["version"] = "0.4.2";
+        case "0.4.2":
+            return obj;
+    }
+}
+
 function set_data(l: 集type) {
+    l = version_tr(l);
     for (let i in l) {
         if (集[i]) 集[i] = l[i];
     }
