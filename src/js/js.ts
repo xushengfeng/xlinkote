@@ -26,6 +26,9 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js");
 }
 
+import pack from "../../package.json?raw";
+const packagejson = JSON.parse(pack);
+
 // 工具栏
 
 if (window.showOpenFilePicker) {
