@@ -944,6 +944,7 @@ type 集type = {
         url: string;
         UUID: string;
         file_name: string;
+        version: string;
     };
     数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
@@ -961,6 +962,7 @@ function new_集(pname: string): 集type {
             url: "",
             UUID: uuid(),
             file_name: "",
+            version: packagejson.version,
         },
         数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
         链接: { 0: {} },
