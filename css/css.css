@@ -129,6 +129,7 @@ x-color > .broad .color_pointer {
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
     border: 1px solid;
+    outline: 1px solid white;
     pointer-events: none;
 }
 x-color > .range {
