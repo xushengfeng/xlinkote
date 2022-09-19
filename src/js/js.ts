@@ -628,16 +628,18 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 
     if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
-            let values = {};
+            let values = { value: "" };
+            let type = "";
             for (let k of i.childNodes) {
                 let eel = <markdown>k;
-                if (eel.id == "x-x_bar" || eel.id == "x-x_page") continue;
-                values[eel.tagName] = {
+                if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
+                type = eel.tagName;
+                values = {
                     value: eel.value,
                     ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}),
                 };
             }
-            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), values });
+            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), type, values });
             if (!e.shiftKey) {
                 z.remove(i);
                 i.remove();
@@ -798,11 +800,9 @@ function tmp_s_reflash() {
     for (let x of 集.中转站) {
         let div = document.createElement("div");
         let eels = "";
-        for (let i in x.values) {
-            eels += `<${i} value='${x.values[i].value}'`;
-            if (x.values[i].edit) eels += `edit = "cr"`;
-            eels += `></${i}>`;
-        }
+        eels += `<${x.type} value='${x.values.value}'`;
+        if (x.values.edit) eels += `edit = "cr"`;
+        eels += `></${x.type}>`;
         let bar = document.createElement("div");
         bar.classList.add("tmp_s_bar");
         div.append(bar);
@@ -832,11 +832,9 @@ function tmp_s_reflash() {
                     xel.setAttribute("style", i.style);
 
                     let eels = "";
-                    for (let i in data.values) {
-                        eels += `<${i} value='${data.values[i].value}'`;
-                        if (data.values[i].edit) eels += `edit = "cr"`;
-                        eels += `></${i}>`;
-                    }
+                    eels += `<${data.type} value='${data.values.value}'`;
+                    if (data.values.edit) eels += `edit = "cr"`;
+                    eels += `></${data.type}>`;
                     xel.style.left = x / zoom + "px";
                     xel.style.top = y / zoom + "px";
                     xel.innerHTML = eels;
@@ -948,7 +946,7 @@ type 集type = {
         name: string;
         p: { x: number; y: number; zoom: number };
         data: data;
-        绑定: { 类型: "点" | "移动" | "边"; l: x[] }[];
+        绑定: { 类型: "点" | "移动" | "边"; l: string[] }[];
     }>;
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
@@ -976,16 +974,18 @@ function new_集(pname: string): 集type {
 
 function get_data() {
     let l = 集;
-    let data = [];
+    let data = [] as data;
     for (let i of O.childNodes) {
         let el = <x>i;
-        let values = {};
+        let values = { value: "" };
+        let type = "";
         for (let k of el.childNodes) {
             let eel = <markdown>k;
             if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
-            values[eel.tagName] = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
+            values = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
+            type = eel.tagName;
         }
-        data.push({ id: el.id, style: el.getAttribute("style"), values, fixed: el.fixed });
+        data.push({ id: el.id, style: el.getAttribute("style"), values, type, fixed: el.fixed });
     }
     for (let p of 集.数据) {
         if (p.name == 集.meta.focus_page) {
@@ -996,7 +996,14 @@ function get_data() {
     return l;
 }
 
-type data = Array<{ id: string; style: string; values: object; fixed: boolean; global?: boolean }>;
+type data = Array<{
+    id: string;
+    style: string;
+    type: string;
+    values: { value: string; edit?: boolean };
+    fixed: boolean;
+    global?: boolean;
+}>;
 
 function rename_el() {
     let el = document.createElement("input");
@@ -1032,6 +1039,23 @@ function version_tr(obj): 集type {
             }
             obj.meta["version"] = "0.4.2";
         case "0.4.2":
+            for (let i of obj.数据) {
+                for (let j of i.data) {
+                    let type = "";
+                    let values = {};
+                    for (let v in j.values) {
+                        if (j.values[v].value) {
+                            type = v;
+                            values = j.values[v];
+                            break;
+                        }
+                    }
+                    j.values = values;
+                    j.type = type;
+                }
+            }
+            obj.meta.version = "0.5.0";
+        case "0.5.0":
             return obj;
     }
 }
@@ -1084,11 +1108,9 @@ function render_data(inputdata: { name: string; p: { x: number; y: number; zoom:
         try {
             link(x.id).add();
             let eels = "";
-            for (let i in x.values) {
-                eels += `<${i} value='${x.values[i].value}'`;
-                if (x.values[i].edit) eels += `edit = "cr"`;
-                eels += `></${i}>`;
-            }
+            eels += `<${x.type} value='${x.values.value}'`;
+            if (x.values.edit) eels += `edit = "cr"`;
+            eels += `></${x.type}>`;
             t += `<x-x id="${x.id}" fixed="${x.fixed}" style="${x.style}">${eels}</x-x>`;
         } catch (e) {
             console.error(e);
@@ -1127,7 +1149,8 @@ function md2json(t: string) {
                         {
                             id: "上传的md",
                             style: `left: 0px; top: 0px; z-index: ${z.z.length};`,
-                            values: { "X-MD": { value: t, edit: true } },
+                            values: { value: t, edit: true },
+                            type: "X-MD",
                             fixed: false,
                         },
                     ],
@@ -1494,7 +1517,8 @@ document.addEventListener("message", (msg: any) => {
                     id: uuid().slice(0, 7),
                     fixed: false,
                     style: "",
-                    values: { "X-MD": { value: data.text } },
+                    values: { value: data.text },
+                    type: "X-MD",
                 });
                 set_data(j);
             }
