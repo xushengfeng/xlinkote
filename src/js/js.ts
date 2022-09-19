@@ -944,7 +944,12 @@ type 集type = {
         file_name: string;
         version: string;
     };
-    数据: Array<{ name: string; p: { x: number; y: number; zoom: number }; data: data }>;
+    数据: Array<{
+        name: string;
+        p: { x: number; y: number; zoom: number };
+        data: data;
+        绑定: { 类型: "点" | "移动" | "边"; l: x[] }[];
+    }>;
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
@@ -962,7 +967,7 @@ function new_集(pname: string): 集type {
             file_name: "",
             version: packagejson.version,
         },
-        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] }],
         链接: { 0: {} },
         assets: {},
         中转站: [],
@@ -1055,7 +1060,7 @@ function set_data(l: 集type) {
                 div.remove();
                 集.数据 = 集.数据.filter((d) => d != p);
                 if (集.数据.length == 0) {
-                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] });
                 }
                 集.meta.focus_page = 集.数据[0].name;
             }
@@ -1396,7 +1401,7 @@ function data_changed() {
 function add_画布(xname?: string) {
     get_data(); /* 保存之前的画布 */
     let name = xname || `画布${uuid().slice(0, 7)}`;
-    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] });
     集.meta.focus_page = name;
     set_data(集);
     data_changed();
