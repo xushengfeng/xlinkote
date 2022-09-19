@@ -88,6 +88,10 @@ body > #main > #nav > div:nth-child(1) #upload_i {
     display: none;
 }
 
+body > #main > #nav > #draw_bar {
+    touch-action: none;
+}
+
 #penc {
     padding: 0;
     position: relative;
