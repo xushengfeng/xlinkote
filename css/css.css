@@ -834,6 +834,15 @@ x-file > div > * {
         width: 100%;
         flex-direction: row;
     }
+
+    x-color {
+        top: auto;
+        bottom: var(--icon-p-b-size);
+    }
+    #笔 > div {
+        top: auto;
+        bottom: var(--icon-p-b-size);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
