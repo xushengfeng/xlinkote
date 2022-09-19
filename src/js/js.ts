@@ -556,13 +556,13 @@ function zoom_o(z: number) {
 O.style.left = `${画布.offsetWidth / 2}px`;
 O.style.top = `${画布.offsetHeight / 2}px`;
 
-function el_offset(el: HTMLElement, pel?: HTMLElement) {
+function el_offset(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
     return { x: ox, y: oy };
 }
-function el_offset2(el: HTMLElement, pel?: HTMLElement) {
+function el_offset2(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
@@ -2073,17 +2073,14 @@ function link(key0: string) {
 }
 
 画布.addEventListener("pointermove", (e) => {
-    let el = e.target as HTMLElement;
-    for (let i in 集.链接[0]) {
-        if (document.getElementById(i).contains(el)) {
-            el = document.getElementById(i);
-            break;
+    if (模式 != "浏览") return;
+    let els = document.elementsFromPoint(e.clientX, e.clientY);
+    for (let el of els) {
+        if (集.链接[el.id]) {
+            link_value_bar.style.left = el_offset(el, 画布).x + "px";
+            link_value_bar.style.top = el_offset(el, document.body).y + "px";
+            link_value_bar.elid = el.id;
         }
-    }
-    if (集.链接[el.id]) {
-        link_value_bar.style.left = el_offset(el, 画布).x + "px";
-        link_value_bar.style.top = el_offset(el, document.body).y + "px";
-        link_value_bar.elid = el.id;
     }
 });
 
