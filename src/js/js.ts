@@ -1526,6 +1526,8 @@ function new_draw() {
 var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
     if (模式 == "绘制") {
+        penc_el.classList.remove("color_show");
+        pen_el.classList.remove("pen_show");
         new_draw();
         penc_el.value = (<draw>focus_draw_el).pen.color;
     }
