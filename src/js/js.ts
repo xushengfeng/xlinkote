@@ -93,8 +93,8 @@ document.getElementById("新建元素").onclick = () => {
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
         i.remove();
+        z.remove(i);
     }
-    if (focus_md) focus_md.remove();
 };
 
 var 侧栏 = document.getElementById("侧栏");
@@ -885,6 +885,7 @@ document.onkeydown = (e) => {
         case "Delete":
             for (let el of selected_el) {
                 el.remove();
+                z.remove(el);
             }
             selected_el = [];
             break;
