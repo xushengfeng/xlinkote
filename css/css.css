@@ -547,6 +547,7 @@ x-x {
     min-height: 0.5rem;
 }
 
+.x-x_selected > #x-x_bar,
 .x-x_bar_show {
     opacity: 1 !important;
     pointer-events: all !important;
