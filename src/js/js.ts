@@ -1929,6 +1929,9 @@ function show_setting() {
 }
 show_setting();
 
+const about = document.getElementById("about");
+(<HTMLElement>about.querySelector("#version")).innerText = packagejson.version;
+
 // 搜索
 import Fuse from "fuse.js";
 function search(s: string, type: "str" | "regex") {

@@ -419,19 +419,28 @@ body > #main > #nav #search {
     height: 16px;
 }
 
-.侧栏 > #items > #设置 > div {
+.侧栏 > #items > #设置 > div:last-child {
     display: flex;
 }
-.侧栏 > #items > #设置 > div > div {
+.侧栏 > #items > #设置 > div:last-child > div {
     position: relative;
     width: var(--icon-p-b-size);
     height: var(--icon-p-b-size);
 }
-.侧栏 > #items > #设置 > div > div > .icon {
+.侧栏 > #items > #设置 > div:last-child > div > .icon {
     width: var(--icon-size);
     height: var(--icon-size);
     left: var(--icon-margin);
     top: var(--icon-margin);
+}
+
+.侧栏 > #items > #设置 > #about > #about_main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.侧栏 > #items > #设置 > #about > div {
+    text-align: center;
 }
 
 body > #main > #画布 {
