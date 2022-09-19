@@ -252,7 +252,7 @@ body > #main > #nav #search {
 .侧栏 > #items {
     flex-grow: 1;
     overflow: hidden;
-    width: 192px;
+    width: 300px;
 }
 
 .侧栏 > #items > div:nth-child(1) {
