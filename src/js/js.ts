@@ -829,6 +829,8 @@ function tmp_s_reflash() {
                     let xel = <x>document.createElement("x-x");
                     xel.id = data.id;
 
+                    xel.setAttribute("style", i.style);
+
                     let eels = "";
                     for (let i in data.values) {
                         eels += `<${i} value='${data.values[i].value}'`;
@@ -839,8 +841,6 @@ function tmp_s_reflash() {
                     xel.style.top = y / zoom + "px";
                     xel.innerHTML = eels;
                     z.push(xel);
-                    set_模式("浏览");
-                    if (v) (<markdown>md).value = v;
                     set_模式("设计");
                     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
                     free_o_e = e;
