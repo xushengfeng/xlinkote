@@ -1890,6 +1890,7 @@ function auto_put_xln() {
         auto_put_xln_t = window.setTimeout(() => {
             if (now_dav_data != JSON.stringify(get_data())) {
                 put_xln_value();
+                now_dav_data = JSON.stringify(get_data());
             }
         }, Number(store.webdav.自动上传) * 60 * 1000);
     }
