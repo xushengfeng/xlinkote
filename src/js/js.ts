@@ -1970,37 +1970,54 @@ const about = document.getElementById("about");
 
 // 搜索
 import Fuse from "fuse.js";
+type search_result = { id: string; l: readonly Fuse.FuseResultMatch[]; n?: number; type?: "str" | "regex" }[];
 function search(s: string, type: "str" | "regex") {
-    let result = [];
+    let result = [] as search_result;
     switch (type) {
         case "str":
-            for (let t of document.querySelectorAll("textarea")) {
-                const fuse = new Fuse(t.value.split("\n"), {
+            for (let id in 集.链接[0]) {
+                let el = document.getElementById(id);
+                if (!el) continue;
+                let text = "";
+                if (el.querySelector("x-md")) {
+                    text = (el.querySelector("x-md") as markdown).value;
+                } else {
+                    text = el.innerText;
+                }
+                const fuse = new Fuse(text.split("\n"), {
                     includeMatches: true,
                     findAllMatches: true,
                     useExtendedSearch: true,
                 });
                 let fr = fuse.search(s);
                 for (let i of fr) {
-                    result.push({ el: t, l: i.matches, n: i.refIndex, type: "str" });
+                    result.push({ id: id, l: i.matches, n: i.refIndex, type: "str" });
                 }
             }
             break;
         case "regex":
-            for (let t of document.querySelectorAll("textarea")) {
+            for (let id in 集.链接[0]) {
+                let el = document.getElementById(id);
+                if (!el) continue;
+                let text = "";
+                if (el.querySelector("x-md")) {
+                    text = (el.querySelector("x-md") as markdown).value;
+                } else {
+                    text = el.innerText;
+                }
                 let r: RegExp;
                 try {
                     r = eval("/" + s + "/g");
                 } catch (error) {
                     console.error(error);
                 }
-                let rl = Array.from(new Set(t.value.match(r)));
+                let rl = Array.from(new Set(text.match(r)));
                 let l = [];
                 for (let i of rl) {
-                    l.push({ value: i, indices: s_i(i, t.value).map((v) => [v, v + i.length]) });
+                    l.push({ value: i, indices: s_i(i, text).map((v) => [v, v + i.length]) });
                 }
                 if (l.length != 0) {
-                    result.push({ el: t, l });
+                    result.push({ id, l });
                 }
             }
             break;
@@ -2042,7 +2059,7 @@ search_el.oninput = search_el.onfocus = () => {
     }
 };
 
-function show_search_l(l) {
+function show_search_l(l: search_result) {
     search_r.innerHTML = "";
     for (let i of l) {
         for (let j of i.l) {
@@ -2055,15 +2072,26 @@ function show_search_l(l) {
                 div.append(p);
                 search_r.append(div);
                 div.onclick = () => {
-                    let el = <HTMLTextAreaElement>i.el;
-                    let x = el.parentElement.parentElement.offsetLeft,
-                        y = el.parentElement.parentElement.offsetTop;
-                    O.style.left = -x + "px";
-                    O.style.top = -y + "px";
+                    let el = document.getElementById(i.id);
+                    move_to_x_link(el as x & xlink);
                     show_search_l([]);
+                };
+                div.onpointerenter = () => {
+                    let el = document.getElementById(i.id);
+                    move_to_x_link(el as x & xlink);
                 };
             }
         }
+    }
+}
+
+function move_to_x_link(el: x & xlink) {
+    let x = el_offset(el, O).x - 画布.offsetWidth / 2,
+        y = el_offset(el, O).y - 画布.offsetHeight / 2;
+    O.style.left = -x + "px";
+    O.style.top = -y + "px";
+    if (el.tagName == "X-X") {
+        z.focus(el);
     }
 }
 
