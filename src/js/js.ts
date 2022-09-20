@@ -2797,6 +2797,14 @@ class markdown extends HTMLElement {
                     text.setRangeText(`#${uuid().slice(0, 7)}]]`);
                 }
             }
+            if (e.key == "Tab") {
+                e.preventDefault();
+                let s = text.selectionStart;
+                text.setRangeText("\t");
+                text.selectionStart = s + 1;
+                text.selectionEnd = s + 1;
+                text.dispatchEvent(new Event("input"));
+            }
         };
         // text.addEventListener("keyup",(e)=>{})
         // 光标移动或点击以移动光标时定位到相应元素
