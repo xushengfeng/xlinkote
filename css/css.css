@@ -419,6 +419,9 @@ body > #main > #nav #search {
     height: 16px;
 }
 
+.侧栏 > #items > #设置 > form input {
+    width: 100%;
+}
 .侧栏 > #items > #设置 > div:last-child {
     display: flex;
 }
