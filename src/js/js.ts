@@ -946,12 +946,18 @@ type 集type = {
         name: string;
         p: { x: number; y: number; zoom: number };
         data: data;
-        绑定: { 类型: "点" | "移动" | "边"; l: string[] }[];
+        绑定: 绑定type;
     }>;
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
 };
+type 绑定type = {
+    id: string;
+    类型?: "堆叠" | "无" | "相对";
+    子元素?: 绑定type;
+    参数?: { 间距?: number; x?: number; y?: number };
+}[];
 
 var 集 = new_集(pname);
 
