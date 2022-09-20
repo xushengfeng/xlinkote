@@ -2105,9 +2105,12 @@ function link(key0: string) {
                 link(key1).add();
                 link(key0).value(key1);
             } else {
-                if (集.链接[key0]) return;
-                集.链接[key0] = {};
-                集.链接[0][key0] = { value: 1, time: t };
+                if (!集.链接[key0]) {
+                    集.链接[key0] = {};
+                }
+                if (!集.链接[0][key0]) {
+                    集.链接[0][key0] = { value: 1, time: t };
+                }
             }
         },
         rm: (key1?: string) => {
