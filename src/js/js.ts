@@ -1050,7 +1050,7 @@ function version_tr(obj): 集type {
                     let type = "";
                     let values = {};
                     for (let v in j.values) {
-                        if (j.values[v].value) {
+                        if (v.includes("X")) {
                             type = v;
                             values = j.values[v];
                             break;
