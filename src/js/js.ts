@@ -615,6 +615,7 @@ let free_o_e: MouseEvent;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
 let free_o_a = NaN;
 let free_move = false;
+let free_target_id = "";
 document.addEventListener("pointermove", (e: PointerEvent) => {
     if (模式 == "设计" && free_o_e) {
         e.preventDefault();
@@ -956,14 +957,14 @@ type 画布type = {
     name: string;
     p: { x: number; y: number; zoom: number };
     data: data;
-    绑定: 绑定type;
+    绑定: 绑定type[];
 };
 type 绑定type = {
     id: string;
     类型?: "堆叠" | "无" | "相对";
-    子元素?: 绑定type;
+    子元素?: 绑定type[];
     参数?: { 间距?: number; x?: number; y?: number };
-}[];
+};
 
 var 集 = new_集(pname);
 
@@ -2170,6 +2171,40 @@ function link(key0: string) {
     }
 });
 
+// 绑定
+function layout_tree_walker(i: 绑定type, f: (i: 绑定type) => void) {
+    if (i.子元素) {
+        w(i.子元素);
+    }
+    function w(x: 绑定type[]) {
+        for (let i of x) {
+            f(i);
+            if (i.子元素) {
+                w(i.子元素);
+            }
+        }
+    }
+}
+function find_root_layout(id: string) {
+    for (let p of 当前画布.绑定) {
+        let l = [] as x[];
+        let o = false;
+        layout_tree_walker(p, (i) => {
+            l.push(document.getElementById(i.id) as x);
+            if (i.id == id) {
+                o = true;
+                layout_tree_walker(p, (i) => {
+                    l.push(document.getElementById(i.id) as x);
+                });
+                return;
+            }
+        });
+        if (o) {
+            return l;
+        }
+    }
+}
+
 // MD
 import markdownit from "markdown-it";
 import markdownitTaskLists from "markdown-it-task-lists";
@@ -2603,7 +2638,11 @@ class x extends HTMLElement {
                 for (const el of selected_el) {
                     free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
                 }
+                for (let el of find_root_layout(this.id)) {
+                    free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                }
             }
+            free_target_id = this.id;
         };
 
         this.onmousemove = (e) => {
