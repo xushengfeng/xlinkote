@@ -22,6 +22,10 @@ function uuid() {
     });
 }
 
+function uuid_id() {
+    return uuid().slice(0, 7);
+}
+
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js");
 }
@@ -194,6 +198,7 @@ document.getElementById("设计").onclick = () => {
 };
 document.getElementById("绘制").onclick = () => {
     set_模式("绘制");
+    当前画布.绑定.push({ id: uuid_id(), 类型: "无", 子元素: [] });
 };
 function set_模式(模式x: "浏览" | "设计" | "绘制") {
     模式 = 模式x;
@@ -942,15 +947,16 @@ type 集type = {
         file_name: string;
         version: string;
     };
-    数据: Array<{
-        name: string;
-        p: { x: number; y: number; zoom: number };
-        data: data;
-        绑定: 绑定type;
-    }>;
+    数据: 画布type[];
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
+};
+type 画布type = {
+    name: string;
+    p: { x: number; y: number; zoom: number };
+    data: data;
+    绑定: 绑定type;
 };
 type 绑定type = {
     id: string;
@@ -1066,6 +1072,8 @@ function version_tr(obj): 集type {
     }
 }
 
+var 当前画布 = 集.数据[0] as 画布type;
+
 function set_data(l: 集type) {
     l = version_tr(l);
     for (let i in l) {
@@ -1078,6 +1086,7 @@ function set_data(l: 集type) {
         document.getElementById("集").append(div);
         div.value = p.name;
         div.onclick = () => {
+            当前画布 = p;
             render_data(p);
             集.meta.focus_page = p.name;
             data_changed();
@@ -1098,6 +1107,7 @@ function set_data(l: 集type) {
             set_data(集);
         };
         if (集.meta.focus_page == p.name) {
+            当前画布 = p;
             render_data(p);
             集.meta.focus_page = p.name;
         }
@@ -1557,6 +1567,10 @@ function new_draw() {
 
     z.push(xel);
     z.focus(xel);
+
+    当前画布.绑定[当前画布.绑定.length - 1].子元素.push({ id: xel.id });
+
+    console.log(当前画布.绑定);
 }
 var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
