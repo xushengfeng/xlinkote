@@ -2174,25 +2174,11 @@ function link(key0: string) {
 //         }
 //     }
 // }
-// function find_root_layout(id: string) {
-//     for (let p of 当前画布.绑定) {
-//         let l = [] as x[];
-//         let o = false;
-//         layout_tree_walker(p, (i) => {
-//             l.push(document.getElementById(i.id) as x);
-//             if (i.id == id) {
-//                 o = true;
-//                 layout_tree_walker(p, (i) => {
-//                     l.push(document.getElementById(i.id) as x);
-//                 });
-//                 return;
-//             }
-//         });
-//         if (o) {
-//             return l;
-//         }
-//     }
-// }
+function find_root_layout(el: HTMLElement) {
+    for (let p of O.querySelectorAll(":scope > x-x")) {
+        if (p.contains(el)) return p as x;
+    }
+}
 
 function add_none_layout() {
     let x = document.createElement("x-x") as x;
@@ -2945,8 +2931,20 @@ class markdown extends HTMLElement {
                     p.after(xel);
                     md.edit = true;
                 } else {
-                    text.setRangeText("\n");
-                    text.selectionStart = text.selectionEnd = text.selectionStart + 1;
+                    if (e.ctrlKey) {
+                        let rel = find_root_layout(this.parentElement);
+                        let xel = <x>document.createElement("x-x");
+                        xel.style.left = rel.offsetLeft + "px";
+                        xel.style.top = rel.offsetTop + rel.offsetHeight + "px";
+                        xel.style.width = rel.offsetWidth + "px";
+                        z.push(xel);
+                        var md = document.createElement("x-md");
+                        xel.append(md);
+                        (<markdown>md).edit = true;
+                    } else {
+                        text.setRangeText("\n");
+                        text.selectionStart = text.selectionEnd = text.selectionStart + 1;
+                    }
                 }
             } else {
                 let l_l = [
