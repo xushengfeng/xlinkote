@@ -2915,14 +2915,35 @@ class markdown extends HTMLElement {
                 }
 
                 if (!e.shiftKey) {
+                    let p = this.parentElement as x;
+                    let pxel = null as x;
+                    if (document.defaultView.getComputedStyle(p.parentElement, null).display == "flex") {
+                        pxel = p.parentElement as x;
+                    } else {
+                        pxel = document.createElement("x-x") as x;
+                        pxel.style.left = p.offsetLeft + "px";
+                        pxel.style.top = p.offsetTop + "px";
+                        pxel.style.display = "flex";
+                        pxel.style.flexDirection = "column";
+                        z.push(pxel);
+                        let x = document.createElement("x-x") as x;
+                        x.id = p.id;
+                        x.setAttribute("style", p.getAttribute("style"));
+                        pxel.append(x);
+                        x.style.left = "";
+                        x.style.top = "";
+                        x.style.position = "relative";
+                        x.value = p.value;
+                        z.remove(p);
+                        p.remove();
+                        p = x;
+                    }
                     let xel = <x>document.createElement("x-x");
-                    xel.style.left = this.parentElement.offsetLeft + "px";
-                    xel.style.top = this.parentElement.offsetTop + this.parentElement.offsetHeight + "px";
-                    xel.style.width = this.parentElement.offsetWidth + "px";
-                    z.push(xel);
-                    var md = document.createElement("x-md");
+                    let md = document.createElement("x-md") as markdown;
                     xel.append(md);
-                    (<markdown>md).edit = true;
+                    xel.style.position = "relative";
+                    p.after(xel);
+                    md.edit = true;
                 } else {
                     text.setRangeText("\n");
                     text.selectionStart = text.selectionEnd = text.selectionStart + 1;
