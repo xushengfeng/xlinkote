@@ -633,18 +633,15 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 
     if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
-            let values = { value: "" };
+            let value = "";
             let type = "";
             for (let k of i.childNodes) {
                 let eel = <markdown>k;
                 if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
                 type = eel.tagName;
-                values = {
-                    value: eel.value,
-                    ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}),
-                };
+                value = eel.value;
             }
-            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), type, values });
+            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), type, value });
             if (!e.shiftKey) {
                 z.remove(i);
                 i.remove();
@@ -805,8 +802,7 @@ function tmp_s_reflash() {
     for (let x of 集.中转站) {
         let div = document.createElement("div");
         let eels = "";
-        eels += `<${x.type} value='${x.values.value}'`;
-        if (x.values.edit) eels += `edit = "cr"`;
+        eels += `<${x.type} value='${x.value}'`;
         eels += `></${x.type}>`;
         let bar = document.createElement("div");
         bar.classList.add("tmp_s_bar");
@@ -837,8 +833,7 @@ function tmp_s_reflash() {
                     xel.setAttribute("style", i.style);
 
                     let eels = "";
-                    eels += `<${data.type} value='${data.values.value}'`;
-                    if (data.values.edit) eels += `edit = "cr"`;
+                    eels += `<${data.type} value='${data.value}'`;
                     eels += `></${data.type}>`;
                     xel.style.left = x / zoom + "px";
                     xel.style.top = y / zoom + "px";
@@ -957,9 +952,9 @@ type data = Array<{
     id: string;
     style: string;
     type: string;
-    fixed: boolean;
+    fixed?: boolean;
     子元素?: data;
-    values?: { value: string; edit?: boolean };
+    value?: string;
     global?: boolean;
 }>;
 type 画布type = {
@@ -1041,16 +1036,24 @@ function version_tr(obj): 集type {
             for (let i of obj.数据) {
                 for (let j of i.data) {
                     let type = "";
-                    let values = {};
+                    let value = "";
                     for (let v in j.values) {
                         if (v.includes("X")) {
                             type = v;
-                            values = j.values[v];
+                            value = j.values[v].value;
                             break;
                         }
                     }
-                    j.values = values;
-                    j.type = type;
+                    j.type = "X-X";
+                    j.子元素 = [
+                        {
+                            id: "",
+                            style: "",
+                            value: value,
+                            type: type,
+                        },
+                    ];
+                    delete j.values;
                 }
             }
             obj.meta.version = "0.5.0";
@@ -1519,7 +1522,7 @@ document.addEventListener("message", (msg: any) => {
                     id: uuid().slice(0, 7),
                     fixed: false,
                     style: "",
-                    values: { value: data.text },
+                    value: data.text,
                     type: "X-MD",
                 });
                 set_data(j);
@@ -2691,9 +2694,8 @@ class x extends HTMLElement {
                 list.push({
                     id: el.id,
                     style: el.getAttribute("style"),
-                    values: { value: (el as markdown).value },
+                    value: (el as markdown).value,
                     type: el.tagName,
-                    fixed: false,
                 });
             }
         }
@@ -2713,7 +2715,7 @@ class x extends HTMLElement {
                 el.setAttribute("style", d.style);
                 el.id = d.id;
                 this.append(el);
-                el.value = d.values.value;
+                el.value = d.value;
             }
         }
     }
