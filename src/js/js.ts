@@ -198,7 +198,6 @@ document.getElementById("设计").onclick = () => {
 };
 document.getElementById("绘制").onclick = () => {
     set_模式("绘制");
-    当前画布.绑定.push({ id: uuid_id(), 类型: "无", 子元素: [] });
 };
 function set_模式(模式x: "浏览" | "设计" | "绘制") {
     模式 = 模式x;
@@ -953,17 +952,20 @@ type 集type = {
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
 };
+
+type data = Array<{
+    id: string;
+    style: string;
+    type: string;
+    fixed: boolean;
+    子元素?: data;
+    values?: { value: string; edit?: boolean };
+    global?: boolean;
+}>;
 type 画布type = {
     name: string;
     p: { x: number; y: number; zoom: number };
     data: data;
-    绑定: 绑定type[];
-};
-type 绑定type = {
-    id: string;
-    类型?: "堆叠" | "无" | "相对";
-    子元素?: 绑定type[];
-    参数?: { 间距?: number; x?: number; y?: number };
 };
 
 var 集 = new_集(pname);
@@ -978,7 +980,7 @@ function new_集(pname: string): 集type {
             file_name: "",
             version: packagejson.version,
         },
-        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] }],
+        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
         链接: { 0: {} },
         assets: {},
         中转站: [],
@@ -1008,15 +1010,6 @@ function get_data() {
     }
     return l;
 }
-
-type data = Array<{
-    id: string;
-    style: string;
-    type: string;
-    values: { value: string; edit?: boolean };
-    fixed: boolean;
-    global?: boolean;
-}>;
 
 function rename_el() {
     let el = document.createElement("input");
@@ -1100,7 +1093,7 @@ function set_data(l: 集type) {
                 div.remove();
                 集.数据 = 集.数据.filter((d) => d != p);
                 if (集.数据.length == 0) {
-                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] });
+                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
                 }
                 集.meta.focus_page = 集.数据[0].name;
             }
@@ -1441,7 +1434,7 @@ function data_changed() {
 function add_画布(xname?: string) {
     get_data(); /* 保存之前的画布 */
     let name = xname || `画布${uuid().slice(0, 7)}`;
-    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [], 绑定: [] });
+    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
     集.meta.focus_page = name;
     set_data(集);
     data_changed();
@@ -1568,10 +1561,6 @@ function new_draw() {
 
     z.push(xel);
     z.focus(xel);
-
-    当前画布.绑定[当前画布.绑定.length - 1].子元素.push({ id: xel.id });
-
-    console.log(当前画布.绑定);
 }
 var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
@@ -2172,38 +2161,38 @@ function link(key0: string) {
 });
 
 // 绑定
-function layout_tree_walker(i: 绑定type, f: (i: 绑定type) => void) {
-    if (i.子元素) {
-        w(i.子元素);
-    }
-    function w(x: 绑定type[]) {
-        for (let i of x) {
-            f(i);
-            if (i.子元素) {
-                w(i.子元素);
-            }
-        }
-    }
-}
-function find_root_layout(id: string) {
-    for (let p of 当前画布.绑定) {
-        let l = [] as x[];
-        let o = false;
-        layout_tree_walker(p, (i) => {
-            l.push(document.getElementById(i.id) as x);
-            if (i.id == id) {
-                o = true;
-                layout_tree_walker(p, (i) => {
-                    l.push(document.getElementById(i.id) as x);
-                });
-                return;
-            }
-        });
-        if (o) {
-            return l;
-        }
-    }
-}
+// function layout_tree_walker(i: 绑定type, f: (i: 绑定type) => void) {
+//     if (i.子元素) {
+//         w(i.子元素);
+//     }
+//     function w(x: 绑定type[]) {
+//         for (let i of x) {
+//             f(i);
+//             if (i.子元素) {
+//                 w(i.子元素);
+//             }
+//         }
+//     }
+// }
+// function find_root_layout(id: string) {
+//     for (let p of 当前画布.绑定) {
+//         let l = [] as x[];
+//         let o = false;
+//         layout_tree_walker(p, (i) => {
+//             l.push(document.getElementById(i.id) as x);
+//             if (i.id == id) {
+//                 o = true;
+//                 layout_tree_walker(p, (i) => {
+//                     l.push(document.getElementById(i.id) as x);
+//                 });
+//                 return;
+//             }
+//         });
+//         if (o) {
+//             return l;
+//         }
+//     }
+// }
 
 // MD
 import markdownit from "markdown-it";
@@ -2638,9 +2627,9 @@ class x extends HTMLElement {
                 for (const el of selected_el) {
                     free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
                 }
-                for (let el of find_root_layout(this.id)) {
-                    free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
-                }
+                // for (let el of find_root_layout(this.id)) {
+                //     free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                // }
             }
             free_target_id = this.id;
         };
