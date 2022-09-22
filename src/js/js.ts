@@ -992,15 +992,8 @@ function get_data() {
     let data = [] as data;
     for (let i of O.childNodes) {
         let el = <x>i;
-        let values = { value: "" };
-        let type = "";
-        for (let k of el.childNodes) {
-            let eel = <markdown>k;
-            if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
-            values = { value: eel.value, ...((<markdown>eel).edit ? { edit: (<markdown>eel).edit } : {}) };
-            type = eel.tagName;
-        }
-        data.push({ id: el.id, style: el.getAttribute("style"), values, type, fixed: el.fixed });
+        let type = "X-X";
+        data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
     }
     for (let p of 集.数据) {
         if (p.name == 集.meta.focus_page) {
@@ -1110,23 +1103,22 @@ function set_data(l: 集type) {
     document.title = get_title();
 }
 
-function render_data(inputdata: { name: string; p: { x: number; y: number; zoom: number }; data: data }) {
+function render_data(inputdata: 画布type) {
     O.innerHTML = "";
     z.z = [];
-    let t = "";
     for (const x of inputdata.data) {
         try {
             link(x.id).add();
-            let eels = "";
-            eels += `<${x.type} value='${x.values.value}'`;
-            if (x.values.edit) eels += `edit = "cr"`;
-            eels += `></${x.type}>`;
-            t += `<x-x id="${x.id}" fixed="${x.fixed}" style="${x.style}">${eels}</x-x>`;
+            let xx = document.createElement("x-x") as x;
+            xx.id = x.id;
+            xx.fixed = x.fixed;
+            xx.setAttribute("style", x.style);
+            O.append(xx);
+            xx.value = x.子元素;
         } catch (e) {
             console.error(e);
         }
     }
-    O.innerHTML = t;
     O.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
     O.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
     zoom_o(inputdata?.p?.zoom || 1);
@@ -2676,6 +2668,58 @@ class x extends HTMLElement {
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
         };
+
+        if (this.getAttribute("value")) {
+            this.set_v(JSON.parse(this.getAttribute("value")));
+        }
+    }
+
+    get value() {
+        let list = [] as data;
+        for (let l of this.children) {
+            let el = l as HTMLElement;
+            if (el.id == "x-x_bar" || el.id == "x-x_handle") continue;
+            if (el.tagName == "X-X") {
+                list.push({
+                    id: el.id,
+                    style: el.getAttribute("style"),
+                    子元素: (el as x).value,
+                    type: el.tagName,
+                    fixed: (el as x).fixed,
+                });
+            } else {
+                list.push({
+                    id: el.id,
+                    style: el.getAttribute("style"),
+                    values: { value: (el as markdown).value },
+                    type: el.tagName,
+                    fixed: false,
+                });
+            }
+        }
+        return list;
+    }
+
+    set_v(data: data) {
+        for (let d of data) {
+            if (d.type == "X-X") {
+                let el = document.createElement(d.type) as x;
+                el.setAttribute("style", d.style);
+                el.id = d.id;
+                this.append(el);
+                el.value = d.子元素;
+            } else {
+                let el = document.createElement(d.type) as markdown;
+                el.setAttribute("style", d.style);
+                el.id = d.id;
+                this.append(el);
+                el.value = d.values.value;
+            }
+        }
+    }
+
+    set value(data) {
+        this.set_v(data);
     }
 }
 
