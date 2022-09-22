@@ -2911,6 +2911,7 @@ class markdown extends HTMLElement {
                         pxel.style.top = p.offsetTop + "px";
                         pxel.style.display = "flex";
                         pxel.style.flexDirection = "column";
+                        pxel.style.gap = "1em";
                         z.push(pxel);
                         let x = document.createElement("x-x") as x;
                         x.id = p.id;
@@ -2935,7 +2936,7 @@ class markdown extends HTMLElement {
                         let rel = find_root_layout(this.parentElement);
                         let xel = <x>document.createElement("x-x");
                         xel.style.left = rel.offsetLeft + "px";
-                        xel.style.top = rel.offsetTop + rel.offsetHeight + "px";
+                        xel.style.top = rel.offsetTop + rel.offsetHeight + 16 + "px";
                         xel.style.width = rel.offsetWidth + "px";
                         z.push(xel);
                         var md = document.createElement("x-md");

@@ -265,6 +265,10 @@ x-md > textarea {
     border-bottom: 2px var(--bg-color3) solid;
 }
 
+p {
+    margin: 0;
+}
+
 x-graph {
     display: flex;
     flex-direction: column;
