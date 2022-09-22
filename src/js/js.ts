@@ -198,8 +198,13 @@ document.getElementById("设计").onclick = () => {
 };
 document.getElementById("绘制").onclick = () => {
     set_模式("绘制");
+
+    add_none_layout();
 };
 function set_模式(模式x: "浏览" | "设计" | "绘制") {
+    if (模式 == "绘制") {
+        reflash_none_layout(O.lastElementChild as x);
+    }
     模式 = 模式x;
     nav.querySelectorAll("#mode_bar > div").forEach((v) => {
         v.classList.remove("模式突出");
@@ -1554,8 +1559,8 @@ function new_draw() {
     xel.append(draw);
     set_模式("绘制");
 
-    z.push(xel);
-    z.focus(xel);
+    focus_draw_el = draw;
+    O.lastElementChild.append(xel);
 }
 var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
@@ -2188,6 +2193,32 @@ function link(key0: string) {
 //         }
 //     }
 // }
+
+function add_none_layout() {
+    let x = document.createElement("x-x") as x;
+    x.style.left = "0";
+    x.style.top = "0";
+    z.push(x);
+}
+function reflash_none_layout(el: x) {
+    let px = 16,
+        py = 16;
+    let dy = Infinity,
+        dx = Infinity;
+    for (let i of el.children) {
+        if (i.tagName != "X-X") continue;
+        let of = el_offset2(i, el);
+        if (of.x < dx) dx = of.x;
+        if (of.y < dy) dy = of.y;
+    }
+    for (let i of el.children) {
+        if (i.tagName != "X-X") continue;
+        (i as x).style.left = el_offset2(i, el).x - dx + px + "px";
+        (i as x).style.top = el_offset2(i, el).y - dy + py + "px";
+    }
+    el.style.left = el_offset2(el).x + dx - px + "px";
+    el.style.top = el_offset2(el).y + dy - py + "px";
+}
 
 // MD
 import markdownit from "markdown-it";
