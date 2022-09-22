@@ -2907,6 +2907,7 @@ class markdown extends HTMLElement {
                         pxel = p.parentElement as x;
                     } else {
                         pxel = document.createElement("x-x") as x;
+                        pxel.id = uuid_id();
                         pxel.style.left = p.offsetLeft + "px";
                         pxel.style.top = p.offsetTop + "px";
                         pxel.style.display = "flex";
@@ -2928,6 +2929,7 @@ class markdown extends HTMLElement {
                     let xel = <x>document.createElement("x-x");
                     let md = document.createElement("x-md") as markdown;
                     xel.append(md);
+                    xel.id = uuid_id();
                     xel.style.position = "relative";
                     p.after(xel);
                     md.edit = true;
