@@ -428,6 +428,9 @@ body > #main > #nav #search {
 }
 .侧栏 > #items > #设置 > div:last-child {
     display: flex;
+    position: sticky;
+    bottom: 0;
+    justify-content: center;
 }
 .侧栏 > #items > #设置 > div:last-child > div {
     position: relative;

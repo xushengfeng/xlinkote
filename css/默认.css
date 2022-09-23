@@ -93,6 +93,12 @@ body > #main > #nav #search {
     border-radius: 4px;
     margin-right: 4px;
 }
+
+.侧栏 > #items > #设置 > div:last-child {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+}
+
 .buttom_a {
     background-color: var(--bg-color3) !important;
 }
