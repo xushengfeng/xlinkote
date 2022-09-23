@@ -101,6 +101,13 @@ document.getElementById("删除元素").onclick = () => {
     }
 };
 
+document.getElementById("撤销").onclick = () => {
+    undo(true);
+};
+document.getElementById("重做").onclick = () => {
+    undo(false);
+};
+
 var 侧栏 = document.getElementById("侧栏");
 
 侧栏.onclick = (e) => {
