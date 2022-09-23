@@ -126,28 +126,30 @@ var 侧栏 = document.getElementById("侧栏");
 document.getElementById("切换侧栏").onclick = () => {
     侧栏.classList.toggle("侧栏显示");
 };
-var handle_e: TouchEvent, handle_e1: TouchEvent, handle_a: number;
-document.getElementById("handle").onclick = () => {
-    侧栏.classList.toggle("侧栏显示");
-};
-document.getElementById("handle").ontouchstart = (e) => {
+var handle_e: MouseEvent, handle_e1: MouseEvent, handle_a: number;
+
+document.getElementById("handle").onpointerdown = (e) => {
     handle_e = e;
     侧栏.style.transition = "0s";
-};
-document.getElementById("handle").ontouchmove = (e) => {
-    if (!handle_e) return;
-    let dy = e.changedTouches[0].clientY - handle_e.changedTouches[0].clientY;
-    if (dy < 0) dy = 0;
-    侧栏.style.transform = `translateY(${dy}px)`;
-    if (handle_e1) handle_a = e.changedTouches[0].clientY - handle_e1.changedTouches[0].clientY;
-    handle_e1 = e;
-};
-document.getElementById("handle").ontouchend = (e) => {
-    侧栏.style.transform = ``;
-    侧栏.style.transition = "";
-    handle_e = null;
-    handle_e1 = null;
-    if (handle_a > 0) 侧栏.classList.toggle("侧栏显示");
+    let m = (e: MouseEvent) => {
+        if (!handle_e) return;
+        let dy = e.clientY - handle_e.clientY;
+        if (dy < 0) dy = 0;
+        侧栏.style.transform = `translateY(${dy}px)`;
+        if (handle_e1) handle_a = e.clientY - handle_e1.clientY;
+        handle_e1 = e;
+    };
+    let u = (e: MouseEvent) => {
+        侧栏.style.transform = ``;
+        侧栏.style.transition = "";
+        handle_e = null;
+        handle_e1 = null;
+        if (handle_a > 0) 侧栏.classList.toggle("侧栏显示");
+        document.removeEventListener("pointermove", m);
+        document.removeEventListener("pointerup", u);
+    };
+    document.addEventListener("pointermove", m);
+    document.addEventListener("pointerup", u);
 };
 
 for (let el of document.querySelectorAll(".tools")) {

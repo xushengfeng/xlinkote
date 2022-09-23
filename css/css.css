@@ -229,6 +229,10 @@ body > #main > #nav #search {
     transform: translateX(0%);
 }
 
+.侧栏 > #handle {
+    touch-action: none;
+}
+
 .侧栏 > #tabs {
     width: var(--icon-p-b-size);
     display: flex;
