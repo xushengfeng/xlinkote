@@ -176,6 +176,13 @@ document.getElementById("顶层").onclick = () => {
     z.顶层(z.聚焦元素);
 };
 
+document.getElementById("纵向堆叠").onclick = () => {
+    to_flex(selected_el, "y");
+};
+document.getElementById("横向堆叠").onclick = () => {
+    to_flex(selected_el, "x");
+};
+
 const toast = document.getElementById("toast");
 
 function put_toast(t: string, time?: number) {
@@ -2170,23 +2177,41 @@ function link(key0: string) {
 });
 
 // 绑定
-// function layout_tree_walker(i: 绑定type, f: (i: 绑定type) => void) {
-//     if (i.子元素) {
-//         w(i.子元素);
-//     }
-//     function w(x: 绑定type[]) {
-//         for (let i of x) {
-//             f(i);
-//             if (i.子元素) {
-//                 w(i.子元素);
-//             }
-//         }
-//     }
-// }
 function find_root_layout(el: HTMLElement) {
     for (let p of O.querySelectorAll(":scope > x-x")) {
         if (p.contains(el)) return p as x;
     }
+}
+
+function to_flex(els: x[], d: "x" | "y") {
+    let xels = [] as x[];
+    for (let el of els) {
+        let rel = find_root_layout(el);
+        if (!xels.includes(rel)) xels.push(rel);
+    }
+    let xel = document.createElement("x-x") as x;
+    xel.id = uuid_id();
+    if (d == "x") {
+        xels.sort((a, b) => el_offset2(a).x - el_offset2(b).x);
+    } else {
+        xel.style.flexDirection = "column";
+        xels.sort((a, b) => el_offset2(a).y - el_offset2(b).y);
+    }
+    xel.style.left = el_offset2(xels[0]).x + "px";
+    xel.style.top = el_offset2(xels[0]).y + "px";
+    xel.style.display = "flex";
+    xel.style.gap = "1em";
+    z.push(xel);
+    let data = [] as data;
+    for (let el of xels) {
+        el.style.left = "";
+        el.style.top = "";
+        el.style.position = "relative";
+        data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
+        z.remove(el);
+        el.remove();
+    }
+    xel.value = data;
 }
 
 function add_none_layout() {
