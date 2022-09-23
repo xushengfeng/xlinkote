@@ -3069,7 +3069,11 @@ class markdown extends HTMLElement {
             if (el.tagName == "LI") {
                 line = el_line(text, this.index, s, el)[0] + 1;
             } else {
-                line = el_line(text, this.index, s, el)[1];
+                if (el == s) {
+                    line = 0;
+                } else {
+                    line = el_line(text, this.index, s, el)[1];
+                }
             }
             text_set_line(text, line);
             if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)

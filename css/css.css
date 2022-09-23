@@ -562,8 +562,6 @@ x-x {
     position: absolute;
     display: block;
     width: max-content;
-    min-width: 0.5rem;
-    min-height: 0.5rem;
 }
 
 .x-x_selected > #x-x_bar,
@@ -673,6 +671,10 @@ x-md > textarea {
     left: -20px;
     top: 0;
     opacity: 0;
+}
+x-md > #h {
+    min-width: 0.5rem;
+    min-height: 0.5rem;
 }
 x-md > #h *:hover > .handle {
     opacity: 1;
