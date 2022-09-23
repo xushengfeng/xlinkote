@@ -689,6 +689,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 var free_mouse = (e: MouseEvent) => {
     if (free_o_e) {
         for (const xel of free_o_rects) {
+            let f = document.defaultView.getComputedStyle(xel.el.parentElement, null).display == "flex";
             let dx = (e.clientX - free_o_e.clientX) / zoom,
                 dy = (e.clientY - free_o_e.clientY) / zoom;
             let x = xel.x,
@@ -775,25 +776,25 @@ var free_mouse = (e: MouseEvent) => {
                         y = xel.y - d;
                         h = xel.h + i * d;
                         xel.el.style.height = h + "px";
-                        xel.el.style.top = y + "px";
+                        if (!f) xel.el.style.top = y + "px";
                         break;
                     case 1:
                         w = xel.w + i * d;
                         x = xel.x - j * d;
                         xel.el.style.width = w + "px";
-                        xel.el.style.left = x + "px";
+                        if (!f) xel.el.style.left = x + "px";
                         break;
                     case 2:
                         h = xel.h + i * d;
                         y = xel.y - j * d;
                         xel.el.style.height = h + "px";
-                        xel.el.style.top = y + "px";
+                        if (!f) xel.el.style.top = y + "px";
                         break;
                     case 3:
                         x = xel.x - d;
                         w = xel.w + i * d;
                         xel.el.style.width = w + "px";
-                        xel.el.style.left = x + "px";
+                        if (!f) xel.el.style.left = x + "px";
                         break;
                 }
             }
@@ -2656,6 +2657,7 @@ class x extends HTMLElement {
             let el = e.target as HTMLDivElement;
             if (bar.contains(el)) return;
             if (x_h.includes(el)) {
+                e.stopPropagation();
                 free_o_a = x_h.indexOf(el);
                 free_o_e = e;
                 free_o_rects = [
@@ -2673,9 +2675,6 @@ class x extends HTMLElement {
                 for (const el of selected_el) {
                     free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
                 }
-                // for (let el of find_root_layout(this.id)) {
-                //     free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
-                // }
             }
             free_target_id = this.id;
         };
