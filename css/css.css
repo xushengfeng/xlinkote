@@ -459,6 +459,7 @@ body > #main > #画布 {
     overflow: hidden;
     grid-area: 2 / 1 / 3 / 2;
     touch-action: none;
+    contain: paint;
 }
 
 /* 画布 */
