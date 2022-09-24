@@ -430,11 +430,17 @@ body > #main > #nav #search {
     width: 16px;
     height: 16px;
 }
+.侧栏 > #items > #中转站 > #临时 #x-x_bar {
+    transform: none;
+}
 .侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(2) {
     display: block;
 }
 .侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
     display: none;
+}
+.侧栏 > #items > #中转站 > #临时 .xxhandle > div {
+    transform: none;
 }
 
 .侧栏 > #items > #设置 > form input {
