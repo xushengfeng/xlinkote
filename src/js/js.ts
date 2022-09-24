@@ -1399,6 +1399,7 @@ document.getElementById("db_load").onchange = () => {
     reader.readAsText(file);
 };
 
+// 撤销
 var undo_stack = [],
     undo_i = -1;
 
@@ -1410,7 +1411,21 @@ function undo(v: boolean) {
         undo_i++;
         if (undo_i >= undo_stack.length) undo_i = undo_stack.length - 1;
     }
-    set_data(JSON.parse(undo_stack[undo_i]));
+    let d = JSON.parse(undo_stack[undo_i]);
+    set_data(d[0]);
+    selections = d[1];
+    (document.getElementById(selections[0].id).querySelector("x-md") as markdown).edit = true;
+    let text = (document.getElementById(selections[0].id).querySelector("x-md") as markdown).text;
+    text.selectionStart = selections[0].start;
+    text.selectionEnd = selections[0].end;
+}
+
+function push_undo() {
+    if (undo_i != undo_stack.length - 1) {
+        undo_stack.push(undo_stack[undo_i]);
+    }
+    undo_stack.push(JSON.stringify([get_data(), selections]));
+    undo_i = undo_stack.length - 1;
 }
 
 async function download_file(text: string) {
@@ -1451,11 +1466,7 @@ function data_changed() {
             write_file(json2md(get_data()));
             db_put(get_data());
         }
-        if (undo_i != undo_stack.length - 1) {
-            undo_stack.push(undo_stack[undo_i]);
-        }
-        undo_stack.push(JSON.stringify(get_data()));
-        undo_i = undo_stack.length - 1;
+        push_undo();
     }, save_dt);
 }
 
