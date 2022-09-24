@@ -633,6 +633,14 @@ document.addEventListener("mousemove", (e: MouseEvent) => {
     if (模式 != "浏览") e.preventDefault();
 };
 
+// 光标
+type selection_type = {
+    id: string; // md 父主元素
+    start: number;
+    end: number;
+};
+var selections = [{ id: "", start: 0, end: 0 }] as selection_type[];
+
 // 自由元素移动
 let free_o_e: MouseEvent;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
@@ -2936,6 +2944,8 @@ class markdown extends HTMLElement {
                 this.index = line_el(l);
                 this.drag();
             }, 0);
+
+            selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
         };
         text.onkeydown = (e) => {
             if (模式 != "浏览") e.preventDefault();
