@@ -6,6 +6,7 @@ import cloud from "../../assets/icons/cloud.svg";
 import ding_svg from "../../assets/icons/ding.svg";
 import close_svg from "../../assets/icons/close.svg";
 import file_svg from "../../assets/icons/file.svg";
+import handle_svg from "../../assets/icons/handle.svg";
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
@@ -2654,6 +2655,8 @@ class x extends HTMLElement {
     connectedCallback() {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
+        const m = document.createElement("div");
+        m.innerHTML = `<img src="${handle_svg}" class="icon">`;
         var f = document.createElement("div");
         f.innerHTML = `<img src="${ding_svg}" class="icon">`;
         var d = document.createElement("div");
@@ -2681,6 +2684,7 @@ class x extends HTMLElement {
         h.append(...x_h);
         this.append(h);
 
+        bar.append(m);
         bar.append(f);
         bar.append(d);
         this.append(bar);
@@ -2705,7 +2709,27 @@ class x extends HTMLElement {
             if (模式 != "设计") return;
             if (this.fixed) return;
             let el = e.target as HTMLDivElement;
-            if (bar.contains(el)) return;
+            if (bar.contains(el) && el != m) return;
+            if (el == m) {
+                e.stopPropagation();
+                if (this.parentElement != O) {
+                    let x = e.clientX - O.getBoundingClientRect().x,
+                        y = e.clientY - O.getBoundingClientRect().y;
+                    let xel = <x>document.createElement("x-x");
+                    xel.id = this.id;
+                    xel.setAttribute("style", this.getAttribute("style"));
+                    z.push(xel);
+                    xel.style.left = el_offset2(this, O).x + "px";
+                    xel.style.top = el_offset2(this, O).y + "px";
+                    xel.style.position = "absolute";
+                    xel.value = this.value;
+                    this.remove();
+                    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+                    free_o_e = e;
+                    free_o_a = -1;
+                    return;
+                }
+            }
             if (x_h.includes(el)) {
                 e.stopPropagation();
                 free_o_a = x_h.indexOf(el);
@@ -2848,12 +2872,10 @@ class markdown extends HTMLElement {
         for (let i of this.index) {
             let el = this.h.querySelector(`:scope > ${i[0]}`) as HTMLElement;
             el.style.position = "relative";
-            let handle = el.querySelector(".handle") as HTMLDivElement;
+            let handle = el.querySelector(".handle") as HTMLImageElement;
             if (!handle) {
-                handle = document.createElement("div");
-                handle.innerHTML = `<svg width="16" height="16">
-            <path d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"></path>
-          </svg>`;
+                handle = document.createElement("img");
+                handle.src = handle_svg;
                 handle.classList.add("handle");
                 handle.onmousedown = () => {
                     el.draggable = true;
