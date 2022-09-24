@@ -1657,11 +1657,12 @@ window.onbeforeunload = () => {
 
 // 导出
 import html2canvas from "html2canvas";
+document.getElementById("导出图片").onclick = to_canvas;
 function to_canvas() {
     for (let m of document.querySelectorAll("mjx-assistive-mml")) {
         m.remove();
     }
-    html2canvas(画布).then(function (canvas: HTMLCanvasElement) {
+    html2canvas(画布, { scale: 1 / zoom }).then(function (canvas: HTMLCanvasElement) {
         let url = canvas.toDataURL();
         let a = document.createElement("a");
         let name = get_file_name();
