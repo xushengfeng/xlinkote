@@ -665,15 +665,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 
     if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
-            let value = "";
-            let type = "";
-            for (let k of i.childNodes) {
-                let eel = <markdown>k;
-                if (eel.id == "x-x_bar" || eel.id == "x-x_handle") continue;
-                type = eel.tagName;
-                value = eel.value;
-            }
-            集.中转站.push({ id: i.id, fixed: i.fixed, style: i.getAttribute("style"), type, value });
+            集.中转站.push({
+                id: i.id,
+                fixed: i.fixed,
+                style: "",
+                type: i.tagName,
+                子元素: i.value,
+            });
             if (!e.shiftKey) {
                 z.remove(i);
                 i.remove();
@@ -834,9 +832,7 @@ function tmp_s_reflash() {
     临时中转站.innerHTML = "";
     for (let x of 集.中转站) {
         let div = document.createElement("div");
-        let eels = "";
-        eels += `<${x.type} value='${x.value}'`;
-        eels += `></${x.type}>`;
+        临时中转站.append(div);
         let bar = document.createElement("div");
         bar.classList.add("tmp_s_bar");
         div.append(bar);
@@ -847,8 +843,11 @@ function tmp_s_reflash() {
         if (x.global) g.classList.add("buttom_a");
         bar.append(g);
         let t = document.createElement("div");
-        t.innerHTML = eels;
         div.append(t);
+        let xel = document.createElement("x-x") as x;
+        t.append(xel);
+        xel.setAttribute("style", x.style);
+        xel.value = x.子元素;
         h.onpointerdown = (e) => {
             console.log((<HTMLElement>e.target).id);
             let id = x.id;
@@ -865,13 +864,10 @@ function tmp_s_reflash() {
 
                     xel.setAttribute("style", i.style);
 
-                    let eels = "";
-                    eels += `<${data.type} value='${data.value}'`;
-                    eels += `></${data.type}>`;
                     xel.style.left = x / zoom + "px";
                     xel.style.top = y / zoom + "px";
-                    xel.innerHTML = eels;
                     z.push(xel);
+                    xel.value = data.子元素;
                     set_模式("设计");
                     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
                     free_o_e = e;
@@ -900,7 +896,6 @@ function tmp_s_reflash() {
                 g.classList.remove("buttom_a");
             }
         };
-        临时中转站.append(div);
     }
 }
 
