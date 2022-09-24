@@ -1607,8 +1607,9 @@ var focus_draw_el = null as draw;
     }
 };
 
-document.getElementById("penc").onclick = (e) => {
-    if (e.target == penc_el.parentElement) penc_el.classList.toggle("color_show");
+const color_yl = document.getElementById("color_yl");
+color_yl.onclick = (e) => {
+    if (e.target == color_yl) penc_el.classList.toggle("color_show");
 };
 const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
 penc_el.addEventListener("input", () => {
@@ -1623,7 +1624,7 @@ penc_el.addEventListener("input", () => {
             }
         });
     }
-    penc_el.parentElement.style.background = penc_el.value;
+    color_yl.style.background = penc_el.value;
 });
 
 const pen_el = document.getElementById("笔").querySelector("div");

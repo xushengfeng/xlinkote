@@ -103,6 +103,12 @@ body > #main > #nav #search {
     background-color: var(--bg-color3) !important;
 }
 
+#color_yl {
+    border-radius: 50%;
+    border: var(--bg1) 2px solid;
+    box-shadow: var(--shadow1);
+}
+
 x-color {
     background-color: var(--bg-color2);
     box-shadow: var(--shadow1);

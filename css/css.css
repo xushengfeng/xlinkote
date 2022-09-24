@@ -92,10 +92,17 @@ body > #main > #nav > #draw_bar {
     touch-action: none;
 }
 
-#penc {
-    padding: 0;
+#color_yl {
+    left: 4px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
     position: relative;
-    height: var(--icon-p-b-size);
+    box-sizing: border-box;
+}
+#penc {
+    top: 0;
+    position: absolute;
 }
 x-color {
     opacity: 0;
