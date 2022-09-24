@@ -2,7 +2,7 @@
 
 ## 简介
 
-一个简单的笔记系统，基于 js 等技术。[在线使用](https://xlinkote.vercel.app/)
+一个简单的笔记系统，基于 js 等技术。[在线使用](https://xlinkote.netlify.app/)
 
 无需注册，不存在官方云存储，只使用 webDAV 代替。
 
@@ -12,7 +12,7 @@
 
 ## 使用
 
-[在线使用](https://xlinkote.vercel.app/)
+[在线使用](https://xlinkote.netlify.app/)
 
 ### 编译
 
