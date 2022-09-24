@@ -1607,6 +1607,7 @@ var focus_draw_el = null as draw;
     }
 };
 
+// 色盘
 const color_yl = document.getElementById("color_yl");
 color_yl.onclick = (e) => {
     if (e.target == color_yl) penc_el.classList.toggle("color_show");
@@ -1625,6 +1626,7 @@ penc_el.addEventListener("input", () => {
         });
     }
     color_yl.style.background = penc_el.value;
+    pen_width_el.color = penc_el.value;
 });
 
 const pen_el = document.getElementById("笔").querySelector("div");
@@ -3972,6 +3974,9 @@ class xdraw_width extends HTMLElement {
     set value(s) {
         this.c = Number(s);
         this.set_v(s);
+    }
+    set color(s: string) {
+        (<HTMLDivElement>this.querySelector("div > div")).style.background = s;
     }
 }
 
