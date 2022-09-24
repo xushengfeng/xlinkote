@@ -1689,6 +1689,12 @@ class 图层 {
         document.documentElement.style.setProperty("--zest-index", String(this.z.length - 1));
 
         if (!nosave) data_changed();
+
+        if (this.z.length > 128) {
+            O.style.willChange = "left, top";
+        } else {
+            O.style.willChange = "";
+        }
     }
 
     push(el: x) {
