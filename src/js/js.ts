@@ -182,6 +182,9 @@ document.getElementById("纵向堆叠").onclick = () => {
 document.getElementById("横向堆叠").onclick = () => {
     to_flex(selected_el, "x");
 };
+document.getElementById("成组").onclick = () => {
+    to_none_layout(selected_el);
+};
 
 const toast = document.getElementById("toast");
 
@@ -2190,6 +2193,15 @@ function find_root_layout(el: HTMLElement) {
     }
 }
 
+function els_to_rels(els: x[]) {
+    let xels = [] as x[];
+    for (let el of els) {
+        let rel = find_root_layout(el);
+        if (!xels.includes(rel)) xels.push(rel);
+    }
+    return xels;
+}
+
 function to_flex(els: x[], d: "x" | "y") {
     let xels = [] as x[];
     for (let el of els) {
@@ -2226,6 +2238,7 @@ function add_none_layout() {
     x.style.left = "0";
     x.style.top = "0";
     z.push(x);
+    return x;
 }
 function reflash_none_layout(el: x) {
     let px = 16,
@@ -2245,6 +2258,19 @@ function reflash_none_layout(el: x) {
     }
     el.style.left = el_offset2(el).x + dx - px + "px";
     el.style.top = el_offset2(el).y + dy - py + "px";
+}
+
+function to_none_layout(els: x[]) {
+    let x = add_none_layout();
+    let data = [] as data;
+    let xels = els_to_rels(els);
+    for (let el of xels) {
+        data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
+        z.remove(el);
+        el.remove();
+    }
+    x.value = data;
+    reflash_none_layout(x);
 }
 
 // MD
