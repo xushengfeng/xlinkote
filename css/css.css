@@ -411,6 +411,7 @@ body > #main > #nav #search {
 .侧栏 > #items > #中转站 > #临时 {
     flex-grow: 1;
     overflow-y: auto;
+    padding-top: 16px;
 }
 .侧栏 > #items > #中转站 > #临时 > div {
     position: relative;
@@ -428,6 +429,12 @@ body > #main > #nav #search {
 .侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar > div > .icon {
     width: 16px;
     height: 16px;
+}
+.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(2) {
+    display: block;
+}
+.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
+    display: none;
 }
 
 .侧栏 > #items > #设置 > form input {
@@ -602,6 +609,9 @@ x-x > #x-x_bar > div {
 x-x > #x-x_bar > div > .icon {
     width: 16px;
     height: 16px;
+}
+x-x > #x-x_bar > div:nth-child(2) {
+    display: none;
 }
 x-x:focus-within {
     z-index: calc(var(--zest-index) + 1) !important;

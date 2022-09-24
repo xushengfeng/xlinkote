@@ -834,69 +834,13 @@ function tmp_s_reflash() {
     for (let x of 集.中转站) {
         let div = document.createElement("div");
         临时中转站.append(div);
-        let bar = document.createElement("div");
-        bar.classList.add("tmp_s_bar");
-        div.append(bar);
-        let h = document.createElement("div");
-        bar.append(h);
-        let g = document.createElement("div");
-        g.innerHTML = `<img src="${ding_svg}" class="icon">`;
-        if (x.global) g.classList.add("buttom_a");
-        bar.append(g);
         let t = document.createElement("div");
         div.append(t);
         let xel = document.createElement("x-x") as x;
+        xel.id = x.id;
         t.append(xel);
         xel.setAttribute("style", x.style);
         xel.value = x.子元素;
-        h.onpointerdown = (e) => {
-            console.log((<HTMLElement>e.target).id);
-            let id = x.id;
-            let v = null;
-            for (let i of 集.中转站) {
-                if (id == i.id) {
-                    let data = i;
-
-                    let x = e.clientX - O.getBoundingClientRect().x,
-                        y = e.clientY - O.getBoundingClientRect().y;
-
-                    let xel = <x>document.createElement("x-x");
-                    xel.id = data.id;
-
-                    xel.setAttribute("style", i.style);
-
-                    xel.style.left = x / zoom + "px";
-                    xel.style.top = y / zoom + "px";
-                    z.push(xel);
-                    xel.value = data.子元素;
-                    set_模式("设计");
-                    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
-                    free_o_e = e;
-                    drag_block = true;
-
-                    if (!e.shiftKey && !i.global) {
-                        集.中转站 = 集.中转站.filter((x) => x != i);
-                        tmp_s_reflash();
-                    } else {
-                        xel.id = uuid().slice(0, 7);
-                    }
-
-                    data_changed();
-
-                    return;
-                }
-            }
-        };
-        g.onclick = () => {
-            x.global = !x.global;
-            if (x.global) {
-                global_x.push(x);
-                g.classList.add("buttom_a");
-            } else {
-                global_x = global_x.filter((i) => i != x);
-                g.classList.remove("buttom_a");
-            }
-        };
     }
 }
 
@@ -2727,6 +2671,21 @@ class x extends HTMLElement {
                     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
                     free_o_e = e;
                     free_o_a = -1;
+
+                    set_模式("设计");
+
+                    for (let i of 集.中转站) {
+                        if (xel.id == i.id) {
+                            drag_block = true;
+                            if (!e.shiftKey && !i.global) {
+                                集.中转站 = 集.中转站.filter((x) => x != i);
+                                tmp_s_reflash();
+                            } else {
+                                xel.id = uuid().slice(0, 7);
+                            }
+                            data_changed();
+                        }
+                    }
                     return;
                 }
             }
@@ -2787,7 +2746,19 @@ class x extends HTMLElement {
         };
 
         f.onclick = () => {
-            this.fixed = !this.fixed;
+            for (let x of 集.中转站) {
+                if (x.id == this.id) {
+                    x.global = !x.global;
+                    if (x.global) {
+                        global_x.push(x);
+                        f.classList.add("buttom_a");
+                    } else {
+                        global_x = global_x.filter((i) => i != x);
+                        f.classList.remove("buttom_a");
+                    }
+                    console.log(集.中转站);
+                }
+            }
         };
 
         d.onclick = () => {
