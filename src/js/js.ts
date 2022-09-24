@@ -669,7 +669,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             集.中转站.push({
                 id: i.id,
                 fixed: i.fixed,
-                style: "",
+                style: i.getAttribute("style"),
                 type: i.tagName,
                 子元素: i.value,
             });
@@ -832,14 +832,14 @@ function creat_x_x(x: number, y: number, w: number) {
 function tmp_s_reflash() {
     临时中转站.innerHTML = "";
     for (let x of 集.中转站) {
-        let div = document.createElement("div");
-        临时中转站.append(div);
         let t = document.createElement("div");
-        div.append(t);
+        临时中转站.append(t);
         let xel = document.createElement("x-x") as x;
         xel.id = x.id;
         t.append(xel);
         xel.setAttribute("style", x.style);
+        xel.style.left = "0px";
+        xel.style.top = "0px";
         xel.value = x.子元素;
     }
 }
