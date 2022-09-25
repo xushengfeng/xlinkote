@@ -2635,13 +2635,13 @@ class x extends HTMLElement {
 
         var bar_hide_t = NaN;
         this.onmouseenter = () => {
-            if (模式 == "设计") {
+            if (模式 == "设计" || 临时中转站.contains(this)) {
                 clearTimeout(bar_hide_t);
                 bar.classList.add("x-x_bar_show");
             }
         };
         this.onmouseleave = () => {
-            if (模式 == "设计") {
+            if (模式 == "设计" || 临时中转站.contains(this)) {
                 bar_hide_t = window.setTimeout(() => {
                     bar.classList.remove("x-x_bar_show");
                 }, 200);
