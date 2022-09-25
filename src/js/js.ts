@@ -7,6 +7,8 @@ import ding_svg from "../../assets/icons/ding.svg";
 import close_svg from "../../assets/icons/close.svg";
 import file_svg from "../../assets/icons/file.svg";
 import handle_svg from "../../assets/icons/handle.svg";
+import ul_hide_svg from "../../assets/icons/ul_hide.svg";
+import ul_show_svg from "../../assets/icons/ul_show.svg";
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
@@ -1646,6 +1648,20 @@ class 图层 {
                 if (i.value) {
                     pel.querySelector("span").innerText += " md";
                     return;
+                } else {
+                    if (!pel.querySelector("img")) {
+                        let x = document.createElement("img");
+                        x.src = ul_show_svg;
+                        pel.firstChild?.before(x);
+                        x.onclick = () => {
+                            pel.classList.toggle("层ul_hide");
+                            if (pel.classList.contains("层ul_hide")) {
+                                x.src = ul_hide_svg;
+                            } else {
+                                x.src = ul_show_svg;
+                            }
+                        };
+                    }
                 }
                 let li = document.createElement("li");
                 let c = document.createElement("input");

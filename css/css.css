@@ -349,16 +349,32 @@ body > #main > #nav #search {
     overflow: auto;
 }
 
-.层容器 > #层 > div {
-    display: flex;
-    height: var(--item-height);
+.层容器 > #层 ul {
+    list-style: none;
+    padding-inline-start: 16px;
+    position: relative;
 }
-.层容器 > #层 > div > input[type="text"] {
-    width: 100%;
+.层容器 > #层 ul::before {
+    content: "";
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: -8px;
 }
-.层容器 > #层 > div > textarea {
-    resize: vertical;
-    width: 100%;
+.层容器 > #层 > ul::before {
+    display: none;
+}
+.层容器 > #层 li {
+    position: relative;
+}
+.层容器 > #层 li > img {
+    width: 16px;
+    height: 16px;
+    left: -16px;
+    position: absolute;
+}
+.层ul_hide > ul {
+    display: none;
 }
 
 .侧栏 > #items > #工具 > div {
