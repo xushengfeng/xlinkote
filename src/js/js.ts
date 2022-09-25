@@ -955,8 +955,18 @@ function new_集(pname: string): 集type {
 function get_data() {
     let l = 集;
     let data = [] as data;
-    for (let i of O.childNodes) {
-        let el = <x>i;
+    let els = O.querySelectorAll(":scope > *");
+    let map = [];
+    els.forEach((el: HTMLElement, i) => {
+        if (el.style.zIndex) {
+            map[Number(el.style.zIndex) - 1] = i;
+        } else {
+            map.push(i);
+        }
+    });
+    map = map.flat();
+    for (let i of map) {
+        let el = <x>els[i];
         let type = "X-X";
         data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
     }
@@ -2804,9 +2814,20 @@ class x extends HTMLElement {
 
     get value() {
         let list = [] as data;
-        for (let l of this.children) {
+        let els = this.querySelectorAll(":scope > *");
+        let map = [];
+        els.forEach((el: HTMLElement, i) => {
+            if (el.id == "x-x_bar" || el.id == "x-x_handle") return;
+            if (el.style.zIndex) {
+                map[Number(el.style.zIndex) - 1] = i;
+            } else {
+                map.push(i);
+            }
+        });
+        map = map.flat();
+        for (let n of map) {
+            const l = els[n];
             let el = l as HTMLElement;
-            if (el.id == "x-x_bar" || el.id == "x-x_handle") continue;
             if (el.tagName == "X-X") {
                 list.push({
                     id: el.id,
