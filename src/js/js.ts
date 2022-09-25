@@ -97,7 +97,6 @@ document.getElementById("新建元素").onclick = () => {
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
-        i.remove();
         z.remove(i);
     }
 };
@@ -675,7 +674,6 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             });
             if (!e.shiftKey) {
                 z.remove(i);
-                i.remove();
             }
         }
         console.log(集.中转站);
@@ -855,7 +853,6 @@ document.onkeydown = (e) => {
             break;
         case "Delete":
             for (let el of selected_el) {
-                el.remove();
                 z.remove(el);
             }
             selected_el = [];
@@ -1632,7 +1629,10 @@ class 图层 {
         图层_el.innerHTML = "";
         let w = (data: data, pel: HTMLElement) => {
             let ul = document.createElement("ul");
-            for (let i of data) {
+            for (let n in data) {
+                const i = data[n];
+
+                if (i.id) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
                 if (i.value) {
                     pel.querySelector("span").innerText += " md";
                     return;
@@ -1693,20 +1693,13 @@ class 图层 {
     push(el: x) {
         el.id = el.id === "undefined" || !el.id ? `${uuid().slice(0, 7)}` : el.id;
         O.append(el);
-        this.z.push(el);
         this.reflash(el);
         link(el.id).add();
     }
 
     remove(el: x) {
-        for (let i in this.z) {
-            link(el.id).rm();
-            if (this.z[i] == el) {
-                this.z.splice(Number(i), 1);
-                this.reflash(el);
-                return;
-            }
-        }
+        link(el.id).rm();
+        el.remove();
     }
 
     focus(el: x) {
@@ -1741,31 +1734,41 @@ class 图层 {
     }
 
     get(el: x) {
-        return this.z.indexOf(el);
+        let w = (data: data) => {
+            for (let n in data) {
+                const i = data[n];
+                if (i.id == el.id) return { n: Number(n), data };
+                if (i?.子元素?.length > 0) {
+                    w(i.子元素);
+                }
+            }
+        };
+        return w(当前画布.data);
+    }
+
+    mv(array: data, i: number, t: number) {
+        if (t < 0 || t >= array.length) return;
+        array.splice(t, 0, array.splice(i, 1)[0]);
     }
 
     底层(el: x) {
-        this.remove(el);
-        this.z.unshift(el);
+        let v = this.get(el);
+        this.mv(v.data, v.n, 0);
         this.reflash(el);
     }
     下一层(el: x) {
-        let i = this.get(el);
-        if (i == 0) return;
-        this.remove(el);
-        this.z.splice(i - 1, 0, el);
+        let v = this.get(el);
+        this.mv(v.data, v.n, v.n - 1);
         this.reflash(el);
     }
     上一层(el: x) {
-        let i = this.get(el);
-        if (i == this.z.length - 1) return;
-        this.remove(el);
-        this.z.splice(i + 1, 0, el);
+        let v = this.get(el);
+        this.mv(v.data, v.n, v.n + 1);
         this.reflash(el);
     }
     顶层(el: x) {
-        this.remove(el);
-        this.z.push(el);
+        let v = this.get(el);
+        this.mv(v.data, v.n, v.data.length - 1);
         this.reflash(el);
     }
 }
@@ -2221,7 +2224,6 @@ function to_flex(els: x[], d: "x" | "y") {
         el.style.position = "relative";
         data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
         z.remove(el);
-        el.remove();
     }
     xel.value = data;
 }
@@ -2260,7 +2262,6 @@ function to_none_layout(els: x[]) {
     for (let el of xels) {
         data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
         z.remove(el);
-        el.remove();
     }
     x.value = data;
     reflash_none_layout(x);
@@ -2792,7 +2793,6 @@ class x extends HTMLElement {
         };
 
         d.onclick = () => {
-            this.remove();
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
         };
@@ -3032,7 +3032,6 @@ class markdown extends HTMLElement {
                         x.style.position = "relative";
                         x.value = p.value;
                         z.remove(p);
-                        p.remove();
                         p = x;
                     }
                     let xel = <x>document.createElement("x-x");
