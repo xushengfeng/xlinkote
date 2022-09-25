@@ -1617,42 +1617,69 @@ function to_canvas() {
     });
 }
 
+function get_x_by_id(id: string) {
+    return document.getElementById(id) as x;
+}
+
+const 图层_el = document.getElementById("层");
+
 class 图层 {
     z: Array<x> = [];
 
     聚焦元素 = <x>null;
 
     reflash(el: x, nosave?: boolean) {
-        document.getElementById("层").innerHTML = "";
-        for (let i in this.z) {
-            this.z[i].style.zIndex = i;
+        图层_el.innerHTML = "";
+        let w = (data: data, pel: HTMLElement) => {
+            let ul = document.createElement("ul");
+            for (let i of data) {
+                if (i.value) {
+                    pel.querySelector("span").innerText += " md";
+                    return;
+                }
+                let li = document.createElement("li");
+                let c = document.createElement("input");
+                c.type = "checkbox";
+                let s = document.createElement("span");
+                s.innerText = i.id;
+                li.setAttribute("data-id", i.id);
+                li.append(c);
+                li.append(s);
+                c.onclick = () => {
+                    li.querySelectorAll("input").forEach((el) => {
+                        el.checked = c.checked;
+                    });
+                };
+                s.onclick = () => {
+                    this.focus(get_x_by_id(i.id));
+                    图层_el.querySelectorAll("input").forEach((el) => {
+                        if (el.checked) {
+                            this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
+                        }
+                    });
+                };
+                if (el.id == i.id) {
+                    this.focus(get_x_by_id(i.id));
+                    c.checked = true;
+                }
 
-            let div = document.createElement("div");
-            let r = document.createElement("input");
-            r.type = "radio";
-            r.name = "层";
-            r.value = i;
-            if (this.z[i] == el) {
-                r.checked = true;
-                this.focus(el);
+                if (i?.子元素?.length > 0) {
+                    w(i.子元素, li);
+                }
+                if (ul.firstElementChild) {
+                    ul.firstElementChild.before(li);
+                } else {
+                    ul.append(li);
+                }
             }
-            let t = rename_el();
-            t.value = this.z[i].id;
-            t.onclick = () => {
-                r.checked = true;
-            };
-            t.onchange = () => {
-                this.z[i].id = t.value;
-                this.reflash(this.z[i]);
-            };
-            div.append(r);
-            div.append(t);
-            div.onclick = () => {
-                this.focus(this.z[i]);
-            };
-            document.getElementById("层").insertBefore(div, document.getElementById("层").firstChild);
-        }
-        document.documentElement.style.setProperty("--zest-index", String(this.z.length - 1));
+            if (pel.children.length > 0) {
+                pel.querySelector("span").after(ul);
+            } else {
+                pel.append(ul);
+            }
+        };
+        w(当前画布.data, 图层_el);
+        document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length - 1));
 
         if (!nosave) data_changed();
 
@@ -1684,9 +1711,12 @@ class 图层 {
 
     focus(el: x) {
         this.聚焦元素 = el;
-        for (let l of document.getElementById("层").querySelectorAll("div")) {
-            if (el.id == (<HTMLInputElement>l.querySelector("input[type='text']")).value)
-                (<HTMLInputElement>l.querySelector("input[type='radio']")).checked = true;
+        for (let l of 图层_el.querySelectorAll("input")) {
+            if (el.id == l.parentElement.getAttribute("data-id")) {
+                l.checked = true;
+            } else {
+                l.checked = false;
+            }
         }
         focus_md = null;
         focus_draw_el = null;
