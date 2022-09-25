@@ -439,8 +439,8 @@ body > #main > #nav #search {
 .侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
     display: none;
 }
-.侧栏 > #items > #中转站 > #临时 .xxhandle > div {
-    transform: none;
+.侧栏 > #items > #中转站 > #临时 .xxhandle {
+    display: none;
 }
 
 .侧栏 > #items > #设置 > form input {
