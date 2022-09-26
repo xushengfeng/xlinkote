@@ -1746,6 +1746,8 @@ class 图层 {
     remove(el: x) {
         link(el.id).rm();
         el.remove();
+        get_data();
+        this.reflash(el);
     }
 
     focus(el: x) {
