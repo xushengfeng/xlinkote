@@ -1539,6 +1539,7 @@ function put_assets(url: string, base64: string) {
 // 画板
 function new_draw() {
     let xel = <x>document.createElement("x-x");
+    xel.id = uuid_id();
     xel.style.left = -el_offset(O).x / zoom + "px";
     xel.style.top = -el_offset(O).y / zoom + "px";
     let draw = document.createElement("x-draw") as draw;
