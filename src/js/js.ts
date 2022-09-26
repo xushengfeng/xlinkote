@@ -2133,7 +2133,7 @@ search_el.oninput = search_el.onfocus = () => {
     }
 };
 
-function show_search_l(l: search_result) {
+function show_search_l(l: search_result, cb?: (id: string) => void) {
     search_r.innerHTML = "";
     for (let i of l) {
         for (let j of i.l) {
@@ -2149,6 +2149,7 @@ function show_search_l(l: search_result) {
                     let el = document.getElementById(i.id);
                     move_to_x_link(el as x & xlink);
                     show_search_l([]);
+                    cb(i.id);
                 };
                 div.onpointerenter = () => {
                     let el = document.getElementById(i.id);
@@ -2202,16 +2203,15 @@ function link(key0: string) {
         value(key1?: string, dv?: number) {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
-                if (集.链接[key0][key1].value !== undefined) {
+                if (集.链接[key0][key1]?.value !== undefined) {
                     集.链接[key0][key1].value = Math.max(0, 集.链接[key0][key1].value + (dv || 1));
                     集.链接[key0][key1].time = t;
-                } else if (集.链接[key1][key0].value !== undefined) {
+                } else if (集.链接[key1][key0]?.value !== undefined) {
                     集.链接[key1][key0].value = Math.max(0, 集.链接[key1][key0].value + (dv || 1));
                     集.链接[key1][key0].time = t;
                 } else {
                     // 只存储在边的一个方向上，以时间换空间
-                    集.链接[key0][key1].value = 1;
-                    集.链接[key0][key1].time = t;
+                    集.链接[key0][key1] = { value: 1, time: t };
                 }
             }
         },
@@ -4168,15 +4168,14 @@ class link_value extends HTMLElement {
             }
 
             // 搜索
-            console.log(get_x_by_id(this._id).value[0]);
-            
-
             let l = search(get_x_by_id(this._id).value[0].value, "str");
             console.log(l);
-            show_search_l(l);
+            show_search_l(l, (id) => {
+                link(this._id).add(id);
+            });
 
-            let x = el_offset(this, 画布).x,
-                y = el_offset(this, 画布).y + this.getBoundingClientRect().height + 4;
+            let x = el_offset(this, document.body).x,
+                y = el_offset(this, document.body).y + this.getBoundingClientRect().height + 4;
 
             search_r.style.left = x + "px";
             search_r.style.top = y + "px";
