@@ -2200,6 +2200,17 @@ function link(key0: string) {
                 delete 集.链接[key0];
             }
         },
+        get() {
+            let l = { ...集.链接[key0] };
+            for (let i in 集.链接[0]) {
+                for (let x in 集.链接[i]) {
+                    if (x == key0) {
+                        l[i] = 集.链接[i][x];
+                    }
+                }
+            }
+            return l;
+        },
         value(key1?: string, dv?: number) {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
@@ -4161,9 +4172,9 @@ class link_value extends HTMLElement {
         this.v.onclick = () => {
             // 展示链接
             vl.innerHTML = "";
-            for (let i in 集.链接[this._id]) {
+            for (let i in link(this._id).get()) {
                 let el = document.createElement("div");
-                el.innerText = `#${i} ${集.链接[this._id][i].value}`;
+                el.innerText = `#${i} ${link(this._id).get()[i].value}`;
                 vl.append(el);
                 el.onpointerover = () => {
                     move_to_x_link(get_x_by_id(i));
