@@ -1676,6 +1676,17 @@ class 图层 {
                     li.querySelectorAll("input").forEach((el) => {
                         el.checked = c.checked;
                     });
+                    selected_el = [];
+                    for (let x of O.querySelectorAll(".x-x_selected")) {
+                        x.classList.remove("x-x_selected");
+                    }
+                    图层_el.querySelectorAll("input").forEach((el) => {
+                        if (el.checked) {
+                            let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
+                            selected_el.push(x);
+                            x.classList.add("x-x_selected");
+                        }
+                    });
                 };
                 s.onclick = () => {
                     move_to_x_link(get_x_by_id(i.id));
@@ -1685,10 +1696,18 @@ class 图层 {
                         }
                     });
                 };
-                if (el.id == i.id) {
+                if (el.id == i.id && selected_el.length == 1) {
                     this.focus(get_x_by_id(i.id));
                     c.checked = true;
                 }
+                图层_el.querySelectorAll("input").forEach((el) => {
+                    let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
+                    if (selected_el.includes(x)) {
+                        el.checked = true;
+                    } else {
+                        el.checked = false;
+                    }
+                });
 
                 if (i?.子元素?.length > 0) {
                     w(i.子元素, li);
