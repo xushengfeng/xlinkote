@@ -4163,8 +4163,11 @@ class link_value extends HTMLElement {
             vl.innerHTML = "";
             for (let i in 集.链接[this._id]) {
                 let el = document.createElement("div");
-                el.innerText = String(集.链接[this._id][i].value);
+                el.innerText = `#${i} ${集.链接[this._id][i].value}`;
                 vl.append(el);
+                el.onpointerover = () => {
+                    move_to_x_link(get_x_by_id(i));
+                };
             }
 
             // 搜索
