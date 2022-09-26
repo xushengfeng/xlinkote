@@ -272,7 +272,7 @@ set_模式("设计");
 
 function blur_all() {
     selected_el = [];
-    for (let x of z.z) {
+    for (let x of 画布.querySelectorAll(".x-x_selected")) {
         x.classList.remove("x-x_selected");
     }
 }
@@ -1090,7 +1090,6 @@ function set_data(l: 集type) {
 
 function render_data(inputdata: 画布type) {
     O.innerHTML = "";
-    z.z = [];
     for (const x of inputdata.data) {
         try {
             link(x.id).add();
@@ -1107,9 +1106,6 @@ function render_data(inputdata: 画布type) {
     O.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
     O.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
     zoom_o(inputdata?.p?.zoom || 1);
-    for (const el of O.children) {
-        z.z.push(el as x);
-    }
     z.reflash(O.children[O.children.length - 1] as x, true);
     l_math();
     tmp_s_reflash();
@@ -1135,7 +1131,7 @@ function md2json(t: string) {
                     data: [
                         {
                             id: "上传的md",
-                            style: `left: 0px; top: 0px; z-index: ${z.z.length};`,
+                            style: `left: 0px; top: 0px; z-index: ${当前画布.data.length};`,
                             values: { value: t, edit: true },
                             type: "X-MD",
                             fixed: false,
@@ -1634,8 +1630,6 @@ function get_x_by_id(id: string) {
 const 图层_el = document.getElementById("层");
 
 class 图层 {
-    z: Array<x> = [];
-
     聚焦元素 = <x>null;
 
     reflash(el: x, nosave?: boolean) {
@@ -1716,7 +1710,7 @@ class 图层 {
 
         if (!nosave) data_changed();
 
-        if (this.z.length > 128) {
+        if (O.querySelectorAll("x-x").length > 128) {
             O.style.willChange = "left, top";
         } else {
             O.style.willChange = "";
@@ -1750,7 +1744,7 @@ class 图层 {
         if (el.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
 
         selected_el = [];
-        for (let x of this.z) {
+        for (let x of O.querySelectorAll(".x-x_selected")) {
             x.classList.remove("x-x_selected");
         }
         el.classList.add("x-x_selected");
