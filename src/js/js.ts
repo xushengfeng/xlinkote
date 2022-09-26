@@ -9,6 +9,8 @@ import file_svg from "../../assets/icons/file.svg";
 import handle_svg from "../../assets/icons/handle.svg";
 import ul_hide_svg from "../../assets/icons/ul_hide.svg";
 import ul_show_svg from "../../assets/icons/ul_show.svg";
+import add_svg from "../../assets/icons/add.svg";
+import minus_svg from "../../assets/icons/minus.svg";
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
@@ -4149,15 +4151,15 @@ class link_value extends HTMLElement {
     _id: string;
 
     connectedCallback() {
-        const add_el = document.createElement("div");
-        const down_el = document.createElement("div");
+        const add_el = document.createElement("img");
+        const down_el = document.createElement("img");
         this.v = document.createElement("div");
         const c = document.createElement("div");
         c.append(down_el, this.v, add_el);
         this.append(c);
 
-        add_el.innerText = "+";
-        down_el.innerText = "-";
+        add_el.src = add_svg;
+        down_el.src = minus_svg;
         add_el.onclick = () => {
             link("0").value(this._id, 1);
             this.v.innerText = String(集.链接[0][this._id].value);

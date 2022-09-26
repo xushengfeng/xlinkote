@@ -549,9 +549,16 @@ body > #main > #画布 > x-link-value {
     cursor: pointer !important;
     transform-origin: left bottom;
     gap: 4px;
+    align-items: flex-start;
 }
 body > #main > #画布 > x-link-value > div:nth-child(1) {
     display: flex;
+    align-items: center;
+}
+body > #main > #画布 > x-link-value > div > img {
+    width: 16px;
+    height: 16px;
+    margin: 4px;
 }
 body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
     padding: 0 0.5em;
