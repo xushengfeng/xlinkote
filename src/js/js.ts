@@ -1684,7 +1684,7 @@ class 图层 {
                     });
                 };
                 s.onclick = () => {
-                    this.focus(get_x_by_id(i.id));
+                    move_to_x_link(get_x_by_id(i.id));
                     图层_el.querySelectorAll("input").forEach((el) => {
                         if (el.checked) {
                             this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
