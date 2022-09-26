@@ -1646,7 +1646,13 @@ class 图层 {
 
                 if (i.id) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
                 if (i.value) {
-                    pel.querySelector("span").innerText += " md";
+                    const type = {
+                        "X-MD": "md",
+                        "X-DRAW": "墨迹",
+                        "X-FILE": "文件",
+                        "x-record": "录音机",
+                    };
+                    pel.querySelector("span").innerText += ` ${type[i.type]}`;
                     return;
                 } else {
                     if (!pel.querySelector("img")) {
