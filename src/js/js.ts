@@ -4141,7 +4141,9 @@ class link_value extends HTMLElement {
         const add_el = document.createElement("div");
         const down_el = document.createElement("div");
         this.v = document.createElement("div");
-        this.append(down_el, this.v, add_el);
+        const c = document.createElement("div");
+        c.append(down_el, this.v, add_el);
+        this.append(c);
 
         add_el.innerText = "+";
         down_el.innerText = "-";
@@ -4152,6 +4154,33 @@ class link_value extends HTMLElement {
         down_el.onclick = () => {
             link("0").value(this._id, -1);
             this.v.innerText = String(集.链接[0][this._id].value);
+        };
+
+        const vl = document.createElement("div");
+        this.append(vl);
+        this.v.onclick = () => {
+            // 展示链接
+            vl.innerHTML = "";
+            for (let i in 集.链接[this._id]) {
+                let el = document.createElement("div");
+                el.innerText = String(集.链接[this._id][i].value);
+                vl.append(el);
+            }
+
+            // 搜索
+            console.log(get_x_by_id(this._id).value[0]);
+            
+
+            let l = search(get_x_by_id(this._id).value[0].value, "str");
+            console.log(l);
+            show_search_l(l);
+
+            let x = el_offset(this, 画布).x,
+                y = el_offset(this, 画布).y + this.getBoundingClientRect().height + 4;
+
+            search_r.style.left = x + "px";
+            search_r.style.top = y + "px";
+            search_r.style.width = "200px";
         };
     }
 

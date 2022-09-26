@@ -543,10 +543,18 @@ body > #main > #画布 > #paste {
 
 body > #main > #画布 > x-link-value {
     display: flex;
+    flex-direction: column;
     position: fixed;
     transition: opacity var(--transition);
     cursor: pointer !important;
     transform-origin: left bottom;
+    gap: 4px;
+}
+body > #main > #画布 > x-link-value > div:nth-child(1) {
+    display: flex;
+}
+body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
+    padding: 0 0.5em;
 }
 
 body > #搜索结果 {
