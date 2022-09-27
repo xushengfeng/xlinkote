@@ -2123,6 +2123,15 @@ search_el.oninput = search_el.onfocus = () => {
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
 };
+let op = { x: 0, y: 0 };
+search_r.onpointerenter = () => {
+    op.x = el_offset(O).x;
+    op.y = el_offset(O).y;
+};
+search_r.onpointerleave = () => {
+    O.style.left = op.x + "px";
+    O.style.top = op.y + "px";
+};
 
 function show_search_l(l: search_result, cb?: (id: string) => void) {
     search_r.innerHTML = "";
@@ -2136,7 +2145,7 @@ function show_search_l(l: search_result, cb?: (id: string) => void) {
                 p.append(j.value.slice(0, k[0]), h, j.value.slice(k[1] + 1));
                 div.append(p);
                 search_r.append(div);
-                div.onclick = () => {
+                div.onpointerdown = () => {
                     let el = document.getElementById(i.id);
                     move_to_x_link(el as x & xlink);
                     show_search_l([]);
