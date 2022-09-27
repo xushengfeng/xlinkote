@@ -2237,18 +2237,6 @@ function link(key0: string) {
     };
 }
 
-画布.addEventListener("pointermove", (e) => {
-    if (模式 != "浏览") return;
-    let els = document.elementsFromPoint(e.clientX, e.clientY);
-    for (let el of els) {
-        if (集.链接[el.id]) {
-            link_value_bar.style.left = el_offset(el, 画布).x + "px";
-            link_value_bar.style.top = el_offset(el, document.body).y + "px";
-            link_value_bar.elid = el.id;
-        }
-    }
-});
-
 // 绑定
 function find_root_layout(el: HTMLElement) {
     for (let p of O.querySelectorAll(":scope > x-x")) {
@@ -2867,6 +2855,14 @@ class x extends HTMLElement {
         if (this.getAttribute("value")) {
             this.set_v(JSON.parse(this.getAttribute("value")));
         }
+
+        this.onpointerenter = () => {
+            if (模式 == "浏览") {
+                link_value_bar.style.left = el_offset(this, 画布).x + "px";
+                link_value_bar.style.top = el_offset(this, document.body).y + "px";
+                link_value_bar.elid = this.id;
+            }
+        };
     }
 
     get value() {
@@ -4144,6 +4140,12 @@ class xlink extends HTMLElement {
                 search_r.innerHTML = "";
             };
         }
+        this.onpointerenter = () => {
+            if (模式 != "浏览") return;
+            link_value_bar.style.left = el_offset(this, 画布).x + "px";
+            link_value_bar.style.top = el_offset(this, document.body).y + "px";
+            link_value_bar.elid = this.id;
+        };
     }
 }
 
@@ -4190,7 +4192,23 @@ class link_value extends HTMLElement {
             }
 
             // 搜索
-            let l = search(get_x_by_id(this._id).value[0].value, "str");
+            let el = get_x_by_id(this._id);
+            let v = "";
+            if (el.tagName == "X-X") {
+                let w = (v: data) => {
+                    for (let i of v) {
+                        if (i.type == "X-MD") {
+                            return i.value;
+                        } else {
+                            if (i.子元素) return w(i.子元素);
+                        }
+                    }
+                };
+                v = w(get_x_by_id(this._id).value);
+            } else {
+                v = el.innerText;
+            }
+            let l = search(v, "str");
             console.log(l);
             show_search_l(l, (id) => {
                 link(this._id).add(id);
