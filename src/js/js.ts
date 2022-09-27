@@ -2171,8 +2171,8 @@ function show_g_search() {
 function move_to_x_link(el: x & xlink) {
     let x = el_offset(el, O).x - 画布.offsetWidth / 2,
         y = el_offset(el, O).y - 画布.offsetHeight / 2;
-    O.style.left = -x + "px";
-    O.style.top = -y + "px";
+    O.style.left = -x - (el.offsetWidth * zoom) / 2 + "px";
+    O.style.top = -y - (el.offsetHeight * zoom) / 2 + "px";
     if (el.tagName == "X-X") {
         z.focus(el);
     }
