@@ -2172,14 +2172,17 @@ function show_g_search() {
     search_pel.setAttribute("data-fid", "0");
 }
 
+let now_focus_id = "0";
+
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
     link_value_bar.style.top = el_offset(el, document.body).y + "px";
     link_value_bar.elid = el.id;
-    if (!search_pel.getAttribute("data-fid")) {
+    if (!search_pel.getAttribute("data-fid") && el.id != now_focus_id) {
         search_el.blur();
         search_pel.classList.remove("搜索展示");
+        now_focus_id = el.id;
     }
 }
 
