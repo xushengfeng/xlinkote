@@ -4191,6 +4191,7 @@ class link_value extends HTMLElement {
             // 展示链接
             vl.innerHTML = "";
             for (let i in link(this._id).get()) {
+                if (i == "0") continue;
                 let el = document.createElement("div");
                 el.innerText = `#${i} ${link(this._id).get()[i].value}`;
                 vl.append(el);
