@@ -2149,7 +2149,7 @@ function show_search_l(l: search_result, cb?: (id: string) => void) {
                     let el = document.getElementById(i.id);
                     move_to_x_link(el as x & xlink);
                     show_search_l([]);
-                    cb(i.id);
+                    if (cb) cb(i.id);
                 };
                 div.onpointerenter = () => {
                     let el = document.getElementById(i.id);
