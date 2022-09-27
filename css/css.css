@@ -550,6 +550,7 @@ body > #main > #画布 > x-link-value {
     transform-origin: left bottom;
     gap: 4px;
     align-items: flex-start;
+    padding-bottom: 4px;
 }
 body > #main > #画布 > x-link-value > div:nth-child(1) {
     display: flex;
