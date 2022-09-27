@@ -564,12 +564,18 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
     padding: 0 0.5em;
 }
 
-body > #搜索结果 {
+body > #搜索 {
     position: absolute;
-    top: 0;
-    left: 0;
-    max-height: 50%;
+    top: 30vh;
+    left: calc(50% - 30vw);
+    width: 60vw;
+}
+body > #搜索 > input {
+    width: 100%;
+}
+body > #搜索 > #搜索结果 {
     overflow: auto;
+    max-height: 50vh;
 }
 
 body > #上下文菜单 {

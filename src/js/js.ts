@@ -2115,24 +2115,11 @@ function search(s: string, type: "str" | "regex") {
 
 var search_el = document.getElementById("search") as HTMLInputElement;
 var search_r = document.getElementById("搜索结果");
+var search_pel = document.getElementById("搜索");
 search_el.oninput = search_el.onfocus = () => {
     let l = search(search_el.value, "str");
     console.log(l);
     show_search_l(l);
-
-    let r = search_el.getBoundingClientRect();
-    let x = r.x,
-        w = r.width,
-        y = r.y + r.height;
-    if (window.matchMedia("(orientation: portrait)").matches) {
-        search_r.style.left = "0";
-        search_r.style.top = r.y - 4 - search_r.offsetHeight + "px";
-        search_r.style.width = "100vw";
-    } else {
-        search_r.style.left = x + "px";
-        search_r.style.top = y + 4 + "px";
-        search_r.style.width = w + "px";
-    }
 };
 
 function show_search_l(l: search_result, cb?: (id: string) => void) {
@@ -4193,9 +4180,9 @@ class link_value extends HTMLElement {
             let x = el_offset(this, document.body).x,
                 y = el_offset(this, document.body).y + this.getBoundingClientRect().height + 4;
 
-            search_r.style.left = x + "px";
-            search_r.style.top = y + "px";
-            search_r.style.width = "200px";
+            search_pel.style.left = x + "px";
+            search_pel.style.top = y + "px";
+            search_pel.style.width = "200px";
         };
     }
 
