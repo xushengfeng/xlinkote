@@ -888,8 +888,7 @@ document.onkeydown = (e) => {
         case "k":
             if (e.ctrlKey) {
                 e.preventDefault();
-                e.preventDefault();
-                search_el.focus();
+                show_g_search();
             }
             break;
         case "z":
@@ -2121,6 +2120,9 @@ search_el.oninput = search_el.onfocus = () => {
     console.log(l);
     show_search_l(l);
 };
+search_el.onblur = () => {
+    search_pel.classList.remove("搜索展示");
+};
 
 function show_search_l(l: search_result, cb?: (id: string) => void) {
     search_r.innerHTML = "";
@@ -2147,6 +2149,14 @@ function show_search_l(l: search_result, cb?: (id: string) => void) {
             }
         }
     }
+}
+
+function show_g_search() {
+    search_pel.classList.add("搜索展示");
+    search_pel.style.left = "";
+    search_pel.style.top = "";
+    search_pel.style.width = "";
+    search_el.focus();
 }
 
 function move_to_x_link(el: x & xlink) {
@@ -4183,6 +4193,7 @@ class link_value extends HTMLElement {
             search_pel.style.left = x + "px";
             search_pel.style.top = y + "px";
             search_pel.style.width = "200px";
+            search_pel.classList.add("搜索展示");
         };
     }
 

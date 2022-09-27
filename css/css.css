@@ -569,6 +569,13 @@ body > #搜索 {
     top: 30vh;
     left: calc(50% - 30vw);
     width: 60vw;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+}
+.搜索展示 {
+    opacity: 1 !important;
+    pointer-events: all !important;
 }
 body > #搜索 > input {
     width: 100%;
