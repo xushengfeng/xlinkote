@@ -2122,6 +2122,7 @@ search_el.oninput = search_el.onfocus = () => {
 };
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
+    search_pel.setAttribute("data-fid", "");
 };
 let op = { x: 0, y: 0 };
 search_r.onpointerenter = () => {
@@ -2149,7 +2150,9 @@ function show_search_l(l: search_result, cb?: (id: string) => void) {
                     let el = document.getElementById(i.id);
                     move_to_x_link(el as x & xlink);
                     show_search_l([]);
-                    if (cb) cb(i.id);
+                    let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
+                    console.log(id);
+                    link(id).add(i.id);
                 };
                 div.onpointerenter = () => {
                     let el = document.getElementById(i.id);
@@ -2166,6 +2169,7 @@ function show_g_search() {
     search_pel.style.top = "";
     search_pel.style.width = "";
     search_el.focus();
+    search_pel.setAttribute("data-fid", "0");
 }
 
 function move_to_x_link(el: x & xlink) {
@@ -4210,9 +4214,7 @@ class link_value extends HTMLElement {
             }
             let l = search(v, "str");
             console.log(l);
-            show_search_l(l, (id) => {
-                link(this._id).add(id);
-            });
+            show_search_l(l);
 
             let x = el_offset(this, document.body).x,
                 y = el_offset(this, document.body).y + this.getBoundingClientRect().height + 4;
@@ -4229,6 +4231,9 @@ class link_value extends HTMLElement {
             this._id = id;
             this.v.innerText = String(集.链接[0][id].value);
         }
+    }
+    get elid() {
+        return this._id;
     }
 }
 
