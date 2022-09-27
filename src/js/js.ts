@@ -2172,6 +2172,17 @@ function show_g_search() {
     search_pel.setAttribute("data-fid", "0");
 }
 
+function show_link_value_bar(el: x | xlink) {
+    if (模式 != "浏览") return;
+    link_value_bar.style.left = el_offset(el, 画布).x + "px";
+    link_value_bar.style.top = el_offset(el, document.body).y + "px";
+    link_value_bar.elid = el.id;
+    if (!search_pel.getAttribute("data-fid")) {
+        search_el.blur();
+        search_pel.classList.remove("搜索展示");
+    }
+}
+
 function move_to_x_link(el: x & xlink) {
     let x = el_offset(el, O).x - 画布.offsetWidth / 2,
         y = el_offset(el, O).y - 画布.offsetHeight / 2;
@@ -2861,11 +2872,7 @@ class x extends HTMLElement {
         }
 
         this.onpointerenter = () => {
-            if (模式 == "浏览") {
-                link_value_bar.style.left = el_offset(this, 画布).x + "px";
-                link_value_bar.style.top = el_offset(this, document.body).y + "px";
-                link_value_bar.elid = this.id;
-            }
+            show_link_value_bar(this);
         };
     }
 
@@ -4145,10 +4152,7 @@ class xlink extends HTMLElement {
             };
         }
         this.onpointerenter = () => {
-            if (模式 != "浏览") return;
-            link_value_bar.style.left = el_offset(this, 画布).x + "px";
-            link_value_bar.style.top = el_offset(this, document.body).y + "px";
-            link_value_bar.elid = this.id;
+            show_link_value_bar(this);
         };
     }
 }
