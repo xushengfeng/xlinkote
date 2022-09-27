@@ -2134,7 +2134,7 @@ search_r.onpointerleave = () => {
     O.style.top = op.y + "px";
 };
 
-function show_search_l(l: search_result, cb?: (id: string) => void) {
+function show_search_l(l: search_result) {
     search_r.innerHTML = "";
     for (let i of l) {
         for (let j of i.l) {
@@ -4220,6 +4220,11 @@ class link_value extends HTMLElement {
             let l = search(v, "str");
             console.log(l);
             show_search_l(l);
+
+            search_el.value = v;
+            search_el.focus();
+            search_el.selectionStart = 0;
+            search_el.selectionEnd = search_el.value.length;
 
             let x = el_offset(this, document.body).x,
                 y = el_offset(this, document.body).y + this.getBoundingClientRect().height + 4;
