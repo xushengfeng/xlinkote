@@ -2183,6 +2183,7 @@ function show_link_value_bar(el: x | xlink) {
         search_el.blur();
         search_pel.classList.remove("搜索展示");
         now_focus_id = el.id;
+        link_value_bar.querySelector(":scope > div:nth-child(2)").innerHTML = "";
     }
 }
 
