@@ -2376,27 +2376,6 @@ var defaultRender =
     function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
     };
-md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
-    let aIndex = tokens[idx].attrIndex("id");
-    if (aIndex < 0) {
-        tokens[idx].attrPush(["id", tokens[idx + 1].content]);
-    }
-    return defaultRender(tokens, idx, options, env, self);
-};
-md.renderer.rules.strong_open = function (tokens, idx, options, env, self) {
-    let aIndex = tokens[idx].attrIndex("id");
-    if (aIndex < 0) {
-        tokens[idx].attrPush(["id", tokens[idx + 1].content]);
-    }
-    return defaultRender(tokens, idx, options, env, self);
-};
-md.renderer.rules.em_open = function (tokens, idx, options, env, self) {
-    let aIndex = tokens[idx].attrIndex("id");
-    if (aIndex < 0) {
-        tokens[idx].attrPush(["id", tokens[idx + 1].content]);
-    }
-    return defaultRender(tokens, idx, options, env, self);
-};
 let f = md.renderer.rules.fence;
 import mermaid from "mermaid";
 md.renderer.rules.fence = function (tokens, idx, options, env, self) {
