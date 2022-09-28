@@ -2265,13 +2265,22 @@ function link(key0: string) {
             }
             return l;
         },
-        value(key1?: string, dv?: number) {
+        value(key1?: string, dv?: number, force?: boolean) {
+            let dt = 5 * 60 * 1000; // 5分钟内增值无效
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
                 if (集.链接[key0][key1]?.value !== undefined) {
+                    if (!force) {
+                        let nt = new Date().getTime();
+                        if (nt - 集.链接[key0][key1].time < dt) return;
+                    }
                     集.链接[key0][key1].value = Math.max(0, 集.链接[key0][key1].value + (dv || 1));
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0]?.value !== undefined) {
+                    if (!force) {
+                        let nt = new Date().getTime();
+                        if (nt - 集.链接[key1][key0].time < dt) return;
+                    }
                     集.链接[key1][key0].value = Math.max(0, 集.链接[key1][key0].value + (dv || 1));
                     集.链接[key1][key0].time = t;
                 } else {
@@ -4187,11 +4196,11 @@ class link_value extends HTMLElement {
         add_el.src = add_svg;
         down_el.src = minus_svg;
         add_el.onclick = () => {
-            link("0").value(this._id, 1);
+            link("0").value(this._id, 1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
         };
         down_el.onclick = () => {
-            link("0").value(this._id, -1);
+            link("0").value(this._id, -1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
         };
 
