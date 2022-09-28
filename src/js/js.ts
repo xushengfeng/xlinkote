@@ -2192,7 +2192,7 @@ let now_focus_id = "0";
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
-    link_value_bar.style.top = el_offset(el, document.body).y + "px";
+    link_value_bar.style.top = el_offset(el, 画布).y - link_value_bar.querySelector("div").offsetHeight + "px";
     link_value_bar.elid = el.id;
     if (!search_pel.getAttribute("data-fid") && el.id != now_focus_id) {
         search_el.blur();
