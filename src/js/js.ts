@@ -382,6 +382,7 @@ const 临时中转站 = document.getElementById("临时");
 
 var o_e: MouseEvent;
 var o_rect;
+var o_vb_sb = { x0: 0, y0: 0, x1: 0, y1: 0 };
 var move: boolean = false;
 var select_id = "";
 var fxsd_el = document.getElementById("方向锁定");
@@ -470,6 +471,12 @@ document.ontouchstart = (e) => {
     ) {
         o_touch_e = o_touch_zoom_e = e;
         o_rect = { x: el_offset(O).x, y: el_offset(O).y };
+        o_vb_sb = {
+            x0: el_offset(link_value_bar).x,
+            y0: el_offset(link_value_bar).y,
+            x1: el_offset(search_pel).x,
+            y1: el_offset(search_pel).y,
+        };
         o_zoom = zoom;
         if (e.targetTouches.length == 1) {
         } else if (e.targetTouches.length == 2) {
@@ -505,14 +512,19 @@ var pointer_move = true;
 var touch_move = (e: TouchEvent) => {
     if (o_touch_e) {
         if (pointer_move) {
-            let x =
-                    o_rect.x +
-                    (fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0),
-                y =
-                    o_rect.y +
-                    (fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0);
+            let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0,
+                dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
+            let x = o_rect.x + dx,
+                y = o_rect.y + dy;
             O.style.left = x + "px";
             O.style.top = y + "px";
+
+            link_value_bar.style.left = o_vb_sb.x0 + dx + "px";
+            link_value_bar.style.top = o_vb_sb.y0 + dy + "px";
+            if (!search_pel.getAttribute("data-fid")) {
+                search_pel.style.left = o_vb_sb.x1 + dx + "px";
+                search_pel.style.top = o_vb_sb.y1 + dy + "px";
+            }
         }
     }
 };
