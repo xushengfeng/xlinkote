@@ -112,6 +112,10 @@ document.getElementById("重做").onclick = () => {
     undo(false);
 };
 
+document.getElementById("搜索操作").onclick = () => {
+    show_g_search();
+};
+
 var 侧栏 = document.getElementById("侧栏");
 
 侧栏.onclick = (e) => {
