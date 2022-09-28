@@ -93,10 +93,10 @@ body > #main > #nav > #draw_bar {
 }
 
 #color_yl {
-    left: 4px;
-    top: 4px;
-    width: 24px;
-    height: 24px;
+    left: var(--icon-margin);
+    top: var(--icon-margin);
+    width: var(--icon-size);
+    height: var(--icon-size);
     position: relative;
     box-sizing: border-box;
 }
