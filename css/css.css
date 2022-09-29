@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     --bg-color1: rgba(235, 235, 235, 0.6);
@@ -618,6 +622,9 @@ body > #toast {
 x-sinppet {
     float: left;
     overflow: auto;
+}
+x-sinppet > div {
+    @apply flex flex-wrap;
 }
 
 .add_tag {
