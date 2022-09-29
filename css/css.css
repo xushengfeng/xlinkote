@@ -668,6 +668,10 @@ x-md > #h *:hover > .handle {
     opacity: 1;
 }
 
+mjx-container svg {
+    display: inline;
+}
+
 .show_md {
     display: inline-block;
 }
