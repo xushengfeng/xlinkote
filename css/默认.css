@@ -49,7 +49,6 @@ select {
 
 body > #main > #nav {
     background-color: var(--bg1);
-    outline: 1px solid var(--color5);
 }
 
 .模式突出 {
@@ -131,9 +130,6 @@ x-draw-width > div > div {
 body > #main > #画布 {
     background-color: var(--bg1);
 }
-body > #main > #画布 > #导航 > #缩放 {
-    padding: 0 4px;
-}
 body > #main > #层容器 > #层 input[type="radio"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -160,13 +156,6 @@ body > #main > #画布 > #选择 > div {
     border: 1px solid #000;
 }
 
-/* 导航 */
-body > #main > #画布 > #导航 > div {
-    background-color: var(--color5);
-    border-radius: 8px;
-    outline: none;
-}
-
 body > #main > #画布 > x-link-value > div {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
@@ -181,7 +170,7 @@ body > #搜索 {
     border-radius: 4px;
     box-sizing: border-box;
 }
-body  > #搜索> #搜索结果 > div {
+body > #搜索 > #搜索结果 > div {
     margin: 4px;
     cursor: pointer;
 }

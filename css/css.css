@@ -521,23 +521,13 @@ body > #main > #画布 > #选择 > div {
 }
 
 /* 导航 */
-body > #main > #画布 > #导航 {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    display: flex;
-}
 body > #main > #画布 > #导航 > div {
-    width: 16px;
-    height: 16px;
-    border: none;
-    margin-left: 8px;
+    @apply w-4 h-4 rounded-lg bg-gray-100;
     cursor: pointer;
     position: relative;
 }
 body > #main > #画布 > #导航 > div > .icon {
-    width: 16px;
-    height: 16px;
+    @apply w-4 h-4;
 }
 body > #main > #画布 > #导航 > #缩放 {
     width: auto;
@@ -875,12 +865,10 @@ x-file > div > * {
         --item-icon-margin: 6px;
     }
     #导航 > div {
-        width: 32px;
-        height: 32px;
+        @apply w-8 h-8 !important;
     }
     #导航 > div > .icon {
-        width: 32px;
-        height: 32px;
+        @apply w-8 h-8 !important;
     }
     x-sinppet > div {
         zoom: 1.5;
