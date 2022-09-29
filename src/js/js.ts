@@ -1145,6 +1145,7 @@ function render_data(inputdata: 画布type) {
     tmp_s_reflash();
 }
 
+set_css("./md.css");
 function set_css(t: string) {
     if (t.includes("\n")) {
     } else {
