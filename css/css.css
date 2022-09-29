@@ -35,6 +35,16 @@
     -webkit-user-drag: none;
 }
 
+.icon-pel > div {
+    @apply icon-m;
+}
+.icon-m {
+    @apply h-8 w-8 relative;
+}
+.icon-m > .icon {
+    @apply h-6 w-6 top-1 left-1;
+}
+
 html {
     height: 100%;
 }
@@ -72,21 +82,8 @@ body > #main > #nav > div:nth-child(2)::-webkit-scrollbar,
 body > #main > #nav > div:nth-child(3)::-webkit-scrollbar {
     display: none;
 }
-body > #main > #nav > div:nth-child(1) > div,
-body > #main > #nav > div:nth-child(2) > div,
-body > #main > #nav > div:nth-child(3) > div {
-    cursor: pointer;
-    position: relative;
-    min-width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-}
-body > #main > #nav > div:nth-child(1) > div > .icon,
-body > #main > #nav > div:nth-child(2) > div > .icon,
-body > #main > #nav > div:nth-child(3) > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
+body > #main > #nav > div > div {
+    @apply icon-m;
 }
 body > #main > #nav > div:nth-child(1) #upload_i {
     display: none;
@@ -250,20 +247,6 @@ body > #main > #nav #search {
     flex-direction: column;
 }
 
-.侧栏 > #tabs > div {
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-    position: relative;
-    cursor: pointer;
-}
-
-.侧栏 > #tabs > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
-}
-
 .侧栏 > #items {
     flex-grow: 1;
     overflow: hidden;
@@ -331,19 +314,6 @@ body > #main > #nav #search {
     position: sticky;
     top: 0;
 }
-.侧栏 > #items > #层容器 > div:nth-child(1) > div {
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-    position: relative;
-    float: left;
-    cursor: pointer;
-}
-.侧栏 > #items > #层容器 > div:nth-child(1) > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
-}
 
 .侧栏 > #items > #层容器 > div:nth-child(2) {
     position: sticky;
@@ -382,31 +352,11 @@ body > #main > #nav #search {
 }
 
 .侧栏 > #items > #工具 > div {
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-    position: relative;
-    float: left;
-    cursor: pointer;
-}
-.侧栏 > #items > #工具 > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
+    @apply float-left;
 }
 
 .侧栏 > #items > #markdown > div {
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-    position: relative;
-    float: left;
-    cursor: pointer;
-}
-.侧栏 > #items > #markdown > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
+    @apply float-left;
 }
 .侧栏 > #items > #中转站 {
     display: flex;
@@ -415,18 +365,6 @@ body > #main > #nav #search {
 .侧栏 > #items > #中转站 > #常驻 {
     display: flex;
     flex-wrap: wrap;
-}
-.侧栏 > #items > #中转站 > #常驻 > div {
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-    position: relative;
-    cursor: pointer;
-}
-.侧栏 > #items > #中转站 > #常驻 > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
 }
 .侧栏 > #items > #中转站 > #临时 {
     flex-grow: 1;
@@ -863,6 +801,12 @@ x-file > div > * {
         --item-height: 36px;
         --item-icon: 24px;
         --item-icon-margin: 6px;
+    }
+    .icon-m {
+        @apply h-12 w-12 relative !important;
+    }
+    .icon-m > .icon {
+        @apply h-8 w-8 top-2 left-2 !important;
     }
     #导航 > div {
         @apply w-8 h-8 !important;
