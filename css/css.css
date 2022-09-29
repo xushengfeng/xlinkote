@@ -68,18 +68,13 @@ body > #main > #nav {
     width: 100vw;
     display: flex;
 }
-body > #main > #nav > div:nth-child(1),
-body > #main > #nav > div:nth-child(2),
-body > #main > #nav > div:nth-child(3) {
+body > #main > #nav > div {
     display: flex;
     align-items: center;
     box-sizing: border-box;
     height: var(--icon-p-b-size);
-    /* overflow-x: auto; */
 }
-body > #main > #nav > div:nth-child(1)::-webkit-scrollbar,
-body > #main > #nav > div:nth-child(2)::-webkit-scrollbar,
-body > #main > #nav > div:nth-child(3)::-webkit-scrollbar {
+body > #main > #nav > div::-webkit-scrollbar {
     display: none;
 }
 body > #main > #nav > div > div {
@@ -519,20 +514,6 @@ body > #搜索 > input {
 body > #搜索 > #搜索结果 {
     overflow: auto;
     max-height: 50vh;
-}
-
-body > #上下文菜单 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-}
-
-.上下文菜单展示 {
-    opacity: 1 !important;
-    pointer-events: all !important;
 }
 
 body > #toast {

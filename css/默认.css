@@ -130,27 +130,6 @@ x-draw-width > div > div {
 body > #main > #画布 {
     background-color: var(--bg1);
 }
-body > #main > #层容器 > #层 input[type="radio"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    border: 2px solid #eee;
-    transition: var(--transition);
-    margin: 0;
-    vertical-align: middle;
-}
-body > #main > #层容器 > #层 input[type="radio"]:checked {
-    border: 6px solid #000;
-}
-body > #main > #层容器 > #层 input[type="text"] {
-    background-color: #0000;
-    padding: 0;
-    vertical-align: middle;
-}
-
 /* 画布 */
 body > #main > #画布 > #选择 > div {
     border: 1px solid #000;
