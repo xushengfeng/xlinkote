@@ -2072,6 +2072,17 @@ show_setting();
 const about = document.getElementById("about");
 (<HTMLElement>about.querySelector("#version")).innerText = packagejson.version;
 
+document.getElementById("app_update").onclick = async () => {
+    const cacheKeepList = ["v2"];
+    const keyList = await caches.keys();
+    const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
+    await Promise.all(
+        cachesToDelete.map(async (key) => {
+            await caches.delete(key);
+        })
+    );
+};
+
 // 搜索
 import Fuse from "fuse.js";
 type search_result = { id: string; l: readonly Fuse.FuseResultMatch[]; n?: number; type?: "str" | "regex" }[];
