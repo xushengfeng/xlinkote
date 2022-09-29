@@ -1,4 +1,4 @@
-import "../../css/css.css"
+import "../../css/css.css";
 
 import x_y_svg from "../../assets/icons/x_y.svg";
 import y_svg from "../../assets/icons/y.svg";
@@ -1118,6 +1118,8 @@ function set_data(l: 集type) {
     }
     location.hash = `#${集.meta.UUID}`;
     document.title = get_title();
+
+    set_css("./md.css");
 }
 
 function render_data(inputdata: 画布type) {
@@ -1141,6 +1143,24 @@ function render_data(inputdata: 画布type) {
     z.reflash(O.children[O.children.length - 1] as x, true);
     l_math();
     tmp_s_reflash();
+}
+
+function set_css(t: string) {
+    if (t.includes("\n")) {
+    } else {
+        fetch(t)
+            .then((v) => v.text())
+            .then((v) => add_md(v));
+    }
+    function add_md(text: string) {
+        text = text.replace(/^.*(\n*)[,{]/gm, "x-md > #h $&");
+        add_css(text);
+    }
+    function add_css(text: string) {
+        let style = document.createElement("style");
+        style.innerHTML = text;
+        document.body.append(style);
+    }
 }
 
 function json2md(obj: 集type) {
