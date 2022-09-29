@@ -32,7 +32,9 @@ function uuid_id() {
 }
 
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
+    if (import.meta.env.PROD) {
+        navigator.serviceWorker.register("/sw.js");
+    }
 }
 
 import pack from "../../package.json?raw";

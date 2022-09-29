@@ -26,10 +26,6 @@ self.addEventListener("fetch", async (e) => {
                 // 默认本地加载
                 let r = await caches.match(e.request);
                 if (r) {
-                    setTimeout(async () => {
-                        let response = await fetch(e.request);
-                        if (response.ok) await cache.put(e.request, response.clone());
-                    }, 0);
                     return r;
                 } else {
                     let response = await fetch(e.request);
