@@ -4161,8 +4161,6 @@ class xdraw_width extends HTMLElement {
 
 window.customElements.define("x-draw-width", xdraw_width);
 
-const link_bar = document.getElementById("link_bar");
-const link_ids = document.getElementById("link_ids");
 class xlink extends HTMLElement {
     constructor() {
         super();
@@ -4172,39 +4170,6 @@ class xlink extends HTMLElement {
         var id = this.getAttribute("id");
         if (!集.链接[id]) {
             link(id).add();
-            let r = search_el.getBoundingClientRect();
-            let x = r.x,
-                w = r.width,
-                y = r.y + r.height;
-            if (window.matchMedia("(orientation: portrait)").matches) {
-                search_r.style.left = "0";
-                search_r.style.top = r.y - 4 - search_r.offsetHeight + "px";
-                search_r.style.width = "100vw";
-            } else {
-                search_r.style.left = x + "px";
-                search_r.style.top = y + 4 + "px";
-                search_r.style.width = w + "px";
-            }
-            search_r.innerHTML = "";
-            for (let i in 集.链接) {
-                if (i == id) continue;
-                let d = document.createElement("div");
-                let t = document.createElement("span");
-                let idv = document.createElement("span");
-                t.innerText = document.getElementById(i).innerText;
-                idv.innerText = i;
-                d.append(t, idv);
-                search_r.append(d);
-                d.onclick = () => {
-                    link(id).add(i);
-                    search_r.innerHTML = "";
-                };
-            }
-            let cl = document.createElement("div");
-            search_r.append(cl);
-            cl.onclick = () => {
-                search_r.innerHTML = "";
-            };
         }
         this.onpointerenter = () => {
             show_link_value_bar(this);
