@@ -18,6 +18,7 @@
     --item-icon: 24px;
     --item-icon-margin: 0;
     --zest-index: 0;
+    --x-x-bar-w: 16px;
     --x-x-handle-d: block;
     --x-x-handle-w: 8px;
     --x-x-handle-o: calc(50% - var(--x-x-handle-w) / 2);
@@ -563,7 +564,7 @@ x-x > * {
 x-x > #x-x_bar {
     display: flex;
     position: absolute;
-    top: -16px;
+    top: calc(-1 * var(--x-x-bar-w));
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--transition);
@@ -572,13 +573,13 @@ x-x > #x-x_bar {
     transform-origin: left bottom;
 }
 x-x > #x-x_bar > div {
-    width: 16px;
-    height: 16px;
+    width: var(--x-x-bar-w);
+    height: var(--x-x-bar-w);
     position: relative;
 }
 x-x > #x-x_bar > div > .icon {
-    width: 16px;
-    height: 16px;
+    width: var(--x-x-bar-w);
+    height: var(--x-x-bar-w);
 }
 x-x > #x-x_bar > div:nth-child(2) {
     display: none;
@@ -790,6 +791,8 @@ x-link {
         --item-height: 36px;
         --item-icon: 24px;
         --item-icon-margin: 6px;
+        --x-x-handle-w: 16px;
+        --x-x-bar-w: 20px;
     }
     .icon-m {
         @apply h-12 w-12 relative !important;
