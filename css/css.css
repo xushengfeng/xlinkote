@@ -463,7 +463,7 @@ body > #main > #画布 > #导航 > div > .icon {
     @apply w-4 h-4;
 }
 body > #main > #画布 > #导航 > #缩放 {
-    width: auto;
+    width: auto !important;
     font-size: small;
 }
 body > #main > #画布 > #paste {
@@ -798,10 +798,10 @@ x-link {
         @apply h-8 w-8 top-2 left-2 !important;
     }
     #导航 > div {
-        @apply w-8 h-8 !important;
+        @apply w-6 h-6 !important;
     }
     #导航 > div > .icon {
-        @apply w-8 h-8 !important;
+        @apply w-6 h-6 !important;
     }
     x-sinppet > div {
         zoom: 1.5;
