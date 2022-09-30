@@ -27,3 +27,7 @@ h6 {
     font-size: 0.67em;
     font-weight: bold;
 }
+
+x-link {
+    color: #0000cc;
+}
