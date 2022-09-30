@@ -3589,7 +3589,7 @@ class file extends HTMLElement {
         let f = 集.assets[this._value.id];
         if (!f) return;
         let type = f.base64.match(/data:(.*?);/)[1].split("/");
-        if (type[0] != "image" && type[0] != "video") this._value.r = false;
+        if (type[0] != "image" && type[0] != "video" && type[1] != "pdf") this._value.r = false;
         this.div.innerHTML = "";
         if (this._value.r) {
             this.div.classList.remove("file");
@@ -3603,6 +3603,11 @@ class file extends HTMLElement {
                 video.controls = true;
                 this.div.append(video);
                 video.src = f.base64;
+            }
+            if (type[1] == "pdf") {
+                let pdf = document.createElement("x-pdf") as pdf_viewer;
+                this.div.append(pdf);
+                pdf.src = f.base64;
             }
         } else {
             this.div.classList.add("file");
@@ -3624,6 +3629,67 @@ class file extends HTMLElement {
 }
 
 window.customElements.define("x-file", file);
+
+import * as pdfjsLib from "pdfjs-dist";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js";
+
+class pdf_viewer extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value: string;
+    div: HTMLDivElement;
+
+    connectedCallback() {
+        this.div = document.createElement("div");
+        this.append(this.div);
+        if (this.getAttribute("value")) {
+            this._value = this.getAttribute("value");
+            this.set_m();
+        }
+    }
+
+    set_m() {
+        var loadingTask = pdfjsLib.getDocument(this._value);
+        loadingTask.promise.then((pdf) => {
+            pdf.getPage(1).then((page) => {
+                console.log(page);
+                var scale = 1.5;
+                var viewport = page.getViewport({ scale: scale });
+                var outputScale = window.devicePixelRatio || 1;
+
+                var canvas = document.createElement("canvas");
+                this.div.append(canvas);
+                var context = canvas.getContext("2d");
+
+                canvas.width = Math.floor(viewport.width * outputScale);
+                canvas.height = Math.floor(viewport.height * outputScale);
+                canvas.style.width = Math.floor(viewport.width) + "px";
+                canvas.style.height = Math.floor(viewport.height) + "px";
+
+                var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+                var renderContext = {
+                    canvasContext: context,
+                    transform: transform,
+                    viewport: viewport,
+                };
+                page.render(renderContext);
+            });
+        });
+    }
+
+    get src() {
+        return this._value;
+    }
+    set src(s) {
+        this._value = s;
+        this.set_m();
+    }
+}
+
+window.customElements.define("x-pdf", pdf_viewer);
 class draw extends HTMLElement {
     constructor() {
         super();
