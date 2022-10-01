@@ -3686,6 +3686,9 @@ class pdf_viewer extends HTMLElement {
         this.pages.append(page_bar);
         this.pages.append(pages);
         pages.classList.add("hide_pdf_pages");
+        pages.onwheel = (e) => {
+            e.stopPropagation();
+        };
         this.pages.onclick = () => {
             pages.classList.toggle("hide_pdf_pages");
         };
