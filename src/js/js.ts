@@ -3739,7 +3739,7 @@ class pdf_viewer extends HTMLElement {
         if (this.old_id != this._value.id) {
             this.old_id = this._value.id;
             let div = this.pages.querySelector("#pages");
-            for (let i = 1; i < pdf.numPages; i++) {
+            for (let i = 1; i <= pdf.numPages; i++) {
                 let page = document.createElement("div");
                 div.append(page);
                 page.onclick = () => {
@@ -3750,7 +3750,7 @@ class pdf_viewer extends HTMLElement {
                 p.innerText = `${i}`;
                 page.append(p);
             }
-            for (let i = 1; i < pdf.numPages; i++) {
+            for (let i = 1; i <= pdf.numPages; i++) {
                 pdf.getPage(i).then(async (page) => {
                     let viewport = page.getViewport({ scale: 0.1 });
 
