@@ -779,12 +779,15 @@ x-file > div > * {
     height: 100%;
 }
 
-x-pdf > div {
+x-pdf {
+    position: relative;
+}
+x-pdf > div:nth-child(1) {
     display: flex;
     gap: 4px;
     position: absolute;
 }
-x-pdf > div > div {
+x-pdf > div:nth-child(1) > div {
     width: 16px;
     height: 16px;
 }
@@ -793,6 +796,21 @@ x-pdf > canvas {
     height: 100% !important;
 }
 
+x-pdf > div:nth-child(3) {
+    position: absolute;
+    top: 0;
+    transform-origin: 0% 0%;
+}
+
+x-pdf > div:nth-child(3) > span {
+    position: absolute;
+    white-space: nowrap;
+    color: transparent;
+}
+x-pdf > div:nth-child(3) > span::selection {
+    color: transparent;
+    background-color: #0000ff55;
+}
 x-link {
     @apply cursor-pointer;
 }

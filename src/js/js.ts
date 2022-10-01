@@ -3649,6 +3649,7 @@ class pdf_viewer extends HTMLElement {
     _value: { id: string; page: number };
     div: HTMLDivElement;
     canvas: HTMLCanvasElement;
+    text: HTMLElement;
 
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
@@ -3674,6 +3675,8 @@ class pdf_viewer extends HTMLElement {
         this.div.append(per, next);
         this.canvas = document.createElement("canvas");
         this.append(this.canvas);
+        this.text = document.createElement("div");
+        this.append(this.text);
         if (this.getAttribute("value")) {
             this._value = JSON.parse(this.getAttribute("value"));
             this.set_m();
@@ -3682,8 +3685,7 @@ class pdf_viewer extends HTMLElement {
 
     async set_m() {
         let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
-        pdf.getPage(this._value.page).then((page) => {
-            console.log(page);
+        pdf.getPage(this._value.page).then(async (page) => {
             var scale = 1.5;
             var viewport = page.getViewport({ scale: scale });
             var outputScale = window.devicePixelRatio * zoom || 1;
@@ -3704,6 +3706,13 @@ class pdf_viewer extends HTMLElement {
                 viewport: viewport,
             };
             page.render(renderContext);
+
+            this.text.style.transform = `scaleX(${canvas.offsetWidth / viewport.width}) scaleY(${
+                canvas.offsetHeight / viewport.height
+            })`;
+            this.text.innerHTML = "";
+            let text = await page.getTextContent();
+            pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text });
         });
     }
 
