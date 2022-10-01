@@ -1580,7 +1580,12 @@ import CryptoJS from "crypto-js";
 function put_assets(url: string, base64: string) {
     let id = uuid().slice(0, 7);
     let sha = "";
-    if (base64) sha = CryptoJS.SHA256(base64).toString();
+    if (base64) {
+        sha = CryptoJS.SHA256(base64).toString();
+        for (let id in 集.assets) {
+            if (集.assets[id].sha == sha) return id;
+        }
+    }
     集.assets[id] = { url, base64, sha };
     return id;
 }
