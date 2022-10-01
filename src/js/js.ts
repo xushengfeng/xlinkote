@@ -3606,8 +3606,9 @@ class file extends HTMLElement {
             }
             if (type[1] == "pdf") {
                 let pdf = document.createElement("x-pdf") as pdf_viewer;
-                this.div.append(pdf);
-                pdf.src = f.base64;
+                this.parentElement.append(pdf);
+                pdf.value = JSON.stringify({ id: this._value.id, page: 1 });
+                this.remove();
             }
         } else {
             this.div.classList.add("file");
@@ -3640,33 +3641,49 @@ class pdf_viewer extends HTMLElement {
         super();
     }
 
-    _value: string;
+    _value: { id: string; page: number };
     div: HTMLDivElement;
+    canvas: HTMLCanvasElement;
 
+    load_pdf = async () => {
+        let f = 集.assets[this._value.id];
+        if (!f) return;
+        var loadingTask = pdfjsLib.getDocument(f.base64);
+        pdf_cache[this._value.id] = await loadingTask.promise;
+        return pdf_cache[this._value.id];
+    };
     connectedCallback() {
         this.div = document.createElement("div");
         this.append(this.div);
+        let per = document.createElement("div"),
+            next = document.createElement("div");
+        per.onclick = () => {
+            this._value.page = Math.max(1, this._value.page - 1);
+            this.set_m();
+        };
+        next.onclick = async () => {
+            let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
+            this._value.page = Math.min(pdf.numPages, this._value.page + 1);
+            this.set_m();
+        };
+        this.div.append(per, next);
+        this.canvas = document.createElement("canvas");
+        this.append(this.canvas);
         if (this.getAttribute("value")) {
-            this._value = this.getAttribute("value");
+            this._value = JSON.parse(this.getAttribute("value"));
             this.set_m();
         }
     }
 
     async set_m() {
-        var load_pdf = async () => {
-            var loadingTask = pdfjsLib.getDocument(this._value);
-            pdf_cache[this._value] = await loadingTask.promise;
-            return pdf_cache[this._value];
-        };
-        let pdf = pdf_cache[this._value] || (await load_pdf());
-        pdf.getPage(1).then((page) => {
+        let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
+        pdf.getPage(this._value.page).then((page) => {
             console.log(page);
             var scale = 1.5;
             var viewport = page.getViewport({ scale: scale });
-            var outputScale = window.devicePixelRatio || 1;
+            var outputScale = window.devicePixelRatio * zoom || 1;
 
-            var canvas = document.createElement("canvas");
-            this.div.append(canvas);
+            var canvas = this.canvas;
             var context = canvas.getContext("2d");
 
             canvas.width = Math.floor(viewport.width * outputScale);
@@ -3685,11 +3702,11 @@ class pdf_viewer extends HTMLElement {
         });
     }
 
-    get src() {
-        return this._value;
+    get value() {
+        return JSON.stringify(this._value);
     }
-    set src(s) {
-        this._value = s;
+    set value(s) {
+        this._value = JSON.parse(s);
         this.set_m();
     }
 }

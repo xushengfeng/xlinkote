@@ -779,6 +779,15 @@ x-file > div > * {
     height: 100%;
 }
 
+x-pdf > div {
+    display: flex;
+    gap: 4px;
+}
+x-pdf > div > div {
+    width: 16px;
+    height: 16px;
+}
+
 x-link {
     @apply cursor-pointer;
 }
