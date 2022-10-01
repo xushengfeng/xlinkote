@@ -3732,47 +3732,49 @@ class pdf_viewer extends HTMLElement {
             })`;
             this.text.innerHTML = "";
             let text = await page.getTextContent();
-            pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text });
+            pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text }).promise.then(() => {
+                setTimeout(() => {
+                    if (this.old_id != this._value.id) {
+                        this.old_id = this._value.id;
+                        let div = this.pages.querySelector("#pages");
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            let page = document.createElement("div");
+                            div.append(page);
+                            page.onclick = () => {
+                                this._value.page = i;
+                                this.set_m();
+                            };
+                            let p = document.createElement("span");
+                            p.innerText = `${i}`;
+                            page.append(p);
+                        }
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            pdf.getPage(i).then(async (page) => {
+                                let viewport = page.getViewport({ scale: 0.1 });
+
+                                let canvas = document.createElement("canvas");
+                                let context = canvas.getContext("2d");
+
+                                this.pages.querySelectorAll("#pages > div")[i - 1].append(canvas);
+
+                                canvas.width = Math.floor(viewport.width);
+                                canvas.height = Math.floor(viewport.height);
+                                let renderContext = {
+                                    canvasContext: context,
+                                    transform: null,
+                                    viewport: viewport,
+                                };
+                                page.render(renderContext);
+                            });
+                        }
+                    }
+                }, 100);
+            });
         });
         let page_i = this.pages.querySelector("#page_i") as HTMLElement;
         this.pages.querySelector("input").value = String(this._value.page);
         page_i.innerHTML = `${pdf.numPages}`;
         this.pages.querySelector("input").style.width = page_i.offsetWidth + "px";
-
-        if (this.old_id != this._value.id) {
-            this.old_id = this._value.id;
-            let div = this.pages.querySelector("#pages");
-            for (let i = 1; i <= pdf.numPages; i++) {
-                let page = document.createElement("div");
-                div.append(page);
-                page.onclick = () => {
-                    this._value.page = i;
-                    this.set_m();
-                };
-                let p = document.createElement("span");
-                p.innerText = `${i}`;
-                page.append(p);
-            }
-            for (let i = 1; i <= pdf.numPages; i++) {
-                pdf.getPage(i).then(async (page) => {
-                    let viewport = page.getViewport({ scale: 0.1 });
-
-                    let canvas = document.createElement("canvas");
-                    let context = canvas.getContext("2d");
-
-                    this.pages.querySelectorAll("#pages > div")[i - 1].append(canvas);
-
-                    canvas.width = Math.floor(viewport.width);
-                    canvas.height = Math.floor(viewport.height);
-                    let renderContext = {
-                        canvasContext: context,
-                        transform: null,
-                        viewport: viewport,
-                    };
-                    page.render(renderContext);
-                });
-            }
-        }
     }
 
     get value() {
