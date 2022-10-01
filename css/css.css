@@ -791,6 +791,34 @@ x-pdf > div:nth-child(1) > div {
     width: 16px;
     height: 16px;
 }
+x-pdf > div:nth-child(1) > div:nth-child(2) {
+    width: 128px;
+    height: 16px;
+    position: relative;
+}
+x-pdf > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) {
+    @apply flex items-center justify-center text-xs;
+}
+x-pdf > div:nth-child(1) > div:nth-child(2) > #pages {
+    position: absolute;
+    top: 20px;
+    height: 256px;
+    width: 100%;
+    overflow-y: scroll;
+    transition: var(--transition);
+}
+.hide_pdf_pages {
+    @apply opacity-0 pointer-events-none;
+}
+x-pdf > div:nth-child(1) > div:nth-child(2) > div > div {
+    @apply relative;
+}
+x-pdf > div:nth-child(1) > div:nth-child(2) > div > div > span {
+    @apply absolute bottom-0 right-0;
+}
+x-pdf > div:nth-child(1) > div:nth-child(2) > div > div > canvas {
+    @apply w-full;
+}
 x-pdf > canvas {
     width: 100% !important;
     height: 100% !important;

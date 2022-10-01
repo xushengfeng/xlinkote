@@ -3648,8 +3648,10 @@ class pdf_viewer extends HTMLElement {
 
     _value: { id: string; page: number };
     div: HTMLDivElement;
+    pages: HTMLElement;
     canvas: HTMLCanvasElement;
     text: HTMLElement;
+    old_id = "";
 
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
@@ -3663,6 +3665,7 @@ class pdf_viewer extends HTMLElement {
         this.append(this.div);
         let per = document.createElement("div"),
             next = document.createElement("div");
+        this.pages = document.createElement("div");
         per.onclick = () => {
             this._value.page = Math.max(1, this._value.page - 1);
             this.set_m();
@@ -3672,7 +3675,21 @@ class pdf_viewer extends HTMLElement {
             this._value.page = Math.min(pdf.numPages, this._value.page + 1);
             this.set_m();
         };
-        this.div.append(per, next);
+
+        let page_i = document.createElement("input"),
+            page_t = document.createElement("span"),
+            page_bar = document.createElement("div"),
+            pages = document.createElement("div");
+        page_t.id = "page_i";
+        pages.id = "pages";
+        page_bar.append(page_i, page_t);
+        this.pages.append(page_bar);
+        this.pages.append(pages);
+        pages.classList.add("hide_pdf_pages");
+        this.pages.onclick = () => {
+            pages.classList.toggle("hide_pdf_pages");
+        };
+        this.div.append(per, this.pages, next);
         this.canvas = document.createElement("canvas");
         this.append(this.canvas);
         this.text = document.createElement("div");
@@ -3686,21 +3703,21 @@ class pdf_viewer extends HTMLElement {
     async set_m() {
         let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
         pdf.getPage(this._value.page).then(async (page) => {
-            var scale = 1.5;
-            var viewport = page.getViewport({ scale: scale });
-            var outputScale = window.devicePixelRatio * zoom || 1;
+            let scale = 1.5;
+            let viewport = page.getViewport({ scale: scale });
+            let outputScale = window.devicePixelRatio * zoom || 1;
 
-            var canvas = this.canvas;
-            var context = canvas.getContext("2d");
+            let canvas = this.canvas;
+            let context = canvas.getContext("2d");
 
             canvas.width = Math.floor(viewport.width * outputScale);
             canvas.height = Math.floor(viewport.height * outputScale);
             canvas.style.width = Math.floor(viewport.width) + "px";
             canvas.style.height = Math.floor(viewport.height) + "px";
 
-            var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+            let transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
-            var renderContext = {
+            let renderContext = {
                 canvasContext: context,
                 transform: transform,
                 viewport: viewport,
@@ -3714,6 +3731,45 @@ class pdf_viewer extends HTMLElement {
             let text = await page.getTextContent();
             pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text });
         });
+        let page_i = this.pages.querySelector("#page_i") as HTMLElement;
+        this.pages.querySelector("input").value = String(this._value.page);
+        page_i.innerHTML = `${pdf.numPages}`;
+        this.pages.querySelector("input").style.width = page_i.offsetWidth + "px";
+
+        if (this.old_id != this._value.id) {
+            this.old_id = this._value.id;
+            let div = this.pages.querySelector("#pages");
+            for (let i = 1; i < pdf.numPages; i++) {
+                let page = document.createElement("div");
+                div.append(page);
+                page.onclick = () => {
+                    this._value.page = i;
+                    this.set_m();
+                };
+                let p = document.createElement("span");
+                p.innerText = `${i}`;
+                page.append(p);
+            }
+            for (let i = 1; i < pdf.numPages; i++) {
+                pdf.getPage(i).then(async (page) => {
+                    let viewport = page.getViewport({ scale: 0.1 });
+
+                    let canvas = document.createElement("canvas");
+                    let context = canvas.getContext("2d");
+
+                    this.pages.querySelectorAll("#pages > div")[i - 1].append(canvas);
+
+                    canvas.width = Math.floor(viewport.width);
+                    canvas.height = Math.floor(viewport.height);
+                    let renderContext = {
+                        canvasContext: context,
+                        transform: null,
+                        viewport: viewport,
+                    };
+                    page.render(renderContext);
+                });
+            }
+        }
     }
 
     get value() {
