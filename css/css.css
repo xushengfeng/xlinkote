@@ -782,10 +782,15 @@ x-file > div > * {
 x-pdf > div {
     display: flex;
     gap: 4px;
+    position: absolute;
 }
 x-pdf > div > div {
     width: 16px;
     height: 16px;
+}
+x-pdf > canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 x-link {
