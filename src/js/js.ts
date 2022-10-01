@@ -13,6 +13,7 @@ import ul_hide_svg from "../../assets/icons/ul_hide.svg";
 import ul_show_svg from "../../assets/icons/ul_show.svg";
 import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
+import remove_svg from "../../assets/icons/remove.svg";
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
@@ -1143,6 +1144,7 @@ function render_data(inputdata: 画布type) {
     z.reflash(O.children[O.children.length - 1] as x, true);
     l_math();
     tmp_s_reflash();
+    assets_reflash();
 }
 
 set_css("./md.css");
@@ -1587,7 +1589,31 @@ function put_assets(url: string, base64: string) {
         }
     }
     集.assets[id] = { url, base64, sha };
+    assets_reflash();
     return id;
+}
+
+const assets_el = document.getElementById("资源");
+
+function assets_reflash() {
+    assets_el.innerHTML = "";
+    for (let i in 集.assets) {
+        let div = document.createElement("div");
+        assets_el.append(div);
+        let file = <file>document.createElement("x-file");
+        div.append(file);
+        file.value = JSON.stringify({ r: true, id: i });
+
+        let bar = document.createElement("div");
+        let r = document.createElement("div");
+        r.innerHTML = `<img src="${remove_svg}" class="icon">`;
+        div.append(bar);
+        bar.append(r);
+        r.onclick = () => {
+            delete 集.assets[i];
+            div.remove();
+        };
+    }
 }
 
 // 画板

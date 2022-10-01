@@ -95,6 +95,10 @@ body > #main > #nav #search {
     border-radius: 4px;
     margin-right: 4px;
 }
+.侧栏 > #items > #资源 > div > div > div {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+}
 
 .侧栏 > #items > #设置 > div:last-child {
     background-color: var(--bg-color2);
@@ -288,7 +292,6 @@ x-pdf > div > div {
     border-radius: 4px;
     box-shadow: var(--shadow1);
 }
-
 
 @media (any-pointer: coarse) {
 }

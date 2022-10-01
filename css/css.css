@@ -396,6 +396,22 @@ body > #main > #nav #search {
 .侧栏 > #items > #中转站 > #临时 .xxhandle {
     display: none;
 }
+.侧栏 > #items > #资源 {
+    @apply flex flex-col gap-1;
+}
+.侧栏 > #items > #资源 > div {
+    @apply relative;
+}
+.侧栏 > #items > #资源 > div > div {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
+.侧栏 > #items > #资源 > div > div > div {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
 
 .侧栏 > #items > #设置 > form input {
     width: 100%;
