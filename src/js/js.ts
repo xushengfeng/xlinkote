@@ -3633,6 +3633,8 @@ window.customElements.define("x-file", file);
 import * as pdfjsLib from "pdfjs-dist";
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js";
 
+var pdf_cache = {} as { [key: string]: pdfjsLib.PDFDocumentProxy };
+
 class pdf_viewer extends HTMLElement {
     constructor() {
         super();
@@ -3650,33 +3652,36 @@ class pdf_viewer extends HTMLElement {
         }
     }
 
-    set_m() {
-        var loadingTask = pdfjsLib.getDocument(this._value);
-        loadingTask.promise.then((pdf) => {
-            pdf.getPage(1).then((page) => {
-                console.log(page);
-                var scale = 1.5;
-                var viewport = page.getViewport({ scale: scale });
-                var outputScale = window.devicePixelRatio || 1;
+    async set_m() {
+        var load_pdf = async () => {
+            var loadingTask = pdfjsLib.getDocument(this._value);
+            pdf_cache[this._value] = await loadingTask.promise;
+            return pdf_cache[this._value];
+        };
+        let pdf = pdf_cache[this._value] || (await load_pdf());
+        pdf.getPage(1).then((page) => {
+            console.log(page);
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale });
+            var outputScale = window.devicePixelRatio || 1;
 
-                var canvas = document.createElement("canvas");
-                this.div.append(canvas);
-                var context = canvas.getContext("2d");
+            var canvas = document.createElement("canvas");
+            this.div.append(canvas);
+            var context = canvas.getContext("2d");
 
-                canvas.width = Math.floor(viewport.width * outputScale);
-                canvas.height = Math.floor(viewport.height * outputScale);
-                canvas.style.width = Math.floor(viewport.width) + "px";
-                canvas.style.height = Math.floor(viewport.height) + "px";
+            canvas.width = Math.floor(viewport.width * outputScale);
+            canvas.height = Math.floor(viewport.height * outputScale);
+            canvas.style.width = Math.floor(viewport.width) + "px";
+            canvas.style.height = Math.floor(viewport.height) + "px";
 
-                var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+            var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
-                var renderContext = {
-                    canvasContext: context,
-                    transform: transform,
-                    viewport: viewport,
-                };
-                page.render(renderContext);
-            });
+            var renderContext = {
+                canvasContext: context,
+                transform: transform,
+                viewport: viewport,
+            };
+            page.render(renderContext);
         });
     }
 
