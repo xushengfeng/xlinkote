@@ -612,6 +612,7 @@ x-x > .xxhandle {
     pointer-events: none;
     display: var(--x-x-handle-d);
     box-sizing: border-box;
+    z-index: 1;
 }
 x-x > .xxhandle > div {
     pointer-events: all;
