@@ -65,7 +65,7 @@ document.getElementById("加载数据库").onclick = () => {
 document.getElementById("下载数据库").onclick = db_download;
 
 document.getElementById("新建集").onclick = () => {
-    window.open(location.href);
+    window.open(location.origin);
 };
 
 document.getElementById("新建画布").onclick = () => {
