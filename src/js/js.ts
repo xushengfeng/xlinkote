@@ -1403,6 +1403,9 @@ document.getElementById("db_load").onchange = () => {
 var undo_stack = [],
     undo_i = -1;
 
+import DiffMatchPatch from "diff-match-patch";
+const dmp = new DiffMatchPatch.diff_match_patch();
+
 function undo(v: boolean) {
     if (v) {
         undo_i--;
@@ -1411,21 +1414,44 @@ function undo(v: boolean) {
         undo_i++;
         if (undo_i >= undo_stack.length) undo_i = undo_stack.length - 1;
     }
-    let d = JSON.parse(undo_stack[undo_i]);
+    let data = get_undo_s(undo_i);
+    let d = JSON.parse(data);
     set_data(d[0]);
     selections = d[1];
-    (document.getElementById(selections[0].id).querySelector("x-md") as markdown).edit = true;
-    let text = (document.getElementById(selections[0].id).querySelector("x-md") as markdown).text;
-    text.selectionStart = selections[0].start;
-    text.selectionEnd = selections[0].end;
+    if (selections[0].id) {
+        (document.getElementById(selections[0].id).querySelector("x-md") as markdown).edit = true;
+        let text = (document.getElementById(selections[0].id).querySelector("x-md") as markdown).text;
+        text.selectionStart = selections[0].start;
+        text.selectionEnd = selections[0].end;
+    }
+}
+
+function get_undo_s(i: number) {
+    let s_data = undo_stack[0];
+    for (let k = 1; k <= i; k++) {
+        s_data = dmp.patch_apply(undo_stack[k], s_data)[0];
+    }
+    return s_data;
 }
 
 function push_undo() {
+    let data = JSON.stringify([get_data(), selections], null, 2);
+    if (data == get_undo_s(undo_i)) return;
     if (undo_i != undo_stack.length - 1) {
-        undo_stack.push(undo_stack[undo_i]);
+        let pre_data = get_undo_s(undo_i);
+        let last_data = get_undo_s(undo_stack.length - 1);
+        let data = dmp.patch_make(pre_data, last_data);
+        undo_stack.push(data);
+        undo_i = undo_stack.length - 1;
     }
-    undo_stack.push(JSON.stringify([get_data(), selections]));
+    if (undo_i == -1) {
+        undo_stack.push(data);
+    } else {
+        let p = dmp.patch_make(get_undo_s(undo_i), data);
+        undo_stack.push(p);
+    }
     undo_i = undo_stack.length - 1;
+    console.log(undo_stack);
 }
 
 async function download_file(text: string) {
