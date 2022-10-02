@@ -1652,7 +1652,6 @@ function new_draw() {
     draw.setAttribute("width", String(画布.offsetWidth / zoom));
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
     xel.append(draw);
-    set_模式("绘制");
 
     focus_draw_el = draw;
     O.lastElementChild.append(xel);
