@@ -655,6 +655,34 @@ x-x > .xxhandle > div {
     top: var(--x-x-handle-o2);
 }
 
+.handle_cursor .xxhandle > .xxhandle0 {
+    cursor: n-resize;
+}
+.handle_cursor .xxhandle > .xxhandle1 {
+    cursor: e-resize;
+}
+.handle_cursor .xxhandle > .xxhandle2 {
+    cursor: s-resize;
+}
+.handle_cursor .xxhandle > .xxhandle3 {
+    cursor: w-resize;
+}
+.handle_cursor .xxhandle > .xxhandle4 {
+    cursor: ne-resize;
+}
+.handle_cursor .xxhandle > .xxhandle5 {
+    cursor: se-resize;
+}
+.handle_cursor .xxhandle > .xxhandle6 {
+    cursor: sw-resize;
+}
+.handle_cursor .xxhandle > .xxhandle7 {
+    cursor: nw-resize;
+}
+.handle_cursor x-x {
+    cursor: move;
+}
+
 x-md {
     position: relative;
     display: block;

@@ -253,6 +253,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "auto";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "";
+            O.classList.remove("handle_cursor");
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -265,6 +266,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
             if (link_value_bar) link_value_bar.style.display = "none";
+            O.classList.add("handle_cursor");
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -276,6 +278,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "none";
+            O.classList.remove("handle_cursor");
             break;
     }
 }
@@ -2922,39 +2925,6 @@ class x extends HTMLElement {
                 }
             }
             free_target_id = this.id;
-        };
-
-        this.onmousemove = (e) => {
-            if (模式 == "设计") {
-                switch (e.target) {
-                    case x_h[0]:
-                        画布.style.cursor = "n-resize";
-                        break;
-                    case x_h[1]:
-                        画布.style.cursor = "e-resize";
-                        break;
-                    case x_h[2]:
-                        画布.style.cursor = "s-resize";
-                        break;
-                    case x_h[3]:
-                        画布.style.cursor = "w-resize";
-                        break;
-                    case x_h[4]:
-                        画布.style.cursor = "ne-resize";
-                        break;
-                    case x_h[5]:
-                        画布.style.cursor = "se-resize";
-                        break;
-                    case x_h[6]:
-                        画布.style.cursor = "sw-resize";
-                        break;
-                    case x_h[7]:
-                        画布.style.cursor = "nw-resize";
-                        break;
-                    default:
-                        画布.style.cursor = "move";
-                }
-            }
         };
 
         f.onclick = () => {
