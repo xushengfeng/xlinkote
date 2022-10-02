@@ -2993,7 +2993,7 @@ class x extends HTMLElement {
         let map = [];
         els.forEach((el: HTMLElement, i) => {
             if (el.id == "x-x_bar" || el.id == "x-x_handle") return;
-            if (el.style.zIndex) {
+            if (el.style.zIndex && !map[Number(el.style.zIndex) - 1]) {
                 map[Number(el.style.zIndex) - 1] = i;
             } else {
                 map.push(i);
