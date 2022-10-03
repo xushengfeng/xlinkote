@@ -28,6 +28,11 @@ h6 {
     font-weight: bold;
 }
 
+a {
+    color: #000099;
+    text-decoration: underline;
+}
+
 x-link {
     color: #0000cc;
 }
