@@ -292,13 +292,8 @@ function blur_all() {
 }
 
 // markdown
-document.getElementById("toggle_md").onclick = () => {
-    if (focus_md) {
-        focus_md.edit = !focus_md.edit;
-    }
-};
 function set_md_v(s: string, e: string) {
-    let text = focus_md.text;
+    let text = (document.getElementById(selections[0].id).querySelector("x-md") as markdown).text;
     let sn = text.selectionStart,
         en = text.selectionEnd;
     let select_text = text.value.slice(sn, en);
@@ -1508,8 +1503,6 @@ function add_画布(xname?: string) {
     data_changed();
 }
 
-var focus_md: markdown = null;
-
 // 拖放
 function put_datatransfer(data: DataTransfer, x: number, y: number) {
     if (data.files.length != 0) {
@@ -1872,9 +1865,7 @@ class 图层 {
                 l.checked = false;
             }
         }
-        focus_md = null;
         focus_draw_el = null;
-        if (el.querySelector("x-md")) focus_md = el.querySelector("x-md") as markdown;
         if (el.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
 
         selected_el = [];
@@ -3141,7 +3132,8 @@ class markdown extends HTMLElement {
                 this.index = line_el(l);
                 this.drag();
             }, 0);
-
+        };
+        text.onfocus = () => {
             selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
         };
         text.onkeydown = (e) => {
@@ -3283,6 +3275,8 @@ class markdown extends HTMLElement {
                 text.style.left = x + "px";
                 text.style.top = y + "px";
             }
+
+            selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
         };
         text.onblur = () => {
             if (模式 == "浏览") this.edit = false;
@@ -3539,7 +3533,7 @@ class symbols extends HTMLElement {
             f(<HTMLElement>e.target);
         };
         var f = (el: HTMLElement) => {
-            let text = focus_md.text;
+            let text = (get_x_by_id(selections[0].id).querySelector("x-md") as markdown).text;
             if (text.tagName != "TEXTAREA") return;
             if (el.parentElement.id.includes("snippet")) {
                 for (let i in mathSymbols) {
