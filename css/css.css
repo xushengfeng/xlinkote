@@ -161,6 +161,9 @@ x-color > .color_bar {
     overflow: auto;
     gap: 4px;
 }
+x-color > .color_bar > input {
+    width: 6em;
+}
 x-color > .color_bar > div {
     height: 20px;
     width: 20px;

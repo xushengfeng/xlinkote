@@ -4088,7 +4088,7 @@ class xcolor extends HTMLElement {
         arange: null as HTMLElement,
         par: null as HTMLElement,
         c0: null as HTMLElement,
-        ci: null as HTMLElement,
+        ci: null as HTMLInputElement,
     };
 
     connectedCallback() {
@@ -4109,7 +4109,7 @@ class xcolor extends HTMLElement {
         const par = (this.els.par = document.createElement("div"));
         const cb = document.createElement("div");
         const c0 = (this.els.c0 = document.createElement("div"));
-        const ci = (this.els.ci = document.createElement("div"));
+        const ci = (this.els.ci = document.createElement("input"));
 
         pel.classList.add("color");
 
@@ -4142,9 +4142,8 @@ class xcolor extends HTMLElement {
         cb.append(c0);
         cb.append(ci);
         ci.onchange = () => {
-            this.value = ci.innerText;
+            this.value = ci.value;
         };
-        ci.contentEditable = "true";
         c0.onclick = () => {
             let div = document.createElement("div");
             const v = this.value;
@@ -4204,7 +4203,7 @@ class xcolor extends HTMLElement {
             pb.style.backgroundColor = `${hsv.rgb().string()}`;
             this.c = hsv.hexa();
 
-            ci.innerText = hsv.hexa();
+            ci.value = hsv.hexa();
 
             this.dispatchEvent(new InputEvent("input"));
         };
@@ -4250,7 +4249,7 @@ class xcolor extends HTMLElement {
         this.els.arange.style.background = this.msk(`linear-gradient(to right, ${x.hex()} 0%, #0000 100%)`);
         this.els.par.style.left = (1 - (hsv?.[3] || 1)) * this.els.arange.offsetWidth + "px";
 
-        this.els.ci.innerText = x.hexa();
+        this.els.ci.value = x.hexa();
     }
 
     get value() {
