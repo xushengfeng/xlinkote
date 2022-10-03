@@ -3295,6 +3295,12 @@ class markdown extends HTMLElement {
                 data_changed();
                 return;
             }
+            if (el.tagName == "A") {
+                e.preventDefault();
+                if (e.ctrlKey) {
+                    window.open((el as HTMLAnchorElement).href);
+                }
+            }
             text.style.left = el_offset2(el, this.h).x + "px";
             text.style.top = el_offset2(el, this.h).y + el.offsetHeight + "px";
             let line = NaN;
