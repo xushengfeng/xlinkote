@@ -1686,6 +1686,7 @@ var focus_draw_el = null as draw;
 
 // 色盘
 const color_yl = document.getElementById("color_yl");
+color_yl.style.background = "#000";
 color_yl.onclick = (e) => {
     if (e.target == color_yl) penc_el.classList.toggle("color_show");
 };
