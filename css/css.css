@@ -704,6 +704,7 @@ x-md > textarea {
     top: 0;
     left: 0;
     width: 100%;
+    resize: both;
 }
 .handle {
     width: 16px;
