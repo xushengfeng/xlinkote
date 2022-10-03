@@ -118,11 +118,13 @@ x-color {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    cursor: auto;
 }
 x-color > .broad {
     width: 300px;
     height: 300px;
     position: relative;
+    cursor: crosshair;
 }
 x-color > .broad > div {
     width: 100%;
@@ -143,6 +145,7 @@ x-color > .broad .color_pointer {
 x-color > .range {
     position: relative;
     height: 20px;
+    cursor: ew-resize;
 }
 x-color > .range > .color_range_p {
     width: 2px;
@@ -168,6 +171,7 @@ x-color > .color_bar > div {
     height: 20px;
     width: 20px;
     border-radius: 4px;
+    cursor: pointer;
 }
 x-color > .color_bar > div:nth-child(2) {
     width: auto;
