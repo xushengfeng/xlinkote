@@ -1103,7 +1103,6 @@ function set_data(l: 集type) {
             当前画布 = p;
             render_data(p);
             集.meta.focus_page = p.name;
-            data_changed();
         };
         div.onchange = () => {
             if (div.value) {
