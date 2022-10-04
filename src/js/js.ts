@@ -3168,11 +3168,17 @@ class markdown extends HTMLElement {
                 }
 
                 if (!e.shiftKey) {
+                    let t = this.text.value;
+                    let t0 = t.slice(0, this.text.selectionStart),
+                        t1 = t.slice(this.text.selectionEnd, t.length);
+                    this.value = t0;
+
                     let p = this.parentElement as x;
                     let pxel = null as x;
                     if (document.defaultView.getComputedStyle(p.parentElement, null).display == "flex") {
                         pxel = p.parentElement as x;
                     } else {
+                        // 不存在上级堆叠元素，需要新建并把此元素套进去
                         pxel = document.createElement("x-x") as x;
                         pxel.id = uuid_id();
                         link(pxel.id).add();
@@ -3193,6 +3199,7 @@ class markdown extends HTMLElement {
                         z.remove(p);
                         p = x;
                     }
+
                     let xel = <x>document.createElement("x-x");
                     let md = document.createElement("x-md") as markdown;
                     xel.append(md);
@@ -3201,6 +3208,8 @@ class markdown extends HTMLElement {
                     xel.style.position = "relative";
                     p.after(xel);
                     md.edit = true;
+                    md.value = t1;
+                    md.text.setSelectionRange(0, 0);
                 } else {
                     if (e.ctrlKey) {
                         let rel = find_root_layout(this.parentElement);
