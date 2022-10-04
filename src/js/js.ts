@@ -697,6 +697,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         set_模式("浏览");
         (<markdown>free_o_rects[0].el.children[1]).edit = true;
         drag_block = false;
+        data_changed();
     }
 
     free_mouse(e);
@@ -716,6 +717,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         }
         console.log(集.中转站);
         tmp_s_reflash();
+        data_changed();
     }
 
     if (!free_move && free_o_e) {
@@ -725,12 +727,11 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 return;
             }
         });
+        data_changed();
     }
     free_o_e = null;
     free_move = false;
     free_o_rects = [];
-
-    data_changed();
 });
 var free_mouse = (e: MouseEvent) => {
     if (free_o_e) {
