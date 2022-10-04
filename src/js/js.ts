@@ -1451,9 +1451,11 @@ function get_undo_s(i: number) {
     return s_data;
 }
 
+let pre_data = "";
+
 function push_undo() {
     let data = JSON.stringify([get_data(), selections], null, 2);
-    if (data == get_undo_s(undo_i)) return;
+    if (data == pre_data) return;
     if (undo_i != undo_stack.length - 1) {
         let pre_data = get_undo_s(undo_i);
         let last_data = get_undo_s(undo_stack.length - 1);
@@ -1464,9 +1466,10 @@ function push_undo() {
     if (undo_i == -1) {
         undo_stack.push(data);
     } else {
-        let p = dmp.patch_make(get_undo_s(undo_i), data);
+        let p = dmp.patch_make(pre_data, data);
         undo_stack.push(p);
     }
+    pre_data = data;
     undo_i = undo_stack.length - 1;
     console.log(undo_stack);
 }
