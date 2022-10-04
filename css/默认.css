@@ -1,6 +1,6 @@
 :root {
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    --bg-color1: rgba(235, 235, 235, 0.6);
+    --bg-color1: rgba(225, 225, 225, 0.8);
     --bg-color2: rgba(255, 255, 255, 0.72);
     --bg-color3: #ddd;
     --bg-color4: #f5f5f5;
@@ -74,6 +74,11 @@ body > #main > #nav #search {
 }
 .侧栏显示 {
     box-shadow: var(--shadow1);
+}
+
+.selected_item {
+    background-color: var(--bg-color1);
+    border-radius: 4px;
 }
 
 .侧栏 > #items > #层容器 > div:nth-child(1) {
@@ -311,7 +316,7 @@ x-pdf > div > div {
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-color1: rgba(20, 20, 20, 0.6);
+        --bg-color1: rgba(30, 30, 30, 0.8);
         --bg-color2: rgba(0, 0, 0, 0.72);
         --bg-color3: #222;
         --bg-color4: #161616;

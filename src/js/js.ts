@@ -129,6 +129,10 @@ var 侧栏 = document.getElementById("侧栏");
             document.querySelectorAll("#侧栏 > #items > div").forEach((iel: HTMLDivElement, j) => {
                 if (i == j) {
                     iel.style.height = "100%";
+                    document.querySelectorAll(".selected_item").forEach((el) => {
+                        el.classList.remove("selected_item");
+                    });
+                    el.classList.add("selected_item");
                 } else {
                     iel.style.height = "0";
                 }
@@ -1077,18 +1081,24 @@ function version_tr(obj): 集type {
 
 var 当前画布 = 集.数据[0] as 画布type;
 
+const 集_el = document.getElementById("集");
+
 function set_data(l: 集type) {
     l = version_tr(l);
     for (let i in l) {
         if (集[i]) 集[i] = l[i];
     }
     O.innerHTML = "";
-    document.getElementById("集").innerHTML = "";
+    集_el.innerHTML = "";
     for (const p of 集.数据) {
         let div = rename_el();
-        document.getElementById("集").append(div);
+        集_el.append(div);
         div.value = p.name;
         div.onclick = () => {
+            集_el.querySelectorAll(".selected_item").forEach((el) => {
+                el.classList.remove("selected_item");
+            });
+            div.classList.add("selected_item");
             当前画布 = p;
             render_data(p);
             集.meta.focus_page = p.name;
@@ -1110,6 +1120,7 @@ function set_data(l: 集type) {
             set_data(集);
         };
         if (集.meta.focus_page == p.name) {
+            div.classList.add("selected_item");
             当前画布 = p;
             render_data(p);
             集.meta.focus_page = p.name;
@@ -1318,6 +1329,7 @@ function db_get() {
         new_t.value = `新建集${uuid().slice(0, 7)}`;
         let dav = document.createElement("div");
         new_d.append(dav, new_t);
+        new_d.classList.add("selected_item");
         new_d.onclick = () => {
             let fn = prompt("文件名");
             if (fn) {
@@ -1328,11 +1340,17 @@ function db_get() {
         文件_el.append(new_d);
         for (let f of r.result) {
             let d = document.createElement("div");
+            d.setAttribute("data-uuid", f.meta.UUID);
             let t = rename_el();
             t.onclick = () => {
                 if (!集.meta.file_name) new_d.remove();
                 set_data(f);
                 侧栏.classList.remove("侧栏显示");
+
+                文件_el.querySelectorAll(".selected_item").forEach((el) => {
+                    el.classList.remove("selected_item");
+                });
+                d.classList.add("selected_item");
             };
             t.onchange = () => {
                 集.meta.file_name = t.value;
@@ -1356,6 +1374,7 @@ function db_get() {
                 if (`#${f.meta.UUID}` == location.hash) {
                     set_data(f);
                     new_d.remove();
+                    文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
                 }
             }
         }

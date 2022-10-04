@@ -4,12 +4,7 @@
 
 :root {
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    --bg-color1: rgba(235, 235, 235, 0.6);
-    --bg-color2: rgba(255, 255, 255, 0.6);
-    --bg-color3: #ddd;
-    --shadow1: 0 0 4px #3333;
     --blur: blur(10px);
-    --bg1: #ffffff;
     --icon-color: none;
     --icon-p-b-size: 32px;
     --icon-size: 24px;
@@ -280,7 +275,7 @@ body > #main > #nav #search {
 }
 .侧栏 > #items > #文件 > div {
     display: flex;
-    width: 100%;
+    width: calc(100% - 8px);
     align-items: center;
     height: var(--item-height);
 }
@@ -305,7 +300,7 @@ body > #main > #nav #search {
     height: var(--item-height);
 }
 .侧栏 > #items > #集 > input {
-    width: 100%;
+    width: calc(100% - 8px);
     box-sizing: border-box;
 }
 
