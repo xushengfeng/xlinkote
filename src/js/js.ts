@@ -1133,20 +1133,19 @@ function set_data(l: 集type) {
 }
 
 function render_data(inputdata: 画布type) {
-    O.innerHTML = "";
-    for (const x of inputdata.data) {
-        try {
-            link(x.id).add();
-            let xx = document.createElement("x-x") as x;
-            xx.id = x.id;
-            xx.fixed = x.fixed;
-            xx.setAttribute("style", x.style);
-            O.append(xx);
-            xx.value = x.子元素;
-        } catch (e) {
-            console.error(e);
+    function w(data: data) {
+        let text = "";
+        for (let i of data) {
+            let style = i.style ? `style='${i.style}'` : "";
+            let v = i.value ? `value='${i.value}'` : "";
+            let s = i.子元素 ? w(i.子元素) : "";
+            text += `<${i.type} id='${i.id}' ${style} ${v}>${s}</${i.type}>`;
+            link(i.id).add();
         }
+        return text;
     }
+    let t = w(inputdata.data);
+    O.innerHTML = t;
     O.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
     O.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
     zoom_o(inputdata?.p?.zoom || 1);
