@@ -979,6 +979,7 @@ type data = Array<{
     global?: boolean;
 }>;
 type 画布type = {
+    id: string;
     name: string;
     p: { x: number; y: number; zoom: number };
     data: data;
@@ -996,7 +997,7 @@ function new_集(pname: string): 集type {
             file_name: "",
             version: packagejson.version,
         },
-        数据: [{ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+        数据: [{ id: uuid_id(), name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
         链接: { 0: {} },
         assets: {},
         中转站: [],
@@ -1005,6 +1006,10 @@ function new_集(pname: string): 集type {
 
 function get_data() {
     let l = 集;
+    let p = {};
+    for (let i of 集.数据) {
+        p[i.id] = i.p;
+    }
     集.数据 = [];
     for (let O of 画布s.children) {
         let data = [] as data;
@@ -1023,10 +1028,15 @@ function get_data() {
             let type = "X-X";
             data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
         }
+        if ((O as HTMLElement).style.display == "block") {
+            p[O.id] = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
+            集.meta.focus_page = O.id;
+        }
         集.数据.push({
+            id: O.id,
             data,
-            name: O.id,
-            p: { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom },
+            name: O.getAttribute("data-name"),
+            p: p[O.id],
         });
     }
     return l;
@@ -1097,6 +1107,14 @@ function version_tr(obj): 集type {
         case "0.6.3":
         case "0.6.4":
         case "0.6.5":
+            for (let i of obj.数据) {
+                i["id"] = uuid_id();
+                if (obj.meta.focus_page == i.name) {
+                    obj.meta.focus_page = i.id;
+                }
+            }
+            obj.meta.version = "0.6.6";
+        case "0.6.6":
             return obj;
     }
 }
@@ -1118,16 +1136,16 @@ function set_data(l: 集type) {
         let div = rename_el();
         集_el.append(div);
         div.value = p.name;
-        ps[p.name] = render_data(p);
-        画布s.append(ps[p.name]);
+        ps[p.id] = render_data(p);
+        画布s.append(ps[p.id]);
         div.onclick = () => {
             集_el.querySelectorAll(".selected_item").forEach((el) => {
                 el.classList.remove("selected_item");
             });
             div.classList.add("selected_item");
             当前画布 = p;
-            集.meta.focus_page = p.name;
-            O = ps[p.name];
+            集.meta.focus_page = p.id;
+            O = ps[p.id];
             for (let el of 画布s.children) {
                 (el as HTMLElement).style.display = "none";
             }
@@ -1143,18 +1161,18 @@ function set_data(l: 集type) {
                 div.remove();
                 集.数据 = 集.数据.filter((d) => d != p);
                 if (集.数据.length == 0) {
-                    集.数据.push({ name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+                    集.数据.push({ id: uuid_id(), name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
                 }
-                集.meta.focus_page = 集.数据[0].name;
+                集.meta.focus_page = 集.数据[0].id;
             }
             data_changed();
             set_data(集);
         };
-        if (集.meta.focus_page == p.name) {
+        if (集.meta.focus_page == p.id) {
             div.classList.add("selected_item");
             当前画布 = p;
-            集.meta.focus_page = p.name;
-            O = ps[p.name];
+            集.meta.focus_page = p.id;
+            O = ps[p.id];
             O.style.display = "block";
             reload_side();
         }
@@ -1175,7 +1193,8 @@ function reload_side() {
 function render_data(inputdata: 画布type) {
     let el = document.createElement("div");
     el.style.display = "none";
-    el.id = inputdata.name;
+    el.id = inputdata.id;
+    el.setAttribute("data-name", inputdata.name);
     function w(data: data) {
         let text = "";
         for (let i of data) {
@@ -1558,7 +1577,7 @@ function data_changed() {
 function add_画布(xname?: string) {
     get_data(); /* 保存之前的画布 */
     let name = xname || `画布${uuid().slice(0, 7)}`;
-    集.数据.push({ name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+    集.数据.push({ id: uuid_id(), name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
     集.meta.focus_page = name;
     set_data(集);
     data_changed();
