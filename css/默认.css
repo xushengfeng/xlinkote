@@ -71,14 +71,18 @@ body > #main > #nav #search {
 .侧栏 {
     background-color: var(--bg1);
     transition: var(--transition) transform;
+    box-shadow: var(--shadow1);
 }
 .侧栏显示 {
-    box-shadow: var(--shadow1);
+    box-shadow: var(--shadow1) !important;
 }
 
 .selected_item {
     background-color: var(--bg-color1);
     border-radius: 4px;
+}
+.selected_item_hide {
+    background-color: transparent;
 }
 
 .侧栏 > #items > #层容器 > div:nth-child(1) {
@@ -307,10 +311,14 @@ x-pdf > div > div {
 @media all and (orientation: portrait) {
     .侧栏 {
         border-radius: 32px 32px 0 0;
+        box-shadow: none;
     }
     .侧栏 > #handle > div {
         background-color: var(--bg-color3);
         border-radius: 2px;
+    }
+    .selected_item_hide {
+        background-color: var(--bg-color1);
     }
 }
 

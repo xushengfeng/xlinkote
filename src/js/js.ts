@@ -122,10 +122,22 @@ document.getElementById("搜索操作").onclick = () => {
 };
 
 var 侧栏 = document.getElementById("侧栏");
+const 侧栏_tabs = document.querySelector("#侧栏 > #tabs");
+const 侧栏_items = document.querySelector("#侧栏 > #items");
 
 侧栏.onclick = (e) => {
     document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
+            if (el.classList.contains("selected_item") && !el.classList.contains("selected_item_hide")) {
+                el.classList.add("selected_item_hide");
+                侧栏_items.classList.add("item_hide");
+            } else {
+                侧栏_tabs.querySelectorAll(".selected_item_hide").forEach((el) => {
+                    el.classList.remove("selected_item_hide");
+                });
+                el.classList.remove("selected_item_hide");
+                侧栏_items.classList.remove("item_hide");
+            }
             document.querySelectorAll("#侧栏 > #items > div").forEach((iel: HTMLDivElement, j) => {
                 if (i == j) {
                     iel.style.height = "100%";

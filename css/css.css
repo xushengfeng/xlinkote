@@ -216,6 +216,9 @@ body > #main > #nav > #search_bar {
 body > #main > #nav #search {
     flex-grow: 1;
 }
+body > #main > #nav #切换侧栏 {
+    display: none;
+}
 
 .db_load {
     display: none;
@@ -228,7 +231,6 @@ body > #main > #nav #search {
     left: 0;
     top: var(--icon-p-b-size);
     height: calc(100vh - var(--icon-p-b-size));
-    transform: translateX(-100%);
     z-index: calc(var(--zest-index) + 8);
 }
 .侧栏显示 {
@@ -249,6 +251,14 @@ body > #main > #nav #search {
     flex-grow: 1;
     overflow: hidden;
     width: 300px;
+    transition: var(--transition);
+}
+.侧栏 > #items > * {
+    width: 300px;
+}
+
+.item_hide {
+    width: 0 !important;
 }
 
 .侧栏 > #items > div:nth-child(1) {
@@ -940,6 +950,7 @@ x-link {
     }
     body > #main > #nav #切换侧栏 {
         transform: rotate(-90deg);
+        display: block;
     }
     body > #main > #画布 {
         grid-area: 1 / 1 / 2 / 2;
@@ -961,6 +972,12 @@ x-link {
     }
     .侧栏 > #items {
         width: 100%;
+    }
+    .侧栏 > #items > * {
+        width: 100%;
+    }
+    .item_hide {
+        width: 100% !important;
     }
     .侧栏 > #handle > div {
         width: 32px;
