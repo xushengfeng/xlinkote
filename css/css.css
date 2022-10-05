@@ -468,7 +468,10 @@ body > #main > #画布 {
 }
 
 /* 画布 */
-body > #main > #画布 > #O {
+body > #main > #画布 > #画布们 {
+    position: relative;
+}
+body > #main > #画布 > #画布们 > div {
     position: absolute;
     top: 0;
     left: 0;

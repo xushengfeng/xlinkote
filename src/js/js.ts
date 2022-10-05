@@ -229,7 +229,8 @@ function put_toast(t: string, time?: number) {
 var nav = document.getElementById("nav");
 
 const 画布 = document.getElementById("画布");
-const O = document.getElementById("O");
+const 画布s = document.getElementById("画布们");
+var O = document.getElementById("O");
 
 const link_value_bar = document.createElement("x-link-value") as link_value;
 画布.append(link_value_bar);
@@ -1004,27 +1005,29 @@ function new_集(pname: string): 集type {
 
 function get_data() {
     let l = 集;
-    let data = [] as data;
-    let els = O.querySelectorAll(":scope > *");
-    let map = [];
-    els.forEach((el: HTMLElement, i) => {
-        if (el.style.zIndex) {
-            map[Number(el.style.zIndex) - 1] = i;
-        } else {
-            map.push(i);
+    集.数据 = [];
+    for (let O of 画布s.children) {
+        let data = [] as data;
+        let els = O.querySelectorAll(":scope > *");
+        let map = [];
+        els.forEach((el: HTMLElement, i) => {
+            if (el.style.zIndex) {
+                map[Number(el.style.zIndex) - 1] = i;
+            } else {
+                map.push(i);
+            }
+        });
+        map = map.flat();
+        for (let i of map) {
+            let el = <x>els[i];
+            let type = "X-X";
+            data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
         }
-    });
-    map = map.flat();
-    for (let i of map) {
-        let el = <x>els[i];
-        let type = "X-X";
-        data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
-    }
-    for (let p of 集.数据) {
-        if (p.name == 集.meta.focus_page) {
-            p.data = data;
-            p.p = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
-        }
+        集.数据.push({
+            data,
+            name: O.id,
+            p: { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom },
+        });
     }
     return l;
 }
@@ -1101,20 +1104,30 @@ function set_data(l: 集type) {
     for (let i in l) {
         if (集[i]) 集[i] = l[i];
     }
-    O.innerHTML = "";
+    画布s.innerHTML = "";
     集_el.innerHTML = "";
+
+    let ps = {};
     for (const p of 集.数据) {
         let div = rename_el();
         集_el.append(div);
         div.value = p.name;
+        ps[p.name] = render_data(p);
+        画布s.append(ps[p.name]);
         div.onclick = () => {
             集_el.querySelectorAll(".selected_item").forEach((el) => {
                 el.classList.remove("selected_item");
             });
             div.classList.add("selected_item");
             当前画布 = p;
-            render_data(p);
             集.meta.focus_page = p.name;
+            O = ps[p.name];
+            for (let el of 画布s.children) {
+                (el as HTMLElement).style.display = "none";
+            }
+            O.style.display = "block";
+            z.reflash(O.children[O.children.length - 1] as x, true);
+            zoom_o(p.p.zoom);
         };
         div.onchange = () => {
             if (div.value) {
@@ -1134,8 +1147,10 @@ function set_data(l: 集type) {
         if (集.meta.focus_page == p.name) {
             div.classList.add("selected_item");
             当前画布 = p;
-            render_data(p);
             集.meta.focus_page = p.name;
+            O = ps[p.name];
+            O.style.display = "block";
+            reload_side();
         }
     }
     location.hash = `#${集.meta.UUID}`;
@@ -1144,7 +1159,17 @@ function set_data(l: 集type) {
     set_css("./md.css");
 }
 
+function reload_side() {
+    z.reflash(O.children[O.children.length - 1] as x, true);
+    l_math();
+    tmp_s_reflash();
+    assets_reflash();
+}
+
 function render_data(inputdata: 画布type) {
+    let el = document.createElement("div");
+    el.style.display = "none";
+    el.id = inputdata.name;
     function w(data: data) {
         let text = "";
         for (let i of data) {
@@ -1157,14 +1182,11 @@ function render_data(inputdata: 画布type) {
         return text;
     }
     let t = w(inputdata.data);
-    O.innerHTML = t;
-    O.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
-    O.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
-    zoom_o(inputdata?.p?.zoom || 1);
-    z.reflash(O.children[O.children.length - 1] as x, true);
-    l_math();
-    tmp_s_reflash();
-    assets_reflash();
+    el.innerHTML = t;
+    el.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
+    el.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
+    el.style.transform = `scale(${inputdata.p.zoom})`;
+    return el;
 }
 
 set_css("./md.css");
