@@ -129,7 +129,7 @@ var 侧栏 = document.getElementById("侧栏");
             document.querySelectorAll("#侧栏 > #items > div").forEach((iel: HTMLDivElement, j) => {
                 if (i == j) {
                     iel.style.height = "100%";
-                    document.querySelectorAll(".selected_item").forEach((el) => {
+                    侧栏.querySelectorAll("#tabs > .selected_item").forEach((el) => {
                         el.classList.remove("selected_item");
                     });
                     el.classList.add("selected_item");
