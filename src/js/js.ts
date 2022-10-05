@@ -1091,6 +1091,12 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.5.0";
         case "0.5.0":
+        case "0.6.0":
+        case "0.6.1":
+        case "0.6.2":
+        case "0.6.3":
+        case "0.6.4":
+        case "0.6.5":
             return obj;
     }
 }
