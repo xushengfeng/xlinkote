@@ -1151,7 +1151,7 @@ function set_data(l: 集type) {
             }
             O.style.display = "block";
             z.reflash(O.children[O.children.length - 1] as x, true);
-            zoom_o(p.p.zoom);
+            zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
         };
         div.onchange = () => {
             if (div.value) {
