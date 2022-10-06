@@ -1396,6 +1396,8 @@ function db_get() {
             }
         };
         文件_el.append(new_d);
+
+        let ihash = false;
         for (let f of r.result) {
             let d = document.createElement("div");
             d.setAttribute("data-uuid", f.meta.UUID);
@@ -1425,16 +1427,17 @@ function db_get() {
                 for (let x of (f as 集type).中转站) {
                     if (x.global) global_x.push(x);
                 }
+
+            if (`#${f.meta.UUID}` == location.hash) {
+                ihash = true;
+                set_data(f);
+                new_d.remove();
+                文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
+            }
         }
 
-        if (`#${集.meta.UUID}` != location.hash) {
-            for (let f of r.result) {
-                if (`#${f.meta.UUID}` == location.hash) {
-                    set_data(f);
-                    new_d.remove();
-                    文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
-                }
-            }
+        if (!ihash) {
+            set_data(集);
         }
     };
 }
@@ -2029,7 +2032,6 @@ function load_xywh() {
 }
 
 // url
-if (!location.hash) set_data(集);
 if (location.search) {
     let p = new URLSearchParams(location.search);
     if (p.get("src")) {
