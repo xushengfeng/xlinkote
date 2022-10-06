@@ -989,15 +989,16 @@ var 集 = new_集(pname);
 
 function new_集(pname: string): 集type {
     if (!pname) pname = `画布${uuid().slice(0, 7)}`;
+    const pid = uuid_id();
     return {
         meta: {
-            focus_page: pname,
+            focus_page: pid,
             url: "",
             UUID: uuid(),
             file_name: "",
             version: packagejson.version,
         },
-        数据: [{ id: uuid_id(), name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
+        数据: [{ id: pid, name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
         链接: { 0: {} },
         assets: {},
         中转站: [],
