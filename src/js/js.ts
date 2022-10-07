@@ -1138,7 +1138,7 @@ function set_data(l: 集type) {
         集_el.append(div);
         div.value = p.name;
         ps[p.id] = render_data(p);
-        画布s.append(ps[p.id]);
+        // 画布s.append(ps[p.id]);
         div.onclick = () => {
             集_el.querySelectorAll(".selected_item").forEach((el) => {
                 el.classList.remove("selected_item");
@@ -1196,13 +1196,16 @@ function render_data(inputdata: 画布type) {
     el.style.display = "none";
     el.id = inputdata.id;
     el.setAttribute("data-name", inputdata.name);
-    function w(data: data) {
+    let values = {};
+    function w(data: data, pid?: string) {
         let text = "";
         for (let i of data) {
             let style = i.style ? `style='${i.style}'` : "";
-            let v = i.value ? `value='${i.value}'` : "";
-            let s = i.子元素 ? w(i.子元素) : "";
-            text += `<${i.type} id='${i.id}' ${style} ${v}>${s}</${i.type}>`;
+            if (i.value) {
+                values[pid] = i.value;
+            }
+            let s = i.子元素 ? w(i.子元素, i.id) : "";
+            text += `<${i.type} id='${i.id}' ${style}>${s}</${i.type}>`;
             link(i.id).add();
         }
         return text;
@@ -1212,6 +1215,18 @@ function render_data(inputdata: 画布type) {
     el.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
     el.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
     el.style.transform = `scale(${inputdata.p.zoom})`;
+    画布s.append(el);
+
+    function v(data: data, pid?: string) {
+        for (let i of data) {
+            if (values[pid]) {
+                (<markdown>get_x_by_id(pid).querySelector(i.type)).value = values[pid];
+            }
+            if (i.子元素) v(i.子元素, i.id);
+        }
+    }
+    v(inputdata.data);
+    values = null;
     return el;
 }
 
