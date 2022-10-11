@@ -1596,8 +1596,9 @@ function data_changed() {
 function add_画布(xname?: string) {
     get_data(); /* 保存之前的画布 */
     let name = xname || `画布${uuid().slice(0, 7)}`;
-    集.数据.push({ id: uuid_id(), name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
-    集.meta.focus_page = name;
+    let id = uuid_id();
+    集.数据.push({ id: id, name, p: { x: 0, y: 0, zoom: 1 }, data: [] });
+    集.meta.focus_page = id;
     set_data(集);
     data_changed();
 }
