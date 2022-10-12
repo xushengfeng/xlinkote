@@ -37,18 +37,24 @@
     background-color: #0000;
 }
 
+body {
+    color: var(--color6);
+}
+
 input,
 textarea,
 select {
     outline: none;
     border: none;
-    background-color: #0000;
-    color: var(--color6);
-    font-size: 1em;
+    background-color: transparent;
 }
 
 body > #main > #nav {
     background-color: var(--bg1);
+}
+
+#画布 > #导航 {
+    color: var(--bg1);
 }
 
 .模式突出 {
@@ -324,7 +330,7 @@ x-pdf > div > div {
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-color1: rgba(30, 30, 30, 0.8);
+        --bg-color1: rgba(100, 100, 100, 0.8);
         --bg-color2: rgba(0, 0, 0, 0.72);
         --bg-color3: #222;
         --bg-color4: #161616;
@@ -332,9 +338,6 @@ x-pdf > div > div {
         --color6: #fff;
         --shadow1: 0 0 4px #ccc6;
         --bg1: #000000;
-        --icon-color: invert(1);
-    }
-    x-sinppet {
-        filter: invert(1);
+        --icon-color: invert(1) !important;
     }
 }
