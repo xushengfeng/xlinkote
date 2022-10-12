@@ -2266,6 +2266,7 @@ function search(s: string, type: "str" | "regex") {
             for (let id in 集.链接[0]) {
                 let el = document.getElementById(id);
                 if (!el) continue;
+                if (el.querySelector(":scope > x-x")) continue;
                 let text = "";
                 if (el.querySelector("x-md")) {
                     text = (el.querySelector("x-md") as markdown).value;
@@ -2287,6 +2288,7 @@ function search(s: string, type: "str" | "regex") {
             for (let id in 集.链接[0]) {
                 let el = document.getElementById(id);
                 if (!el) continue;
+                if (el.querySelector(":scope > x-x")) continue;
                 let text = "";
                 if (el.querySelector("x-md")) {
                     text = (el.querySelector("x-md") as markdown).value;
