@@ -438,22 +438,9 @@ body > #main > #nav #切换侧栏 {
     justify-content: center;
 }
 .侧栏 > #items > #设置 > div:last-child > div {
-    position: relative;
-    width: var(--icon-p-b-size);
-    height: var(--icon-p-b-size);
-}
-.侧栏 > #items > #设置 > div:last-child > div > .icon {
-    width: var(--icon-size);
-    height: var(--icon-size);
-    left: var(--icon-margin);
-    top: var(--icon-margin);
+    @apply icon-m;
 }
 
-.侧栏 > #items > #设置 > #about > #about_main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .侧栏 > #items > #设置 > #about > div {
     text-align: center;
 }
