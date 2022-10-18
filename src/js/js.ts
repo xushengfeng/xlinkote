@@ -2393,6 +2393,17 @@ function show_g_search() {
 
 let now_focus_id = "0";
 
+/** 判断是否是最小元素 */
+function is_smallest_el(el: x | xlink) {
+    if (el.tagName == "X-LINK") {
+        return true;
+    } else if (!el.querySelector("x-x")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
@@ -2404,6 +2415,9 @@ function show_link_value_bar(el: x | xlink) {
         now_focus_id = el.id;
         link_value_bar.querySelector(":scope > div:nth-child(2)").innerHTML = "";
     }
+
+    // 不是最小元素不显示控件，只显示计算后的值
+    link_value_bar.show_ctrl = is_smallest_el(el);
 }
 
 function move_to_x_link(el: x & xlink) {
@@ -4564,6 +4578,14 @@ class link_value extends HTMLElement {
     }
     get elid() {
         return this._id;
+    }
+
+    set show_ctrl(v: boolean) {
+        if (v) {
+            this.classList.remove("hide_link_ctrl");
+        } else {
+            this.classList.add("hide_link_ctrl");
+        }
     }
 }
 

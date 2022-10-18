@@ -511,6 +511,9 @@ body > #main > #画布 > x-link-value > div > img {
 body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
     padding: 0 0.5em;
 }
+.hide_link_ctrl > div:nth-child(1) > img {
+    display: none;
+}
 
 body > #搜索 {
     position: absolute;
