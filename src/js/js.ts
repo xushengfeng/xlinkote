@@ -1837,6 +1837,11 @@ function get_x_by_id(id: string) {
     return document.getElementById(id) as x;
 }
 
+/** 获取存在链接值的元素 */
+function get_link_el_by_id(id: string) {
+    return document.getElementById(id) as x | xlink;
+}
+
 const 图层_el = document.getElementById("层");
 
 class 图层 {
@@ -2268,9 +2273,9 @@ function search(s: string, type: "str" | "regex") {
     switch (type) {
         case "str":
             for (let id in 集.链接[0]) {
-                let el = document.getElementById(id);
+                let el = get_link_el_by_id(id);
                 if (!el) continue;
-                if (el.querySelector(":scope > x-x")) continue;
+                if (!is_smallest_el(el)) continue;
                 let text = "";
                 if (el.querySelector("x-md")) {
                     text = (el.querySelector("x-md") as markdown).value;
@@ -2290,9 +2295,9 @@ function search(s: string, type: "str" | "regex") {
             break;
         case "regex":
             for (let id in 集.链接[0]) {
-                let el = document.getElementById(id);
+                let el = get_link_el_by_id(id);
                 if (!el) continue;
-                if (el.querySelector(":scope > x-x")) continue;
+                if (!is_smallest_el(el)) continue;
                 let text = "";
                 if (el.querySelector("x-md")) {
                     text = (el.querySelector("x-md") as markdown).value;
