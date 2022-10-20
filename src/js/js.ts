@@ -1131,6 +1131,7 @@ function version_tr(obj): 集type {
         case "0.6.7":
         case "0.6.8":
         case "0.7.0":
+        case "0.7.1":
             return obj;
     }
 }
