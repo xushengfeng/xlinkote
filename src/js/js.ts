@@ -1063,6 +1063,11 @@ function rename_el() {
     return el;
 }
 
+/**
+ * 转换旧版本集到新版本
+ * @param obj 输入集
+ * @returns 输出集
+ */
 function version_tr(obj): 集type {
     let v = obj.meta.version || "";
     switch (v) {
@@ -1120,6 +1125,9 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.6.6";
         case "0.6.6":
+        case "0.6.7":
+        case "0.6.8":
+        case "0.7.0":
             return obj;
     }
 }
