@@ -976,6 +976,7 @@ type 集type = {
 type data = Array<{
     id: string;
     style: string;
+    class?: string;
     type: string;
     fixed?: boolean;
     子元素?: data;
@@ -1031,7 +1032,9 @@ function get_data() {
         for (let i of map) {
             let el = <x>els[i];
             let type = "X-X";
-            data.push({ id: el.id, style: el.getAttribute("style"), 子元素: el.value, type, fixed: el.fixed });
+            data.push({ id: el.id, style: "", 子元素: el.value, type, fixed: el.fixed });
+            if (el.getAttribute("style")) data[data.length - 1].style = el.getAttribute("style");
+            if (el.className) data[data.length - 1].class = el.className;
         }
         if ((O as HTMLElement).style.display == "block") {
             p[O.id] = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
@@ -1213,11 +1216,12 @@ function render_data(inputdata: 画布type) {
         let text = "";
         for (let i of data) {
             let style = i.style ? `style='${i.style}'` : "";
+            let _class = i.class ? `class='${i.class}'` : "";
             if (i.value) {
                 values[pid] = i.value;
             }
             let s = i.子元素 ? w(i.子元素, i.id) : "";
-            text += `<${i.type} id='${i.id}' ${style}>${s}</${i.type}>`;
+            text += `<${i.type} id='${i.id}' ${style} ${_class}>${s}</${i.type}>`;
             link(i.id).add();
         }
         return text;
@@ -3100,7 +3104,8 @@ class x extends HTMLElement {
             if (el.tagName == "X-X") {
                 list.push({
                     id: el.id,
-                    style: el.getAttribute("style"),
+                    style: el.getAttribute("style") || "",
+                    class: el.className,
                     子元素: (el as x).value,
                     type: el.tagName,
                     fixed: (el as x).fixed,
@@ -3108,7 +3113,8 @@ class x extends HTMLElement {
             } else {
                 list.push({
                     id: el.id,
-                    style: el.getAttribute("style"),
+                    style: el.getAttribute("style") || "",
+                    class: el.className,
                     value: (el as markdown).value,
                     type: el.tagName,
                 });
@@ -3122,12 +3128,14 @@ class x extends HTMLElement {
             if (d.type == "X-X") {
                 let el = document.createElement(d.type) as x;
                 el.setAttribute("style", d.style);
+                el.className = d.class;
                 el.id = d.id;
                 this.append(el);
                 el.value = d.子元素;
             } else {
                 let el = document.createElement(d.type) as markdown;
                 el.setAttribute("style", d.style);
+                el.className = d.class;
                 el.id = d.id;
                 this.append(el);
                 el.value = d.value;
