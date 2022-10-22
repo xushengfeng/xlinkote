@@ -3391,6 +3391,7 @@ class markdown extends HTMLElement {
             } else {
                 let l_l = [
                     ["(", ")"],
+                    ["[", "]"],
                     ["{", "}"],
                     ["<", ">"],
                     ["'", "'"],
@@ -3400,18 +3401,19 @@ class markdown extends HTMLElement {
                     ["~", "~"],
                 ];
                 for (let i of l_l) {
-                    if (e.key == i[0] && text.value.charAt(text.selectionStart) != i[1]) {
+                    if (e.key == i[0] && e.key != i[1]) {
                         e.preventDefault();
                         let t = text.value.slice(text.selectionStart, text.selectionEnd);
                         let s = text.selectionStart;
                         text.setRangeText(i[0] + t + i[1]);
                         text.selectionStart = s + i[0].length;
                         text.selectionEnd = s + i[0].length + t.length;
+                        if (e.key == "[" && text.value.charAt(text.selectionStart - 2) == "[") {
+                            text.setRangeText(`${t}#${uuid_id()}`);
+                            if (t) text.selectionEnd -= 8;
+                        }
                         text.dispatchEvent(new Event("input"));
                     }
-                }
-                if (e.key == "[" && text.value.charAt(text.selectionStart - 1) == "[") {
-                    text.setRangeText(`#${uuid().slice(0, 7)}]]`);
                 }
             }
             if (e.key == "Tab") {
