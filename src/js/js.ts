@@ -2448,6 +2448,7 @@ function move_to_x_link(el: x & xlink) {
     }
 }
 
+/** 链接处理 */
 function link(key0: string) {
     let t = new Date().getTime();
     // key1存在，作用于边，否则作用于点
@@ -2511,6 +2512,26 @@ function link(key0: string) {
                     // 只存储在边的一个方向上，以时间换空间
                     集.链接[key0][key1] = { value: 1, time: t };
                 }
+            }
+        },
+        /** 获取值 */
+        get_v() {
+            if (is_smallest_el(get_link_el_by_id(key0))) {
+                if (集.链接[0][key0]) {
+                    return 集.链接[0][key0].value;
+                }
+            } else {
+                let nl = [];
+                get_link_el_by_id(key0)
+                    .querySelectorAll("x-x, x-link")
+                    .forEach((el) => {
+                        if (集.链接[0][el.id]) {
+                            nl.push(集.链接[0][el.id].value);
+                        }
+                    });
+                let n = 0;
+                for (let i of nl) n += i;
+                return n / nl.length;
             }
         },
     };
@@ -4593,10 +4614,8 @@ class link_value extends HTMLElement {
     }
 
     set elid(id: string) {
-        if (集.链接[0][id]) {
-            this._id = id;
-            this.v.innerText = String(集.链接[0][id].value);
-        }
+        this._id = id;
+        this.v.innerText = String(link(id).get_v());
     }
     get elid() {
         return this._id;
