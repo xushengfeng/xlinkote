@@ -239,6 +239,8 @@ var O = document.getElementById("O");
 const link_value_bar = document.createElement("x-link-value") as link_value;
 画布.append(link_value_bar);
 
+const breadcrumbs_el = document.getElementById("breadcrumbs");
+
 // 模式切换
 
 var 模式: "浏览" | "设计" | "绘制";
@@ -2449,21 +2451,27 @@ function move_to_x_link(el: x & xlink) {
     }
 }
 
+var now_data_id = "0";
+
 /** 跳转到元素位置并记录 */
 function jump_to_x_link(el: x & xlink) {
     move_to_x_link(el);
+    if (el.id == now_data_id) return;
     let li = document.createElement("div");
     let main = document.createElement("div");
     let children = document.createElement("div");
     li.append(main, children);
+    li.classList.add("bci");
     main.innerText = `#${el.id}`;
     li.setAttribute("data-id", el.id);
     main.onpointerenter = () => {
         move_to_x_link(el);
     };
     main.onpointerdown = () => {
-        move_to_x_link(el);
+        jump_to_x_link(el);
     };
+    breadcrumbs_el.querySelector(`div[data-id="${now_data_id}"] > div:nth-child(2)`).append(li);
+    now_data_id = el.id;
 }
 
 /** 链接处理 */
@@ -4592,6 +4600,9 @@ class link_value extends HTMLElement {
                 vl.append(el);
                 el.onpointerover = () => {
                     move_to_x_link(get_x_by_id(i));
+                };
+                el.onpointerup = () => {
+                    jump_to_x_link(get_x_by_id(i));
                 };
             }
 
