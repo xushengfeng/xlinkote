@@ -1917,7 +1917,7 @@ class 图层 {
                     });
                 };
                 s.onclick = () => {
-                    move_to_x_link(get_x_by_id(i.id));
+                    jump_to_x_link(get_x_by_id(i.id));
                     图层_el.querySelectorAll("input").forEach((el) => {
                         if (el.checked) {
                             this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
@@ -2385,7 +2385,7 @@ function show_search_l(l: search_result) {
                 search_r.append(div);
                 div.onpointerdown = () => {
                     let el = document.getElementById(i.id);
-                    move_to_x_link(el as x & xlink);
+                    jump_to_x_link(el as x & xlink);
                     show_search_l([]);
                     let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
                     console.log(id);
@@ -2438,6 +2438,7 @@ function show_link_value_bar(el: x | xlink) {
     link_value_bar.show_ctrl = is_smallest_el(el);
 }
 
+/** 跳转到元素位置 */
 function move_to_x_link(el: x & xlink) {
     let x = el_offset(el, O).x - 画布.offsetWidth / 2,
         y = el_offset(el, O).y - 画布.offsetHeight / 2;
@@ -2446,6 +2447,23 @@ function move_to_x_link(el: x & xlink) {
     if (el.tagName == "X-X") {
         z.focus(el);
     }
+}
+
+/** 跳转到元素位置并记录 */
+function jump_to_x_link(el: x & xlink) {
+    move_to_x_link(el);
+    let li = document.createElement("div");
+    let main = document.createElement("div");
+    let children = document.createElement("div");
+    li.append(main, children);
+    main.innerText = `#${el.id}`;
+    li.setAttribute("data-id", el.id);
+    main.onpointerenter = () => {
+        move_to_x_link(el);
+    };
+    main.onpointerdown = () => {
+        move_to_x_link(el);
+    };
 }
 
 /** 链接处理 */
