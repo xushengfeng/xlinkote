@@ -515,6 +515,13 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
     display: none;
 }
 
+.breadcrumbs {
+    @apply absolute h-4 bg-white;
+    top: var(--icon-p-b-size);
+    left: var(--icon-p-b-size);
+    width: calc(100vw - var(--icon-p-b-size));
+}
+
 body > #搜索 {
     position: absolute;
     top: 30vh;
