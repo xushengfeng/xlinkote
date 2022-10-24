@@ -327,6 +327,9 @@ body > #main > #nav #切换侧栏 {
     position: sticky;
     top: var(--icon-p-b-size);
 }
+#xywh > input {
+    width: 25%;
+}
 .层容器 {
     overflow: auto;
 }

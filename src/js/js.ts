@@ -2077,19 +2077,32 @@ el_style.oninput = () => {
     z.聚焦元素.setAttribute("style", el_style.value);
 };
 
-var xywh_el = <HTMLInputElement>document.getElementById("xywh");
-xywh_el.oninput = () => {
-    let l = xywh_el.value.split(",").map((v) => v.trim());
-    z.聚焦元素.style.left = Number(l[0]) ? l[0] + "px" : l[0];
-    z.聚焦元素.style.top = Number(l[1]) ? l[1] + "px" : l[1];
-    z.聚焦元素.style.width = Number(l[2]) ? l[2] + "px" : l[2];
-    z.聚焦元素.style.height = Number(l[3]) ? l[3] + "px" : l[3];
-
+var xywh_x_el = <HTMLInputElement>document.getElementById("xywh_x");
+var xywh_y_el = <HTMLInputElement>document.getElementById("xywh_y");
+var xywh_w_el = <HTMLInputElement>document.getElementById("xywh_w");
+var xywh_h_el = <HTMLInputElement>document.getElementById("xywh_h");
+xywh_x_el.oninput = () => {
+    z.聚焦元素.style.left = xywh_x_el.value + "px";
+    data_changed();
+};
+xywh_y_el.oninput = () => {
+    z.聚焦元素.style.top = xywh_y_el.value + "px";
+    data_changed();
+};
+xywh_w_el.oninput = () => {
+    z.聚焦元素.style.width = xywh_w_el.value + "px";
+    data_changed();
+};
+xywh_h_el.oninput = () => {
+    z.聚焦元素.style.height = xywh_h_el.value + "px";
     data_changed();
 };
 function load_xywh() {
     let fe = z.聚焦元素;
-    xywh_el.value = `${fe.offsetLeft}, ${fe.offsetTop}, ${fe.offsetWidth}, ${fe.offsetHeight}`;
+    xywh_x_el.value = String(fe.offsetLeft);
+    xywh_y_el.value = String(fe.offsetTop);
+    xywh_w_el.value = String(fe.offsetWidth);
+    xywh_h_el.value = String(fe.offsetHeight);
 }
 
 // url
