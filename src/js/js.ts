@@ -11,9 +11,14 @@ import file_svg from "../../assets/icons/file.svg";
 import handle_svg from "../../assets/icons/handle.svg";
 import ul_hide_svg from "../../assets/icons/ul_hide.svg";
 import ul_show_svg from "../../assets/icons/ul_show.svg";
+import ul_hide2_svg from "../../assets/icons/ul_hide2.svg";
 import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
 import remove_svg from "../../assets/icons/remove.svg";
+
+function icon(src: string) {
+    return `<img src="${src}" class="icon">`;
+}
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
@@ -240,6 +245,20 @@ const link_value_bar = document.createElement("x-link-value") as link_value;
 画布.append(link_value_bar);
 
 const breadcrumbs_el = document.getElementById("breadcrumbs");
+const bc_sw_el = document.getElementById("bc_sw");
+let bc_show = false;
+bc_sw_el.onclick = () => {
+    bc_show = !bc_show;
+    let h = 0;
+    if (bc_show) {
+        bc_sw_el.innerHTML = icon(ul_show_svg);
+        h = (<HTMLElement>breadcrumbs_el.querySelector(".bci > div:nth-child(2)")).offsetHeight;
+    } else {
+        bc_sw_el.innerHTML = icon(ul_hide2_svg);
+        h = bc_sw_el.offsetHeight;
+    }
+    breadcrumbs_el.style.height = h + "px";
+};
 
 // 模式切换
 

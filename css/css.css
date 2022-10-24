@@ -516,14 +516,21 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
 }
 
 .breadcrumbs {
-    @apply absolute h-6 overflow-hidden flex bg-white;
+    @apply absolute h-6 overflow-hidden flex bg-white transition-all shadow-sm;
     top: var(--icon-p-b-size);
     left: var(--icon-p-b-size);
     width: calc(100vw - var(--icon-p-b-size));
 }
 
 .bci {
-    @apply flex items-end gap-1;
+    @apply flex items-end gap-1 flex-grow;
+}
+
+#bc_sw {
+    @apply relative w-6 h-6 cursor-pointer;
+}
+#bc_sw > .icon {
+    @apply w-6 h-6;
 }
 
 body > #搜索 {
