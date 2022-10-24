@@ -884,7 +884,7 @@ var free_mouse = (e: MouseEvent) => {
                 }
             }
             if (xel.el == z.聚焦元素) {
-                el_style.value = xel.el.getAttribute("style");
+                el_style.value = xel.el.getAttribute("style").replaceAll("; ", ";\n");
                 load_xywh();
             }
         }
@@ -2018,7 +2018,7 @@ class 图层 {
         }
         el.classList.add("x-x_selected");
         selected_el.push(el);
-        el_style.value = el.getAttribute("style");
+        el_style.value = el.getAttribute("style").replaceAll("; ", ";\n");
         load_xywh();
 
         if (模式 == "设计") {
@@ -2074,7 +2074,7 @@ var z = new 图层();
 var el_style = <HTMLTextAreaElement>document.getElementById("el_style");
 
 el_style.oninput = () => {
-    z.聚焦元素.setAttribute("style", el_style.value);
+    z.聚焦元素.setAttribute("style", el_style.value.replaceAll("\n", ""));
 };
 
 var xywh_x_el = <HTMLInputElement>document.getElementById("xywh_x");
