@@ -2491,6 +2491,11 @@ var now_data_id = "0";
 /** 跳转到元素位置并记录 */
 function jump_to_x_link(el: x & xlink) {
     move_to_x_link(el);
+    add_bci(el);
+}
+
+/** 添加到面包屑栏 */
+function add_bci(el: x & xlink) {
     if (el.id == now_data_id) return;
     let li = document.createElement("div");
     let main = document.createElement("div");
