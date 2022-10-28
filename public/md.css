@@ -33,6 +33,10 @@ a {
     text-decoration: underline;
 }
 
+ul {
+    padding-left: 2em;
+}
+
 x-link {
     color: #0000cc;
 }
