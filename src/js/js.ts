@@ -2476,26 +2476,26 @@ function show_link_value_bar(el: x | xlink) {
 }
 
 /** 跳转到元素位置 */
-function move_to_x_link(el: x & xlink) {
+function move_to_x_link(el: x | xlink) {
     let x = el_offset(el, O).x - 画布.offsetWidth / 2,
         y = el_offset(el, O).y - 画布.offsetHeight / 2;
     O.style.left = -x - (el.offsetWidth * zoom) / 2 + "px";
     O.style.top = -y - (el.offsetHeight * zoom) / 2 + "px";
     if (el.tagName == "X-X") {
-        z.focus(el);
+        z.focus(el as x);
     }
 }
 
 var now_data_id = "0";
 
 /** 跳转到元素位置并记录 */
-function jump_to_x_link(el: x & xlink) {
+function jump_to_x_link(el: x | xlink) {
     move_to_x_link(el);
     add_bci(el);
 }
 
 /** 添加到面包屑栏 */
-function add_bci(el: x & xlink) {
+function add_bci(el: x | xlink) {
     if (el.id == now_data_id) return;
     let li = document.createElement("div");
     let main = document.createElement("div");
@@ -4623,10 +4623,14 @@ class link_value extends HTMLElement {
         add_el.onclick = () => {
             link("0").value(this._id, 1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
+            now_data_id = "0";
+            add_bci(get_link_el_by_id(this._id));
         };
         down_el.onclick = () => {
             link("0").value(this._id, -1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
+            now_data_id = "0";
+            add_bci(get_link_el_by_id(this._id));
         };
 
         const vl = document.createElement("div");
