@@ -3615,7 +3615,7 @@ function line_el(l: Array<any>) {
             continue;
         }
         if (i.type == "html_block") {
-            i.tag = i.content.match(/<(\S*?)>/)?.[1] || "";
+            i.tag = i.content.match(/<(\S*?)[ >]/)?.[1] || "";
             i.nesting = 1;
         }
         if (i.type == "mathjax_block") i.nesting = 1;
