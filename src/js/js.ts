@@ -3253,6 +3253,7 @@ class markdown extends HTMLElement {
         let text = this.text;
         for (let i of this.index) {
             let el = this.h.querySelector(`:scope > ${i[0]}`) as HTMLElement;
+            if (el.tagName != "LI" && el.tagName != "UL") continue;
             el.style.position = "relative";
             let handle = el.querySelector(".handle") as HTMLImageElement;
             if (!handle) {
