@@ -425,7 +425,9 @@ const 临时中转站 = document.getElementById("临时");
 
 // 画布
 
+type p_point = { x: number; y: number };
 var o_e: MouseEvent;
+var o_ab_p: p_point;
 var o_rect;
 var o_vb_sb = { x0: 0, y0: 0, x1: 0, y1: 0 };
 var move: boolean = false;
@@ -445,6 +447,7 @@ document.onmousedown = (e) => {
         if (e.button == 0) {
             if (模式 != "设计") return;
             o_e = e;
+            o_ab_p = e2p(e);
             let select = document.createElement("div");
             select_id = select.id = `s${new Date().getTime()}`;
             document.getElementById("选择").append(select);
@@ -462,7 +465,7 @@ document.onmouseup = (e) => {
     mouse(e);
     if (e.button == 0 && selected_el.length == 0 && move && o_e) {
         if (模式 != "设计") return;
-        let r = e2rect(o_e, e);
+        let r = p2rect(o_ab_p, e2p(e));
         creat_x_x(r.x - el_offset(O).x, r.y - el_offset(O).y, r.w);
     }
     o_e = null;
@@ -473,6 +476,7 @@ document.onmouseup = (e) => {
 };
 var mouse = (e: MouseEvent) => {
     if (o_e) {
+        let now_point: p_point = e2p(e);
         if (e.buttons == 2) {
             let x = o_rect.x + (fxsd == 0 || fxsd == 2 ? e.clientX - o_e.clientX : 0),
                 y = o_rect.y + (fxsd == 0 || fxsd == 1 ? e.clientY - o_e.clientY : 0);
@@ -484,13 +488,13 @@ var mouse = (e: MouseEvent) => {
                     el.classList.remove("x-x_selected");
                     selected_el = [];
                 });
-                let rect = e2rect(o_e, e);
+                let rect = p2rect(o_ab_p, now_point);
                 let select = <HTMLDivElement>document.getElementById(select_id);
                 select.id = select_id;
-                select.style.left = rect.x + "px";
-                select.style.top = rect.y + "px";
-                select.style.width = rect.w + "px";
-                select.style.height = rect.h + "px";
+                select.style.left = (rect.x + el_offset2(O, select.parentElement).x) * zoom + "px";
+                select.style.top = (rect.y + el_offset2(O, select.parentElement).y) * zoom + "px";
+                select.style.width = rect.w * zoom + "px";
+                select.style.height = rect.h * zoom + "px";
                 select_x_x(rect);
             }
         }
@@ -601,24 +605,25 @@ var touch_zoom = (e: TouchEvent) => {
     }
 };
 
-function e2rect(e0: MouseEvent, e1: MouseEvent) {
-    let r0 = { x: e0.clientX - 画布.getBoundingClientRect().x, y: e0.clientY - 画布.getBoundingClientRect().y },
-        r1 = { x: e1.clientX - 画布.getBoundingClientRect().x, y: e1.clientY - 画布.getBoundingClientRect().y };
+function p2rect(r0: p_point, r1: p_point) {
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
+}
+
+/**定位指针到画布坐标 */
+function e2p(e: MouseEvent) {
+    return {
+        x: (e.clientX - el_offset(O, document.body).x) / zoom,
+        y: (e.clientY - el_offset(O, document.body).y) / zoom,
+    } as p_point;
 }
 
 var selected_el: x[] = [];
 
+/**选择元素 */
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     for (const el of O.querySelectorAll(":scope > x-x")) {
-        let r = el.getBoundingClientRect();
-        let rr = {
-            left: r.left - 画布.getBoundingClientRect().x,
-            top: r.top - 画布.getBoundingClientRect().y,
-            right: r.right - 画布.getBoundingClientRect().x,
-            bottom: r.bottom - 画布.getBoundingClientRect().y,
-        };
-        if (rect.x <= rr.left && rr.right <= rect.x + rect.w && rect.y <= rr.top && rr.bottom <= rect.y + rect.h) {
+        let r = el_offset2(el);
+        if (rect.x <= r.x && r.x + r.w <= rect.x + rect.w && rect.y <= r.y && r.y + r.h <= rect.y + rect.h) {
             el.classList.add("x-x_selected");
             selected_el.push(<x>el);
         }
@@ -655,11 +660,18 @@ function el_offset(el: Element, pel?: Element) {
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
     return { x: ox, y: oy };
 }
+
+/**元素大小和相对位置（画布坐标） */
 function el_offset2(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
-    return { x: ox / zoom, y: oy / zoom };
+    return {
+        x: ox / zoom,
+        y: oy / zoom,
+        w: el.getBoundingClientRect().width / zoom,
+        h: el.getBoundingClientRect().height / zoom,
+    };
 }
 
 document.getElementById("画布").onwheel = (e) => {
