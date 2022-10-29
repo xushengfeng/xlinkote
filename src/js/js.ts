@@ -610,7 +610,7 @@ function e2rect(e0: MouseEvent, e1: MouseEvent) {
 var selected_el: x[] = [];
 
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
-    for (const el of 画布.querySelectorAll("x-x")) {
+    for (const el of O.querySelectorAll(":scope > x-x")) {
         let r = el.getBoundingClientRect();
         let rr = {
             left: r.left - 画布.getBoundingClientRect().x,
