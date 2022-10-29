@@ -1215,6 +1215,7 @@ function set_data(l: 集type) {
             集.meta.focus_page = p.id;
             O = ps[p.id];
             O.style.display = "block";
+            zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
             reload_side();
         }
     }
