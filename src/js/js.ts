@@ -110,8 +110,8 @@ document.getElementById("保存设置").onclick = () => {
     save_setting();
 };
 document.getElementById("新建元素").onclick = () => {
-    const margin = 8;
-    creat_x_x(-el_offset(O).x + margin, -el_offset(O).y + margin, 画布.offsetWidth - margin * 2);
+    const margin = 8 / zoom;
+    creat_x_x(-el_offset2(O).x + margin, -el_offset2(O).y + margin, 画布.offsetWidth / zoom - margin * 2);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
@@ -466,7 +466,7 @@ document.onmouseup = (e) => {
     if (e.button == 0 && selected_el.length == 0 && move && o_e) {
         if (模式 != "设计") return;
         let r = p2rect(o_ab_p, e2p(e));
-        creat_x_x(r.x - el_offset(O).x, r.y - el_offset(O).y, r.w);
+        creat_x_x(r.x, r.y, r.w);
     }
     o_e = null;
     move = false;
@@ -905,9 +905,9 @@ var free_mouse = (e: MouseEvent) => {
 
 function creat_x_x(x: number, y: number, w: number) {
     let xel = <x>document.createElement("x-x");
-    xel.style.left = x / zoom + "px";
-    xel.style.top = y / zoom + "px";
-    xel.style.width = w / zoom + "px";
+    xel.style.left = x + "px";
+    xel.style.top = y + "px";
+    xel.style.width = w + "px";
     z.push(xel);
     var md = document.createElement("x-md");
     xel.append(md);
