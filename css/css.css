@@ -366,9 +366,6 @@ body > #main > #nav #切换侧栏 {
     @apply float-left;
 }
 
-.侧栏 > #items > #markdown > div {
-    @apply float-left;
-}
 .侧栏 > #items > #中转站 {
     display: flex;
     flex-direction: column;
