@@ -1266,8 +1266,10 @@ function set_data(l: 集type) {
 
 /** 侧栏刷新 */
 function reload_side() {
-    z.focus(O.children[O.children.length - 1] as x);
-    z.reflash(true);
+    if (O.children[O.children.length - 1]) {
+        z.focus(O.children[O.children.length - 1] as x);
+        z.reflash(true);
+    }
     l_math();
     tmp_s_reflash();
     assets_reflash();
