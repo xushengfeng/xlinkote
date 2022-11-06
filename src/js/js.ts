@@ -1103,6 +1103,7 @@ function get_data() {
             当前画布 = 画布数据;
         }
     }
+    window["xln"]["集"] = l;
     return l;
 }
 
@@ -2771,6 +2772,8 @@ function to_none_layout(els: x[]) {
     x.value = data;
     reflash_none_layout(x);
 }
+
+window["xln"] = {};
 
 // MD
 import markdownit from "markdown-it";
