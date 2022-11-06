@@ -1092,12 +1092,16 @@ function get_data() {
             p[O.id] = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
             集.meta.focus_page = O.id;
         }
-        集.数据.push({
+        let 画布数据 = {
             id: O.id,
             data,
             name: O.getAttribute("data-name"),
             p: p[O.id],
-        });
+        };
+        集.数据.push(画布数据);
+        if (O.id == 当前画布.id) {
+            当前画布 = 画布数据;
+        }
     }
     return l;
 }
@@ -2046,9 +2050,14 @@ class 图层 {
         }
     }
 
-    push(el: x) {
+    push(el: x, pel?: x) {
         el.id = el.id === "undefined" || !el.id ? `${uuid().slice(0, 7)}` : el.id;
-        O.append(el);
+        if (pel) {
+            pel.append(el);
+        } else {
+            O.append(el);
+        }
+        get_data();
         this.reflash(el);
         link(el.id).add();
     }
