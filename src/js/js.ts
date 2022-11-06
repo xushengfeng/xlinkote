@@ -1676,10 +1676,12 @@ function data_changed() {
             document.title = `● ` + get_title();
             saved = false;
         }
+        const data = get_data();
         if (集.meta.file_name) {
-            write_file(json2md(get_data()));
-            db_put(get_data());
+            write_file(json2md(data));
+            db_put(data);
         }
+        z.reflash();
         push_undo();
     }, save_dt);
 }
