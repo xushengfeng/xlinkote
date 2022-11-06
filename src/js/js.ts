@@ -39,6 +39,7 @@ function uuid() {
     }
 }
 
+/** 七位uuid */
 function uuid_id() {
     return uuid().slice(0, 7);
 }
@@ -275,6 +276,7 @@ document.getElementById("绘制").onclick = () => {
 
     add_none_layout();
 };
+/** 切换模式 */
 function set_模式(模式x: "浏览" | "设计" | "绘制") {
     if (模式 == "绘制") {
         reflash_none_layout(O.lastElementChild as x);
@@ -326,6 +328,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
 }
 set_模式("设计");
 
+/** 移除所有选择 */
 function blur_all() {
     selected_el = [];
     for (let x of 画布.querySelectorAll(".x-x_selected")) {
@@ -425,6 +428,7 @@ const 临时中转站 = document.getElementById("临时");
 
 // 画布
 
+/** 画布坐标 */
 type p_point = { x: number; y: number };
 var o_e: MouseEvent;
 var o_ab_p: p_point;
@@ -474,6 +478,8 @@ document.onmouseup = (e) => {
     if (select_id) document.getElementById(select_id).remove();
     select_id = "";
 };
+
+/** 鼠标事件处理，滚动，选择，画框创建 */
 var mouse = (e: MouseEvent) => {
     if (o_e) {
         let now_point: p_point = e2p(e);
@@ -558,6 +564,7 @@ document.ontouchend = (e) => {
 
 var pointer_move = true;
 
+/** 触控事件处理，移动画布 */
 var touch_move = (e: TouchEvent) => {
     if (o_touch_e) {
         if (pointer_move) {
@@ -578,6 +585,7 @@ var touch_move = (e: TouchEvent) => {
     }
 };
 
+/** 双指缩放 */
 var touch_zoom = (e: TouchEvent) => {
     if (o_touch_zoom_e) {
         if (pointer_move) {
@@ -605,6 +613,7 @@ var touch_zoom = (e: TouchEvent) => {
     }
 };
 
+/** 两个画布坐标转为框 */
 function p2rect(r0: p_point, r1: p_point) {
     return { x: Math.min(r0.x, r1.x), y: Math.min(r0.y, r1.y), w: Math.abs(r0.x - r1.x), h: Math.abs(r0.y - r1.y) };
 }
@@ -644,6 +653,7 @@ document.getElementById("归位").onclick = () => {
 var zoom = 1;
 const zoom_el = document.getElementById("缩放");
 
+/** 缩放 */
 function zoom_o(z: number) {
     zoom = z;
     O.style.transform = `scale(${z})`;
@@ -654,6 +664,7 @@ function zoom_o(z: number) {
 O.style.left = `${画布.offsetWidth / 2}px`;
 O.style.top = `${画布.offsetHeight / 2}px`;
 
+/**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
@@ -783,6 +794,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
     free_move = false;
     free_o_rects = [];
 });
+
+/** 调整元素大小、位置以及元素聚焦 */
 var free_mouse = (e: MouseEvent) => {
     if (free_o_e) {
         for (const xel of free_o_rects) {
@@ -903,6 +916,7 @@ var free_mouse = (e: MouseEvent) => {
     }
 };
 
+/** 通过画布坐标创建主元素 */
 function creat_x_x(x: number, y: number, w: number) {
     let xel = <x>document.createElement("x-x");
     xel.style.left = x + "px";
@@ -915,7 +929,7 @@ function creat_x_x(x: number, y: number, w: number) {
     set_模式("浏览");
 }
 
-// 中转站
+/** 中转站刷新 */
 function tmp_s_reflash() {
     临时中转站.innerHTML = "";
     for (let x of 集.中转站) {
@@ -992,6 +1006,7 @@ document.onkeydown = (e) => {
 
 // 文件数据
 let pname = `画布${uuid().slice(0, 7)}`;
+/** 文件 */
 type 集type = {
     meta: {
         focus_page: string;
@@ -1006,6 +1021,7 @@ type 集type = {
     中转站: data;
 };
 
+/** 主元素 */
 type data = Array<{
     id: string;
     style: string;
@@ -1016,6 +1032,7 @@ type data = Array<{
     value?: string;
     global?: boolean;
 }>;
+/** 画布 */
 type 画布type = {
     id: string;
     name: string;
@@ -1025,6 +1042,7 @@ type 画布type = {
 
 var 集 = new_集(pname);
 
+/** 新建默认集 */
 function new_集(pname: string): 集type {
     if (!pname) pname = `画布${uuid().slice(0, 7)}`;
     const pid = uuid_id();
@@ -1043,6 +1061,7 @@ function new_集(pname: string): 集type {
     };
 }
 
+/** 获取集 */
 function get_data() {
     let l = 集;
     let p = {};
@@ -1177,6 +1196,7 @@ var 当前画布 = 集.数据[0] as 画布type;
 
 const 集_el = document.getElementById("集");
 
+/** 设置集 */
 function set_data(l: 集type) {
     l = version_tr(l);
     for (let i in l) {
@@ -1238,6 +1258,7 @@ function set_data(l: 集type) {
     set_css("./md.css");
 }
 
+/** 侧栏刷新 */
 function reload_side() {
     z.reflash(O.children[O.children.length - 1] as x, true);
     l_math();
@@ -1245,6 +1266,7 @@ function reload_side() {
     assets_reflash();
 }
 
+/** 渲染画布 */
 function render_data(inputdata: 画布type) {
     let el = document.createElement("div");
     el.style.display = "none";
@@ -1286,6 +1308,8 @@ function render_data(inputdata: 画布type) {
 }
 
 set_css("./md.css");
+
+/** 设置文件css样式 */
 function set_css(t: string) {
     if (t.includes("\n")) {
     } else {
@@ -1435,6 +1459,7 @@ var files;
 
 const 文件_el = document.getElementById("文件");
 
+/** 获取文件并渲染 */
 function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
@@ -1513,6 +1538,7 @@ function db_get() {
     };
 }
 
+/** 下载数据库 */
 function db_download() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
@@ -1527,6 +1553,7 @@ function db_download() {
     };
 }
 
+/** 上传数据库 */
 function db_load(t: string) {
     let o = JSON.parse(t);
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
@@ -1606,6 +1633,7 @@ function push_undo() {
     console.log(undo_stack);
 }
 
+/** 下载文件 */
 async function download_file(text: string) {
     if (window.showSaveFilePicker) {
         fileHandle = await window.showSaveFilePicker({
@@ -1633,6 +1661,8 @@ async function download_file(text: string) {
 
 var save_timeout = NaN,
     save_dt = 200;
+
+/** 文件状态改变触发 */
 function data_changed() {
     clearTimeout(save_timeout);
     save_timeout = window.setTimeout(() => {
@@ -1648,6 +1678,7 @@ function data_changed() {
     }, save_dt);
 }
 
+/** 添加画布 */
 function add_画布(xname?: string) {
     get_data(); /* 保存之前的画布 */
     let name = xname || `画布${uuid().slice(0, 7)}`;
@@ -1658,7 +1689,7 @@ function add_画布(xname?: string) {
     data_changed();
 }
 
-// 拖放
+/** 拖放数据处理 */
 function put_datatransfer(data: DataTransfer, x: number, y: number) {
     if (data.files.length != 0) {
         for (let f of data.files) {
@@ -1695,6 +1726,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
 
 // 添加文件或文字
 import TurndownService from "turndown";
+/** 添加文件或文字到画布 */
 function add_file(type: string, text: string, data: string, x: number, y: number) {
     let types = type.split("/");
     let xel = <x>document.createElement("x-x");
@@ -1718,6 +1750,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
     }
 }
 
+/** 摘录 */
 document.addEventListener("message", (msg: any) => {
     alert(msg.data);
     const data = JSON.parse(msg.data);
@@ -1755,7 +1788,7 @@ document.addEventListener("message", (msg: any) => {
 
 import CryptoJS from "crypto-js";
 
-// 资源
+/** 添加资源到assets */
 function put_assets(url: string, base64: string) {
     let id = uuid().slice(0, 7);
     let sha = "";
@@ -1772,6 +1805,7 @@ function put_assets(url: string, base64: string) {
 
 const assets_el = document.getElementById("资源");
 
+/** 刷新资源栏 */
 function assets_reflash() {
     assets_el.innerHTML = "";
     for (let i in 集.assets) {
@@ -1793,7 +1827,7 @@ function assets_reflash() {
     }
 }
 
-// 画板
+/** 新建绘制元素 */
 function new_draw() {
     let xel = <x>document.createElement("x-x");
     xel.id = uuid_id();
@@ -1812,7 +1846,7 @@ var focus_draw_el = null as draw;
     if (模式 == "绘制") {
         penc_el.classList.remove("color_show");
         pen_el.classList.remove("pen_show");
-        new_draw();
+        new_draw(); // 一个笔画就创建一个元素
         penc_el.value = (<draw>focus_draw_el).pen.color;
     }
 };
@@ -1898,8 +1932,18 @@ const 图层_el = document.getElementById("层");
 class 图层 {
     聚焦元素 = <x>null;
 
+    /**
+     * 从数据渲染图层侧栏
+     * @param el 聚焦的元素
+     * @param nosave 不触发data change
+     */
     reflash(el: x, nosave?: boolean) {
         图层_el.innerHTML = "";
+        /**
+         * 遍历walker
+         * @param data 数据
+         * @param pel 要把ul添加到的目标元素
+         */
         let w = (data: data, pel: HTMLElement) => {
             let ul = document.createElement("ul");
             for (let n in data) {
@@ -2141,7 +2185,8 @@ var client = createClient(store.webdav.网址, {
     password: store.webdav.密码,
 });
 
-async function get_all_xln(r) {
+/** 获取云文件列表并渲染 */
+async function get_all_xln(r: 集type[]) {
     let dav_files = (await client.getDirectoryContents("/", { deep: true, glob: "**.xln" })) as any[];
     let rp = await client.getDirectoryContents("/");
     let 删除路径 = "";
@@ -2191,6 +2236,7 @@ async function get_all_xln(r) {
 
 var now_dav_data = "";
 
+/** 获取云文件数据并渲染 */
 async function get_xln_value(path: string) {
     let str = await client.getFileContents(path, { format: "text" });
     let o: any;
@@ -2216,6 +2262,7 @@ async function get_xln_value(path: string) {
     集.meta.url = path;
 }
 
+/** 上传到云 */
 async function put_xln_value() {
     let path = 集.meta.url;
     if (!path) {
@@ -2241,6 +2288,7 @@ async function put_xln_value() {
 
 var auto_put_xln_t = NaN;
 
+/** 自动上传到云 */
 function auto_put_xln() {
     if (Number(store.webdav.自动上传)) {
         auto_put_xln_t = window.setTimeout(() => {
@@ -2422,6 +2470,7 @@ search_r.onpointerleave = () => {
     O.style.top = op.y + "px";
 };
 
+/** 展示搜索结果 */
 function show_search_l(l: search_result) {
     search_r.innerHTML = "";
     for (let i of l) {
@@ -2451,6 +2500,7 @@ function show_search_l(l: search_result) {
     }
 }
 
+/** 全局搜索栏 */
 function show_g_search() {
     search_pel.classList.add("搜索展示");
     search_pel.style.left = "";
@@ -2473,6 +2523,7 @@ function is_smallest_el(el: x | xlink) {
     }
 }
 
+/** 展示链接栏 */
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
@@ -2617,13 +2668,14 @@ function link(key0: string) {
     };
 }
 
-// 绑定
+/** 获取父根元素 */
 function find_root_layout(el: HTMLElement) {
     for (let p of O.querySelectorAll(":scope > x-x")) {
         if (p.contains(el)) return p as x;
     }
 }
 
+/** 元素集转为父根元素集 */
 function els_to_rels(els: x[]) {
     let xels = [] as x[];
     for (let el of els) {
@@ -2633,6 +2685,7 @@ function els_to_rels(els: x[]) {
     return xels;
 }
 
+/** 转化为堆叠布局 */
 function to_flex(els: x[], d: "x" | "y") {
     let xels = [] as x[];
     for (let el of els) {
@@ -2663,6 +2716,7 @@ function to_flex(els: x[], d: "x" | "y") {
     xel.value = data;
 }
 
+/** 添加一个固定布局元素 */
 function add_none_layout() {
     let x = document.createElement("x-x") as x;
     x.style.left = "0";
@@ -2670,6 +2724,8 @@ function add_none_layout() {
     z.push(x);
     return x;
 }
+
+/** 固定布局修剪 */
 function reflash_none_layout(el: x) {
     let px = 16,
         py = 16;
@@ -2690,6 +2746,7 @@ function reflash_none_layout(el: x) {
     el.style.top = el_offset2(el).y + dy - py + "px";
 }
 
+/** 转化为固定布局 */
 function to_none_layout(els: x[]) {
     let x = add_none_layout();
     let data = [] as data;
@@ -3033,7 +3090,7 @@ function tlink(state, silent: boolean) {
 md.inline.ruler.before("link", "x-link", tlink);
 
 // template
-// 元素
+/** 主元素 */
 class x extends HTMLElement {
     constructor() {
         super();
@@ -3254,7 +3311,7 @@ window.customElements.define("x-x", x);
 
 var parse;
 
-// markdown
+/** markdown元素 */
 class markdown extends HTMLElement {
     constructor() {
         super();
@@ -3825,6 +3882,7 @@ class symbols extends HTMLElement {
 
 window.customElements.define("x-sinppet", symbols);
 
+/** 进度元素 */
 class progress extends HTMLElement {
     constructor() {
         super();
@@ -3845,6 +3903,7 @@ class progress extends HTMLElement {
 
 window.customElements.define("x-pro", progress);
 
+/** 文件预览元素 */
 class file extends HTMLElement {
     constructor() {
         super();
@@ -3917,6 +3976,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@2.16.105/
 
 var pdf_cache = {} as { [key: string]: pdfjsLib.PDFDocumentProxy };
 
+/** pdf浏览元素 */
 class pdf_viewer extends HTMLElement {
     constructor() {
         super();
@@ -4063,6 +4123,8 @@ class pdf_viewer extends HTMLElement {
 }
 
 window.customElements.define("x-pdf", pdf_viewer);
+
+/** 绘画元素 */
 class draw extends HTMLElement {
     constructor() {
         super();
@@ -4328,6 +4390,7 @@ window.customElements.define("x-draw", draw);
 // 色彩选择器
 import color from "color";
 
+/** 取色器 */
 class xcolor extends HTMLElement {
     constructor() {
         super();
@@ -4599,6 +4662,7 @@ class xdraw_width extends HTMLElement {
 
 window.customElements.define("x-draw-width", xdraw_width);
 
+/** 双链元素 */
 class xlink extends HTMLElement {
     constructor() {
         super();
@@ -4616,6 +4680,8 @@ class xlink extends HTMLElement {
 }
 
 window.customElements.define("x-link", xlink);
+
+/** 展示元素值栏 */
 class link_value extends HTMLElement {
     constructor() {
         super();
@@ -4722,7 +4788,7 @@ class link_value extends HTMLElement {
 
 window.customElements.define("x-link-value", link_value);
 
-// 录音
+/** 录音元素 */
 class record extends HTMLElement {
     constructor() {
         super();
