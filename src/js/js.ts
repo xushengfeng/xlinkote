@@ -3514,7 +3514,7 @@ class markdown extends HTMLElement {
                         x.style.top = "";
                         x.style.position = "relative";
                         x.value = p.value;
-                        z.remove(p);
+                        p.remove();
                         p = x;
                     }
 
