@@ -932,7 +932,8 @@ function creat_x_x(x: number, y: number, w: number) {
 /** 中转站刷新 */
 function tmp_s_reflash() {
     临时中转站.innerHTML = "";
-    for (let x of 集.中转站) {
+    let l = [...集.中转站, ...global_x];
+    for (let x of l) {
         let t = document.createElement("div");
         临时中转站.append(t);
         let xel = document.createElement("x-x") as x;
@@ -1504,6 +1505,7 @@ function db_get() {
         文件_el.append(new_d);
 
         let ihash = false;
+        global_x = [];
         for (let f of r.result) {
             let d = document.createElement("div");
             d.setAttribute("data-uuid", f.meta.UUID);
@@ -1528,7 +1530,6 @@ function db_get() {
             d.append(dav, t);
             文件_el.append(d);
 
-            global_x = [];
             if ((f as 集type)?.中转站)
                 for (let x of (f as 集type).中转站) {
                     if (x.global) global_x.push(x);
