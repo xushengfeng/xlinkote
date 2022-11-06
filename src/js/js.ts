@@ -3250,6 +3250,13 @@ class x extends HTMLElement {
             }
         };
 
+        for (let x of global_x)
+            if (x.id == this.id)
+                if (x.global) {
+                    f.classList.add("buttom_a");
+                    break;
+                }
+
         d.onclick = () => {
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
