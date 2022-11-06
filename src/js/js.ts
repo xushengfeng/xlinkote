@@ -1228,7 +1228,8 @@ function set_data(l: 集type) {
                 (el as HTMLElement).style.display = "none";
             }
             O.style.display = "block";
-            z.reflash(O.children[O.children.length - 1] as x, true);
+            z.focus(O.children[O.children.length - 1] as x);
+            z.reflash(true);
             zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
         };
         div.onchange = () => {
@@ -1264,7 +1265,8 @@ function set_data(l: 集type) {
 
 /** 侧栏刷新 */
 function reload_side() {
-    z.reflash(O.children[O.children.length - 1] as x, true);
+    z.focus(O.children[O.children.length - 1] as x);
+    z.reflash(true);
     l_math();
     tmp_s_reflash();
     assets_reflash();
@@ -1938,10 +1940,9 @@ class 图层 {
 
     /**
      * 从数据渲染图层侧栏
-     * @param el 聚焦的元素
      * @param nosave 不触发data change
      */
-    reflash(el: x, nosave?: boolean) {
+    reflash(nosave?: boolean) {
         图层_el.innerHTML = "";
         /**
          * 遍历walker
@@ -2010,7 +2011,7 @@ class 图层 {
                         }
                     });
                 };
-                if (el.id == i.id && selected_el.length == 1) {
+                if (this.聚焦元素.id == i.id && selected_el.length == 1) {
                     this.focus(get_x_by_id(i.id));
                     c.checked = true;
                 }
@@ -2058,7 +2059,8 @@ class 图层 {
             O.append(el);
         }
         get_data();
-        this.reflash(el);
+        this.focus(el);
+        this.reflash();
         link(el.id).add();
     }
 
@@ -2066,7 +2068,7 @@ class 图层 {
         link(el.id).rm();
         el.remove();
         get_data();
-        this.reflash(el);
+        this.reflash();
     }
 
     focus(el: x) {
@@ -2119,22 +2121,22 @@ class 图层 {
     底层(el: x) {
         let v = this.get(el);
         this.mv(v.data, v.n, 0);
-        this.reflash(el);
+        this.reflash();
     }
     下一层(el: x) {
         let v = this.get(el);
         this.mv(v.data, v.n, v.n - 1);
-        this.reflash(el);
+        this.reflash();
     }
     上一层(el: x) {
         let v = this.get(el);
         this.mv(v.data, v.n, v.n + 1);
-        this.reflash(el);
+        this.reflash();
     }
     顶层(el: x) {
         let v = this.get(el);
         this.mv(v.data, v.n, v.data.length - 1);
-        this.reflash(el);
+        this.reflash();
     }
 }
 
