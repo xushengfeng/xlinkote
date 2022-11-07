@@ -4924,3 +4924,52 @@ class record extends HTMLElement {
 }
 
 window.customElements.define("x-record", record);
+
+import * as THREE from "three";
+
+/** 3d元素 */
+class three extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value: { id: string; page: number };
+    div: HTMLDivElement;
+    pages: HTMLElement;
+    canvas: HTMLCanvasElement;
+    text: HTMLElement;
+    old_id = "";
+
+    connectedCallback() {
+        this.div = document.createElement("div");
+        this.append(this.div);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        this.div.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        renderer.render(scene, camera);
+    }
+
+    async set_m() {}
+
+    get value() {
+        return JSON.stringify(this._value);
+    }
+    set value(s) {
+        this._value = JSON.parse(s);
+        this.set_m();
+    }
+}
+
+window.customElements.define("x-three", three);

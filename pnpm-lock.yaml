@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/color': ^3.0.3
   '@types/diff-match-patch': ^1.0.32
+  '@types/three': ^0.144.0
   autoprefixer: ^10.4.12
   color: ^4.2.3
   crypto-js: ^4.1.1
@@ -21,6 +22,7 @@ specifiers:
   pdfjs-dist: ^2.16.105
   postcss: ^8.4.17
   tailwindcss: ^3.1.8
+  three: ^0.146.0
   turndown: ^7.1.1
   typescript: ^4.8.4
   vite: ^3.1.5
@@ -41,12 +43,14 @@ dependencies:
   mermaid: 9.1.7
   pako: 2.0.4
   pdfjs-dist: 2.16.105
+  three: 0.146.0
   turndown: 7.1.1
   webdav: 4.11.0
 
 devDependencies:
   '@types/color': 3.0.3
   '@types/diff-match-patch': 1.0.32
+  '@types/three': 0.144.0
   autoprefixer: 10.4.12_postcss@8.4.17
   http-server: 14.1.1
   postcss: 8.4.17
@@ -117,6 +121,16 @@ packages:
 
   /@types/diff-match-patch/1.0.32:
     resolution: {integrity: sha512-bPYT5ECFiblzsVzyURaNhljBH2Gh1t9LowgUwciMrNAhFewLkHT2H0Mto07Y4/3KCOGZHRQll3CTtQZ0X11D/A==}
+    dev: true
+
+  /@types/three/0.144.0:
+    resolution: {integrity: sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==}
+    dependencies:
+      '@types/webxr': 0.5.0
+    dev: true
+
+  /@types/webxr/0.5.0:
+    resolution: {integrity: sha512-IUMDPSXnYIbEO2IereEFcgcqfDREOgmbGqtrMpVPpACTU6pltYLwHgVkrnYv0XhWEcjio9sYEfIEzgn3c7nDqA==}
     dev: true
 
   /acorn-node/1.8.2:
@@ -1807,6 +1821,10 @@ packages:
     resolution: {integrity: sha512-iOiPUo/BGnZ6+54OsWxZidGCsdU8YbE4PSpdPinp7DeMtUJNJBoJ/ouUSTJjHkh1KntHaltHl/gDs2FC4i5+Nw==}
     dependencies:
       utrie: 1.0.2
+    dev: false
+
+  /three/0.146.0:
+    resolution: {integrity: sha512-1lvNfLezN6OJ9NaFAhfX4sm5e9YCzHtaRgZ1+B4C+Hv6TibRMsuBAM5/wVKzxjpYIlMymvgsHEFrrigEfXnb2A==}
     dev: false
 
   /to-regex-range/5.0.1:

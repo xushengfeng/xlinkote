@@ -29,12 +29,14 @@
     "mermaid": "^9.1.7",
     "pako": "^2.0.4",
     "pdfjs-dist": "^2.16.105",
+    "three": "^0.146.0",
     "turndown": "^7.1.1",
     "webdav": "^4.11.0"
   },
   "devDependencies": {
     "@types/color": "^3.0.3",
     "@types/diff-match-patch": "^1.0.32",
+    "@types/three": "^0.144.0",
     "autoprefixer": "^10.4.12",
     "http-server": "^14.1.1",
     "postcss": "^8.4.17",
