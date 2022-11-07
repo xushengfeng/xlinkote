@@ -3519,6 +3519,7 @@ class markdown extends HTMLElement {
             if (模式 != "浏览") e.preventDefault();
             if (e.key == "Enter") {
                 e.preventDefault();
+                O.style.top = O.offsetTop - this.offsetHeight * zoom + "px";
                 data_changed();
                 let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
                 let last_line = text.value.slice(last_line_start, text.selectionStart);
