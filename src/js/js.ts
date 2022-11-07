@@ -667,22 +667,22 @@ function add_blank(op: p_point, p: p_point) {
         let el = xel as x;
         switch (a) {
             case 0:
-                if (el_o.y + el_o.h < op.y) {
+                if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
                     el.style.top = el_o.y - r.h + "px";
                 }
                 break;
             case 1:
-                if (el_o.x > op.x) {
+                if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
                     el.style.left = el_o.x + r.w + "px";
                 }
                 break;
             case 2:
-                if (el_o.y > op.y) {
+                if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
                     el.style.top = el_o.y + r.h + "px";
                 }
                 break;
             case 3:
-                if (el_o.x + el_o.w < op.x) {
+                if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
                     el.style.left = el_o.x - r.w + "px";
                 }
                 break;
