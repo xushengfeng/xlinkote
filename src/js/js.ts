@@ -4926,6 +4926,7 @@ class record extends HTMLElement {
 window.customElements.define("x-record", record);
 
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 /** 3d元素 */
 class three extends HTMLElement {
@@ -4950,6 +4951,18 @@ class three extends HTMLElement {
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         this.div.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        camera.position.set(0, 0, 5);
+        controls.update();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (模式 != "浏览") return;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
