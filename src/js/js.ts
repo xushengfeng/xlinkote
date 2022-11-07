@@ -4009,7 +4009,8 @@ class file extends HTMLElement {
         let f = 集.assets[this._value.id];
         if (!f) return;
         let type = f.base64.match(/data:(.*?);/)[1].split("/");
-        if (type[0] != "image" && type[0] != "video" && type[1] != "pdf") this._value.r = false;
+        if (type[0] != "image" && type[0] != "video" && type[1] != "pdf" && type[1] != "gltf-binary")
+            this._value.r = false;
         this.div.innerHTML = "";
         if (this._value.r) {
             this.div.classList.remove("file");
@@ -4029,6 +4030,11 @@ class file extends HTMLElement {
                 this.parentElement.append(pdf);
                 pdf.value = JSON.stringify({ id: this._value.id, page: 1 });
                 this.remove();
+            }
+            if (type[1] == "gltf-binary") {
+                let td = document.createElement("x-three") as three;
+                this.append(td);
+                td.value = this._value.id;
             }
         } else {
             this.div.classList.add("file");
@@ -4927,6 +4933,7 @@ window.customElements.define("x-record", record);
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 /** 3d元素 */
 class three extends HTMLElement {
@@ -4934,53 +4941,59 @@ class three extends HTMLElement {
         super();
     }
 
-    _value: { id: string; page: number };
+    _value: string;
     div: HTMLDivElement;
-    pages: HTMLElement;
-    canvas: HTMLCanvasElement;
-    text: HTMLElement;
-    old_id = "";
+    scene: THREE.Scene;
+    loader: GLTFLoader;
+    camera: THREE.Camera;
+    renderer: THREE.Renderer;
 
     connectedCallback() {
         this.div = document.createElement("div");
         this.append(this.div);
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.loader = new GLTFLoader();
+        this.renderer = new THREE.WebGLRenderer({ alpha: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.div.appendChild(this.renderer.domElement);
 
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        this.div.appendChild(renderer.domElement);
-
-        const controls = new OrbitControls(camera, renderer.domElement);
-        camera.position.set(0, 0, 5);
+        const controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.camera.position.set(0, 0, 5);
         controls.update();
 
-        function animate() {
+        let animate = () => {
             requestAnimationFrame(animate);
             if (模式 != "浏览") return;
             controls.update();
-            renderer.render(scene, camera);
-        }
+            this.renderer.render(this.scene, this.camera);
+        };
         animate();
 
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        // const geometry = new THREE.BoxGeometry(1, 1, 1);
+        // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        // const cube = new THREE.Mesh(geometry, material);
+        // this.scene.add(cube);
 
-        camera.position.z = 5;
+        this.camera.position.z = 5;
 
-        renderer.render(scene, camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
-    async set_m() {}
+    async set_m() {
+        const url = 集.assets[this._value];
+        this.loader.load(url.base64, (gltf) => {
+            this.scene.add(gltf.scene);
+            this.renderer.render(this.scene, this.camera);
+        });
+    }
 
     get value() {
-        return JSON.stringify(this._value);
+        return this._value;
     }
     set value(s) {
-        this._value = JSON.parse(s);
+        this._value = s;
         this.set_m();
     }
 }
