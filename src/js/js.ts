@@ -469,8 +469,12 @@ document.onmouseup = (e) => {
     mouse(e);
     if (e.button == 0 && selected_el.length == 0 && move && o_e) {
         if (模式 != "设计") return;
-        let r = p2rect(o_ab_p, e2p(e));
-        creat_x_x(r.x, r.y, r.w);
+        if (e.shiftKey) {
+            add_blank(o_ab_p, e2p(e));
+        } else {
+            let r = p2rect(o_ab_p, e2p(e));
+            creat_x_x(r.x, r.y, r.w);
+        }
     }
     o_e = null;
     move = false;
@@ -635,6 +639,53 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
         if (rect.x <= r.x && r.x + r.w <= rect.x + rect.w && rect.y <= r.y && r.y + r.h <= rect.y + rect.h) {
             el.classList.add("x-x_selected");
             selected_el.push(<x>el);
+        }
+    }
+}
+
+function add_blank(op: p_point, p: p_point) {
+    let r = p2rect(op, p);
+    let a = 0; // 0123 上右下左
+    if (r.w > r.h) {
+        // 上下
+        if (op.y < p.y) {
+            a = 2;
+        } else {
+            a = 0;
+        }
+    } else {
+        // 左右
+        if (op.x < p.x) {
+            a = 1;
+        } else {
+            a = 3;
+        }
+    }
+
+    for (let xel of O.querySelectorAll(":scope > x-x")) {
+        let el_o = el_offset2(xel);
+        let el = xel as x;
+        switch (a) {
+            case 0:
+                if (el_o.y + el_o.h < op.y) {
+                    el.style.top = el_o.y - r.h + "px";
+                }
+                break;
+            case 1:
+                if (el_o.x > op.x) {
+                    el.style.left = el_o.x + r.w + "px";
+                }
+                break;
+            case 2:
+                if (el_o.y > op.y) {
+                    el.style.top = el_o.y + r.h + "px";
+                }
+                break;
+            case 3:
+                if (el_o.x + el_o.w < op.x) {
+                    el.style.left = el_o.x - r.w + "px";
+                }
+                break;
         }
     }
 }
