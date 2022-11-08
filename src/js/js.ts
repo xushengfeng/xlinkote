@@ -4041,7 +4041,7 @@ class file extends HTMLElement {
             }
             if (type[1] == "gltf-binary") {
                 let td = document.createElement("x-three") as three;
-                this.append(td);
+                this.div.append(td);
                 td.value = this._value.id;
             }
         } else {
