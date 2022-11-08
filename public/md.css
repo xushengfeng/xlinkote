@@ -41,6 +41,18 @@ x-x #h x-link {
     color: #0000cc;
 }
 
+.flex-column {
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    gap: 1em;
+    flex-direction: row;
+}
+
 x-x .list {
     padding-left: 2em;
 }

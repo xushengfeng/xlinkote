@@ -860,7 +860,9 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 var free_mouse = (e: MouseEvent) => {
     if (free_o_e) {
         for (const xel of free_o_rects) {
-            let f = document.defaultView.getComputedStyle(xel.el.parentElement, null).display == "flex";
+            let f =
+                xel.el.parentElement.classList.contains("flex-column") ||
+                xel.el.parentElement.classList.contains("flex-row");
             let dx = (e.clientX - free_o_e.clientX) / zoom,
                 dy = (e.clientY - free_o_e.clientY) / zoom;
             let x = xel.x,
@@ -2780,15 +2782,14 @@ function to_flex(els: x[], d: "x" | "y") {
     let xel = document.createElement("x-x") as x;
     xel.id = uuid_id();
     if (d == "x") {
+        xel.classList.add("flex-row");
         xels.sort((a, b) => el_offset2(a).x - el_offset2(b).x);
     } else {
-        xel.style.flexDirection = "column";
+        xel.classList.add("flex-column");
         xels.sort((a, b) => el_offset2(a).y - el_offset2(b).y);
     }
     xel.style.left = el_offset2(xels[0]).x + "px";
     xel.style.top = el_offset2(xels[0]).y + "px";
-    xel.style.display = "flex";
-    xel.style.gap = "1em";
     z.push(xel);
     let data = [] as data;
     for (let el of xels) {
@@ -3570,7 +3571,10 @@ class markdown extends HTMLElement {
 
                     let p = this.parentElement as x;
                     let pxel = null as x;
-                    if (document.defaultView.getComputedStyle(p.parentElement, null).display == "flex") {
+                    if (
+                        p.parentElement.classList.contains("flex-column") ||
+                        p.parentElement.classList.contains("flex-row")
+                    ) {
                         pxel = p.parentElement as x;
                     } else {
                         // 不存在上级堆叠元素，需要新建并把此元素套进去
@@ -3579,9 +3583,7 @@ class markdown extends HTMLElement {
                         link(pxel.id).add();
                         pxel.style.left = p.offsetLeft + "px";
                         pxel.style.top = p.offsetTop + "px";
-                        pxel.style.display = "flex";
-                        pxel.style.flexDirection = "column";
-                        pxel.style.gap = "1em";
+                        pxel.classList.add("flex-column");
                         z.push(pxel);
                         let x = document.createElement("x-x") as x;
                         x.id = p.id;
@@ -3668,9 +3670,7 @@ class markdown extends HTMLElement {
                         md = document.createElement("x-md") as markdown;
                     x.id = p.id;
                     x.setAttribute("style", p.getAttribute("style"));
-                    p.style.display = "flex";
-                    p.style.flexDirection = "column";
-                    p.style.gap = "1em";
+                    p.classList.add("flex-column");
                     p.classList.add("list");
                     this.remove();
                     p.append(x);
