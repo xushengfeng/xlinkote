@@ -4953,7 +4953,7 @@ class three extends HTMLElement {
     div: HTMLDivElement;
     scene: THREE.Scene;
     loader: GLTFLoader;
-    camera: THREE.Camera;
+    camera: THREE.PerspectiveCamera;
     renderer: THREE.Renderer;
 
     connectedCallback() {
@@ -4975,6 +4975,9 @@ class three extends HTMLElement {
             requestAnimationFrame(animate);
             if (模式 != "浏览") return;
             controls.update();
+            this.renderer.setSize(this.offsetWidth, this.offsetHeight);
+            this.camera.aspect = this.offsetWidth / this.offsetHeight;
+            this.camera.updateProjectionMatrix();
             this.renderer.render(this.scene, this.camera);
         };
         animate();
