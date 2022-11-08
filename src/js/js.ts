@@ -1398,7 +1398,8 @@ function set_css(t: string) {
         add_css(text);
     }
     function add_css(text: string) {
-        let style = document.createElement("style");
+        let style = document.getElementById("css") || document.createElement("style");
+        style.id = "css";
         style.innerHTML = text;
         document.body.append(style);
     }
