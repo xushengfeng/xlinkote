@@ -446,6 +446,9 @@ fxsd_el.onclick = () => {
     fxsd_el.querySelector("img").src = os[fxsd];
 };
 
+/** 滚动或触摸在之上时，不改变画布，只作用于元素，使用query */
+var ignore_el = [];
+
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
         if (e.button == 0) {
@@ -751,6 +754,11 @@ document.getElementById("画布").onwheel = (e) => {
         let el = <HTMLElement>e.target;
         if (el.tagName == "TEXTAREA") return;
         if (document.querySelector("x-sinppet").contains(el)) return;
+        for (let q of ignore_el) {
+            for (let qel of 画布.querySelectorAll(q)) {
+                if (qel.contains(el)) return;
+            }
+        }
         let dx = 0,
             dy = 0;
         if (e.shiftKey && !e.deltaX) {
@@ -4971,11 +4979,6 @@ class three extends HTMLElement {
         };
         animate();
 
-        // const geometry = new THREE.BoxGeometry(1, 1, 1);
-        // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        // const cube = new THREE.Mesh(geometry, material);
-        // this.scene.add(cube);
-
         this.camera.position.z = 5;
 
         this.renderer.render(this.scene, this.camera);
@@ -4999,3 +5002,5 @@ class three extends HTMLElement {
 }
 
 window.customElements.define("x-three", three);
+
+ignore_el.push("x-three");
