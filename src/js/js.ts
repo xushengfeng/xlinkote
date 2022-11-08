@@ -852,6 +852,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
     free_o_e = null;
     free_move = false;
     free_o_rects = [];
+
+    z.reflash();
 });
 
 /** 调整元素大小、位置以及元素聚焦 */
@@ -1753,7 +1755,6 @@ function data_changed() {
             write_file(json2md(data));
             db_put(data);
         }
-        z.reflash();
         push_undo();
     }, save_dt);
 }
@@ -3605,6 +3606,8 @@ class markdown extends HTMLElement {
                     md.edit = true;
                     md.value = t1;
                     md.text.setSelectionRange(0, 0);
+
+                    z.reflash();
                 } else {
                     if (e.ctrlKey) {
                         let rel = find_root_layout(this.parentElement);
@@ -3616,6 +3619,8 @@ class markdown extends HTMLElement {
                         var md = document.createElement("x-md");
                         xel.append(md);
                         (<markdown>md).edit = true;
+
+                        z.reflash();
                     } else {
                         text.setRangeText("\n");
                         text.selectionStart = text.selectionEnd = text.selectionStart + 1;
@@ -3675,6 +3680,8 @@ class markdown extends HTMLElement {
                     link(p.id).add();
                     md.edit = true;
                     md.text.setSelectionRange(0, 0);
+
+                    z.reflash();
                 }
             }
         };
