@@ -1571,7 +1571,13 @@ function db_get() {
             let d = document.createElement("div");
             d.setAttribute("data-uuid", f.meta.UUID);
             let t = rename_el();
-            t.onclick = () => {
+            t.onclick = (e) => {
+                if (e.ctrlKey) {
+                    let url = new URL(location.origin);
+                    url.hash = f.meta.UUID;
+                    window.open(url);
+                    return;
+                }
                 if (!集.meta.file_name) new_d.remove();
                 set_data(f);
                 侧栏.classList.remove("侧栏显示");
