@@ -40,3 +40,7 @@ x-x #h ul {
 x-x #h x-link {
     color: #0000cc;
 }
+
+x-x .list {
+    padding-left: 2em;
+}

@@ -3671,6 +3671,7 @@ class markdown extends HTMLElement {
                     p.style.display = "flex";
                     p.style.flexDirection = "column";
                     p.style.gap = "1em";
+                    p.classList.add("list");
                     this.remove();
                     p.append(x);
                     x.append(md);
