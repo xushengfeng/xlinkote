@@ -1,42 +1,42 @@
-h1 {
+x-x #h h1 {
     font-size: 2em;
     font-weight: bold;
 }
 
-h2 {
+x-x #h h2 {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-h3 {
+x-x #h h3 {
     font-size: 1.17em;
     font-weight: bold;
 }
 
-h4 {
+x-x #h h4 {
     font-size: 1em;
     font-weight: bold;
 }
 
-h5 {
+x-x #h h5 {
     font-size: 0.83em;
     font-weight: bold;
 }
 
-h6 {
+x-x #h h6 {
     font-size: 0.67em;
     font-weight: bold;
 }
 
-a {
+x-x #h a {
     color: #000099;
     text-decoration: underline;
 }
 
-ul {
+x-x #h ul {
     padding-left: 2em;
 }
 
-x-link {
+x-x #h x-link {
     color: #0000cc;
 }

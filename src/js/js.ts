@@ -1392,7 +1392,6 @@ function set_css(t: string) {
             .then((v) => add_md(v));
     }
     function add_md(text: string) {
-        text = text.replace(/^.*(\n*)[,{]/gm, "x-md > #h $&");
         add_css(text);
     }
     function add_css(text: string) {
