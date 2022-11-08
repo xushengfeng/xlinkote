@@ -3651,11 +3651,31 @@ class markdown extends HTMLElement {
             }
             if (e.key == "Tab") {
                 e.preventDefault();
-                let s = text.selectionStart;
-                text.setRangeText("\t");
-                text.selectionStart = s + 1;
-                text.selectionEnd = s + 1;
-                text.dispatchEvent(new Event("input"));
+                if (e.ctrlKey || this.text.selectionStart != 0) {
+                    let s = text.selectionStart;
+                    text.setRangeText("\t");
+                    text.selectionStart = s + 1;
+                    text.selectionEnd = s + 1;
+                    text.dispatchEvent(new Event("input"));
+                } else {
+                    let p = this.parentElement as x;
+                    let t = this.text.value;
+                    let x = document.createElement("x-x"),
+                        md = document.createElement("x-md") as markdown;
+                    x.id = p.id;
+                    x.setAttribute("style", p.getAttribute("style"));
+                    p.style.display = "flex";
+                    p.style.flexDirection = "column";
+                    p.style.gap = "1em";
+                    this.remove();
+                    p.append(x);
+                    x.append(md);
+                    md.value = t;
+                    p.id = uuid_id();
+                    link(p.id).add();
+                    md.edit = true;
+                    md.text.setSelectionRange(0, 0);
+                }
             }
         };
         // text.addEventListener("keyup",(e)=>{})
