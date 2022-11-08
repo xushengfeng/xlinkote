@@ -516,7 +516,7 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
 }
 
 .breadcrumbs {
-    @apply absolute h-4 overflow-hidden flex bg-white transition-all shadow-sm;
+    @apply absolute h-4 overflow-hidden flex bg-white dark:bg-black transition-all shadow-sm;
     top: var(--icon-p-b-size);
     left: var(--icon-p-b-size);
     width: calc(100vw - var(--icon-p-b-size));
