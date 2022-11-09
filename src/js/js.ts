@@ -3250,7 +3250,7 @@ class x extends HTMLElement {
                 e.stopPropagation();
                 if (this.parentElement != O) {
                     let x = e.clientX - O.getBoundingClientRect().x,
-                        y = e.clientY - O.getBoundingClientRect().y;
+                        y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetX;
                     let xel = <x>document.createElement("x-x");
                     xel.id = this.id;
                     xel.setAttribute("style", this.getAttribute("style"));
