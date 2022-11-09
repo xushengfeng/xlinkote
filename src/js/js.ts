@@ -822,6 +822,50 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 
     free_mouse(e);
 
+    let els = document.elementsFromPoint(e.clientX, e.clientY);
+    for (let el of els) {
+        if (el.tagName == "X-X") {
+            let rect = el.getBoundingClientRect();
+            for (let x of selected_el) {
+                if (
+                    el.parentElement.classList.contains("flex-column") ||
+                    el.parentElement.classList.contains("flex-row")
+                ) {
+                    if (el.parentElement.classList.contains("flex-column")) {
+                        if (e.clientY - rect.y < rect.height / 2) {
+                            cx(el, x, true);
+                        } else {
+                            cx(el, x, false);
+                        }
+                    }
+                    if (el.parentElement.classList.contains("flex-row")) {
+                        if (e.clientX - rect.x < rect.width / 2) {
+                            cx(el, x, true);
+                        } else {
+                            cx(el, x, false);
+                        }
+                    }
+                    selected_el = [];
+                    break;
+                }
+            }
+            function cx(pel: Element, x: x, before: boolean) {
+                let xel = document.createElement("x-x") as x;
+                xel.id = x.id;
+                xel.setAttribute("style", x.getAttribute("style"));
+                xel.className = x.className;
+                const xx = get_x_by_id(x.id);
+                if (before) {
+                    pel.before(xel);
+                } else {
+                    pel.after(xel);
+                }
+                xel.value = x.value;
+                xx.remove();
+            }
+        }
+    }
+
     if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
             集.中转站.push({
