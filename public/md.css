@@ -47,10 +47,18 @@ x-x #h x-link {
     flex-direction: column;
 }
 
+.flex-column > x-x {
+    position: relative !important;
+}
+
 .flex-row {
     display: flex;
     gap: 1em;
     flex-direction: row;
+}
+
+.flex-row > x-x {
+    position: relative !important;
 }
 
 x-x .list {

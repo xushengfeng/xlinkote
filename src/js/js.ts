@@ -3760,6 +3760,46 @@ class markdown extends HTMLElement {
         text.onblur = () => {
             if (模式 == "浏览") this.edit = false;
         };
+        text.onpaste = (e) => {
+            let t = e.clipboardData.getData("text/plain").trim();
+            if (t.includes("\n")) {
+                e.preventDefault();
+                let el = this.parentElement as x;
+                let pel = el.parentElement;
+                if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
+                    let nel = document.createElement("x-x") as x;
+                    nel.id = el.id;
+                    this.remove();
+                    el.append(nel);
+                    let md = document.createElement("x-md") as markdown;
+                    nel.append(md);
+                    md.value = this.value;
+                    md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
+                    md.reload();
+                    pel = el;
+                    el = nel;
+                    pel.classList.add("flex-column");
+                }
+                const l = t.split("\n");
+                let last_el = el;
+                for (let i in l) {
+                    const tt = l[i];
+                    if (i == "0") {
+                        this.text.setRangeText(tt);
+                    } else {
+                        let x = document.createElement("x-x") as x;
+                        let md = document.createElement("x-md") as markdown;
+                        last_el.after(x);
+                        x.append(md);
+                        x.id = uuid_id();
+                        link(x.id).add();
+                        md.value = tt;
+                        last_el = x;
+                    }
+                }
+                z.reflash();
+            }
+        };
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
