@@ -273,7 +273,7 @@ body > #main > #nav #切换侧栏 {
 }
 
 .侧栏 > #items > #文件 > div:nth-child(1) {
-    height: var(--icon-p-b-size);
+    min-height: var(--icon-p-b-size);
     position: relative;
     cursor: pointer;
 }
