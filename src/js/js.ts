@@ -3848,16 +3848,16 @@ class markdown extends HTMLElement {
                 e.preventDefault();
                 let el = this.parentElement as x;
                 let pel = el.parentElement;
+                let md: markdown;
                 if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
                     let nel = document.createElement("x-x") as x;
                     nel.id = el.id;
                     this.remove();
                     el.append(nel);
-                    let md = document.createElement("x-md") as markdown;
+                    md = document.createElement("x-md") as markdown;
                     nel.append(md);
                     md.value = this.value;
                     md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
-                    md.reload();
                     pel = el;
                     el = nel;
                     pel.classList.add("flex-column");
@@ -3866,8 +3866,10 @@ class markdown extends HTMLElement {
                 let last_el = el;
                 for (let i in l) {
                     const tt = l[i];
+                    if (!tt) continue;
                     if (i == "0") {
-                        this.text.setRangeText(tt);
+                        md.text.setRangeText(tt);
+                        md.reload();
                     } else {
                         let x = document.createElement("x-x") as x;
                         let md = document.createElement("x-md") as markdown;
