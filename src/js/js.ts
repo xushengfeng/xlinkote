@@ -2720,7 +2720,29 @@ var now_data_id = "0";
 
 /** 跳转到元素位置并记录 */
 function jump_to_x_link(el: x | xlink) {
-    move_to_x_link(el);
+    for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
+        if (画布el.contains(el)) {
+            O = 画布el as HTMLElement;
+            for (let p of 集.数据) {
+                if (p.id == O.id) {
+                    当前画布 = p;
+                    集.meta.focus_page = p.id;
+                    O.style.display = "block";
+                    zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
+                    let x = el_offset(el, O).x - 画布.offsetWidth / 2,
+                        y = el_offset(el, O).y - 画布.offsetHeight / 2;
+                    O.style.left = -x - (el.offsetWidth * zoom) / 2 + "px";
+                    O.style.top = -y - (el.offsetHeight * zoom) / 2 + "px";
+                    if (el.tagName == "X-X") {
+                        z.focus(el as x);
+                    }
+                    z.reflash(true);
+                }
+            }
+        } else {
+            (画布el as HTMLElement).style.display = "none";
+        }
+    }
     add_bci(el);
 }
 
