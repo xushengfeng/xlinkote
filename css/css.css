@@ -553,6 +553,14 @@ body > #搜索 > #搜索结果 {
     overflow: auto;
     max-height: 50vh;
 }
+body > #搜索 > #搜索结果 > div {
+    position: relative;
+}
+body > #搜索 > #搜索结果 > div > div:last-child {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 body > #viewer {
     position: absolute;
     width: 400px;

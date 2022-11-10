@@ -2611,6 +2611,7 @@ function show_search_l(l: search_result) {
     for (let i of l) {
         if (!ids[i.id]) {
             let div = document.createElement("div");
+            div.setAttribute("data-id", i.id);
             els.push(div);
             ids[i.id] = els.length - 1;
         }
@@ -2648,6 +2649,9 @@ function show_search_l(l: search_result) {
     }
     for (let div of els) {
         search_r.append(div);
+        let value = document.createElement("div");
+        value.innerText = `${link(div.getAttribute("data-id")).get_v()}`;
+        div.append(value);
     }
 }
 
