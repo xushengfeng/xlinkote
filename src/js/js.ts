@@ -2606,6 +2606,9 @@ search_r.onpointerleave = () => {
 
 /** 展示搜索结果 */
 function show_search_l(l: search_result) {
+    l = l.sort((a, b) => {
+        return link(a.id).get_v() - link(b.id).get_v();
+    });
     search_r.innerHTML = "";
     let els: HTMLElement[] = [];
     let ids = {};
