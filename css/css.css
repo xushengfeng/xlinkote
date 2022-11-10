@@ -562,6 +562,10 @@ body > #viewer {
     transition: var(--transition);
 }
 
+.viewer_hide {
+    opacity: 0;
+}
+
 body > #toast {
     position: fixed;
     bottom: 16px;

@@ -2593,15 +2593,11 @@ search_el.oninput = search_el.onfocus = () => {
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
     search_pel.setAttribute("data-fid", "");
-};
-let op = { x: 0, y: 0 };
-search_r.onpointerenter = () => {
-    op.x = el_offset(O).x;
-    op.y = el_offset(O).y;
+
+    view_el.classList.add("viewer_hide");
 };
 search_r.onpointerleave = () => {
-    O.style.left = op.x + "px";
-    O.style.top = op.y + "px";
+    view_el.classList.add("viewer_hide");
 };
 
 /** 展示搜索结果 */
@@ -2726,6 +2722,7 @@ function move_to_x_link(el: x | xlink) {
     });
 
     view_el.innerHTML = "";
+    view_el.classList.remove("viewer_hide");
     for (let x of els) {
         let xel = document.createElement("x-x") as x;
         xel.setAttribute("style", x.el.getAttribute("style"));
@@ -2740,6 +2737,8 @@ var now_data_id = "0";
 
 /** 跳转到元素位置并记录 */
 function jump_to_x_link(el: x | xlink) {
+    view_el.classList.add("viewer_hide");
+
     for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
         if (画布el.contains(el)) {
             O = 画布el as HTMLElement;
