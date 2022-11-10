@@ -2648,7 +2648,11 @@ function show_search_l(l: search_result) {
         };
     }
     for (let div of els) {
-        search_r.append(div);
+        if (search_r.firstChild) {
+            search_r.firstChild.before(div);
+        } else {
+            search_r.append(div);
+        }
         let value = document.createElement("div");
         value.innerText = `${link(div.getAttribute("data-id")).get_v()}`;
         div.append(value);
