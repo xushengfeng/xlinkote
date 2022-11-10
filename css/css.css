@@ -555,6 +555,11 @@ body > #搜索 > #搜索结果 {
 }
 body > #viewer {
     position: absolute;
+    width: 400px;
+    height: 200px;
+    overflow: hidden;
+    pointer-events: none;
+    transition: var(--transition);
 }
 
 body > #toast {

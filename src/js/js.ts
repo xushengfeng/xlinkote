@@ -2625,7 +2625,8 @@ function show_search_l(l: search_result) {
                     console.log(id);
                     link(id).add(i.id);
                 };
-                div.onpointerenter = () => {
+                div.onpointerenter = (e) => {
+                    set_viewer_posi(e.clientX, e.clientY);
                     let el = document.getElementById(i.id);
                     move_to_x_link(el as x & xlink);
                 };
@@ -2675,6 +2676,12 @@ function show_link_value_bar(el: x | xlink) {
 }
 
 const view_el = document.getElementById("viewer");
+
+/** 定位预览栏 */
+function set_viewer_posi(x: number, y: number) {
+    view_el.style.left = x + "px";
+    view_el.style.top = y + "px";
+}
 
 /** 跳转到元素位置 */
 function move_to_x_link(el: x | xlink) {
@@ -2727,7 +2734,8 @@ function add_bci(el: x | xlink) {
     li.classList.add("bci");
     main.innerText = `#${el.id}`;
     li.setAttribute("data-id", el.id);
-    main.onpointerenter = () => {
+    main.onpointerenter = (e) => {
+        set_viewer_posi(e.clientX, e.clientY);
         move_to_x_link(el);
     };
     main.onpointerdown = () => {
@@ -4962,7 +4970,8 @@ class link_value extends HTMLElement {
                 let el = document.createElement("div");
                 el.innerText = `#${i} ${link(this._id).get()[i].value}`;
                 vl.append(el);
-                el.onpointerover = () => {
+                el.onpointerover = (e) => {
+                    set_viewer_posi(e.clientX, e.clientY);
                     move_to_x_link(get_x_by_id(i));
                 };
                 el.onpointerup = () => {
