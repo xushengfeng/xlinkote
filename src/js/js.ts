@@ -2674,14 +2674,38 @@ function show_link_value_bar(el: x | xlink) {
     link_value_bar.show_ctrl = is_smallest_el(el);
 }
 
+const view_el = document.getElementById("viewer");
+
 /** 跳转到元素位置 */
 function move_to_x_link(el: x | xlink) {
-    let x = el_offset(el, O).x - 画布.offsetWidth / 2,
-        y = el_offset(el, O).y - 画布.offsetHeight / 2;
-    O.style.left = -x - (el.offsetWidth * zoom) / 2 + "px";
-    O.style.top = -y - (el.offsetHeight * zoom) / 2 + "px";
-    if (el.tagName == "X-X") {
-        z.focus(el as x);
+    let center_rect = el_offset2(el, O);
+    let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
+    let dx = 200,
+        dy = 10;
+    let out_rect = {
+        left: center_point.x - dx,
+        right: center_point.x + dx,
+        top: center_point.y - dy,
+        bottom: center_point.y + dy,
+    };
+    console.log(out_rect);
+
+    let els: { el: x; x: number; y: number }[] = [];
+    画布s.querySelectorAll(":scope > div > x-x").forEach((el: x) => {
+        let r = el_offset2(el);
+        if (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) {
+            els.push({ el: el, x: r.x, y: r.y });
+        }
+    });
+
+    view_el.innerHTML = "";
+    for (let x of els) {
+        let xel = document.createElement("x-x") as x;
+        xel.setAttribute("style", x.el.getAttribute("style"));
+        xel.style.left = x.x - out_rect.left + "px";
+        xel.style.top = x.y - out_rect.top + "px";
+        view_el.append(xel);
+        xel.value = x.el.value;
     }
 }
 

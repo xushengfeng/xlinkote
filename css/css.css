@@ -553,6 +553,9 @@ body > #搜索 > #搜索结果 {
     overflow: auto;
     max-height: 50vh;
 }
+body > #viewer {
+    position: absolute;
+}
 
 body > #toast {
     position: fixed;
