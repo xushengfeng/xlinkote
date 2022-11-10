@@ -170,7 +170,13 @@ body > #搜索 {
 }
 body > #搜索 > #搜索结果 > div {
     margin: 4px;
+    padding: 4px;
     cursor: pointer;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+body > #搜索 > #搜索结果 > div:hover {
+    background-color: var(--bg-color1);
 }
 body > #搜索 > #搜索结果 > div > div > span > span {
     color: #f55;
