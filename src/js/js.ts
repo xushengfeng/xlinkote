@@ -2607,31 +2607,41 @@ search_r.onpointerleave = () => {
 /** 展示搜索结果 */
 function show_search_l(l: search_result) {
     search_r.innerHTML = "";
+    let els = [];
     for (let i of l) {
         for (let j of i.l) {
-            for (let k of j.indices) {
-                let div = document.createElement("div");
-                let p = document.createElement("span");
+            let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
+            let div = document.createElement("div");
+            let p = document.createElement("span");
+            for (let i = 0; i < indices.length; i++) {
+                const k = indices[i];
                 let h = document.createElement("span");
                 h.innerText = j.value.slice(k[0], k[1] + 1);
-                p.append(j.value.slice(0, k[0]), h, j.value.slice(k[1] + 1));
-                div.append(p);
-                search_r.append(div);
-                div.onpointerdown = () => {
-                    let el = document.getElementById(i.id);
-                    jump_to_x_link(el as x & xlink);
-                    show_search_l([]);
-                    let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
-                    console.log(id);
-                    link(id).add(i.id);
-                };
-                div.onpointerenter = (e) => {
-                    set_viewer_posi(e.clientX, e.clientY);
-                    let el = document.getElementById(i.id);
-                    move_to_x_link(el as x & xlink);
-                };
+                if (Number(i) == indices.length - 1) {
+                    p.append(j.value.slice(indices[i - 1]?.[1] || 0, k[0]), h, j.value.slice(k[1] + 1));
+                } else {
+                    p.append(j.value.slice(indices[i - 1]?.[1] || 0, k[0]), h);
+                }
             }
+            div.append(p);
+            div.onpointerdown = () => {
+                let el = document.getElementById(i.id);
+                jump_to_x_link(el as x & xlink);
+                show_search_l([]);
+                let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
+                console.log(id);
+                link(id).add(i.id);
+            };
+            div.onpointerenter = (e) => {
+                set_viewer_posi(e.clientX, e.clientY);
+                let el = document.getElementById(i.id);
+                move_to_x_link(el as x & xlink);
+            };
+            els.push(div);
         }
+    }
+    for (let div of els) {
+        search_r.append(div);
     }
 }
 
