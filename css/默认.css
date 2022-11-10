@@ -172,7 +172,7 @@ body > #搜索 > #搜索结果 > div {
     margin: 4px;
     cursor: pointer;
 }
-body > #搜索 > #搜索结果 > div > span > span {
+body > #搜索 > #搜索结果 > div > div > span > span {
     color: #f55;
 }
 

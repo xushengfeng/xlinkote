@@ -2607,11 +2607,18 @@ search_r.onpointerleave = () => {
 /** 展示搜索结果 */
 function show_search_l(l: search_result) {
     search_r.innerHTML = "";
-    let els = [];
+    let els: HTMLElement[] = [];
+    let ids = {};
     for (let i of l) {
+        if (!ids[i.id]) {
+            let div = document.createElement("div");
+            els.push(div);
+            ids[i.id] = els.length - 1;
+        }
+        let div = els[ids[i.id]];
         for (let j of i.l) {
             let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
-            let div = document.createElement("div");
+            let line = document.createElement("div");
             let p = document.createElement("span");
             for (let i = 0; i < indices.length; i++) {
                 const k = indices[i];
@@ -2623,22 +2630,22 @@ function show_search_l(l: search_result) {
                     p.append(j.value.slice(indices[i - 1]?.[1] || 0, k[0]), h);
                 }
             }
-            div.append(p);
-            div.onpointerdown = () => {
-                let el = document.getElementById(i.id);
-                jump_to_x_link(el as x & xlink);
-                show_search_l([]);
-                let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
-                console.log(id);
-                link(id).add(i.id);
-            };
-            div.onpointerenter = (e) => {
-                set_viewer_posi(e.clientX, e.clientY);
-                let el = document.getElementById(i.id);
-                move_to_x_link(el as x & xlink);
-            };
-            els.push(div);
+            line.append(p);
+            div.append(line);
         }
+        div.onpointerdown = () => {
+            let el = document.getElementById(i.id);
+            jump_to_x_link(el as x & xlink);
+            show_search_l([]);
+            let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
+            console.log(id);
+            link(id).add(i.id);
+        };
+        div.onpointerenter = (e) => {
+            set_viewer_posi(e.clientX, e.clientY);
+            let el = document.getElementById(i.id);
+            move_to_x_link(el as x & xlink);
+        };
     }
     for (let div of els) {
         search_r.append(div);
