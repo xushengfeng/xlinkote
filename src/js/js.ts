@@ -2706,18 +2706,21 @@ function show_link_value_bar(el: x | xlink) {
 
 const view_el = document.getElementById("viewer");
 
+var view_width = 400,
+    view_height = 400;
+
 /** 定位预览栏 */
 function set_viewer_posi(x: number, y: number) {
-    view_el.style.left = Math.min(x, window.innerWidth - 2 * 200) + "px";
-    view_el.style.top = Math.min(y, window.innerHeight - 2 * 200) + "px";
+    view_el.style.left = Math.min(x, window.innerWidth - view_width) + "px";
+    view_el.style.top = Math.min(y, window.innerHeight - view_height) + "px";
 }
 
 /** 跳转到元素位置 */
 function move_to_x_link(el: x | xlink) {
     let center_rect = el_offset2(el, O);
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
-    let dx = 200 / zoom,
-        dy = 200 / zoom;
+    let dx = view_width / 2 / zoom,
+        dy = view_height / 2 / zoom;
     let out_rect = {
         left: center_point.x - dx,
         right: center_point.x + dx,
