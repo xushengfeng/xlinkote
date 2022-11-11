@@ -2708,8 +2708,8 @@ const view_el = document.getElementById("viewer");
 
 /** 定位预览栏 */
 function set_viewer_posi(x: number, y: number) {
-    view_el.style.left = x + "px";
-    view_el.style.top = y + "px";
+    view_el.style.left = Math.min(x, window.innerWidth - 2 * 200) + "px";
+    view_el.style.top = Math.min(y, window.innerHeight - 2 * 200) + "px";
 }
 
 /** 跳转到元素位置 */
