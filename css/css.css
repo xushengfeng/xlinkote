@@ -563,11 +563,10 @@ body > #搜索 > #搜索结果 > div > div:last-child {
 }
 body > #viewer {
     position: absolute;
-    width: 400px;
-    height: 200px;
     overflow: hidden;
     pointer-events: none;
     transition: var(--transition);
+    transform-origin: left top;
 }
 
 .viewer_hide {

@@ -2716,8 +2716,8 @@ function set_viewer_posi(x: number, y: number) {
 function move_to_x_link(el: x | xlink) {
     let center_rect = el_offset2(el, O);
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
-    let dx = 200,
-        dy = 10;
+    let dx = 200 / zoom,
+        dy = 200 / zoom;
     let out_rect = {
         left: center_point.x - dx,
         right: center_point.x + dx,
@@ -2734,6 +2734,9 @@ function move_to_x_link(el: x | xlink) {
         }
     });
 
+    view_el.style.width = 2 * dx + "px";
+    view_el.style.height = 2 * dy + "px";
+    view_el.style.transform = `scale(${zoom})`;
     view_el.innerHTML = "";
     view_el.classList.remove("viewer_hide");
     for (let x of els) {
