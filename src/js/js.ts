@@ -2627,9 +2627,9 @@ function show_search_l(l: search_result) {
                 let h = document.createElement("span");
                 h.innerText = j.value.slice(k[0], k[1] + 1);
                 if (Number(i) == indices.length - 1) {
-                    p.append(j.value.slice(indices[i - 1]?.[1] || 0, k[0]), h, j.value.slice(k[1] + 1));
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
                 } else {
-                    p.append(j.value.slice(indices[i - 1]?.[1] || 0, k[0]), h);
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
                 }
             }
             line.append(p);
