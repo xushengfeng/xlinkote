@@ -2643,9 +2643,13 @@ function show_search_l(l: search_result) {
             link(id).add(i.id);
         };
         div.onpointerenter = (e) => {
-            set_viewer_posi(e.clientX, e.clientY);
             let el = document.getElementById(i.id);
             move_to_x_link(el as x & xlink);
+        };
+        div.onpointermove = (e) => {
+            window.requestAnimationFrame(() => {
+                set_viewer_posi(e.clientX, e.clientY);
+            });
         };
     }
     for (let div of els) {
