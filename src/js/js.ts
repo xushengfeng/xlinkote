@@ -508,7 +508,7 @@ var mouse = (e: MouseEvent) => {
                 select.style.top = (rect.y + el_offset2(O, select.parentElement).y) * zoom + "px";
                 select.style.width = rect.w * zoom + "px";
                 select.style.height = rect.h * zoom + "px";
-                select_x_x(rect);
+                if (!e.shiftKey) select_x_x(rect);
             }
         }
     }
