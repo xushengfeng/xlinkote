@@ -2717,7 +2717,17 @@ function set_viewer_posi(x: number, y: number) {
 
 /** 跳转到元素位置 */
 function move_to_x_link(el: x | xlink) {
-    let center_rect = el_offset2(el, O);
+    let pel: HTMLElement;
+    画布s.querySelectorAll(":scope > div").forEach((xel) => {
+        if (xel.contains(el)) {
+            pel = xel as HTMLElement;
+            return;
+        }
+    });
+    let pel_display = pel.style.display;
+    pel.style.display = "block";
+    let center_rect = el_offset2(el, pel);
+
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
     let dx = view_width / 2 / zoom,
         dy = view_height / 2 / zoom;
@@ -2730,12 +2740,13 @@ function move_to_x_link(el: x | xlink) {
     console.log(out_rect);
 
     let els: { el: x; x: number; y: number }[] = [];
-    画布s.querySelectorAll(":scope > div > x-x").forEach((el: x) => {
+    pel.querySelectorAll(":scope > x-x").forEach((el: x) => {
         let r = el_offset2(el);
         if (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) {
             els.push({ el: el, x: r.x, y: r.y });
         }
     });
+    pel.style.display = pel_display;
 
     view_el.style.width = 2 * dx + "px";
     view_el.style.height = 2 * dy + "px";
