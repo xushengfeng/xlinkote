@@ -927,6 +927,12 @@ x-pdf > div:nth-child(3) > span::selection {
     color: transparent;
     background-color: #0000ff55;
 }
+x-pdf input {
+    text-align: right;
+}
+x-pdf #page_i::before {
+    content: "/";
+}
 x-link {
     @apply cursor-pointer;
 }
