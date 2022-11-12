@@ -4372,17 +4372,20 @@ class pdf_viewer extends HTMLElement {
         pdf.getPage(this._value.page).then(async (page) => {
             let scale = 1.5;
             let viewport = page.getViewport({ scale: scale });
-            let outputScale = window.devicePixelRatio * zoom || 1;
 
             let canvas = this.canvas;
             let context = canvas.getContext("2d");
 
-            canvas.width = Math.floor(viewport.width * outputScale);
-            canvas.height = Math.floor(viewport.height * outputScale);
-            canvas.style.width = Math.floor(viewport.width) + "px";
-            canvas.style.height = Math.floor(viewport.height) + "px";
+            let cw = canvas.getBoundingClientRect().width * scale,
+                ch = canvas.getBoundingClientRect().height * scale;
 
-            let transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+            let scalex = cw / viewport.width;
+            let scaley = ch / viewport.height;
+
+            canvas.width = Math.round(cw);
+            canvas.height = Math.round(ch);
+
+            let transform = scalex != 1 && scaley != 1 ? [scalex, 0, 0, scaley, 0, 0] : null;
 
             let renderContext = {
                 canvasContext: context,
