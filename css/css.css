@@ -874,6 +874,8 @@ x-pdf > div:nth-child(1) {
     display: flex;
     gap: 4px;
     position: absolute;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left top;
 }
 x-pdf > div:nth-child(1) > div {
     width: 16px;
