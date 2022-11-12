@@ -2807,11 +2807,18 @@ function add_bci(el: x | xlink) {
     main.innerText = `#${el.id}`;
     li.setAttribute("data-id", el.id);
     main.onpointerenter = (e) => {
-        set_viewer_posi(e.clientX, e.clientY);
         move_to_x_link(el);
     };
     main.onpointerdown = () => {
         jump_to_x_link(el);
+    };
+    main.onpointermove = (e) => {
+        window.requestAnimationFrame(() => {
+            set_viewer_posi(e.clientX, e.clientY);
+        });
+    };
+    breadcrumbs_el.onpointerleave = () => {
+        view_el.classList.add("viewer_hide");
     };
     breadcrumbs_el.querySelector(`div[data-id="${now_data_id}"] > div:nth-child(2)`).append(li);
     now_data_id = el.id;
