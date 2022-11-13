@@ -28,7 +28,7 @@
     "mathjax": "^3.2.2",
     "mermaid": "^9.1.7",
     "pako": "^2.0.4",
-    "pdfjs-dist": "^2.16.105",
+    "pdfjs-dist": "^3.0.279",
     "three": "^0.146.0",
     "turndown": "^7.1.1",
     "webdav": "^4.11.0"
