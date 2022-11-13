@@ -3875,45 +3875,54 @@ class markdown extends HTMLElement {
             if (模式 == "浏览") this.edit = false;
         };
         text.onpaste = (e) => {
-            let t = e.clipboardData.getData("text/plain").trim();
-            if (t.includes("\n")) {
+            if (e.clipboardData.files.length) {
                 e.preventDefault();
-                let el = this.parentElement as x;
-                let pel = el.parentElement;
-                let md: markdown;
-                if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
-                    let nel = document.createElement("x-x") as x;
-                    nel.id = el.id;
-                    this.remove();
-                    el.append(nel);
-                    md = document.createElement("x-md") as markdown;
-                    nel.append(md);
-                    md.value = this.value;
-                    md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
-                    pel = el;
-                    el = nel;
-                    pel.classList.add("flex-column");
+                put_datatransfer(e.clipboardData, el_offset(this, O).x, el_offset(this, O).y);
+                if (!text.value) {
+                    link(this.parentElement.id).rm();
+                    this.parentElement.remove();
                 }
-                const l = t.split("\n");
-                let last_el = el;
-                for (let i in l) {
-                    const tt = l[i];
-                    if (!tt) continue;
-                    if (i == "0") {
-                        md.text.setRangeText(tt);
-                        md.reload();
-                    } else {
-                        let x = document.createElement("x-x") as x;
-                        let md = document.createElement("x-md") as markdown;
-                        last_el.after(x);
-                        x.append(md);
-                        x.id = uuid_id();
-                        link(x.id).add();
-                        md.value = tt;
-                        last_el = x;
+            } else {
+                let t = e.clipboardData.getData("text/plain").trim();
+                if (t.includes("\n")) {
+                    e.preventDefault();
+                    let el = this.parentElement as x;
+                    let pel = el.parentElement;
+                    let md: markdown;
+                    if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
+                        let nel = document.createElement("x-x") as x;
+                        nel.id = el.id;
+                        this.remove();
+                        el.append(nel);
+                        md = document.createElement("x-md") as markdown;
+                        nel.append(md);
+                        md.value = this.value;
+                        md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
+                        pel = el;
+                        el = nel;
+                        pel.classList.add("flex-column");
                     }
+                    const l = t.split("\n");
+                    let last_el = el;
+                    for (let i in l) {
+                        const tt = l[i];
+                        if (!tt) continue;
+                        if (i == "0") {
+                            md.text.setRangeText(tt);
+                            md.reload();
+                        } else {
+                            let x = document.createElement("x-x") as x;
+                            let md = document.createElement("x-md") as markdown;
+                            last_el.after(x);
+                            x.append(md);
+                            x.id = uuid_id();
+                            link(x.id).add();
+                            md.value = tt;
+                            last_el = x;
+                        }
+                    }
+                    z.reflash();
                 }
-                z.reflash();
             }
         };
         // 点击元素定位到源文本行
