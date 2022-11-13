@@ -2527,6 +2527,8 @@ function search(s: string, type: "str" | "regex") {
                 let text = "";
                 if (el.querySelector("x-md")) {
                     text = (el.querySelector("x-md") as markdown).value;
+                } else if (el.querySelector("x-pdf")) {
+                    text = (el.querySelector("x-pdf") as pdf_viewer).text.innerText;
                 } else {
                     text = el.innerText;
                 }
