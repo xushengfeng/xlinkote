@@ -1317,6 +1317,10 @@ var 当前画布 = 集.数据[0] as 画布type;
 
 const 集_el = document.getElementById("集");
 
+import diff from "deep-diff";
+
+window["diff"] = diff;
+
 /** 设置集 */
 function set_data(l: 集type) {
     l = version_tr(l);
@@ -1430,6 +1434,39 @@ function render_data(inputdata: 画布type) {
     v(inputdata.data);
     values = null;
     return el;
+}
+
+type diff_i = diff.Diff<any, any>;
+
+function set_diff_data(diffl: diff_i[]) {
+    if (!diffl) return;
+    console.log(diffl);
+    const main_data = get_data();
+    for (let d of diffl) {
+        if (!d.path) continue;
+        switch (d.path[0]) {
+            case "数据":
+                if (d.path.includes("data")) {
+                    if (d.path.includes("子元素")) {
+                        let offset = -1 - 2;
+                        if (d.path[d.path.length - 1] != "value") {
+                            offset = -1;
+                        }
+                        let t = main_data;
+                        for (let i = 0; i < d.path.length + offset; i++) {
+                            t = t[d.path[i]];
+                        }
+
+                        const id = t["id"];
+                        console.log(id);
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
 }
 
 set_css("./md.css");
@@ -1707,7 +1744,8 @@ document.getElementById("db_load").onchange = () => {
 };
 
 // 撤销
-var undo_stack = [],
+type undo_diff_data = { s: any; diff: diff.Diff<any, any>[] };
+var undo_stack: undo_diff_data[] = [],
     undo_i = -1;
 
 function undo(v: boolean) {
@@ -1719,9 +1757,9 @@ function undo(v: boolean) {
         if (undo_i >= undo_stack.length) undo_i = undo_stack.length - 1;
     }
     let data = get_undo_s(undo_i);
-    let d = JSON.parse(data);
-    set_data(d[0]);
-    selections = d[1];
+    let now_data = get_data();
+    set_diff_data(diff.diff(now_data, data));
+    selections = data.s;
     if (selections[0].id) {
         (document.getElementById(selections[0].id).querySelector("x-md") as markdown).edit = true;
         let text = (document.getElementById(selections[0].id).querySelector("x-md") as markdown).text;
@@ -1730,14 +1768,37 @@ function undo(v: boolean) {
     }
 }
 
-function get_undo_s(i: number) {
-    let s_data = undo_stack[0];
-    return s_data;
+function get_undo_s(i: number): { s: selection_type[]; data: 集type } {
+    let z = {};
+    for (let n = 0; n <= i; n++) {
+        for (let d of undo_stack[n].diff) {
+            diff.applyChange(z, null, d);
+        }
+    }
+    return { s: undo_stack[i].s, data: z as 集type };
 }
 
-let pre_data = "";
+function clone(obj: object) {
+    return JSON.parse(JSON.stringify(obj));
+}
 
-function push_undo() {}
+function push_undo() {
+    if (undo_i != undo_stack.length - 1 && undo_i != -1) {
+        // 把当前位置的数据移到末
+        let pre_data = get_undo_s(undo_i);
+        let last_data = get_undo_s(undo_stack.length - 1);
+        let data: undo_diff_data = { s: clone(pre_data.s), diff: diff.diff(last_data, pre_data) };
+        undo_stack.push(data);
+        undo_i = undo_stack.length - 1;
+    }
+
+    let per = undo_i == -1 ? {} : get_undo_s(undo_i);
+    let now_data = clone(get_data());
+    let d = diff.diff(per, now_data);
+    undo_stack.push({ s: clone(selections), diff: d });
+
+    console.log(undo_stack);
+}
 
 /** 下载文件 */
 async function download_file(text: string) {
@@ -1764,6 +1825,8 @@ async function download_file(text: string) {
         URL.revokeObjectURL(String(blob));
     }
 }
+
+let xpre_data;
 
 var save_timeout = NaN,
     save_dt = 200;

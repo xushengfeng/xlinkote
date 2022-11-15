@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/color': ^3.0.3
+  '@types/deep-diff': ^1.0.1
   '@types/three': ^0.144.0
   autoprefixer: ^10.4.12
   color: ^4.2.3
   crypto-js: ^4.1.1
+  deep-diff: ^1.0.2
   fuse.js: ^6.6.2
   html2canvas: ^1.4.1
   http-server: ^14.1.1
@@ -29,6 +31,7 @@ specifiers:
 dependencies:
   color: 4.2.3
   crypto-js: 4.1.1
+  deep-diff: 1.0.2
   fuse.js: 6.6.2
   html2canvas: 1.4.1
   jsxgraph: 1.4.5
@@ -46,6 +49,7 @@ dependencies:
 
 devDependencies:
   '@types/color': 3.0.3
+  '@types/deep-diff': 1.0.1
   '@types/three': 0.144.0
   autoprefixer: 10.4.12_postcss@8.4.17
   http-server: 14.1.1
@@ -131,6 +135,10 @@ packages:
     resolution: {integrity: sha512-X//qzJ3d3Zj82J9sC/C18ZY5f43utPbAJ6PhYt/M7uG6etcF6MRpKdN880KBy43B0BMzSfeT96MzrsNjFI3GbA==}
     dependencies:
       '@types/color-convert': 2.0.0
+    dev: true
+
+  /@types/deep-diff/1.0.1:
+    resolution: {integrity: sha512-cZIq2GFcPmW0/M7dtLuphyoU8f3zpTcBgV+wkFFJ0CK0lwRVGGLaBSJZ98qs4LjtLimPq1Bb2VJnhGn6SEE4IA==}
     dev: true
 
   /@types/three/0.144.0:
@@ -958,6 +966,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       mimic-response: 2.1.0
+    dev: false
+
+  /deep-diff/1.0.2:
+    resolution: {integrity: sha512-aWS3UIVH+NPGCD1kki+DCU9Dua032iSsO43LqQpcs4R3+dVv7tX0qBGjiVHJHjplsoUM2XRO/KB92glqc68awg==}
     dev: false
 
   /defined/1.0.0:
