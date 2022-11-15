@@ -1759,6 +1759,8 @@ function undo(v: boolean) {
     let data = get_undo_s(undo_i);
     let now_data = get_data();
     set_diff_data(diff.diff(now_data, data));
+    console.log(diff.diff(get_data(), now_data));
+
     selections = data.s;
     if (selections[0].id) {
         (document.getElementById(selections[0].id).querySelector("x-md") as markdown).edit = true;
