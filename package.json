@@ -17,7 +17,6 @@
   "dependencies": {
     "color": "^4.2.3",
     "crypto-js": "^4.1.1",
-    "diff-match-patch": "^1.0.5",
     "fuse.js": "^6.6.2",
     "html2canvas": "^1.4.1",
     "jsxgraph": "^1.4.5",
@@ -35,7 +34,6 @@
   },
   "devDependencies": {
     "@types/color": "^3.0.3",
-    "@types/diff-match-patch": "^1.0.32",
     "@types/three": "^0.144.0",
     "autoprefixer": "^10.4.12",
     "http-server": "^14.1.1",

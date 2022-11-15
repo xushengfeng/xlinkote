@@ -1710,9 +1710,6 @@ document.getElementById("db_load").onchange = () => {
 var undo_stack = [],
     undo_i = -1;
 
-import DiffMatchPatch from "diff-match-patch";
-const dmp = new DiffMatchPatch.diff_match_patch();
-
 function undo(v: boolean) {
     if (v) {
         undo_i--;
@@ -1735,34 +1732,12 @@ function undo(v: boolean) {
 
 function get_undo_s(i: number) {
     let s_data = undo_stack[0];
-    for (let k = 1; k <= i; k++) {
-        s_data = dmp.patch_apply(undo_stack[k], s_data)[0];
-    }
     return s_data;
 }
 
 let pre_data = "";
 
-function push_undo() {
-    let data = JSON.stringify([get_data(), selections], null, 2);
-    if (data == pre_data) return;
-    if (undo_i != undo_stack.length - 1) {
-        let pre_data = get_undo_s(undo_i);
-        let last_data = get_undo_s(undo_stack.length - 1);
-        let data = dmp.patch_make(pre_data, last_data);
-        undo_stack.push(data);
-        undo_i = undo_stack.length - 1;
-    }
-    if (undo_i == -1) {
-        undo_stack.push(data);
-    } else {
-        let p = dmp.patch_make(pre_data, data);
-        undo_stack.push(p);
-    }
-    pre_data = data;
-    undo_i = undo_stack.length - 1;
-    console.log(undo_stack);
-}
+function push_undo() {}
 
 /** 下载文件 */
 async function download_file(text: string) {

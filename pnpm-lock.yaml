@@ -2,12 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/color': ^3.0.3
-  '@types/diff-match-patch': ^1.0.32
   '@types/three': ^0.144.0
   autoprefixer: ^10.4.12
   color: ^4.2.3
   crypto-js: ^4.1.1
-  diff-match-patch: ^1.0.5
   fuse.js: ^6.6.2
   html2canvas: ^1.4.1
   http-server: ^14.1.1
@@ -31,7 +29,6 @@ specifiers:
 dependencies:
   color: 4.2.3
   crypto-js: 4.1.1
-  diff-match-patch: 1.0.5
   fuse.js: 6.6.2
   html2canvas: 1.4.1
   jsxgraph: 1.4.5
@@ -49,7 +46,6 @@ dependencies:
 
 devDependencies:
   '@types/color': 3.0.3
-  '@types/diff-match-patch': 1.0.32
   '@types/three': 0.144.0
   autoprefixer: 10.4.12_postcss@8.4.17
   http-server: 14.1.1
@@ -135,10 +131,6 @@ packages:
     resolution: {integrity: sha512-X//qzJ3d3Zj82J9sC/C18ZY5f43utPbAJ6PhYt/M7uG6etcF6MRpKdN880KBy43B0BMzSfeT96MzrsNjFI3GbA==}
     dependencies:
       '@types/color-convert': 2.0.0
-    dev: true
-
-  /@types/diff-match-patch/1.0.32:
-    resolution: {integrity: sha512-bPYT5ECFiblzsVzyURaNhljBH2Gh1t9LowgUwciMrNAhFewLkHT2H0Mto07Y4/3KCOGZHRQll3CTtQZ0X11D/A==}
     dev: true
 
   /@types/three/0.144.0:
@@ -1005,10 +997,6 @@ packages:
   /didyoumean/1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
     dev: true
-
-  /diff-match-patch/1.0.5:
-    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
-    dev: false
 
   /dlv/1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
