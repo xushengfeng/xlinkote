@@ -514,6 +514,18 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
 .hide_link_ctrl > div:nth-child(1) > img {
     display: none;
 }
+body > #main > #画布 > x-link-value > div:nth-child(2) > div {
+    @apply flex items-center;
+}
+body > #main > #画布 > x-link-value > div:nth-child(2) > div > div {
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
+    width: 16px;
+    height: 16px;
+}
 
 .breadcrumbs {
     @apply absolute h-4 overflow-hidden flex bg-white dark:bg-black transition-all shadow-sm;

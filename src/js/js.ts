@@ -5113,6 +5113,13 @@ class link_value extends HTMLElement {
                 el.onpointerup = () => {
                     jump_to_x_link(get_x_by_id(i));
                 };
+                let rm = document.createElement("div");
+                rm.innerHTML = `<img src="${close_svg}" class="icon">`;
+                rm.onclick = () => {
+                    link(this._id).rm(i);
+                    el.remove();
+                };
+                el.append(rm);
             }
 
             // 搜索
