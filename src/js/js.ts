@@ -2120,7 +2120,7 @@ class 图层 {
             for (let n in data) {
                 const i = data[n];
 
-                if (i.id) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
+                if (i.id && get_x_by_id(i.id)) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
                 if (i.value) {
                     const type = {
                         "X-MD": "md",
