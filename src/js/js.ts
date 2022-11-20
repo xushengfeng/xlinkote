@@ -2616,7 +2616,7 @@ function search(s: string, type: "str" | "regex") {
 var search_el = document.getElementById("search") as HTMLInputElement;
 var search_r = document.getElementById("搜索结果");
 var search_pel = document.getElementById("搜索");
-search_el.oninput = search_el.onfocus = () => {
+search_el.oninput = search_el.click = () => {
     let l = search(search_el.value, "str");
     console.log(l);
     show_search_l(l);
@@ -2632,10 +2632,11 @@ search_r.onpointerleave = () => {
 };
 
 /** 展示搜索结果 */
-function show_search_l(l: search_result) {
+function show_search_l(l: search_result, exid?: string) {
     l = l.sort((a, b) => {
         return link(a.id).get_v() - link(b.id).get_v();
     });
+    if (exid) l = l.filter((i) => i.id != exid);
     search_r.innerHTML = "";
     let els: HTMLElement[] = [];
     let ids = {};
@@ -5129,7 +5130,7 @@ class link_value extends HTMLElement {
                 }
                 let l = search(v, "str");
                 console.log(l);
-                show_search_l(l);
+                show_search_l(l, this._id);
             }
 
             search_el.value = v;
