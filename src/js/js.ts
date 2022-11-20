@@ -1628,38 +1628,40 @@ const 文件_el = document.getElementById("文件");
 function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
+
+    文件_el.innerHTML = "";
+    let load_dav = document.createElement("div");
+    load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
+    文件_el.append(load_dav);
+    load_dav.onclick = () => {
+        get_all_xln(r.result);
+    };
+    let new_d = document.createElement("div");
+    let new_t = rename_el();
+    new_t.onchange = () => {
+        if (new_t.value) {
+            集.meta.file_name = new_t.value;
+            data_changed();
+        }
+    };
+    new_t.value = `新建集${uuid().slice(0, 7)}`;
+    let dav = document.createElement("div");
+    new_d.append(dav, new_t);
+    new_d.classList.add("selected_item");
+    new_d.onclick = () => {
+        let fn = prompt("文件名");
+        if (fn) {
+            集.meta.file_name = new_t.value = fn;
+            data_changed();
+        }
+    };
+    文件_el.append(new_d);
+
     r.onsuccess = () => {
         const result: 集type[] = r.result;
         for (let f of result) {
             file_list.push(f.meta);
         }
-        文件_el.innerHTML = "";
-        let load_dav = document.createElement("div");
-        load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
-        文件_el.append(load_dav);
-        load_dav.onclick = () => {
-            get_all_xln(r.result);
-        };
-        let new_d = document.createElement("div");
-        let new_t = rename_el();
-        new_t.onchange = () => {
-            if (new_t.value) {
-                集.meta.file_name = new_t.value;
-                data_changed();
-            }
-        };
-        new_t.value = `新建集${uuid().slice(0, 7)}`;
-        let dav = document.createElement("div");
-        new_d.append(dav, new_t);
-        new_d.classList.add("selected_item");
-        new_d.onclick = () => {
-            let fn = prompt("文件名");
-            if (fn) {
-                集.meta.file_name = new_t.value = fn;
-                data_changed();
-            }
-        };
-        文件_el.append(new_d);
 
         let ihash = false;
         global_x = [];
