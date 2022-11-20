@@ -1624,6 +1624,8 @@ var file_list: meta[] = [];
 
 const 文件_el = document.getElementById("文件");
 
+function load_file_side_bar() {}
+
 /** 获取文件并渲染 */
 function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
@@ -1663,38 +1665,12 @@ function db_get() {
             file_list.push(f.meta);
         }
 
+        reload_file_list();
+
         let ihash = false;
         global_x = [];
+
         for (let f of r.result) {
-            let d = document.createElement("div");
-            d.setAttribute("data-uuid", f.meta.UUID);
-            let t = rename_el();
-            t.onclick = (e) => {
-                if (e.ctrlKey) {
-                    let url = new URL(location.origin);
-                    url.hash = f.meta.UUID;
-                    window.open(url);
-                    return;
-                }
-                if (!集.meta.file_name) new_d.remove();
-                set_data(f);
-                侧栏.classList.remove("侧栏显示");
-
-                文件_el.querySelectorAll(".selected_item").forEach((el) => {
-                    el.classList.remove("selected_item");
-                });
-                d.classList.add("selected_item");
-            };
-            t.onchange = () => {
-                集.meta.file_name = t.value;
-                data_changed();
-            };
-            t.value = f.meta.file_name || "";
-            if (f.meta.url) t.title = f.meta.url;
-            let dav = document.createElement("div");
-            d.append(dav, t);
-            文件_el.append(d);
-
             if ((f as 集type)?.中转站)
                 for (let x of (f as 集type).中转站) {
                     if (x.global) global_x.push(x);
@@ -1712,6 +1688,39 @@ function db_get() {
             set_data(集);
         }
     };
+}
+
+function reload_file_list() {
+    for (let f of file_list) {
+        let d = document.createElement("div");
+        d.setAttribute("data-uuid", f.UUID);
+        let t = rename_el();
+        t.onclick = (e) => {
+            if (e.ctrlKey) {
+                let url = new URL(location.origin);
+                url.hash = f.UUID;
+                window.open(url);
+                return;
+            }
+            if (!集.meta.file_name) 文件_el.children[1].remove();
+            set_db_file(f.UUID);
+            侧栏.classList.remove("侧栏显示");
+
+            文件_el.querySelectorAll(".selected_item").forEach((el) => {
+                el.classList.remove("selected_item");
+            });
+            d.classList.add("selected_item");
+        };
+        t.onchange = () => {
+            集.meta.file_name = t.value;
+            data_changed();
+        };
+        t.value = f.file_name || "";
+        if (f.url) t.title = f.url;
+        let dav = document.createElement("div");
+        d.append(dav, t);
+        文件_el.append(d);
+    }
 }
 
 /** 通过uuid设置文件 */
