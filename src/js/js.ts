@@ -1116,17 +1116,19 @@ document.onkeydown = (e) => {
 let pname = `画布${uuid().slice(0, 7)}`;
 /** 文件 */
 type 集type = {
-    meta: {
-        focus_page: string;
-        url: string;
-        UUID: string;
-        file_name: string;
-        version: string;
-    };
+    meta: meta;
     数据: 画布type[];
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
+};
+
+type meta = {
+    focus_page: string;
+    url: string;
+    UUID: string;
+    file_name: string;
+    version: string;
 };
 
 /** 主元素 */
@@ -1618,7 +1620,7 @@ function db_put(obj: object) {
     };
 }
 
-var files;
+var file_list: meta[] = [];
 
 const 文件_el = document.getElementById("文件");
 
@@ -1627,7 +1629,10 @@ function db_get() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
     r.onsuccess = () => {
-        files = r.result;
+        const result: 集type[] = r.result;
+        for (let f of result) {
+            file_list.push(f.meta);
+        }
         文件_el.innerHTML = "";
         let load_dav = document.createElement("div");
         load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
@@ -1704,6 +1709,15 @@ function db_get() {
         if (!ihash) {
             set_data(集);
         }
+    };
+}
+
+/** 通过uuid设置文件 */
+function set_db_file(uuid: string) {
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    let r = customerObjectStore.get(uuid);
+    r.onsuccess = () => {
+        set_data(r.result);
     };
 }
 
@@ -1930,9 +1944,9 @@ document.addEventListener("message", (msg: any) => {
     if (data.m == "add") {
         if (集.meta.file_name != "摘录") {
             // 是否存在摘录文件
-            for (let i of files) {
-                if (i.meta.file_name == "摘录") {
-                    set_data(i);
+            for (let i of file_list) {
+                if (i.file_name == "摘录") {
+                    set_db_file(i.UUID);
                 }
             }
             // 新建摘录文件
