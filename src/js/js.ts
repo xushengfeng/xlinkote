@@ -4197,11 +4197,12 @@ class symbols extends HTMLElement {
         this.append(div);
         for (const i in mathSymbols) {
             for (const j of mathSymbols[i]) {
-                let span = document.createElement("span");
-                span.title = j.name;
-                span.id = `snippet_${j.source}`;
-                span.innerHTML = j.svg;
-                div.append(span);
+                let img = document.createElement("img");
+                img.title = j.name;
+                img.id = `snippet_${j.source}`;
+                let b = btoa(j.svg);
+                img.src = `data:image/svg+xml;base64,${b}`;
+                div.append(img);
             }
         }
 
@@ -4212,10 +4213,10 @@ class symbols extends HTMLElement {
         var f = (el: HTMLElement) => {
             let text = (get_x_by_id(selections[0].id).querySelector("x-md") as markdown).text;
             if (text.tagName != "TEXTAREA") return;
-            if (el.parentElement.id.includes("snippet")) {
+            if (el.id.includes("snippet")) {
                 for (let i in mathSymbols) {
                     for (let j of mathSymbols[i]) {
-                        if ("snippet_" + j.source == el.parentElement.id) {
+                        if ("snippet_" + j.source == el.id) {
                             let v = text.value;
                             let se = v.substring(text.selectionStart, text.selectionEnd);
                             let s = <string>j.snippet;
