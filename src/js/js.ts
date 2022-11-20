@@ -1624,13 +1624,7 @@ var file_list: meta[] = [];
 
 const 文件_el = document.getElementById("文件");
 
-function load_file_side_bar() {}
-
-/** 获取文件并渲染 */
-function db_get() {
-    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
-    let r = customerObjectStore.getAll();
-
+function load_file_side_bar() {
     文件_el.innerHTML = "";
     let load_dav = document.createElement("div");
     load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
@@ -1658,6 +1652,14 @@ function db_get() {
         }
     };
     文件_el.append(new_d);
+}
+
+/** 获取文件并渲染 */
+function db_get() {
+    let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+    let r = customerObjectStore.getAll();
+
+    load_file_side_bar();
 
     r.onsuccess = () => {
         const result: 集type[] = r.result;
@@ -1679,7 +1681,7 @@ function db_get() {
             if (`#${f.meta.UUID}` == location.hash) {
                 ihash = true;
                 set_data(f);
-                new_d.remove();
+                文件_el.children[1].remove();
                 文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
             }
         }
