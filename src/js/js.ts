@@ -2561,15 +2561,12 @@ function search(s: string, type: "str" | "regex") {
     let result = [] as search_result;
     switch (type) {
         case "str":
-            for (let id in 集.链接[0]) {
-                let el = get_link_el_by_id(id);
-                if (!el) continue;
-                if (!is_smallest_el(el)) continue;
+            画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
                 let text = "";
-                if (el.querySelector("x-md")) {
-                    text = (el.querySelector("x-md") as markdown).value;
-                } else if (el.querySelector("x-pdf")) {
-                    text = (el.querySelector("x-pdf") as pdf_viewer).text.innerText;
+                if (el.tagName == "X-MD") {
+                    text = (el as markdown).value;
+                } else if (el.tagName == "X-PDF") {
+                    text = (el as pdf_viewer).text.innerText;
                 } else {
                     text = el.innerText;
                 }
@@ -2580,9 +2577,9 @@ function search(s: string, type: "str" | "regex") {
                 });
                 let fr = fuse.search(s);
                 for (let i of fr) {
-                    result.push({ id: id, l: i.matches, n: i.refIndex, type: "str" });
+                    result.push({ id: el.parentElement.id, l: i.matches, n: i.refIndex, type: "str" });
                 }
-            }
+            });
             break;
         case "regex":
             for (let id in 集.链接[0]) {
