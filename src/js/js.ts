@@ -1636,7 +1636,7 @@ function db_get() {
     load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
     文件_el.append(load_dav);
     load_dav.onclick = () => {
-        get_all_xln(r.result);
+        get_all_xln();
     };
     let new_d = document.createElement("div");
     let new_t = rename_el();
@@ -2389,7 +2389,7 @@ var client = createClient(store.webdav.网址, {
 });
 
 /** 获取云文件列表并渲染 */
-async function get_all_xln(r: 集type[]) {
+async function get_all_xln() {
     let dav_files = (await client.getDirectoryContents("/", { deep: true, glob: "**.xln" })) as any[];
     let rp = await client.getDirectoryContents("/");
     let 删除路径 = "";
@@ -2397,16 +2397,16 @@ async function get_all_xln(r: 集type[]) {
     let rplf = rp[rp.length - 1];
     let b = new RegExp(`${rplf.basename}$`);
     删除路径 = rplf.filename.replace(b, "");
-    for (let f of r) {
+    for (let f of file_list) {
         let dav: HTMLElement;
         for (let el of 文件_el.querySelectorAll("input")) {
-            if (el.value == f.meta.file_name) {
+            if (el.value == f.file_name) {
                 dav = el.previousElementSibling as HTMLElement;
                 break;
             }
         }
         for (let fi of dav_files) {
-            if ("/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") == f.meta.url) {
+            if ("/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") == f.url) {
                 dav.onclick = () => {
                     get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
                     document.title = get_title();
