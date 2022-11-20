@@ -2559,17 +2559,17 @@ import Fuse from "fuse.js";
 type search_result = { id: string; l: readonly Fuse.FuseResultMatch[]; n?: number; type?: "str" | "regex" }[];
 function search(s: string, type: "str" | "regex") {
     let result = [] as search_result;
-    switch (type) {
-        case "str":
-            画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
-                let text = "";
-                if (el.tagName == "X-MD") {
-                    text = (el as markdown).value;
-                } else if (el.tagName == "X-PDF") {
-                    text = (el as pdf_viewer).text.innerText;
-                } else {
-                    text = el.innerText;
-                }
+    画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
+        let text = "";
+        if (el.tagName == "X-MD") {
+            text = (el as markdown).value;
+        } else if (el.tagName == "X-PDF") {
+            text = (el as pdf_viewer).text.innerText;
+        } else {
+            text = el.innerText;
+        }
+        switch (type) {
+            case "str":
                 const fuse = new Fuse(text.split("\n"), {
                     includeMatches: true,
                     findAllMatches: true,
@@ -2579,19 +2579,8 @@ function search(s: string, type: "str" | "regex") {
                 for (let i of fr) {
                     result.push({ id: el.parentElement.id, l: i.matches, n: i.refIndex, type: "str" });
                 }
-            });
-            break;
-        case "regex":
-            for (let id in 集.链接[0]) {
-                let el = get_link_el_by_id(id);
-                if (!el) continue;
-                if (!is_smallest_el(el)) continue;
-                let text = "";
-                if (el.querySelector("x-md")) {
-                    text = (el.querySelector("x-md") as markdown).value;
-                } else {
-                    text = el.innerText;
-                }
+                break;
+            case "regex":
                 let r: RegExp;
                 try {
                     r = eval("/" + s + "/g");
@@ -2604,11 +2593,11 @@ function search(s: string, type: "str" | "regex") {
                     l.push({ value: i, indices: s_i(i, text).map((v) => [v, v + i.length]) });
                 }
                 if (l.length != 0) {
-                    result.push({ id, l });
+                    result.push({ id: el.parentElement.id, l });
                 }
-            }
-            break;
-    }
+                break;
+        }
+    });
 
     function s_i(t: string, st: string) {
         let l = [];
