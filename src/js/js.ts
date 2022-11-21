@@ -1341,6 +1341,7 @@ function set_data(l: 集type) {
         div.value = p.name;
         ps[p.id] = render_data(p);
         // 画布s.append(ps[p.id]);
+        div.setAttribute("data-id", p.id);
         div.onclick = () => {
             集_el.querySelectorAll(".selected_item").forEach((el) => {
                 el.classList.remove("selected_item");
@@ -1442,13 +1443,56 @@ function render_data(inputdata: 画布type) {
 
 type diff_i = diff.Diff<any, any>;
 
-function set_diff_data(diffl: diff_i[]) {
+function set_diff_data(diffl: diff_i[], undo_data: 集type) {
     if (!diffl) return;
     console.log(diffl);
     const main_data = get_data();
     for (let d of diffl) {
         if (!d.path) continue;
         switch (d.path[0]) {
+            case "meta":
+                if (d.path.length == 1) {
+                    集.meta = d["rhs"];
+                } else {
+                    let last = d.path[d.path.length - 1];
+                    if (last == "focus_page") {
+                        let id = d["rhs"];
+                        集_el.querySelectorAll(".selected_item").forEach((el) => {
+                            el.classList.remove("selected_item");
+                        });
+                        集_el.querySelector(`*[data-id="${id}"]`).classList.add("selected_item");
+                        for (let p of 集.数据) {
+                            if (p.id == id) {
+                                当前画布 = p;
+                            }
+                        }
+                        集.meta.focus_page = id;
+                        for (let el of 画布s.children) {
+                            if (el.id == id) {
+                                (el as HTMLElement).style.display = "block";
+                                O = el as HTMLElement;
+                            } else {
+                                (el as HTMLElement).style.display = "none";
+                            }
+                        }
+                    }
+                    if (last == "file_name") {
+                        set_title(d["rhs"]);
+                        reload_file_list();
+                    }
+                }
+                break;
+            case "链接":
+                集.链接 = undo_data.链接;
+                break;
+            case "assets":
+                集.assets = undo_data.assets;
+                assets_reflash();
+                break;
+            case "中转站":
+                集.中转站 = undo_data.中转站;
+                tmp_s_reflash();
+                break;
             case "数据":
                 if (d.path.includes("data")) {
                     if (d.path.includes("子元素")) {
@@ -1485,7 +1529,6 @@ function set_diff_data(diffl: diff_i[]) {
                     }
                 }
                 break;
-
             default:
                 break;
         }
@@ -1806,7 +1849,7 @@ function undo(v: boolean) {
     }
     let data = get_undo_s(undo_i);
     let now_data = get_data();
-    set_diff_data(diff.diff(now_data, data.data));
+    set_diff_data(diff.diff(now_data, data.data), data.data);
     console.log(diff.diff(get_data(), now_data));
 
     selections = data.s;
