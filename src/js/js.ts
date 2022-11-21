@@ -1787,7 +1787,7 @@ function undo(v: boolean) {
     }
     let data = get_undo_s(undo_i);
     let now_data = get_data();
-    set_diff_data(diff.diff(now_data, data));
+    set_diff_data(diff.diff(now_data, data.data));
     console.log(diff.diff(get_data(), now_data));
 
     selections = data.s;
