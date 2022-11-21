@@ -1827,7 +1827,9 @@ function push_undo() {
         // 把当前位置的数据移到末
         let pre_data = get_undo_s(undo_i);
         let last_data = get_undo_s(undo_stack.length - 1);
-        let data: undo_diff_data = { s: clone(pre_data.s), diff: diff.diff(last_data, pre_data) };
+        let d = diff.diff(last_data.data, pre_data.data);
+        if (!d) return;
+        let data: undo_diff_data = { s: clone(pre_data.s), diff: d };
         undo_stack.push(data);
         undo_i = undo_stack.length - 1;
     }
