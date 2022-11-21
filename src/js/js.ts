@@ -1463,6 +1463,15 @@ function set_diff_data(diffl: diff_i[]) {
 
                         const id = t["id"];
                         console.log(id);
+
+                        let el = get_x_by_id(id);
+                        if (d.path[d.path.length - 1] == "value") {
+                            let t = main_data;
+                            for (let i = 0; i < d.path.length - 1; i++) {
+                                t = t[d.path[i]];
+                            }
+                            (el.querySelector(`${t["type"]}`) as markdown).value = d["rhs"];
+                        }
                     }
                 }
                 break;
@@ -5313,6 +5322,7 @@ window.customElements.define("x-record", record);
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { equalPath } from "html2canvas/dist/types/render/path";
 
 /** 3d元素 */
 class three extends HTMLElement {
