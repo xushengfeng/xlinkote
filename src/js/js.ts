@@ -1465,12 +1465,22 @@ function set_diff_data(diffl: diff_i[]) {
                         console.log(id);
 
                         let el = get_x_by_id(id);
-                        if (d.path[d.path.length - 1] == "value") {
-                            let t = main_data;
-                            for (let i = 0; i < d.path.length - 1; i++) {
-                                t = t[d.path[i]];
+                        if (d.kind == "E") {
+                            if (d.path[d.path.length - 1] == "value") {
+                                let t = main_data;
+                                for (let i = 0; i < d.path.length - 1; i++) {
+                                    t = t[d.path[i]];
+                                }
+                                (el.querySelector(`${t["type"]}`) as markdown).value = d["rhs"];
+                            } else if (d.path[d.path.length - 1] == "style") {
+                                el.setAttribute("style", d["rhs"]);
+                            } else if (d.path[d.path.length - 1] == "class") {
+                                el.className = d["rhs"];
+                            } else if (d.path[d.path.length - 1] == "id") {
+                                el.id = d["rhs"];
+                            } else if (d.path[d.path.length - 1] == "子元素") {
+                                el.value = d["rhs"];
                             }
-                            (el.querySelector(`${t["type"]}`) as markdown).value = d["rhs"];
                         }
                     }
                 }
