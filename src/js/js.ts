@@ -2656,6 +2656,16 @@ search_el.onblur = () => {
 
     view_el.classList.add("viewer_hide");
 };
+search_el.onkeyup = (e) => {
+    switch (e.key) {
+        case "Escape":
+            search_pel.classList.remove("搜索展示");
+            search_pel.setAttribute("data-fid", "");
+
+            view_el.classList.add("viewer_hide");
+            break;
+    }
+};
 search_r.onpointerleave = () => {
     view_el.classList.add("viewer_hide");
 };
