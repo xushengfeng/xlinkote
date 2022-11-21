@@ -1826,6 +1826,7 @@ function push_undo() {
     let per = undo_i == -1 ? {} : get_undo_s(undo_i).data;
     let now_data = clone(get_data());
     let d = diff.diff(per, now_data);
+    if (!d) return;
     undo_stack.push({ s: clone(selections), diff: d });
     undo_i = undo_stack.length - 1;
 
