@@ -2645,10 +2645,16 @@ function search(s: string, type: "str" | "regex") {
 var search_el = document.getElementById("search") as HTMLInputElement;
 var search_r = document.getElementById("搜索结果");
 var search_pel = document.getElementById("搜索");
+let select_index = 0;
 search_el.oninput = search_el.click = () => {
     let l = search(search_el.value, "str");
     console.log(l);
     show_search_l(l);
+    select_index = 0;
+    let el = select_search(select_index);
+    move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+    let r = el.getBoundingClientRect();
+    set_viewer_posi(r.x + r.width, r.y);
 };
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
@@ -2664,8 +2670,41 @@ search_el.onkeyup = (e) => {
 
             view_el.classList.add("viewer_hide");
             break;
+        case "ArrowUp":
+            if (select_index == 0) {
+                select_index = search_r.childElementCount - 1;
+            } else {
+                select_index--;
+            }
+            break;
+        case "ArrowDown":
+            if (select_index == search_r.childElementCount - 1) {
+                select_index = 0;
+            } else {
+                select_index++;
+            }
+            break;
+        case "Enter":
+            (<HTMLElement>search_r.querySelector(".search_item_select")).click();
+            search_el.blur();
+            break;
+    }
+    if (e.key == "ArrowUp" || e.key == "ArrowDown") {
+        e.preventDefault();
+        let el = select_search(select_index);
+        move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+        let r = el.getBoundingClientRect();
+        set_viewer_posi(r.x + r.width, r.y);
     }
 };
+
+function select_search(i: number) {
+    search_r.querySelectorAll(".search_item_select").forEach((el) => {
+        el.classList.remove("search_item_select");
+    });
+    (<HTMLElement>search_r.children[i]).classList.add("search_item_select");
+    return search_r.children[i];
+}
 search_r.onpointerleave = () => {
     view_el.classList.add("viewer_hide");
 };
@@ -2704,7 +2743,8 @@ function show_search_l(l: search_result, exid?: string) {
             line.append(p);
             div.append(line);
         }
-        div.onpointerdown = () => {
+        div.setAttribute("data-id", i.id);
+        div.click = () => {
             let el = document.getElementById(i.id);
             jump_to_x_link(el as x & xlink);
             show_search_l([]);
@@ -2715,6 +2755,8 @@ function show_search_l(l: search_result, exid?: string) {
         div.onpointerenter = (e) => {
             let el = document.getElementById(i.id);
             move_to_x_link(el as x & xlink);
+            select_index = Number(div.getAttribute("data-i"));
+            select_search(select_index);
         };
         div.onpointermove = (e) => {
             window.requestAnimationFrame(() => {
@@ -2732,6 +2774,9 @@ function show_search_l(l: search_result, exid?: string) {
         value.innerText = `${link(div.getAttribute("data-id")).get_v()}`;
         div.append(value);
     }
+    [...search_r.children].forEach((div, i) => {
+        div.setAttribute("data-i", String(i));
+    });
 }
 
 /** 全局搜索栏 */

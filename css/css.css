@@ -573,6 +573,9 @@ body > #搜索 > #搜索结果 > div > div:last-child {
     right: 0;
     top: 0;
 }
+.search_item_select {
+    background-color: var(--bg-color1);
+}
 body > #viewer {
     position: absolute;
     overflow: hidden;
