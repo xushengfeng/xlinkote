@@ -517,7 +517,7 @@ body > #main > #画布 > x-link-value > div:nth-child(1) > div:nth-child(2) {
 body > #main > #画布 > x-link-value > div:nth-child(2) > div {
     @apply flex items-center;
 }
-body > #main > #画布 > x-link-value > div:nth-child(2) > div > div {
+body > #main > #画布 > x-link-value > div:nth-child(2) > div > div:not(:first-child) {
     width: 16px;
     height: 16px;
     position: relative;

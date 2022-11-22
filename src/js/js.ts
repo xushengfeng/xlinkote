@@ -5275,19 +5275,23 @@ class link_value extends HTMLElement {
 
         const vl = document.createElement("div");
         this.append(vl);
+        let v_text = (i: string) => {
+            return `#${i} ${link(this._id).get()[i].value.toFixed(2)}`;
+        };
         this.v.onclick = () => {
             // 展示链接
             vl.innerHTML = "";
             for (let i in link(this._id).get()) {
                 if (i == "0") continue;
                 let el = document.createElement("div");
-                el.innerText = `#${i} ${link(this._id).get()[i].value}`;
                 vl.append(el);
+                let n = document.createElement("div");
+                n.innerText = v_text(i);
                 el.onpointerover = (e) => {
                     set_viewer_posi(e.clientX, e.clientY);
                     move_to_x_link(get_x_by_id(i));
                 };
-                el.onpointerup = () => {
+                n.onpointerup = () => {
                     jump_to_x_link(get_x_by_id(i));
                 };
                 let rm = document.createElement("div");
@@ -5296,7 +5300,20 @@ class link_value extends HTMLElement {
                     link(this._id).rm(i);
                     el.remove();
                 };
-                el.append(rm);
+                const add_el = document.createElement("div");
+                const down_el = document.createElement("div");
+
+                add_el.innerHTML = `<img src="${add_svg}" class="icon">`;
+                down_el.innerHTML = `<img src="${minus_svg}" class="icon">`;
+                add_el.onclick = () => {
+                    link(this._id).value(i, 0.1, true);
+                    n.innerText = v_text(i);
+                };
+                down_el.onclick = () => {
+                    link(this._id).value(i, -0.1, true);
+                    n.innerText = v_text(i);
+                };
+                el.append(n, add_el, rm, down_el);
             }
 
             // 搜索
