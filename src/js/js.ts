@@ -2752,7 +2752,8 @@ search_el.onkeyup = (e) => {
             }
             break;
         case "Enter":
-            (<HTMLElement>search_r.querySelector(".search_item_select")).click();
+            let id = (<HTMLElement>search_r.querySelector(".search_item_select")).getAttribute("data-id");
+            click_search_item(id);
             search_el.blur();
             break;
     }
@@ -2772,6 +2773,16 @@ function select_search(i: number) {
     (<HTMLElement>search_r.children[i]).classList.add("search_item_select");
     return search_r.children[i];
 }
+
+function click_search_item(iid: string) {
+    let el = document.getElementById(iid);
+    jump_to_x_link(el as x & xlink);
+    show_search_l([]);
+    let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
+    console.log(id);
+    link(id).add(iid);
+}
+
 search_r.onpointerleave = () => {
     view_el.classList.add("viewer_hide");
 };
@@ -2811,13 +2822,8 @@ function show_search_l(l: search_result, exid?: string) {
             div.append(line);
         }
         div.setAttribute("data-id", i.id);
-        div.click = () => {
-            let el = document.getElementById(i.id);
-            jump_to_x_link(el as x & xlink);
-            show_search_l([]);
-            let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
-            console.log(id);
-            link(id).add(i.id);
+        div.onpointerdown = (e) => {
+            click_search_item(i.id);
         };
         div.onpointerenter = (e) => {
             let el = document.getElementById(i.id);
