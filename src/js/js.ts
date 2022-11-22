@@ -3088,10 +3088,15 @@ function link(key0: string) {
             }
         },
         /** 获取值 */
-        get_v() {
-            if (is_smallest_el(get_link_el_by_id(key0))) {
+        get_v(is_small?: boolean) {
+            if (is_small || is_smallest_el(get_link_el_by_id(key0))) {
                 if (集.链接[0][key0]) {
-                    return 集.链接[0][key0].value;
+                    let l = link(key0).get();
+                    let n = 0;
+                    for (let i in l) {
+                        n += l[i].value;
+                    }
+                    return n;
                 }
             } else {
                 let nl = [];
@@ -3099,7 +3104,8 @@ function link(key0: string) {
                     .querySelectorAll("x-x, x-link")
                     .forEach((el) => {
                         if (集.链接[0][el.id]) {
-                            nl.push(集.链接[0][el.id].value);
+                            let n = link(el.id).get_v(true);
+                            nl.push(n);
                         }
                     });
                 let n = 0;
