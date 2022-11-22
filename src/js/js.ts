@@ -1525,6 +1525,16 @@ function set_diff_data(diffl: diff_i[], undo_data: 集type) {
                                 el.id = d["rhs"];
                             } else if (d.path[d.path.length - 1] == "子元素") {
                                 el.value = d["rhs"];
+                            } else if (d.path[d.path.length - 1] == "type") {
+                                let new_el = document.createElement(d["rhs"]) as x;
+                                new_el.id = el.id;
+                                new_el.className = el.className;
+                                new_el.setAttribute("style", el.getAttribute("style"));
+                                let v = el.value;
+                                el.parentElement.replaceChild(new_el, el);
+                                if (v) {
+                                    new_el.value = el.value;
+                                }
                             }
                         }
                     }
