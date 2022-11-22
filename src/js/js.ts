@@ -3089,6 +3089,7 @@ function link(key0: string) {
         },
         /** 获取值 */
         get_v: (is_small?: boolean) => {
+            link("0").衰减();
             if (is_small || is_smallest_el(get_link_el_by_id(key0))) {
                 if (集.链接[0][key0]) {
                     let l = link(key0).get();
@@ -3111,6 +3112,21 @@ function link(key0: string) {
                 let n = 0;
                 for (let i of nl) n += i;
                 return n / nl.length;
+            }
+        },
+        衰减: () => {
+            for (let i in 集.链接) {
+                if (i == "0") continue;
+                for (let j in 集.链接[i]) {
+                    let target = 集.链接[i][j];
+                    集.链接[i][j].value = down(target.value, target.time, t);
+                    集.链接[i][j].time = t;
+                }
+            }
+            function down(value: number, t0: number, t1: number) {
+                let h = (t1 - t0) / 1000 / 60 / 60;
+                let r = Math.max(value - h * (value / 50), 0.1);
+                return r;
             }
         },
     };
@@ -5323,7 +5339,7 @@ class link_value extends HTMLElement {
 
     set elid(id: string) {
         this._id = id;
-        this.v.innerText = String(link(id).get_v());
+        this.v.innerText = String(link(id).get_v().toFixed(2));
     }
     get elid() {
         return this._id;
