@@ -502,6 +502,7 @@ body > #main > #画布 > x-link-value > div {
 body > #main > #画布 > x-link-value > div:nth-child(1) {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 body > #main > #画布 > x-link-value > div > img {
     width: 16px;
