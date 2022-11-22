@@ -3052,7 +3052,7 @@ function link(key0: string) {
                 delete 集.链接[key0];
             }
         },
-        get() {
+        get: () => {
             let l = { ...集.链接[key0] };
             for (let i in 集.链接[0]) {
                 for (let x in 集.链接[i]) {
@@ -3063,7 +3063,7 @@ function link(key0: string) {
             }
             return l;
         },
-        value(key1?: string, dv?: number, force?: boolean) {
+        value: (key1?: string, dv?: number, force?: boolean) => {
             let dt = 5 * 60 * 1000; // 5分钟内增值无效
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
@@ -3088,7 +3088,7 @@ function link(key0: string) {
             }
         },
         /** 获取值 */
-        get_v(is_small?: boolean) {
+        get_v: (is_small?: boolean) => {
             if (is_small || is_smallest_el(get_link_el_by_id(key0))) {
                 if (集.链接[0][key0]) {
                     let l = link(key0).get();
