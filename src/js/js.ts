@@ -1095,7 +1095,12 @@ document.onkeydown = (e) => {
         case "k":
             if (e.ctrlKey) {
                 e.preventDefault();
+                let s = document.getSelection().getRangeAt(0).toString();
                 show_g_search();
+                if (s) {
+                    search_el.value = s;
+                    search_el.select();
+                }
             }
             break;
         case "z":
