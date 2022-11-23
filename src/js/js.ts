@@ -1520,6 +1520,7 @@ function set_diff_data(diffl: diff_i[], undo_data: 集type) {
                     }
                     if (last == "file_name") {
                         set_title(d["rhs"]);
+                        load_file_side_bar();
                         reload_file_list();
                     }
                 }
