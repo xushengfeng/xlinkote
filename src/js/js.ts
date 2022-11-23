@@ -1389,6 +1389,8 @@ function set_data(l: 集type) {
         rm.innerHTML = icon(remove_svg);
         rm.onclick = () => {
             if (集_el.children.length == 1) return;
+            let x = confirm(`确定删除画布 ${p.name}`);
+            if (!x) return;
             if (div.classList.contains("selected_item")) {
                 let id = 集_el.children[0].getAttribute("data-id");
                 集_el.children[0].classList.add("selected_item");
@@ -1838,6 +1840,8 @@ function reload_file_list() {
         let rm = document.createElement("div");
         rm.innerHTML = icon(remove_svg);
         rm.onclick = () => {
+            let x = confirm(`确定删除画布 ${f.file_name}`);
+            if (!x) return;
             let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
             let r = customerObjectStore.delete(f.UUID);
             r.onsuccess = () => {
