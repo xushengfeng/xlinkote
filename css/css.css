@@ -445,6 +445,9 @@ body > #main > #nav #切换侧栏 {
     text-align: center;
 }
 
+.侧栏 > #items > #设置 > #about > #version > img {
+    @apply w-4 h-4;
+}
 body > #main > #画布 {
     flex-grow: 1;
     position: relative;

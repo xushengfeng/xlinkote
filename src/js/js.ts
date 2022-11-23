@@ -15,6 +15,7 @@ import ul_hide2_svg from "../../assets/icons/ul_hide2.svg";
 import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
 import remove_svg from "../../assets/icons/remove.svg";
+import update_svg from "../../assets/icons/update.svg";
 
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
@@ -2657,9 +2658,9 @@ function show_setting() {
 show_setting();
 
 const about = document.getElementById("about");
-(<HTMLElement>about.querySelector("#version")).innerText = packagejson.version;
-
-document.getElementById("app_update").onclick = async () => {
+const version_el = <HTMLElement>about.querySelector("#version");
+version_el.innerHTML = `${packagejson.version}<img src="${update_svg}">`;
+version_el.onclick = async () => {
     const cacheKeepList = ["v2"];
     const keyList = await caches.keys();
     const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
