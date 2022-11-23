@@ -1821,11 +1821,6 @@ function reload_file_list() {
         let dav = document.createElement("div");
         let more = document.createElement("div");
         more.classList.add("more");
-        let b = document.createElement("div");
-        b.innerHTML = icon(more1_svg);
-        b.onclick = () => {
-            more.classList.toggle("show_more");
-        };
         let rename = document.createElement("div");
         rename.innerHTML = icon(edit_svg);
         rename.onclick = () => {
@@ -1853,7 +1848,7 @@ function reload_file_list() {
                 d.remove();
             };
         };
-        more.append(rm, rename, b);
+        more.append(rm, rename);
         d.append(dav, t, more);
         文件_el.append(d);
     }

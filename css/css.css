@@ -313,6 +313,9 @@ body #main > #nav #ink_r {
     position: relative;
     cursor: pointer;
 }
+.侧栏 > #items > #文件 > div > :last-child {
+    width: auto;
+}
 .侧栏 > #items > #文件 > div > div > .icon {
     width: var(--item-icon);
     height: var(--item-icon);
