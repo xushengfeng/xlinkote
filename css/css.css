@@ -226,6 +226,9 @@ body #main > #nav #ink {
     top: var(--icon-p-b-size);
     left: 0;
 }
+body #main > #nav #ink_r {
+    @apply flex w-full gap-1 items-center;
+}
 .ink_hide {
     pointer-events: none;
     opacity: 0;

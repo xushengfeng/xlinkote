@@ -3238,7 +3238,8 @@ function to_none_layout(els: x[]) {
 window["xln"] = {};
 
 // 手写识别
-document.getElementById("ink_icon").onclick = () => {
+document.getElementById("ink_icon").onpointerdown = (e) => {
+    e.preventDefault();
     ink_el.classList.toggle("ink_hide");
     if (!ink_el.classList.contains("ink_hide")) {
         ink_el.width = ink_el.offsetWidth;
@@ -3250,12 +3251,20 @@ ink_el.classList.add("ink_hide");
 let ink_cxt = ink_el.getContext("2d");
 let ink_points: [number[], number[]][] = [];
 let ink_move = false;
+let ink_t = {}; // 确保清除所有计时器
 ink_el.onpointerdown = (e) => {
+    e.preventDefault();
+
     ink_points.push([[], []]);
     ink_move = true;
 
     ink_cxt.beginPath();
     ink_cxt.moveTo(e.offsetX, e.offsetY);
+
+    for (let t in ink_t) {
+        clearTimeout(Number(t));
+        delete ink_t[t];
+    }
 };
 ink_el.onpointermove = (e) => {
     if (!ink_move) return;
@@ -3265,9 +3274,12 @@ ink_el.onpointermove = (e) => {
     ink_cxt.lineTo(e.offsetX, e.offsetY);
     ink_cxt.stroke();
 };
+const ink_r = document.getElementById("ink_r");
 ink_el.onpointerup = () => {
     ink_move = false;
 
+    let md = document.getElementById(selections[0].id).querySelector("x-md") as markdown;
+    let textel = md.text;
     let data = JSON.stringify({
         options: "enable_pre_space",
         requests: [
@@ -3289,7 +3301,37 @@ ink_el.onpointerup = () => {
         .then((v) => v.json())
         .then((v) => {
             console.log(v);
+            let text_l = v[1][0][1];
+            ink_r.innerHTML = "";
+            for (let t of text_l) {
+                let div = document.createElement("div");
+                div.innerText = t;
+                div.onpointerdown = (e) => {
+                    e.preventDefault();
+                    set_text(t);
+                    reset();
+                };
+                ink_r.append(div);
+            }
+            ink_t[
+                setTimeout(() => {
+                    reset();
+                }, 1000)
+            ] = "";
+
+            set_text(text_l[0]);
         });
+    function reset() {
+        ink_cxt.clearRect(0, 0, ink_el.width, ink_el.height);
+        ink_points = [];
+        ink_r.innerHTML = "";
+        textel.selectionStart = textel.selectionEnd;
+    }
+    function set_text(t: string) {
+        textel.setRangeText(t);
+        textel.dispatchEvent(new Event("input"));
+        textel.selectionEnd += t.length;
+    }
 };
 
 // MD
