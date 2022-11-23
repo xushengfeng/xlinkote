@@ -1782,28 +1782,12 @@ function reload_file_list() {
     for (let f of file_list) {
         let d = document.createElement("div");
         d.setAttribute("data-uuid", f.UUID);
-        let t = rename_el();
-        t.onclick = (e) => {
-            if (e.ctrlKey) {
-                let url = new URL(location.origin);
-                url.hash = f.UUID;
-                window.open(url);
-                return;
-            }
-            if (!集.meta.file_name) 文件_el.children[1].remove();
-            set_db_file(f.UUID);
-            侧栏.classList.remove("侧栏显示");
-
-            文件_el.querySelectorAll(".selected_item").forEach((el) => {
-                el.classList.remove("selected_item");
-            });
-            d.classList.add("selected_item");
-        };
-        t.onchange = () => {
-            集.meta.file_name = t.value;
-            data_changed();
-        };
-        t.value = f.file_name || "";
+        let t = document.createElement("a");
+        t.target = "_blank";
+        let url = new URL(location.origin);
+        url.hash = f.UUID;
+        t.href = url.toString();
+        t.innerText = f.file_name;
         if (f.url) t.title = f.url;
         let dav = document.createElement("div");
         d.append(dav, t);

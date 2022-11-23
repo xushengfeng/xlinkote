@@ -319,7 +319,7 @@ body #main > #nav #ink_r {
     left: var(--item-icon-margin);
     top: var(--item-icon-margin);
 }
-.侧栏 > #items > #文件 > div > input {
+.侧栏 > #items > #文件 > div > a {
     width: calc(100% - var(--item-height));
     box-sizing: border-box;
 }
