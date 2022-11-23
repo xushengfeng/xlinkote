@@ -1817,7 +1817,16 @@ function reload_file_list() {
                 };
             }
         };
-        more.append(rename, b);
+        let rm = document.createElement("div");
+        rm.innerHTML = icon(remove_svg);
+        rm.onclick = () => {
+            let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+            let r = customerObjectStore.delete(f.UUID);
+            r.onsuccess = () => {
+                d.remove();
+            };
+        };
+        more.append(rm, rename, b);
         d.append(dav, t, more);
         文件_el.append(d);
     }
