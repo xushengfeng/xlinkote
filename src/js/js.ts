@@ -3180,7 +3180,7 @@ function to_flex(els: x[], d: "x" | "y") {
         el.style.top = "";
         el.style.position = "relative";
         data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
-        z.remove(el);
+        el.remove();
     }
     xel.value = data;
 }
