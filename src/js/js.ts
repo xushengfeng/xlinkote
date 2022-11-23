@@ -1378,7 +1378,7 @@ function set_data(l: 集type) {
         let rename = document.createElement("div");
         rename.innerHTML = icon(edit_svg);
         rename.onclick = () => {
-            let n = prompt();
+            let n = prompt("重命名画布", p.name);
             if (n) {
                 document.getElementById(p.id).setAttribute("data-name", n);
                 data_changed();
@@ -1820,7 +1820,7 @@ function reload_file_list() {
         let rename = document.createElement("div");
         rename.innerHTML = icon(edit_svg);
         rename.onclick = () => {
-            let n = prompt();
+            let n = prompt("重命名文件", f.file_name);
             if (n) {
                 let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
                 let r = customerObjectStore.get(f.UUID);
