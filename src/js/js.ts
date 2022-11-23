@@ -3247,16 +3247,23 @@ document.getElementById("ink_icon").onclick = () => {
 };
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
 ink_el.classList.add("ink_hide");
+let ink_cxt = ink_el.getContext("2d");
 let ink_points: [number[], number[]][] = [];
 let ink_move = false;
-ink_el.onpointerdown = () => {
+ink_el.onpointerdown = (e) => {
     ink_points.push([[], []]);
     ink_move = true;
+
+    ink_cxt.beginPath();
+    ink_cxt.moveTo(e.offsetX, e.offsetY);
 };
 ink_el.onpointermove = (e) => {
     if (!ink_move) return;
     ink_points[ink_points.length - 1][0].push(e.offsetX);
     ink_points[ink_points.length - 1][1].push(e.offsetY);
+
+    ink_cxt.lineTo(e.offsetX, e.offsetY);
+    ink_cxt.stroke();
 };
 ink_el.onpointerup = () => {
     ink_move = false;
