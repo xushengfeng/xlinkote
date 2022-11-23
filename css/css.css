@@ -225,6 +225,7 @@ body #main > #nav #ink {
     position: fixed;
     top: var(--icon-p-b-size);
     left: 0;
+    background-color: #0000000e;
 }
 body #main > #nav #ink_r {
     @apply flex w-full gap-1 items-center;
