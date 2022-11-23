@@ -298,7 +298,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "auto";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "";
-            O.classList.remove("handle_cursor");
+            画布s.classList.remove("handle_cursor");
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -311,7 +311,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
             if (link_value_bar) link_value_bar.style.display = "none";
-            O.classList.add("handle_cursor");
+            画布s.classList.add("handle_cursor");
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -323,7 +323,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "none";
-            O.classList.remove("handle_cursor");
+            画布s.classList.remove("handle_cursor");
             break;
     }
 }
