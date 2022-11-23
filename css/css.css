@@ -227,6 +227,9 @@ body #main > #nav #ink {
     left: 0;
     background-color: #0000000e;
 }
+body #main > #nav #ink_icon {
+    min-width: 2rem;
+}
 body #main > #nav #ink_r {
     @apply flex w-full gap-1 items-center;
 }
