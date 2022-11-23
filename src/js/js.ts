@@ -16,6 +16,8 @@ import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
 import remove_svg from "../../assets/icons/remove.svg";
 import update_svg from "../../assets/icons/update.svg";
+import more1_svg from "../../assets/icons/more1.svg";
+import edit_svg from "../../assets/icons/edit.svg";
 
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
@@ -1790,7 +1792,33 @@ function reload_file_list() {
         t.innerText = f.file_name;
         if (f.url) t.title = f.url;
         let dav = document.createElement("div");
-        d.append(dav, t);
+        let more = document.createElement("div");
+        more.classList.add("more");
+        let b = document.createElement("div");
+        b.innerHTML = icon(more1_svg);
+        b.onclick = () => {
+            more.classList.toggle("show_more");
+        };
+        let rename = document.createElement("div");
+        rename.innerHTML = icon(edit_svg);
+        rename.onclick = () => {
+            let n = prompt();
+            if (n) {
+                let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+                let r = customerObjectStore.get(f.UUID);
+                let j: 集type = null;
+                r.onsuccess = () => {
+                    j = r.result as 集type;
+                    j.meta.file_name = n;
+                    r = customerObjectStore.put(j);
+                    r.onsuccess = () => {
+                        t.innerText = n;
+                    };
+                };
+            }
+        };
+        more.append(rename, b);
+        d.append(dav, t, more);
         文件_el.append(d);
     }
 }

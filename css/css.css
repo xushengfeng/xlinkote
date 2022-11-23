@@ -320,8 +320,28 @@ body #main > #nav #ink_r {
     top: var(--item-icon-margin);
 }
 .侧栏 > #items > #文件 > div > a {
-    width: calc(100% - var(--item-height));
+    flex-grow: 1;
     box-sizing: border-box;
+}
+
+.more {
+    @apply flex justify-end overflow-hidden;
+}
+.more > div {
+    min-width: var(--item-height);
+    height: var(--item-height);
+    position: relative;
+    cursor: pointer;
+}
+.more > div > .icon {
+    width: var(--item-icon);
+    height: var(--item-icon);
+    left: var(--item-icon-margin);
+    top: var(--item-icon-margin);
+}
+
+.show_more{
+    width: auto !important;
 }
 
 .侧栏 > #items > #集 > * {
