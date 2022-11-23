@@ -3238,7 +3238,15 @@ function to_none_layout(els: x[]) {
 window["xln"] = {};
 
 // 手写识别
+document.getElementById("ink_icon").onclick = () => {
+    ink_el.classList.toggle("ink_hide");
+    if (!ink_el.classList.contains("ink_hide")) {
+        ink_el.width = ink_el.offsetWidth;
+        ink_el.height = ink_el.offsetHeight;
+    }
+};
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
+ink_el.classList.add("ink_hide");
 let ink_points: [number[], number[]][] = [];
 let ink_move = false;
 ink_el.onpointerdown = () => {

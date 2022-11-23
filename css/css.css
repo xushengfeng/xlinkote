@@ -219,6 +219,17 @@ body > #main > #nav #search {
 body > #main > #nav #切换侧栏 {
     display: none;
 }
+body #main > #nav #ink {
+    width: 100vw;
+    height: calc(100vh - var(--icon-p-b-size));
+    position: fixed;
+    top: var(--icon-p-b-size);
+    left: 0;
+}
+.ink_hide {
+    pointer-events: none;
+    opacity: 0;
+}
 
 .db_load {
     display: none;
