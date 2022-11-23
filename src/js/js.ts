@@ -3187,7 +3187,8 @@ function to_flex(els: x[], d: "x" | "y") {
         el.remove();
     }
     xel.value = data;
-    data_changed();
+    get_data();
+    z.reflash();
 }
 
 /** 添加一个固定布局元素 */
