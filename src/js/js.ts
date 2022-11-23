@@ -3237,6 +3237,46 @@ function to_none_layout(els: x[]) {
 
 window["xln"] = {};
 
+// 手写识别
+const ink_el = document.getElementById("ink") as HTMLCanvasElement;
+let ink_points: [number[], number[]][] = [];
+let ink_move = false;
+ink_el.onpointerdown = () => {
+    ink_points.push([[], []]);
+    ink_move = true;
+};
+ink_el.onpointermove = (e) => {
+    if (!ink_move) return;
+    ink_points[ink_points.length - 1][0].push(e.offsetX);
+    ink_points[ink_points.length - 1][1].push(e.offsetY);
+};
+ink_el.onpointerup = () => {
+    ink_move = false;
+
+    let data = JSON.stringify({
+        options: "enable_pre_space",
+        requests: [
+            {
+                writing_guide: {
+                    writing_area_width: ink_el.width,
+                    writing_area_height: ink_el.height,
+                },
+                ink: ink_points,
+                language: "zh_CN",
+            },
+        ],
+    });
+    fetch(`https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`, {
+        method: "POST",
+        body: data,
+        headers: { "content-type": "application/json" },
+    })
+        .then((v) => v.json())
+        .then((v) => {
+            console.log(v);
+        });
+};
+
 // MD
 import markdownit from "markdown-it";
 import markdownitTaskLists from "markdown-it-task-lists";
