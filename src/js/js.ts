@@ -897,11 +897,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         });
         data_changed();
     }
+    if (free_drag || free_o_e) z.reflash();
     free_o_e = null;
     free_move = false;
     free_o_rects = [];
-
-    z.reflash();
 });
 
 /** 调整元素大小、位置以及元素聚焦 */
