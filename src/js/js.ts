@@ -1748,21 +1748,16 @@ function load_file_side_bar() {
         get_all_xln();
     };
     let new_d = document.createElement("div");
-    let new_t = rename_el();
-    new_t.onchange = () => {
-        if (new_t.value) {
-            集.meta.file_name = new_t.value;
-            data_changed();
-        }
-    };
-    new_t.value = `新建集${uuid().slice(0, 7)}`;
+    new_d.title = "点击重命名以保存";
+    let new_t = document.createElement("div");
+    new_t.innerText = `新建集${uuid().slice(0, 7)}`;
     let dav = document.createElement("div");
     new_d.append(dav, new_t);
     new_d.classList.add("selected_item");
     new_d.onclick = () => {
-        let fn = prompt("文件名");
+        let fn = prompt("文件名", new_t.innerText);
         if (fn) {
-            集.meta.file_name = new_t.value = fn;
+            集.meta.file_name = new_t.innerText = fn;
             data_changed();
         }
     };
