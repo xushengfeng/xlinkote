@@ -350,11 +350,18 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #集 > * {
     height: var(--item-height);
 }
-.侧栏 > #items > #集 > input {
+.侧栏 > #items > #集 > div {
     width: calc(100% - 8px);
     box-sizing: border-box;
+    display: flex;
 }
 
+.侧栏 > #items > #集 > div > div:nth-child(1) {
+    flex-grow: 1;
+}
+.侧栏 > #items > #集 > div:hover .more {
+    opacity: 1;
+}
 .侧栏 > #items > #层容器 {
     display: flex;
     flex-direction: column;

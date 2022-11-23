@@ -1351,13 +1351,13 @@ function set_data(l: 集type) {
 
     let ps = {};
     for (const p of 集.数据) {
-        let div = rename_el();
+        let div = document.createElement("div");
         集_el.append(div);
-        div.value = p.name;
+        let t = document.createElement("div");
+        t.innerText = p.name;
         ps[p.id] = render_data(p);
-        // 画布s.append(ps[p.id]);
         div.setAttribute("data-id", p.id);
-        div.onclick = () => {
+        t.onclick = () => {
             集_el.querySelectorAll(".selected_item").forEach((el) => {
                 el.classList.remove("selected_item");
             });
@@ -1373,21 +1373,34 @@ function set_data(l: 集type) {
             z.reflash(true);
             zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
         };
-        div.onchange = () => {
-            if (div.value) {
-                集.meta.focus_page = div.value;
-                p.name = div.value;
-            } else {
-                div.remove();
-                集.数据 = 集.数据.filter((d) => d != p);
-                if (集.数据.length == 0) {
-                    集.数据.push({ id: uuid_id(), name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] });
-                }
-                集.meta.focus_page = 集.数据[0].id;
+        let more = document.createElement("div");
+        more.classList.add("more");
+        let rename = document.createElement("div");
+        rename.innerHTML = icon(edit_svg);
+        rename.onclick = () => {
+            let n = prompt();
+            if (n) {
+                document.getElementById(p.id).setAttribute("data-name", n);
+                data_changed();
+                t.innerText = n;
             }
-            data_changed();
-            set_data(集);
         };
+        let rm = document.createElement("div");
+        rm.innerHTML = icon(remove_svg);
+        rm.onclick = () => {
+            if (集_el.children.length == 1) return;
+            if (div.classList.contains("selected_item")) {
+                let id = 集_el.children[0].getAttribute("data-id");
+                集_el.children[0].classList.add("selected_item");
+                集.meta.focus_page = id;
+                select_p(id);
+            }
+            div.remove();
+            document.getElementById(p.id).remove();
+            data_changed();
+        };
+        more.append(rm, rename);
+        div.append(t, more);
         if (集.meta.focus_page == p.id) {
             div.classList.add("selected_item");
             当前画布 = p;
@@ -1454,6 +1467,20 @@ function render_data(inputdata: 画布type) {
     v(inputdata.data);
     values = null;
     return el;
+}
+
+/** 选择画布 */
+function select_p(id: string) {
+    for (let el of 画布s.children) {
+        if (el.id == id) {
+            O = el as HTMLElement;
+            O.style.display = "block";
+        } else {
+            (el as HTMLElement).style.display = "none";
+        }
+    }
+    z.focus(O.children[O.children.length - 1] as x);
+    z.reflash(true);
 }
 
 type diff_i = diff.Diff<any, any>;
