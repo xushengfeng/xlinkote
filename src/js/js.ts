@@ -3240,11 +3240,12 @@ window["xln"] = {};
 // 手写识别
 document.getElementById("ink_icon").onpointerdown = (e) => {
     e.preventDefault();
-    ink_el.classList.toggle("ink_hide");
-    if (!ink_el.classList.contains("ink_hide")) {
+    if (ink_el.classList.contains("ink_hide")) {
+        if (!selections[0].id || 模式 != "浏览") return;
         ink_el.width = ink_el.offsetWidth;
         ink_el.height = ink_el.offsetHeight;
     }
+    ink_el.classList.toggle("ink_hide");
 };
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
 ink_el.classList.add("ink_hide");
