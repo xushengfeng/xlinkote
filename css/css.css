@@ -325,7 +325,10 @@ body #main > #nav #ink_r {
 }
 
 .more {
-    @apply flex justify-end overflow-hidden;
+    @apply flex justify-end overflow-hidden opacity-0;
+}
+.侧栏 > #items > #文件 > div:hover .more {
+    @apply opacity-100;
 }
 .more > div {
     min-width: var(--item-height);
@@ -340,7 +343,7 @@ body #main > #nav #ink_r {
     top: var(--item-icon-margin);
 }
 
-.show_more{
+.show_more {
     width: auto !important;
 }
 
