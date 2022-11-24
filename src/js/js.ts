@@ -1699,6 +1699,7 @@ set_css("./md.css");
 /** 设置文件css样式 */
 function set_css(t: string) {
     if (t.includes("\n")) {
+        add_css(t);
     } else {
         fetch(t)
             .then((v) => v.text())
