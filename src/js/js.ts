@@ -3098,11 +3098,18 @@ function jump_to_x_link(el: x | xlink) {
                     当前画布 = p;
                     集.meta.focus_page = p.id;
                     O.style.display = "block";
-                    zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
                     let x = el_offset(el, O).x - 画布.offsetWidth / 2,
                         y = el_offset(el, O).y - 画布.offsetHeight / 2;
-                    O.style.left = -x - (el.offsetWidth * zoom) / 2 + "px";
-                    O.style.top = -y - (el.offsetHeight * zoom) / 2 + "px";
+                    let ex = -x - (el.offsetWidth * zoom) / 2,
+                        ey = -y - (el.offsetHeight * zoom) / 2;
+                    let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
+                    O.style.transitionDuration = `${t / 1000}s`;
+                    setTimeout(() => {
+                        O.style.transitionDuration = "";
+                    }, t);
+                    zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
+                    O.style.left = ex + "px";
+                    O.style.top = ey + "px";
                     if (el.tagName == "X-X") {
                         z.focus(el as x);
                     }
