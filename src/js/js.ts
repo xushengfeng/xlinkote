@@ -19,13 +19,69 @@ import update_svg from "../../assets/icons/update.svg";
 import more1_svg from "../../assets/icons/more1.svg";
 import edit_svg from "../../assets/icons/edit.svg";
 
+// el
+var 设置_el = document.getElementById("设置");
+var 侧栏 = document.getElementById("侧栏");
+const 侧栏_tabs = document.querySelector("#侧栏 > #tabs");
+const 侧栏_items = document.querySelector("#侧栏 > #items");
+const toast = document.getElementById("toast");
+
+var nav = document.getElementById("nav");
+
+const 画布 = document.getElementById("画布");
+const 画布s = document.getElementById("画布们");
+var O = document.getElementById("O");
+
+const link_value_bar = document.createElement("x-link-value") as link_value;
+画布.append(link_value_bar);
+
+const breadcrumbs_el = document.getElementById("breadcrumbs");
+const bc_sw_el = document.getElementById("bc_sw");
+
+const 临时中转站 = document.getElementById("临时");
+
+const zoom_el = document.getElementById("缩放");
+
+const 集_el = document.getElementById("集");
+
+const 文件_el = document.getElementById("文件");
+
+const assets_el = document.getElementById("资源");
+
+const color_yl = document.getElementById("color_yl");
+const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
+const pen_el = document.getElementById("笔").querySelector("div");
+const pen_width_el = document.getElementById("笔").querySelector("x-draw-width") as xdraw_width;
+const pen_zoom_el = document.getElementById("缩放跟随") as HTMLInputElement;
+const pen_type_el = document.getElementById("笔刷");
+
+const 图层_el = document.getElementById("层");
+
+var el_style = <HTMLTextAreaElement>document.getElementById("el_style");
+
+var xywh_x_el = <HTMLInputElement>document.getElementById("xywh_x");
+var xywh_y_el = <HTMLInputElement>document.getElementById("xywh_y");
+var xywh_w_el = <HTMLInputElement>document.getElementById("xywh_w");
+var xywh_h_el = <HTMLInputElement>document.getElementById("xywh_h");
+
+const about = document.getElementById("about");
+const version_el = <HTMLElement>about.querySelector("#version");
+
+var search_el = document.getElementById("search") as HTMLInputElement;
+var search_r = document.getElementById("搜索结果");
+var search_pel = document.getElementById("搜索");
+
+const view_el = document.getElementById("viewer");
+
+const ink_el = document.getElementById("ink") as HTMLCanvasElement;
+const ink_r = document.getElementById("ink_r");
+
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
 }
 
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
-var 设置_el = document.getElementById("设置");
 const default_setting = {
     webdav: { 网址: "", 用户名: "", 密码: "", 自动上传: "0", 加密密钥: "" },
     ink: {
@@ -154,10 +210,6 @@ document.getElementById("搜索操作").onclick = () => {
     show_g_search();
 };
 
-var 侧栏 = document.getElementById("侧栏");
-const 侧栏_tabs = document.querySelector("#侧栏 > #tabs");
-const 侧栏_items = document.querySelector("#侧栏 > #items");
-
 侧栏.onclick = (e) => {
     document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
@@ -248,8 +300,6 @@ document.getElementById("成组").onclick = () => {
     to_none_layout(selected_el);
 };
 
-const toast = document.getElementById("toast");
-
 function put_toast(t: string, time?: number) {
     if (!time) time = 1;
     toast.innerText = t;
@@ -259,17 +309,6 @@ function put_toast(t: string, time?: number) {
     }, time * 1000);
 }
 
-var nav = document.getElementById("nav");
-
-const 画布 = document.getElementById("画布");
-const 画布s = document.getElementById("画布们");
-var O = document.getElementById("O");
-
-const link_value_bar = document.createElement("x-link-value") as link_value;
-画布.append(link_value_bar);
-
-const breadcrumbs_el = document.getElementById("breadcrumbs");
-const bc_sw_el = document.getElementById("bc_sw");
 let bc_show = false;
 bc_sw_el.onclick = () => {
     bc_show = !bc_show;
@@ -446,8 +485,6 @@ document.getElementById("常驻").onpointerdown = (e) => {
     free_o_e = e;
     drag_block = true;
 };
-
-const 临时中转站 = document.getElementById("临时");
 
 // 画布
 
@@ -728,7 +765,6 @@ document.getElementById("归位").onclick = () => {
 };
 
 var zoom = 1;
-const zoom_el = document.getElementById("缩放");
 
 /** 缩放 */
 function zoom_o(z: number) {
@@ -1355,8 +1391,6 @@ function version_tr(obj): 集type {
 
 var 当前画布 = 集.数据[0] as 画布type;
 
-const 集_el = document.getElementById("集");
-
 import diff from "deep-diff";
 
 window["diff"] = diff;
@@ -1761,8 +1795,6 @@ function db_put(obj: object) {
 
 var file_list: meta[] = [];
 
-const 文件_el = document.getElementById("文件");
-
 function load_file_side_bar() {
     文件_el.innerHTML = "";
     let load_dav = document.createElement("div");
@@ -2157,8 +2189,6 @@ function put_assets(url: string, base64: string) {
     return id;
 }
 
-const assets_el = document.getElementById("资源");
-
 /** 刷新资源栏 */
 function assets_reflash() {
     assets_el.innerHTML = "";
@@ -2221,12 +2251,10 @@ var focus_draw_el = null as draw;
 };
 
 // 色盘
-const color_yl = document.getElementById("color_yl");
 color_yl.style.background = "#000";
 color_yl.onclick = (e) => {
     if (e.target == color_yl) penc_el.classList.toggle("color_show");
 };
-const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
 penc_el.addEventListener("input", () => {
     let el = z.聚焦元素?.querySelector("x-draw") as draw;
     if (el && 模式 == "设计") {
@@ -2243,10 +2271,6 @@ penc_el.addEventListener("input", () => {
     pen_width_el.color = penc_el.value;
 });
 
-const pen_el = document.getElementById("笔").querySelector("div");
-const pen_width_el = document.getElementById("笔").querySelector("x-draw-width") as xdraw_width;
-const pen_zoom_el = document.getElementById("缩放跟随") as HTMLInputElement;
-const pen_type_el = document.getElementById("笔刷");
 document.getElementById("笔").onclick = (e) => {
     if (e.target == pen_el.parentElement) pen_el.classList.toggle("pen_show");
 };
@@ -2280,8 +2304,6 @@ function get_x_by_id(id: string) {
 function get_link_el_by_id(id: string) {
     return document.getElementById(id) as x | xlink;
 }
-
-const 图层_el = document.getElementById("层");
 
 class 图层 {
     聚焦元素 = <x>null;
@@ -2489,17 +2511,10 @@ class 图层 {
 }
 
 var z = new 图层();
-
-var el_style = <HTMLTextAreaElement>document.getElementById("el_style");
-
 el_style.oninput = () => {
     z.聚焦元素.setAttribute("style", el_style.value.replaceAll("\n", ""));
 };
 
-var xywh_x_el = <HTMLInputElement>document.getElementById("xywh_x");
-var xywh_y_el = <HTMLInputElement>document.getElementById("xywh_y");
-var xywh_w_el = <HTMLInputElement>document.getElementById("xywh_w");
-var xywh_h_el = <HTMLInputElement>document.getElementById("xywh_h");
 xywh_x_el.oninput = () => {
     z.聚焦元素.style.left = xywh_x_el.value + "px";
     data_changed();
@@ -2722,8 +2737,6 @@ function show_setting() {
 }
 show_setting();
 
-const about = document.getElementById("about");
-const version_el = <HTMLElement>about.querySelector("#version");
 version_el.innerHTML = `${packagejson.version}<img src="${update_svg}">`;
 version_el.onclick = async () => {
     const cacheKeepList = ["v2"];
@@ -2795,9 +2808,6 @@ function search(s: string, type: "str" | "regex") {
     return result;
 }
 
-var search_el = document.getElementById("search") as HTMLInputElement;
-var search_r = document.getElementById("搜索结果");
-var search_pel = document.getElementById("搜索");
 let select_index = 0;
 search_el.oninput = search_el.click = () => {
     let l = search(search_el.value, "str");
@@ -2977,8 +2987,6 @@ function show_link_value_bar(el: x | xlink) {
     // 不是最小元素不显示控件，只显示计算后的值
     link_value_bar.show_ctrl = is_smallest_el(el);
 }
-
-const view_el = document.getElementById("viewer");
 
 var view_width = 400,
     view_height = 400;
@@ -3312,7 +3320,6 @@ document.getElementById("ink_icon").onpointerdown = (e) => {
     }
     ink_el.classList.toggle("ink_hide");
 };
-const ink_el = document.getElementById("ink") as HTMLCanvasElement;
 ink_el.classList.add("ink_hide");
 var ink_color = "#000";
 var mqList = window.matchMedia("(prefers-color-scheme: dark)");
@@ -3352,7 +3359,6 @@ ink_el.onpointermove = (e) => {
     ink_cxt.lineTo(e.offsetX * 2, e.offsetY * 2);
     ink_cxt.stroke();
 };
-const ink_r = document.getElementById("ink_r");
 ink_el.onpointerup = () => {
     ink_move = false;
 
