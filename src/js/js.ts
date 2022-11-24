@@ -3307,8 +3307,8 @@ document.getElementById("ink_icon").onpointerdown = (e) => {
     e.preventDefault();
     if (ink_el.classList.contains("ink_hide")) {
         if (!selections[0].id || 模式 != "浏览") return;
-        ink_el.width = ink_el.offsetWidth;
-        ink_el.height = ink_el.offsetHeight;
+        ink_el.width = ink_el.offsetWidth * 2;
+        ink_el.height = ink_el.offsetHeight * 2;
     }
     ink_el.classList.toggle("ink_hide");
 };
@@ -3325,7 +3325,10 @@ ink_el.onpointerdown = (e) => {
     ink_move = true;
 
     ink_cxt.beginPath();
-    ink_cxt.moveTo(e.offsetX, e.offsetY);
+    ink_cxt.lineWidth = 3;
+    ink_cxt.shadowBlur = 2;
+    ink_cxt.strokeStyle = ink_cxt.shadowColor = "#000";
+    ink_cxt.moveTo(e.offsetX * 2, e.offsetY * 2);
 
     for (let t in ink_t) {
         clearTimeout(Number(t));
@@ -3337,7 +3340,7 @@ ink_el.onpointermove = (e) => {
     ink_points[ink_points.length - 1][0].push(e.offsetX);
     ink_points[ink_points.length - 1][1].push(e.offsetY);
 
-    ink_cxt.lineTo(e.offsetX, e.offsetY);
+    ink_cxt.lineTo(e.offsetX * 2, e.offsetY * 2);
     ink_cxt.stroke();
 };
 const ink_r = document.getElementById("ink_r");
@@ -3351,8 +3354,8 @@ ink_el.onpointerup = () => {
         requests: [
             {
                 writing_guide: {
-                    writing_area_width: ink_el.width,
-                    writing_area_height: ink_el.height,
+                    writing_area_width: ink_el.offsetWidth,
+                    writing_area_height: ink_el.offsetHeight,
                 },
                 ink: ink_points,
                 language: store.ink.语言 || "zh_CN",
