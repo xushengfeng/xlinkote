@@ -1223,6 +1223,9 @@ let pname = `画布${uuid().slice(0, 7)}`;
 /** 文件 */
 type 集type = {
     meta: meta;
+    extra: {
+        style: string;
+    };
     数据: 画布type[];
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
@@ -1269,6 +1272,9 @@ function new_集(pname: string): 集type {
             UUID: uuid(),
             file_name: "",
             version: packagejson.version,
+        },
+        extra: {
+            style: "",
         },
         数据: [{ id: pid, name: pname, p: { x: 0, y: 0, zoom: 1 }, data: [] }],
         链接: { 0: {} },
@@ -1424,6 +1430,7 @@ function version_tr(obj): 集type {
         case "0.10.1":
         case "0.10.2":
         case "0.10.3":
+            obj["extra"] = { style: "" };
             return obj;
     }
 }
