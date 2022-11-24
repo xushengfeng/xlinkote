@@ -545,6 +545,10 @@ body > #main > #画布 > #导航 > #缩放 {
     width: auto !important;
     font-size: small;
 }
+.zoom_list_hide {
+    opacity: 0;
+    pointer-events: none;
+}
 body > #main > #画布 > #paste {
     opacity: 0;
     pointer-events: none;

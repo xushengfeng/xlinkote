@@ -70,7 +70,11 @@
             <div id="导航" class="flex gap-2 absolute right-3 bottom-3">
                 <div id="方向锁定"><img src="./assets/icons/x_y.svg" class="icon"></div>
                 <div id="归位"></div>
-                <div id="缩放" class="px-1 flex items-center text-black dark:text-white"></div>
+                <div id="缩放" class="px-1 flex items-center text-black dark:text-white relative font-mono" tabindex="0">
+                    <input type="text" name="zoom" id="zoom" class="text-right">% <div id="zooms"
+                        class="zoom_list_hide absolute bottom-4 flex flex-col gap-1 p-1 rounded-sm">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

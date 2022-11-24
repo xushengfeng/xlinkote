@@ -40,7 +40,9 @@ const bc_sw_el = document.getElementById("bc_sw");
 
 const 临时中转站 = document.getElementById("临时");
 
-const zoom_el = document.getElementById("缩放");
+const zoom_pel = document.getElementById("缩放");
+const zoom_el = document.getElementById("zoom") as HTMLInputElement;
+const zoom_list = document.getElementById("zooms");
 
 const 集_el = document.getElementById("集");
 
@@ -786,10 +788,34 @@ var zoom = 1;
 function zoom_o(z: number) {
     zoom = z;
     O.style.transform = `scale(${z})`;
-    zoom_el.innerText = `${(z * 100).toFixed(1)}%`;
+    zoom_el.value = `${(z * 100).toFixed(1)}`;
+    zoom_el.style.width = zoom_el.value.length + "ch";
     document.documentElement.style.setProperty("--zoom", String(z));
 }
 
+zoom_el.oninput = () => {
+    zoom_el.style.width = zoom_el.value.length + "ch";
+};
+zoom_el.onchange = () => {
+    zoom_o((Number(zoom_el.value) || 100) / 100);
+    zoom_list.classList.add("zoom_list_hide");
+};
+
+zoom_el.onblur = zoom_pel.onblur = () => {
+    zoom_list.classList.add("zoom_list_hide");
+};
+zoom_pel.onclick = () => {
+    zoom_list.classList.toggle("zoom_list_hide");
+};
+
+for (let i = 25; i <= 200; i += 25) {
+    let op = document.createElement("div");
+    op.innerText = `${i}%`;
+    zoom_list.append(op);
+    op.onpointerdown = () => {
+        zoom_o(i / 100);
+    };
+}
 O.style.left = `${画布.offsetWidth / 2}px`;
 O.style.top = `${画布.offsetHeight / 2}px`;
 
