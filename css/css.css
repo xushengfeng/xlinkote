@@ -73,13 +73,19 @@ body > #main > #nav > div {
 body > #main > #nav > div::-webkit-scrollbar {
     display: none;
 }
-body > #main > #nav > div > div {
+body > #main > #nav > div:not(.mode_more) > div {
     @apply icon-m;
 }
 body > #main > #nav > div:nth-child(1) #upload_i {
     display: none;
 }
 
+body > #main > #nav > .mode_more > div {
+    @apply flex w-auto;
+}
+body > #main > #nav > .mode_more > div > div {
+    @apply icon-m;
+}
 body > #main > #nav > #draw_bar {
     touch-action: none;
 }
