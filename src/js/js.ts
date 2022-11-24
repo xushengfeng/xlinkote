@@ -1520,7 +1520,7 @@ function set_data(l: 集type) {
     location.hash = `#${集.meta.UUID}`;
     document.title = get_title();
 
-    set_css("./md.css");
+    set_css(l.extra.style || "./md.css");
 }
 
 /** 侧栏刷新 */
