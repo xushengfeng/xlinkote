@@ -3314,6 +3314,15 @@ document.getElementById("ink_icon").onpointerdown = (e) => {
 };
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
 ink_el.classList.add("ink_hide");
+var ink_color = "#000";
+var mqList = window.matchMedia("(prefers-color-scheme: dark)");
+mqList.addEventListener("change", (event) => {
+    if (event.matches) {
+        ink_color = "#FFF";
+    } else {
+        ink_color = "#000";
+    }
+});
 let ink_cxt = ink_el.getContext("2d");
 let ink_points: [number[], number[]][] = [];
 let ink_move = false;
@@ -3327,7 +3336,7 @@ ink_el.onpointerdown = (e) => {
     ink_cxt.beginPath();
     ink_cxt.lineWidth = 3;
     ink_cxt.shadowBlur = 2;
-    ink_cxt.strokeStyle = ink_cxt.shadowColor = "#000";
+    ink_cxt.strokeStyle = ink_cxt.shadowColor = ink_color;
     ink_cxt.moveTo(e.offsetX * 2, e.offsetY * 2);
 
     for (let t in ink_t) {
