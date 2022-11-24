@@ -26,8 +26,28 @@ function icon(src: string) {
 // 获取设置
 var store = JSON.parse(localStorage.getItem("config"));
 var 设置_el = document.getElementById("设置");
+const default_setting = {
+    webdav: { 网址: "", 用户名: "", 密码: "", 自动上传: "0", 加密密钥: "" },
+    ink: {
+        网址: "https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8",
+        语言: "zh_CN",
+        延时: "1",
+    },
+};
 if (!store) {
-    save_setting();
+    localStorage.setItem("config", JSON.stringify(default_setting));
+    store = default_setting;
+} else {
+    for (let i in default_setting) {
+        if (!store[i]) {
+            store[i] = default_setting[i];
+        }
+        for (let j in default_setting[i]) {
+            if (store[i][j] === undefined) {
+                store[i][j] = default_setting[i][j];
+            }
+        }
+    }
 }
 
 function uuid() {
@@ -3335,11 +3355,11 @@ ink_el.onpointerup = () => {
                     writing_area_height: ink_el.height,
                 },
                 ink: ink_points,
-                language: "zh_CN",
+                language: store.ink.语言 || "zh_CN",
             },
         ],
     });
-    fetch(`https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`, {
+    fetch(store.ink.网址 || `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`, {
         method: "POST",
         body: data,
         headers: { "content-type": "application/json" },
@@ -3362,7 +3382,7 @@ ink_el.onpointerup = () => {
             ink_t[
                 setTimeout(() => {
                     reset();
-                }, 1000)
+                }, Number(store.ink.延时) * 1000 || 1000)
             ] = "";
 
             set_text(text_l[0]);
