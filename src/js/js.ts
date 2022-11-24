@@ -109,6 +109,7 @@ if (!store) {
             }
         }
     }
+    localStorage.setItem("config", JSON.stringify(store));
 }
 
 function uuid() {
