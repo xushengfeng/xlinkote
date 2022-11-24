@@ -775,7 +775,6 @@ document.getElementById("归位").onclick = () => {
     O.style.transition = "0.4s";
     O.style.left = `${画布.offsetWidth / 2}px`;
     O.style.top = `${画布.offsetHeight / 2}px`;
-    zoom_o(1);
     setTimeout(() => {
         O.style.transition = "";
     }, 400);
