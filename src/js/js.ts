@@ -48,6 +48,7 @@ const 文件_el = document.getElementById("文件");
 
 const assets_el = document.getElementById("资源");
 
+const pen_pel = document.getElementById("draw_bar");
 const color_yl = document.getElementById("color_yl");
 const penc_el = <xcolor>document.getElementById("penc").querySelector("x-color");
 const pen_el = document.getElementById("笔").querySelector("div");
@@ -360,6 +361,9 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "";
             画布s.classList.remove("handle_cursor");
+
+            ink_el.parentElement.style.display = "";
+            pen_pel.style.display = "none";
             break;
         case "设计":
             if (<draw>focus_draw_el) {
@@ -376,6 +380,9 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
 
             ink_reset();
             ink_el.classList.add("ink_hide");
+
+            ink_el.parentElement.style.display = "none";
+            pen_pel.style.display = "none";
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -391,6 +398,9 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
 
             ink_reset();
             ink_el.classList.add("ink_hide");
+
+            ink_el.parentElement.style.display = "none";
+            pen_pel.style.display = "";
             break;
     }
 }
