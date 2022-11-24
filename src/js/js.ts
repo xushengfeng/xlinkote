@@ -1161,10 +1161,6 @@ var global_x = [] as data;
 // 快捷键
 document.onkeydown = (e) => {
     switch (e.key) {
-        case "F11":
-            e.preventDefault();
-            画布.requestFullscreen();
-            break;
         case "Delete":
             for (let el of selected_el) {
                 z.remove(el);
