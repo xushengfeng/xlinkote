@@ -77,7 +77,6 @@ body > #main > #nav #search {
 .侧栏 {
     background-color: var(--bg1);
     transition: var(--transition) transform;
-    box-shadow: var(--shadow1);
 }
 .侧栏显示 {
     box-shadow: var(--shadow1) !important;
