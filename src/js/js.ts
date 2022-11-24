@@ -40,6 +40,8 @@ const bc_sw_el = document.getElementById("bc_sw");
 
 const 临时中转站 = document.getElementById("临时");
 
+const 归位 = document.getElementById("归位");
+
 const zoom_pel = document.getElementById("缩放");
 const zoom_el = document.getElementById("zoom") as HTMLInputElement;
 const zoom_list = document.getElementById("zooms");
@@ -771,7 +773,7 @@ function add_blank(op: p_point, p: p_point) {
     }
 }
 
-document.getElementById("归位").onclick = () => {
+归位.onclick = () => {
     O.style.transition = "0.4s";
     O.style.left = `${画布.offsetWidth / 2}px`;
     O.style.top = `${画布.offsetHeight / 2}px`;
@@ -1169,7 +1171,7 @@ document.onkeydown = (e) => {
             break;
         case "Home":
             if (e.ctrlKey) {
-                document.getElementById("归位").click();
+                归位.click();
             }
             break;
         case "/":
