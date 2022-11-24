@@ -373,6 +373,9 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
             if (link_value_bar) link_value_bar.style.display = "none";
             画布s.classList.add("handle_cursor");
+
+            ink_reset();
+            ink_el.classList.add("ink_hide");
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -385,6 +388,9 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "none";
             画布s.classList.remove("handle_cursor");
+
+            ink_reset();
+            ink_el.classList.add("ink_hide");
             break;
     }
 }
@@ -3320,7 +3326,6 @@ document.getElementById("ink_icon").onpointerdown = (e) => {
     }
     ink_el.classList.toggle("ink_hide");
 };
-ink_el.classList.add("ink_hide");
 var ink_color = "#000";
 var mqList = window.matchMedia("(prefers-color-scheme: dark)");
 mqList.addEventListener("change", (event) => {
@@ -3393,30 +3398,35 @@ ink_el.onpointerup = () => {
                 div.onpointerdown = (e) => {
                     e.preventDefault();
                     set_text(t);
-                    reset();
+                    ink_reset();
                 };
                 ink_r.append(div);
             }
             ink_t[
                 setTimeout(() => {
-                    reset();
+                    ink_reset();
                 }, Number(store.ink.延时) * 1000 || 1000)
             ] = "";
 
             set_text(text_l[0]);
         });
-    function reset() {
-        ink_cxt.clearRect(0, 0, ink_el.width, ink_el.height);
-        ink_points = [];
-        ink_r.innerHTML = "";
-        textel.selectionStart = textel.selectionEnd;
-    }
     function set_text(t: string) {
         textel.setRangeText(t);
         textel.dispatchEvent(new Event("input"));
         textel.selectionEnd += t.length;
     }
 };
+function ink_reset() {
+    if (!selections) return;
+    let pmd = document.getElementById(selections[0].id);
+    if (!pmd) return;
+    let md = pmd.querySelector("x-md") as markdown;
+    let textel = md.text;
+    ink_cxt.clearRect(0, 0, ink_el.width, ink_el.height);
+    ink_points = [];
+    ink_r.innerHTML = "";
+    textel.selectionStart = textel.selectionEnd;
+}
 
 // MD
 import markdownit from "markdown-it";
