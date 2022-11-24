@@ -3292,6 +3292,11 @@ function add_none_layout() {
 
 /** 固定布局修剪 */
 function reflash_none_layout(el: x) {
+    if (el.value.length == 0) {
+        z.remove(el);
+        data_changed();
+        return;
+    }
     let px = 16,
         py = 16;
     let dy = Infinity,
