@@ -1698,22 +1698,18 @@ set_css("./md.css");
 
 /** 设置文件css样式 */
 function set_css(t: string) {
+    let style: HTMLElement;
+    document.getElementById("css")?.remove();
     if (t.includes("\n")) {
-        add_css(t);
+        style = document.createElement("style");
+        style.innerHTML = t;
     } else {
-        fetch(t)
-            .then((v) => v.text())
-            .then((v) => add_md(v));
+        style = document.createElement("link");
+        (style as HTMLLinkElement).href = t;
+        (style as HTMLLinkElement).rel = "stylesheet";
     }
-    function add_md(text: string) {
-        add_css(text);
-    }
-    function add_css(text: string) {
-        let style = document.getElementById("css") || document.createElement("style");
-        style.id = "css";
-        style.innerHTML = text;
-        document.body.append(style);
-    }
+    style.id = "css";
+    document.body.append(style);
 }
 
 function json2md(obj: 集type) {
