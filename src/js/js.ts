@@ -1434,6 +1434,7 @@ function version_tr(obj): 集type {
             obj["extra"] = { style: "" };
             obj.meta.version = "0.10.4";
         case "0.10.4":
+        case "0.10.5":
             return obj;
     }
 }
