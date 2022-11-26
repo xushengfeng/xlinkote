@@ -21,6 +21,8 @@ self.addEventListener("activate", async () => {
 self.addEventListener("fetch", async (e) => {
     async function getResponse() {
         if (e.request.method.toUpperCase() != "GET") return await fetch(e.request);
+        let url = new URL(e.request.url);
+        if (url.host != location.host && url.host != "unpkg.com") return await fetch(e.request);
         try {
             if (navigator.onLine) {
                 let cache = await caches.open(cache_name);
