@@ -3391,7 +3391,7 @@ mqList.addEventListener("change", (event) => {
 let ink_cxt = ink_el.getContext("2d");
 let ink_points: [number[], number[]][] = [];
 let ink_move = false;
-let ink_t = {}; // 确保清除所有计时器
+var ink_t = {}; // 确保清除所有计时器
 ink_el.onpointerdown = (e) => {
     e.preventDefault();
 
@@ -3457,19 +3457,22 @@ ink_el.onpointerup = () => {
             }
             ink_t[
                 setTimeout(() => {
+                    set_text(text_l[0]);
                     ink_reset();
                 }, Number(store.ink.延时) * 1000 || 1000)
             ] = "";
-
-            set_text(text_l[0]);
         });
     function set_text(t: string) {
         textel.setRangeText(t);
-        textel.dispatchEvent(new Event("input"));
         textel.selectionEnd += t.length;
+        textel.dispatchEvent(new Event("input"));
     }
 };
 function ink_reset() {
+    for (let t in ink_t) {
+        clearTimeout(Number(t));
+        delete ink_t[t];
+    }
     if (!selections) return;
     let pmd = document.getElementById(selections[0].id);
     if (!pmd) return;
@@ -3479,6 +3482,7 @@ function ink_reset() {
     ink_points = [];
     ink_r.innerHTML = "";
     textel.selectionStart = textel.selectionEnd;
+    selections[0].start = selections[0].end = textel.selectionStart;
 }
 
 // MD
