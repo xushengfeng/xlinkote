@@ -4070,7 +4070,7 @@ class markdown extends HTMLElement {
         super();
     }
 
-    _value: { type: md_type; text: string } = { type: "text", text: "" };
+    _value: { type: md_type; text: string } = { type: "p", text: "" };
 
     index;
 
