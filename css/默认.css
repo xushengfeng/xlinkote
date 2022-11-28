@@ -178,6 +178,13 @@ body > #搜索 > #搜索结果 > div > div > span > span {
     color: #f55;
 }
 
+body > #cmd {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    box-shadow: var(--shadow1);
+    border-radius: 4px;
+}
+
 body > #viewer {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
