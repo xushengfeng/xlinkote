@@ -4440,6 +4440,7 @@ class markdown extends HTMLElement {
         } else if (type == "todo") {
             if (!text.match(/^\[[x\s]\] /)) {
                 text = "[ ] " + text;
+                this.text.value = text;
             }
             let check = text.match(/^\[x\]/);
             let i = `<input type="checkbox" ${check ? "checked" : ""}>`;
