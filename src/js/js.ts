@@ -2821,7 +2821,7 @@ function search(s: string, type: "str" | "regex") {
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
         if (el.tagName == "X-MD") {
-            text = (el as markdown).value;
+            text = JSON.parse((el as markdown).value).text;
         } else if (el.tagName == "X-PDF") {
             text = (el as pdf_viewer).text.innerText;
         } else {
@@ -5608,7 +5608,7 @@ class link_value extends HTMLElement {
                     let w = (v: data) => {
                         for (let i of v) {
                             if (i.type == "X-MD") {
-                                return i.value;
+                                return JSON.parse(i.value).text;
                             } else {
                                 if (i.子元素) return w(i.子元素);
                             }
