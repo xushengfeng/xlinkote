@@ -4252,55 +4252,8 @@ class markdown extends HTMLElement {
                     return;
                 }
 
-                if (!e.shiftKey) {
-                    let t = this.text.value;
-                    let t0 = t.slice(0, this.text.selectionStart),
-                        t1 = t.slice(this.text.selectionEnd, t.length);
-                    this._value.text = t0;
-                    this.value = JSON.stringify(this._value);
-
-                    let p = this.parentElement as x;
-                    let pxel = null as x;
-                    if (
-                        p.parentElement.classList.contains("flex-column") ||
-                        p.parentElement.classList.contains("flex-row")
-                    ) {
-                        pxel = p.parentElement as x;
-                    } else {
-                        // 不存在上级堆叠元素，需要新建并把此元素套进去
-                        pxel = document.createElement("x-x") as x;
-                        pxel.id = uuid_id();
-                        link(pxel.id).add();
-                        pxel.style.left = p.offsetLeft + "px";
-                        pxel.style.top = p.offsetTop + "px";
-                        pxel.classList.add("flex-column");
-                        z.push(pxel);
-                        let x = document.createElement("x-x") as x;
-                        x.id = p.id;
-                        x.setAttribute("style", p.getAttribute("style"));
-                        pxel.append(x);
-                        x.style.left = "";
-                        x.style.top = "";
-                        x.style.position = "relative";
-                        x.value = p.value;
-                        p.remove();
-                        p = x;
-                    }
-
-                    let xel = <x>document.createElement("x-x");
-                    let md = document.createElement("x-md") as markdown;
-                    xel.append(md);
-                    xel.id = uuid_id();
-                    link(xel.id).add();
-                    xel.style.position = "relative";
-                    p.after(xel);
-                    md.edit = true;
-                    md.value = JSON.stringify({ type: "text", text: t1 });
-                    md.text.setSelectionRange(0, 0);
-
-                    z.reflash();
-                } else {
-                    if (e.ctrlKey) {
+                if (e.ctrlKey) {
+                    if (e.shiftKey) {
                         let rel = find_root_layout(this.parentElement);
                         let xel = <x>document.createElement("x-x");
                         xel.style.left = rel.offsetLeft + "px";
@@ -4312,9 +4265,58 @@ class markdown extends HTMLElement {
                         (<markdown>md).edit = true;
 
                         z.reflash();
-                    } else {
+                    }
+                } else {
+                    if (e.shiftKey || this._value.type == "text") {
                         text.setRangeText("\n");
                         text.selectionStart = text.selectionEnd = text.selectionStart + 1;
+                    } else {
+                        let t = this.text.value;
+                        let t0 = t.slice(0, this.text.selectionStart),
+                            t1 = t.slice(this.text.selectionEnd, t.length);
+                        this._value.text = t0;
+                        this.value = JSON.stringify(this._value);
+
+                        let p = this.parentElement as x;
+                        let pxel = null as x;
+                        if (
+                            p.parentElement.classList.contains("flex-column") ||
+                            p.parentElement.classList.contains("flex-row")
+                        ) {
+                            pxel = p.parentElement as x;
+                        } else {
+                            // 不存在上级堆叠元素，需要新建并把此元素套进去
+                            pxel = document.createElement("x-x") as x;
+                            pxel.id = uuid_id();
+                            link(pxel.id).add();
+                            pxel.style.left = p.offsetLeft + "px";
+                            pxel.style.top = p.offsetTop + "px";
+                            pxel.classList.add("flex-column");
+                            z.push(pxel);
+                            let x = document.createElement("x-x") as x;
+                            x.id = p.id;
+                            x.setAttribute("style", p.getAttribute("style"));
+                            pxel.append(x);
+                            x.style.left = "";
+                            x.style.top = "";
+                            x.style.position = "relative";
+                            x.value = p.value;
+                            p.remove();
+                            p = x;
+                        }
+
+                        let xel = <x>document.createElement("x-x");
+                        let md = document.createElement("x-md") as markdown;
+                        xel.append(md);
+                        xel.id = uuid_id();
+                        link(xel.id).add();
+                        xel.style.position = "relative";
+                        p.after(xel);
+                        md.edit = true;
+                        md.value = JSON.stringify({ type: "text", text: t1 });
+                        md.text.setSelectionRange(0, 0);
+
+                        z.reflash();
                     }
                 }
             } else {
