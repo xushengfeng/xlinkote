@@ -4225,7 +4225,8 @@ class markdown extends HTMLElement {
                     let t = this.text.value;
                     let t0 = t.slice(0, this.text.selectionStart),
                         t1 = t.slice(this.text.selectionEnd, t.length);
-                    this.value = t0;
+                    this._value.text = t0;
+                    this.value = JSON.stringify(this._value);
 
                     let p = this.parentElement as x;
                     let pxel = null as x;
@@ -4263,7 +4264,7 @@ class markdown extends HTMLElement {
                     xel.style.position = "relative";
                     p.after(xel);
                     md.edit = true;
-                    md.value = t1;
+                    md.value = JSON.stringify({ type: "text", text: t1 });
                     md.text.setSelectionRange(0, 0);
 
                     z.reflash();
