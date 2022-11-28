@@ -1457,6 +1457,7 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.11.0";
         case "0.11.0":
+        case "0.11.1":
             return obj;
     }
 }
