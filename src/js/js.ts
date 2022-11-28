@@ -4062,13 +4062,15 @@ window.customElements.define("x-x", x);
 
 var parse;
 
+type md_type = "text" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "blockquote" | "code" | "todo";
+
 /** markdown元素 */
 class markdown extends HTMLElement {
     constructor() {
         super();
     }
 
-    _value: { type: "text"; text: string } = { type: "text", text: "" };
+    _value: { type: md_type; text: string } = { type: "text", text: "" };
 
     index;
 
@@ -4484,6 +4486,7 @@ class markdown extends HTMLElement {
 
     set value(v) {
         this._value = JSON.parse(v);
+        this.type = this._value.type;
         let t = this._value.text;
         (<HTMLTextAreaElement>this.childNodes[1]).value = t;
         this.querySelector("div:nth-child(1)").innerHTML = md.render(t);
@@ -4508,6 +4511,11 @@ class markdown extends HTMLElement {
         parse = l;
         this.index = line_el(l);
         this.drag();
+    }
+
+    set type(type: md_type) {
+        this._value.type = type;
+        this.h.className = type;
     }
 }
 
