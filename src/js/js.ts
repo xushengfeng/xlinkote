@@ -3034,6 +3034,10 @@ cmd_el.oninput = () => {};
 cmd_el.onchange = () => {
     run_cmd();
 };
+cmd_el.onblur = () => {
+    cmd_el.value = "";
+    cmd_pel.classList.add("cmd_hide");
+};
 
 const md_type_l: md_type[] = [
     "h1",
