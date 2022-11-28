@@ -76,6 +76,11 @@ var search_el = document.getElementById("search") as HTMLInputElement;
 var search_r = document.getElementById("搜索结果");
 var search_pel = document.getElementById("搜索");
 
+var cmd_el = document.getElementById("命令框") as HTMLInputElement;
+var cmd_r = document.getElementById("命令输出");
+var cmd_pel = cmd_el.parentElement;
+cmd_pel.classList.add("cmd_hide");
+
 const view_el = document.getElementById("viewer");
 
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
@@ -3024,6 +3029,30 @@ function show_g_search() {
 
 let now_focus_id = "0";
 
+cmd_el.oninput = () => {};
+cmd_el.onchange = () => {
+    run_cmd();
+};
+
+const md_type_l: md_type[] = ["h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "code", "p", "text", "todo"];
+function run_cmd() {
+    const el = get_x_by_id(cmd_el.getAttribute("data-id"));
+    const md = el.querySelector("x-md") as markdown;
+    let arg = cmd_el.value;
+    let args = arg.split(" ");
+    if (arg == "/") {
+        md.text.setRangeText("/");
+        md.text.dispatchEvent(new Event("input"));
+    }
+    if (md_type_l.includes(args[0] as md_type)) {
+        md.type = args[0] as md_type;
+        data_changed();
+        cmd_pel.classList.add("cmd_hide");
+        md.edit = true;
+    }
+    cmd_el.value = "";
+}
+
 /** 判断是否是最小元素 */
 function is_smallest_el(el: x | xlink) {
     if (el.tagName == "X-LINK") {
@@ -4344,6 +4373,19 @@ class markdown extends HTMLElement {
 
                     z.reflash();
                 }
+            }
+            if (e.key == "/") {
+                e.preventDefault();
+                let s = this.getBoundingClientRect();
+                console.log(document.getSelection().getRangeAt(0), s);
+
+                cmd_pel.style.left = s.left + "px";
+                cmd_pel.style.top = s.top + "px";
+                cmd_pel.classList.remove("cmd_hide");
+                cmd_el.setAttribute("data-id", this.parentElement.id);
+                setTimeout(() => {
+                    cmd_el.focus();
+                }, 10);
             }
         };
         // text.addEventListener("keyup",(e)=>{})

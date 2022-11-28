@@ -642,6 +642,15 @@ body > #搜索 > #搜索结果 > div > div:last-child {
 .search_item_select {
     background-color: var(--bg-color1);
 }
+
+body > #cmd {
+    position: absolute;
+    transition: opacity var(--transition);
+}
+.cmd_hide {
+    opacity: 0;
+    pointer-events: none;
+}
 body > #viewer {
     position: absolute;
     overflow: hidden;
