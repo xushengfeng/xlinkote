@@ -4298,7 +4298,7 @@ class markdown extends HTMLElement {
                         xel.style.position = "relative";
                         p.after(xel);
                         md.edit = true;
-                        md.value = JSON.stringify({ type: "text", text: t1 });
+                        md.value = JSON.stringify({ type: this._value.type, text: t1 });
                         md.text.setSelectionRange(0, 0);
 
                         z.reflash();
