@@ -2942,6 +2942,7 @@ function select_search(i: number) {
 function click_search_item(iid: string) {
     let el = document.getElementById(iid);
     if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el as x & xlink);
+    else view_el.classList.add("viewer_hide");
     show_search_l([]);
     let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
     console.log(id);
