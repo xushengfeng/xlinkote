@@ -2193,9 +2193,9 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         xel.append(md);
         if (type == "text/html") {
             let turndownService = new TurndownService({ headingStyle: "atx" });
-            md.value = turndownService.turndown(text);
+            md.value = JSON.stringify({ type: "text", text: turndownService.turndown(text) });
         } else {
-            md.value = text;
+            md.value = JSON.stringify({ type: "p", text });
         }
     } else {
         let id = put_assets("", data);
