@@ -4190,31 +4190,14 @@ class markdown extends HTMLElement {
             this._value = JSON.parse(v);
             let t = this._value.text;
             (<HTMLTextAreaElement>this.childNodes[1]).value = t;
-            this.querySelector("div:nth-child(1)").innerHTML = md.render(t);
-            var l = md.parse(t, {
-                references: {},
-            });
-            this.index = line_el(l);
-            this.drag();
+            this.render();
         }
 
-        var l = md.parse(text.value, {
-            references: {},
-        });
-        this.index = line_el(l);
-
-        this.drag();
         text.oninput = () => {
             this._value.text = text.value;
             data_changed();
             setTimeout(() => {
-                s.innerHTML = md.render(text.value);
-                l = md.parse(text.value, {
-                    references: {},
-                });
-                parse = l;
-                this.index = line_el(l);
-                this.drag();
+                this.render();
             }, 0);
         };
         text.onfocus = () => {
@@ -4390,24 +4373,10 @@ class markdown extends HTMLElement {
                 }, 10);
             }
         };
-        // text.addEventListener("keyup",(e)=>{})
-        // 光标移动或点击以移动光标时定位到相应元素
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
-            let l_i = text_get_line(text);
-            let index_i: any;
-            for (let i = 0; i < this.index.length; i++) {
-                if (this.index[i][2][0] <= l_i && l_i < this.index[i][2][1]) {
-                    index_i = this.index[i];
-                    // break;
-                } else if (i != 0 && this.index[i - 1][2][1] <= l_i && l_i <= this.index[i][2][0]) {
-                    // 空行处无map
-                    index_i = this.index[i];
-                    break;
-                }
-            }
-            if (index_i) {
-                let el = <HTMLElement>s.querySelector(`#h > ${index_i[0]}`);
+            let el = <HTMLElement>s.querySelector(`#h > *`);
+            if (el) {
                 let x = el_offset2(el, this.h).x,
                     y = el_offset2(el, this.h).y + el.offsetHeight;
                 text.style.left = x + "px";
@@ -4476,10 +4445,7 @@ class markdown extends HTMLElement {
             if (el.tagName == "TEXTAREA") return;
             if ((<HTMLInputElement>el).type == "checkbox") {
                 // 待办与源文本同步
-                let ln = el_line(text, this.index, s, el.parentElement)[0];
-                let l = text.value.split("\n");
-                l[ln] = l[ln].replace(/(^ *[-+*] +\[)[x\s](\] +)/, `$1${(<HTMLInputElement>el).checked ? "x" : " "}$2`);
-                text.value = l.join("\n");
+                text.value = text.value.replace(/\[[x\s]\]/, `[${(<HTMLInputElement>el).checked ? "x" : " "}]`);
                 this._value.text = text.value;
                 data_changed();
                 return;
@@ -4492,17 +4458,6 @@ class markdown extends HTMLElement {
             }
             text.style.left = el_offset2(el, this.h).x + "px";
             text.style.top = el_offset2(el, this.h).y + el.offsetHeight + "px";
-            let line = NaN;
-            if (el.tagName == "LI") {
-                line = el_line(text, this.index, s, el)[0] + 1;
-            } else {
-                if (el == s) {
-                    line = 0;
-                } else {
-                    line = el_line(text, this.index, s, el)[1];
-                }
-            }
-            text_set_line(text, line);
             if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
                 this.edit = true;
             text.focus();
@@ -4533,12 +4488,7 @@ class markdown extends HTMLElement {
         this.type = this._value.type;
         let t = this._value.text;
         (<HTMLTextAreaElement>this.childNodes[1]).value = t;
-        this.querySelector("div:nth-child(1)").innerHTML = md.render(t);
-        var l = md.parse(t, {
-            references: {},
-        });
-        this.index = line_el(l);
-        this.drag();
+        this.render();
     }
 
     get value() {
@@ -4546,20 +4496,31 @@ class markdown extends HTMLElement {
     }
 
     reload() {
-        let s = this.h;
-        let text = this.text;
-        s.innerHTML = md.render(text.value);
-        let l = md.parse(text.value, {
-            references: {},
-        });
-        parse = l;
-        this.index = line_el(l);
-        this.drag();
+        this.render();
+    }
+
+    render() {
+        let type = this._value.type;
+        let text = this.text.value;
+        if (type == "text") {
+            this.h.innerHTML = md.render(text);
+        } else if (type == "todo") {
+            if (!text.match(/^\[[x\s]\] /)) {
+                text = "[ ] " + text;
+            }
+            let check = text.match(/^\[x\]/);
+            let i = `<input type="checkbox" ${check ? "checked" : ""}>`;
+            let t = text.replace(/^\[[x\s]\] +/, "");
+            this.h.innerHTML = i + md.render(t);
+        } else {
+            this.h.innerHTML = md.render(text);
+        }
     }
 
     set type(type: md_type) {
         this._value.type = type;
         this.h.className = type;
+        this.render();
     }
 }
 

@@ -38,6 +38,10 @@ x-x #h h6,
     white-space: pre;
 }
 
+.todo {
+    display: flex;
+}
+
 x-x #h a {
     color: #000099;
     text-decoration: underline;
