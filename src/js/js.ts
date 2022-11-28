@@ -3034,7 +3034,21 @@ cmd_el.onchange = () => {
     run_cmd();
 };
 
-const md_type_l: md_type[] = ["h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "code", "p", "text", "todo", "math"];
+const md_type_l: md_type[] = [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "blockquote",
+    "code",
+    "p",
+    "text",
+    "todo",
+    "math",
+    "iframe",
+];
 function run_cmd() {
     const el = get_x_by_id(cmd_el.getAttribute("data-id"));
     const md = el.querySelector("x-md") as markdown;
@@ -4091,7 +4105,20 @@ window.customElements.define("x-x", x);
 
 var parse;
 
-type md_type = "text" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "blockquote" | "code" | "todo" | "math";
+type md_type =
+    | "text"
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "p"
+    | "blockquote"
+    | "code"
+    | "todo"
+    | "math"
+    | "iframe";
 
 /** markdown元素 */
 class markdown extends HTMLElement {
@@ -4448,6 +4475,8 @@ class markdown extends HTMLElement {
             this.h.innerHTML = i + md.render(t);
         } else if (type == "math") {
             this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
+        } else if (type == "iframe") {
+            this.h.innerHTML = `<iframe src="${text}"></iframe>`;
         } else {
             this.h.innerHTML = md.render(text);
         }

@@ -42,6 +42,16 @@ x-x #h h6,
     display: flex;
 }
 
+.iframe,
+.iframe > iframe {
+    width: 100%;
+    height: 100%;
+}
+x-md:has(.iframe) {
+    width: 100%;
+    height: 100%;
+}
+
 x-x #h a {
     color: #000099;
     text-decoration: underline;
