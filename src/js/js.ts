@@ -1435,6 +1435,23 @@ function version_tr(obj): 集type {
             obj.meta.version = "0.10.4";
         case "0.10.4":
         case "0.10.5":
+            for (let i of obj.数据) {
+                w(i.data);
+            }
+            w(obj.中转站);
+            function w(data) {
+                for (let i of data) {
+                    if (i.type == "X-MD") {
+                        let text = i.value;
+                        let o = { type: "text", text: text };
+                        i.value = JSON.stringify(o);
+                    } else {
+                        if (i.子元素) w(i.子元素);
+                    }
+                }
+            }
+            obj.meta.version = "0.11.0";
+        case "0.11.0":
             return obj;
     }
 }
@@ -4051,7 +4068,7 @@ class markdown extends HTMLElement {
         super();
     }
 
-    _value = "";
+    _value: { type: "text"; text: string } = { type: "text", text: "" };
 
     index;
 
@@ -4139,9 +4156,11 @@ class markdown extends HTMLElement {
 
         if (this.getAttribute("value")) {
             let v = this.getAttribute("value");
-            this._value = (<HTMLTextAreaElement>this.childNodes[1]).value = v;
-            this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
-            var l = md.parse(v, {
+            this._value = JSON.parse(v);
+            let t = this._value.text;
+            (<HTMLTextAreaElement>this.childNodes[1]).value = t;
+            this.querySelector("div:nth-child(1)").innerHTML = md.render(t);
+            var l = md.parse(t, {
                 references: {},
             });
             this.index = line_el(l);
@@ -4155,7 +4174,7 @@ class markdown extends HTMLElement {
 
         this.drag();
         text.oninput = () => {
-            this._value = text.value;
+            this._value.text = text.value;
             data_changed();
             setTimeout(() => {
                 s.innerHTML = md.render(text.value);
@@ -4414,7 +4433,7 @@ class markdown extends HTMLElement {
                 let l = text.value.split("\n");
                 l[ln] = l[ln].replace(/(^ *[-+*] +\[)[x\s](\] +)/, `$1${(<HTMLInputElement>el).checked ? "x" : " "}$2`);
                 text.value = l.join("\n");
-                this._value = text.value;
+                this._value.text = text.value;
                 data_changed();
                 return;
             }
@@ -4463,9 +4482,11 @@ class markdown extends HTMLElement {
     }
 
     set value(v) {
-        this._value = (<HTMLTextAreaElement>this.childNodes[1]).value = v;
-        this.querySelector("div:nth-child(1)").innerHTML = md.render(v);
-        var l = md.parse(v, {
+        this._value = JSON.parse(v);
+        let t = this._value.text;
+        (<HTMLTextAreaElement>this.childNodes[1]).value = t;
+        this.querySelector("div:nth-child(1)").innerHTML = md.render(t);
+        var l = md.parse(t, {
             references: {},
         });
         this.index = line_el(l);
@@ -4473,7 +4494,7 @@ class markdown extends HTMLElement {
     }
 
     get value() {
-        return this._value;
+        return JSON.stringify(this._value);
     }
 
     reload() {
