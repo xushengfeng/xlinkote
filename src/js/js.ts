@@ -1463,6 +1463,7 @@ function version_tr(obj): 集type {
             obj["values"] = {};
             obj.meta.version = "0.11.2";
         case "0.11.2":
+        case "0.11.3":
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
