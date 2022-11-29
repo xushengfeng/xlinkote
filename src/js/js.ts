@@ -4374,6 +4374,8 @@ class markdown extends HTMLElement {
                     if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
                         let nel = document.createElement("x-x") as x;
                         nel.id = el.id;
+                        el.id = uuid_id();
+                        link(el.id).add();
                         this.remove();
                         el.append(nel);
                         md = document.createElement("x-md") as markdown;
