@@ -4386,7 +4386,7 @@ class markdown extends HTMLElement {
                         el = nel;
                         pel.classList.add("flex-column");
                     }
-                    const l = t.split("\n");
+                    const l = t.split(/\n+/);
                     let last_el = el;
                     for (let i in l) {
                         const tt = l[i];
