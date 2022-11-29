@@ -4486,10 +4486,9 @@ class markdown extends HTMLElement {
         if (type == "text") {
             this.h.innerHTML = md.render(text);
         } else if (type == "todo") {
-            if (!集.values[this.parentElement.id]) 集.values[this.parentElement.id] = {};
-            if (!集.values[this.parentElement.id].todo) 集.values[this.parentElement.id]["todo"] = {};
+            this.init_v("todo");
             if (!集.values[this.parentElement.id].todo["checked"])
-                集.values[this.parentElement.id].todo.checked = false;
+                集.values[this.parentElement.id].todo["checked"] = false;
             let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
             this.h.innerHTML = i + md.render(text);
         } else if (type == "math") {
@@ -4499,6 +4498,11 @@ class markdown extends HTMLElement {
         } else {
             this.h.innerHTML = md.render(text);
         }
+    }
+
+    init_v(type: md_type) {
+        if (!集.values[this.parentElement.id]) 集.values[this.parentElement.id] = {};
+        if (!集.values[this.parentElement.id][type]) 集.values[this.parentElement.id][type] = {};
     }
 
     set type(type: md_type) {
