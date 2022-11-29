@@ -1236,7 +1236,7 @@ type 集type = {
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
-    values: { [key: string]: { [key in md_type]: object } };
+    values: { [key: string]: { [key: string]: any } };
 };
 
 type meta = {
@@ -4420,8 +4420,7 @@ class markdown extends HTMLElement {
             if (el.tagName == "TEXTAREA") return;
             if ((<HTMLInputElement>el).type == "checkbox") {
                 // 待办与源文本同步
-                text.value = text.value.replace(/\[[x\s]\]/, `[${(<HTMLInputElement>el).checked ? "x" : " "}]`);
-                this._value.text = text.value;
+                集.values[this.parentElement.id].todo.checked = (<HTMLInputElement>el).checked;
                 data_changed();
                 return;
             }
@@ -4480,14 +4479,12 @@ class markdown extends HTMLElement {
         if (type == "text") {
             this.h.innerHTML = md.render(text);
         } else if (type == "todo") {
-            if (!text.match(/^\[[x\s]\] /)) {
-                text = "[ ] " + text;
-                this.text.value = text;
-            }
-            let check = text.match(/^\[x\]/);
-            let i = `<input type="checkbox" ${check ? "checked" : ""}>`;
-            let t = text.replace(/^\[[x\s]\] +/, "");
-            this.h.innerHTML = i + md.render(t);
+            if (!集.values[this.parentElement.id]) 集.values[this.parentElement.id] = {};
+            if (!集.values[this.parentElement.id].todo) 集.values[this.parentElement.id]["todo"] = {};
+            if (!集.values[this.parentElement.id].todo["checked"])
+                集.values[this.parentElement.id].todo.checked = false;
+            let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
+            this.h.innerHTML = i + md.render(text);
         } else if (type == "math") {
             this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
         } else if (type == "iframe") {
