@@ -4403,6 +4403,7 @@ class markdown extends HTMLElement {
                         const tt = l[i];
                         if (!tt) continue;
                         if (i == "0") {
+                            md._value.text = tt;
                             md.text.setRangeText(tt);
                             md.reload();
                         } else {
