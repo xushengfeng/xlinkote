@@ -4371,7 +4371,7 @@ class markdown extends HTMLElement {
                 }
             } else {
                 let t = e.clipboardData.getData("text/plain").trim();
-                if (t.includes("\n")) {
+                if (t.includes("\n") || t.includes("\r")) {
                     e.preventDefault();
                     let el = this.parentElement as x;
                     let pel = el.parentElement;
@@ -4391,7 +4391,7 @@ class markdown extends HTMLElement {
                         el = nel;
                         pel.classList.add("flex-column");
                     }
-                    const l = t.split(/\n+/);
+                    const l = t.split(/[\n\r]+/);
                     let last_el = el;
                     for (let i in l) {
                         const tt = l[i];
