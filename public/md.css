@@ -34,8 +34,9 @@ x-x #h h6,
     font-weight: bold;
 }
 
-.pre {
+.code {
     white-space: pre;
+    font-family: monospace;
 }
 
 .todo {
