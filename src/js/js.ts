@@ -4377,7 +4377,7 @@ class markdown extends HTMLElement {
                 }
             } else {
                 let t = e.clipboardData.getData("text/plain").trim();
-                if (t.includes("\n") || t.includes("\r")) {
+                if (this._value.type != "text" && (t.includes("\n") || t.includes("\r"))) {
                     e.preventDefault();
                     let el = this.parentElement as x;
                     let pel = el.parentElement;
