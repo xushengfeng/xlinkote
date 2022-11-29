@@ -1236,6 +1236,7 @@ type 集type = {
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
+    values: { [key: string]: { [key in md_type]: object } };
 };
 
 type meta = {
@@ -1286,6 +1287,7 @@ function new_集(pname: string): 集type {
         链接: { 0: {} },
         assets: {},
         中转站: [],
+        values: {},
     };
 }
 
@@ -1458,6 +1460,8 @@ function version_tr(obj): 集type {
             obj.meta.version = "0.11.0";
         case "0.11.0":
         case "0.11.1":
+            obj["values"] = {};
+            obj.meta.version = "0.11.2";
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
