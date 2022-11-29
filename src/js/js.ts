@@ -4377,47 +4377,58 @@ class markdown extends HTMLElement {
                 }
             } else {
                 let t = e.clipboardData.getData("text/plain").trim();
-                if (this._value.type != "text" && (t.includes("\n") || t.includes("\r"))) {
-                    e.preventDefault();
-                    let el = this.parentElement as x;
-                    let pel = el.parentElement;
-                    let md: markdown;
-                    if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
-                        let nel = document.createElement("x-x") as x;
-                        nel.id = el.id;
-                        el.id = uuid_id();
-                        link(el.id).add();
-                        this.remove();
-                        el.append(nel);
-                        md = document.createElement("x-md") as markdown;
-                        nel.append(md);
-                        md.value = this.value;
-                        md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
-                        pel = el;
-                        el = nel;
-                        pel.classList.add("flex-column");
+                if (this._value.type == "code") {
+                    if (!this._value.text && e.clipboardData.getData("text/html")) {
+                        this.init_v("code");
+                        集.values[this.parentElement.id].code["html"] = e.clipboardData.getData("text/html");
+                    } else {
+                        集.values[this.parentElement.id].code["html"] = "";
                     }
-                    const l = t.split(/[\n\r]+/);
-                    let last_el = el;
-                    for (let i in l) {
-                        const tt = l[i];
-                        if (!tt) continue;
-                        if (i == "0") {
-                            md._value.text = tt;
-                            md.text.setRangeText(tt);
-                            md.reload();
-                        } else {
-                            let x = document.createElement("x-x") as x;
-                            let md = document.createElement("x-md") as markdown;
-                            last_el.after(x);
-                            x.append(md);
-                            x.id = uuid_id();
-                            link(x.id).add();
-                            md.value = JSON.stringify({ type: "p", text: tt });
-                            last_el = x;
+                    this.reload();
+                    data_changed();
+                } else {
+                    if (this._value.type != "text" && (t.includes("\n") || t.includes("\r"))) {
+                        e.preventDefault();
+                        let el = this.parentElement as x;
+                        let pel = el.parentElement;
+                        let md: markdown;
+                        if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
+                            let nel = document.createElement("x-x") as x;
+                            nel.id = el.id;
+                            el.id = uuid_id();
+                            link(el.id).add();
+                            this.remove();
+                            el.append(nel);
+                            md = document.createElement("x-md") as markdown;
+                            nel.append(md);
+                            md.value = this.value;
+                            md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
+                            pel = el;
+                            el = nel;
+                            pel.classList.add("flex-column");
                         }
+                        const l = t.split(/[\n\r]+/);
+                        let last_el = el;
+                        for (let i in l) {
+                            const tt = l[i];
+                            if (!tt) continue;
+                            if (i == "0") {
+                                md._value.text = tt;
+                                md.text.setRangeText(tt);
+                                md.reload();
+                            } else {
+                                let x = document.createElement("x-x") as x;
+                                let md = document.createElement("x-md") as markdown;
+                                last_el.after(x);
+                                x.append(md);
+                                x.id = uuid_id();
+                                link(x.id).add();
+                                md.value = JSON.stringify({ type: "p", text: tt });
+                                last_el = x;
+                            }
+                        }
+                        z.reflash();
                     }
-                    z.reflash();
                 }
             }
         };
@@ -4495,6 +4506,12 @@ class markdown extends HTMLElement {
             this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
         } else if (type == "iframe") {
             this.h.innerHTML = `<iframe src="${text}"></iframe>`;
+        } else if (type == "code") {
+            if (集.values?.[this.parentElement.id]?.code?.["html"]) {
+                this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
+            } else {
+                this.h.innerHTML = md.render(text);
+            }
         } else {
             this.h.innerHTML = md.render(text);
         }
