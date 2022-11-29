@@ -1719,6 +1719,12 @@ function set_diff_data(diffl: diff_i[], undo_data: 集type) {
                     }
                 }
                 break;
+            case "values":
+                集.values = undo_data.values;
+                if (d.path[1]) {
+                    (document.getElementById(d.path[1]).querySelector("x-md") as markdown).reload();
+                }
+                break;
             default:
                 break;
         }
