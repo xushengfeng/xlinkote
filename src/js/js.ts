@@ -4399,7 +4399,7 @@ class markdown extends HTMLElement {
                             x.append(md);
                             x.id = uuid_id();
                             link(x.id).add();
-                            md.value = tt;
+                            md.value = JSON.stringify({ type: "p", text: tt });
                             last_el = x;
                         }
                     }
