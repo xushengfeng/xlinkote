@@ -4295,7 +4295,7 @@ class markdown extends HTMLElement {
                     ["~", "~"],
                 ];
                 for (let i of l_l) {
-                    if (e.key == i[0] && e.key != i[1]) {
+                    if (e.key == i[0] && (i[0] == i[1] || e.key != i[1])) {
                         e.preventDefault();
                         let t = text.value.slice(text.selectionStart, text.selectionEnd);
                         let s = text.selectionStart;
