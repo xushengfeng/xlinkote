@@ -84,7 +84,8 @@ cmd_pel.classList.add("cmd_hide");
 const view_el = document.getElementById("viewer");
 
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
-const ink_r = document.getElementById("ink_r");
+let ink_cxt = ink_el.getContext("2d");
+let ink_points: [number[], number[]][] = [];
 
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
@@ -97,7 +98,7 @@ const default_setting = {
     ink: {
         网址: "https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8",
         语言: "zh_CN",
-        延时: "1",
+        延时: "0.6",
     },
 };
 if (!store) {
@@ -3437,8 +3438,6 @@ mqList.addEventListener("change", (event) => {
         ink_color = "#000";
     }
 });
-let ink_cxt = ink_el.getContext("2d");
-let ink_points: [number[], number[]][] = [];
 let ink_move = false;
 var ink_t = {}; // 确保清除所有计时器
 ink_el.onpointerdown = (e) => {
@@ -3484,37 +3483,31 @@ ink_el.onpointerup = () => {
             },
         ],
     });
-    fetch(store.ink.网址 || `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`, {
-        method: "POST",
-        body: data,
-        headers: { "content-type": "application/json" },
-    })
-        .then((v) => v.json())
-        .then((v) => {
-            console.log(v);
-            let text_l = v[1][0][1];
-            ink_r.innerHTML = "";
-            for (let t of text_l) {
-                let div = document.createElement("div");
-                div.innerText = t;
-                div.onpointerdown = (e) => {
-                    e.preventDefault();
-                    set_text(t);
-                    ink_reset();
-                };
-                ink_r.append(div);
-            }
-            ink_t[
-                setTimeout(() => {
+    ink_t[
+        setTimeout(() => {
+            fetch(
+                store.ink.网址 || `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`,
+                {
+                    method: "POST",
+                    body: data,
+                    headers: { "content-type": "application/json" },
+                }
+            )
+                .then((v) => v.json())
+                .then((v) => {
+                    console.log(v);
+                    let text_l = v[1][0][1];
                     set_text(text_l[0]);
                     ink_reset();
-                }, Number(store.ink.延时) * 1000 || 1000)
-            ] = "";
-        });
+                });
+        }, Number(store.ink.延时) * 1000 || 600)
+    ] = "";
     function set_text(t: string) {
         textel.setRangeText(t);
         textel.selectionEnd += t.length;
-        textel.dispatchEvent(new Event("input"));
+        textel.selectionStart = textel.selectionEnd;
+        selections[0].start = selections[0].end = textel.selectionStart;
+        md.reload();
     }
 };
 function ink_reset() {
@@ -3522,16 +3515,8 @@ function ink_reset() {
         clearTimeout(Number(t));
         delete ink_t[t];
     }
-    if (!selections) return;
-    let pmd = document.getElementById(selections[0].id);
-    if (!pmd) return;
-    let md = pmd.querySelector("x-md") as markdown;
-    let textel = md.text;
     ink_cxt.clearRect(0, 0, ink_el.width, ink_el.height);
     ink_points = [];
-    ink_r.innerHTML = "";
-    textel.selectionStart = textel.selectionEnd;
-    selections[0].start = selections[0].end = textel.selectionStart;
 }
 
 // MD
