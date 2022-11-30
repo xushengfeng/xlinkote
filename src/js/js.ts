@@ -619,6 +619,9 @@ document.ontouchend = (e) => {
     } else if (e.targetTouches.length == 2) {
         touch_zoom(e);
     }
+
+    o_touch_e = e;
+    o_rect = { x: el_offset(O).x, y: el_offset(O).y };
 };
 
 var pointer_move = true;
