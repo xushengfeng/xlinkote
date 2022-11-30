@@ -4330,6 +4330,7 @@ class markdown extends HTMLElement {
                     }
                 }
                 this.text.value = t;
+                text.selectionStart = text.selectionEnd = 0;
                 this._value = { type, text: t };
                 this.type = type;
                 this.render();
