@@ -11,7 +11,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "version": "0.11.3",
+  "version": "0.11.4",
   "homepage": "https://github.com/xushengfeng/xlinkote/",
   "license": "GPL-3.0",
   "dependencies": {
