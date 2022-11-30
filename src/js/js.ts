@@ -4352,6 +4352,32 @@ class markdown extends HTMLElement {
                     cmd_el.focus();
                 }, 10);
             }
+            if (e.key == " ") {
+                let mark = this.text.value.slice(0, text.selectionStart);
+                console.log(mark);
+                let t = this.text.value.slice(text.selectionStart, this.text.value.length);
+                let type: md_type;
+                let m2: { [key: string]: md_type } = {
+                    "#": "h1",
+                    "##": "h2",
+                    "###": "h3",
+                    "####": "h4",
+                    "#####": "h5",
+                    "######": "h6",
+                    "[]": "todo",
+                };
+                for (let m in m2) {
+                    if (m == mark) {
+                        e.preventDefault();
+                        type = m2[m];
+                        break;
+                    }
+                }
+                this.text.value = t;
+                this._value = { type, text: t };
+                this.type = type;
+                this.render();
+            }
         };
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
