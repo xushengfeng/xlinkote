@@ -370,7 +370,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "auto";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "";
-            画布s.classList.remove("handle_cursor");
 
             ink_el.parentElement.style.display = "";
             pen_pel.style.display = "none";
@@ -385,7 +384,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
             if (link_value_bar) link_value_bar.style.display = "none";
-            画布s.classList.add("handle_cursor");
 
             ink_reset();
             ink_el.classList.add("ink_hide");
@@ -402,7 +400,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "none");
             if (link_value_bar) link_value_bar.style.display = "none";
-            画布s.classList.remove("handle_cursor");
 
             ink_reset();
             ink_el.classList.add("ink_hide");

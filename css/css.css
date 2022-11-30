@@ -797,31 +797,40 @@ x-x > .xxhandle > div {
     top: var(--x-x-handle-o2);
 }
 
-.handle_cursor .xxhandle > .xxhandle0 {
+.设计 .xxhandle > .xxhandle0,
+.绘制 .xxhandle > .xxhandle0 {
     cursor: n-resize;
 }
-.handle_cursor .xxhandle > .xxhandle1 {
+.设计 .xxhandle > .xxhandle1,
+.绘制 .xxhandle > .xxhandle1 {
     cursor: e-resize;
 }
-.handle_cursor .xxhandle > .xxhandle2 {
+.设计 .xxhandle > .xxhandle2,
+.绘制 .xxhandle > .xxhandle2 {
     cursor: s-resize;
 }
-.handle_cursor .xxhandle > .xxhandle3 {
+.设计 .xxhandle > .xxhandle3,
+.绘制 .xxhandle > .xxhandle3 {
     cursor: w-resize;
 }
-.handle_cursor .xxhandle > .xxhandle4 {
+.设计 .xxhandle > .xxhandle4,
+.绘制 .xxhandle > .xxhandle4 {
     cursor: ne-resize;
 }
-.handle_cursor .xxhandle > .xxhandle5 {
+.设计 .xxhandle > .xxhandle5,
+.绘制 .xxhandle > .xxhandle5 {
     cursor: se-resize;
 }
-.handle_cursor .xxhandle > .xxhandle6 {
+.设计 .xxhandle > .xxhandle6,
+.绘制 .xxhandle > .xxhandle6 {
     cursor: sw-resize;
 }
-.handle_cursor .xxhandle > .xxhandle7 {
+.设计 .xxhandle > .xxhandle7,
+.绘制 .xxhandle > .xxhandle7 {
     cursor: nw-resize;
 }
-.handle_cursor x-x {
+.设计 x-x,
+.绘制 x-x {
     cursor: move;
 }
 
