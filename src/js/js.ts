@@ -3929,6 +3929,7 @@ class x extends HTMLElement {
         this.onpointerdown = (e) => {
             if (模式 != "设计") return;
             if (this.fixed) return;
+            e.preventDefault();
             let el = e.target as HTMLDivElement;
             if (bar.contains(el) && el != m) return;
             if (el == m) {

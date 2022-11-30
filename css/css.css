@@ -527,7 +527,8 @@ body > #main > #画布 > #画布们 > div {
 body > #main > #画布 > #画布们 > .浏览 {
 }
 
-body > #main > #画布 > #画布们 > .设计 {
+body > #main > #画布 > #画布们 > .设计 * {
+    user-select: none;
 }
 
 body > #main > #画布 > #画布们 > .绘制 {
