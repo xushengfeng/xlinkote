@@ -461,35 +461,6 @@ document.getElementById("常驻").onpointerdown = (e) => {
     console.log((<HTMLElement>e.target).id);
     let v = null;
     let el_n = "";
-    switch ((<HTMLElement>e.target).id) {
-        case "md_h1":
-            v = "# ";
-            break;
-        case "md_h2":
-            v = "## ";
-            break;
-        case "md_h3":
-            v = "### ";
-            break;
-        case "md_h4":
-            v = "#### ";
-            break;
-        case "md_h5":
-            v = "##### ";
-            break;
-        case "md_h6":
-            v = "###### ";
-            break;
-        case "md_list":
-            v = "- ";
-            break;
-        case "md_task":
-            v = "- [ ] ";
-            break;
-        case "md_mathb":
-            v = "$$\n\n$$";
-            break;
-    }
     if ((<HTMLElement>e.target).id == "录音") {
         el_n = "x-record";
     } else {
