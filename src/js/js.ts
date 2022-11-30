@@ -359,12 +359,12 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
         v.classList.remove("模式突出");
     });
     nav.querySelector(`#${模式x}`).classList.add("模式突出");
+    if (O) O.className = 模式x;
     switch (模式x) {
         case "浏览":
             if (<draw>focus_draw_el) {
                 focus_draw_el = null;
             }
-            if (O) O.style.pointerEvents = "";
 
             blur_all();
             画布.style.cursor = "auto";
@@ -382,7 +382,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             document.querySelectorAll("x-md").forEach((el) => {
                 (<markdown>el).edit = false;
             });
-            if (O) O.style.pointerEvents = "";
             画布.style.cursor = "crosshair";
             document.documentElement.style.setProperty("--x-x-handle-d", "block");
             if (link_value_bar) link_value_bar.style.display = "none";
@@ -398,7 +397,6 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             document.querySelectorAll("x-md").forEach((el) => {
                 (<markdown>el).edit = false;
             });
-            if (O) O.style.pointerEvents = "none";
 
             blur_all();
             画布.style.cursor = "crosshair";

@@ -524,6 +524,16 @@ body > #main > #画布 > #画布们 > div {
     left: 0;
     transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
 }
+body > #main > #画布 > #画布们 > .浏览 {
+}
+
+body > #main > #画布 > #画布们 > .设计 {
+}
+
+body > #main > #画布 > #画布们 > .绘制 {
+    pointer-events: none;
+    user-select: none;
+}
 body > #main > #画布 > #选择 {
     position: absolute;
     top: 0;
