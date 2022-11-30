@@ -4334,6 +4334,13 @@ class markdown extends HTMLElement {
                 this.type = type;
                 this.render();
             }
+            if (e.key == "Backspace") {
+                if (this._value.type != "text") {
+                    if (text.selectionStart == 0 && text.selectionEnd == 0) {
+                        this.type = "p";
+                    }
+                }
+            }
         };
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
