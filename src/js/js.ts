@@ -4308,6 +4308,7 @@ class markdown extends HTMLElement {
                 }, 10);
             }
             if (e.key == " ") {
+                if (this._value.type == "code" || this._value.type == "text") return;
                 let mark = this.text.value.slice(0, text.selectionStart);
                 console.log(mark);
                 let t = this.text.value.slice(text.selectionStart, this.text.value.length);
