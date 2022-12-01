@@ -768,6 +768,13 @@ function zoom_o(z: number) {
     zoom_el.value = `${(z * 100).toFixed(1)}`;
     zoom_el.style.width = zoom_el.value.length + "ch";
     document.documentElement.style.setProperty("--zoom", String(z));
+
+    document.querySelectorAll("x-pdf").forEach((el: pdf_viewer) => {
+        let r = el.getBoundingClientRect();
+        let w = window.innerWidth,
+            h = window.innerHeight;
+        if (r.x < w && r.y < h && r.x + r.width > 0 && r.y + r.height > 0) el.set_m();
+    });
 }
 
 zoom_el.oninput = () => {
