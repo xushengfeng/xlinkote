@@ -987,6 +987,7 @@ x-pdf > div:nth-child(1) {
     display: flex;
     gap: 4px;
     position: absolute;
+    z-index: 1;
     transform: scale(calc(1 / var(--zoom)));
     transform-origin: left top;
 }
