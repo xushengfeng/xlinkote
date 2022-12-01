@@ -49,6 +49,11 @@ select {
     background-color: transparent;
 }
 
+.bar {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+}
+
 body > #main > #nav {
     background-color: var(--bg1);
 }
