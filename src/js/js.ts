@@ -3044,7 +3044,7 @@ function run_cmd() {
     const el = get_x_by_id(cmd_el.getAttribute("data-id"));
     const md = el.querySelector("x-md") as markdown;
     let arg = cmd_el.value;
-    let args = arg.split(" ");
+    let args = arg.split(/\s+/);
     if (arg == "/") {
         md.text.setRangeText("/");
         md.text.dispatchEvent(new Event("input"));
