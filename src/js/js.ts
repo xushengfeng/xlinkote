@@ -4322,6 +4322,7 @@ class markdown extends HTMLElement {
                     "#####": "h5",
                     "######": "h6",
                     "[]": "todo",
+                    $$: "math",
                 };
                 for (let m in m2) {
                     if (m == mark) {
