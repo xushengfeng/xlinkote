@@ -439,6 +439,9 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #中转站 > #临时 > div {
     position: relative;
 }
+.侧栏 > #items > #中转站 > #临时 > div > x-x {
+    position: static !important;
+}
 .侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar {
     display: flex;
 }
