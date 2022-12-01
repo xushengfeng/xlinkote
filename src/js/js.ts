@@ -958,9 +958,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 子元素: i.value,
             });
             if (!e.shiftKey) {
-                z.remove(i);
+                i.remove();
             }
         }
+        free_o_rects = [];
         console.log(集.中转站);
         tmp_s_reflash();
         data_changed();
