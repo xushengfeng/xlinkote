@@ -774,7 +774,15 @@ zoom_el.oninput = () => {
     zoom_el.style.width = zoom_el.value.length + "ch";
 };
 zoom_el.onchange = () => {
-    zoom_o((Number(zoom_el.value) || 100) / 100);
+    let nzoom = (Number(zoom_el.value) || 100) / 100;
+    let ozoom = zoom,
+        dzoom = nzoom - zoom;
+    zoom += dzoom;
+    let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
+        dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
+    O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
+    O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+    zoom_o(zoom);
     zoom_list.classList.add("zoom_list_hide");
 };
 
@@ -790,7 +798,14 @@ for (let i = 25; i <= 200; i += 25) {
     op.innerText = `${i}%`;
     zoom_list.append(op);
     op.onpointerdown = () => {
-        zoom_o(i / 100);
+        let nzoom = i / 100;
+        let ozoom = zoom,
+            dzoom = nzoom - zoom;
+        let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
+            dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
+        O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
+        O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+        zoom_o(nzoom);
     };
 }
 O.style.left = `${画布.offsetWidth / 2}px`;
