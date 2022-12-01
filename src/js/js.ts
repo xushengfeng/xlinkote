@@ -4866,6 +4866,7 @@ class pdf_viewer extends HTMLElement {
     canvas: HTMLCanvasElement;
     text: HTMLElement;
     old_id = "";
+    tasks: { [key: string]: pdfjsLib.RenderTask } = {};
 
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
@@ -4947,7 +4948,16 @@ class pdf_viewer extends HTMLElement {
                 transform: transform,
                 viewport: viewport,
             };
-            page.render(renderContext);
+            for (let t in this.tasks) {
+                this.tasks[t].cancel();
+                delete this.tasks[t];
+            }
+            let task = page.render(renderContext);
+            let taskid = uuid_id();
+            this.tasks[taskid] = task;
+            task.promise.finally(() => {
+                delete this.tasks[taskid];
+            });
 
             this.text.style.transform = `scaleX(${canvas.offsetWidth / viewport.width}) scaleY(${
                 canvas.offsetHeight / viewport.height
