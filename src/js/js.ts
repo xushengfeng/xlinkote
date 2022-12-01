@@ -4864,6 +4864,7 @@ class pdf_viewer extends HTMLElement {
     div: HTMLDivElement;
     pages: HTMLElement;
     canvas: HTMLCanvasElement;
+    canvas1: HTMLCanvasElement;
     text: HTMLElement;
     old_id = "";
     tasks: { [key: string]: pdfjsLib.RenderTask } = {};
@@ -4909,7 +4910,11 @@ class pdf_viewer extends HTMLElement {
         };
         this.div.append(per, this.pages, next);
         this.canvas = document.createElement("canvas");
+        this.canvas.style.zIndex = "1";
         this.append(this.canvas);
+        this.canvas1 = document.createElement("canvas");
+        this.canvas1.style.zIndex = "2";
+        this.append(this.canvas1);
         this.text = document.createElement("div");
         this.append(this.text);
         if (this.getAttribute("value")) {
@@ -4925,6 +4930,8 @@ class pdf_viewer extends HTMLElement {
 
     async set_m() {
         let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
+        this.canvas.style.zIndex = "1";
+        this.canvas1.style.zIndex = "2";
         pdf.getPage(this._value.page).then(async (page) => {
             let scale = 1.5;
             let viewport = page.getViewport({ scale: scale });
@@ -4955,6 +4962,11 @@ class pdf_viewer extends HTMLElement {
             let task = page.render(renderContext);
             let taskid = uuid_id();
             this.tasks[taskid] = task;
+            task.promise.then(() => {
+                this.canvas.style.zIndex = "2";
+                this.canvas1.style.zIndex = "1";
+                [this.canvas, this.canvas1] = [this.canvas1, this.canvas];
+            });
             task.promise.finally(() => {
                 delete this.tasks[taskid];
             });

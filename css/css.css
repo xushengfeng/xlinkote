@@ -987,7 +987,7 @@ x-pdf > div:nth-child(1) {
     display: flex;
     gap: 4px;
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     transform: scale(calc(1 / var(--zoom)));
     transform-origin: left top;
 }
@@ -1026,20 +1026,25 @@ x-pdf > div:nth-child(1) > div:nth-child(2) > div > div > canvas {
 x-pdf > canvas {
     width: 100% !important;
     height: 100% !important;
+    position: relative;
+}
+x-pdf > canvas:nth-of-type(2) {
+    top: -100%;
 }
 
-x-pdf > div:nth-child(3) {
+x-pdf > div:nth-child(4) {
     position: absolute;
     top: 0;
+    z-index: 3;
     transform-origin: 0% 0%;
 }
 
-x-pdf > div:nth-child(3) > span {
+x-pdf > div:nth-child(4) > span {
     position: absolute;
     white-space: nowrap;
     color: transparent;
 }
-x-pdf > div:nth-child(3) > span::selection {
+x-pdf > div:nth-child(4) > span::selection {
     color: transparent;
     background-color: #0000ff55;
 }
