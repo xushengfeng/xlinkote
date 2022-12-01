@@ -893,8 +893,6 @@ document.addEventListener("pointermove", (e: PointerEvent) => {
 });
 document.addEventListener("pointerup", (e: PointerEvent) => {
     if (drag_block) {
-        set_模式("浏览");
-        (<markdown>free_o_rects[0].el.children[1]).edit = true;
         drag_block = false;
         data_changed();
     }
