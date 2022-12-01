@@ -3913,12 +3913,11 @@ class x extends HTMLElement {
         };
 
         this.onpointerdown = (e) => {
-            if (模式 != "设计") return;
             if (this.fixed) return;
-            e.preventDefault();
             let el = e.target as HTMLDivElement;
             if (bar.contains(el) && el != m) return;
             if (el == m) {
+                e.preventDefault();
                 e.stopPropagation();
                 free_drag = true;
                 if (this.parentElement != O) {
@@ -3954,6 +3953,8 @@ class x extends HTMLElement {
                     return;
                 }
             }
+            if (模式 != "设计") return;
+            e.preventDefault();
             if (x_h.includes(el)) {
                 e.stopPropagation();
                 free_o_a = x_h.indexOf(el);
