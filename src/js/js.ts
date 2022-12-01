@@ -475,7 +475,7 @@ document.getElementById("常驻").onpointerdown = (e) => {
     if (v) (<markdown>md).value = v;
     set_模式("设计");
     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
-    free_o_e = e;
+    free_old_point = e2p(e);
     drag_block = true;
 };
 
@@ -878,14 +878,14 @@ type selection_type = {
 var selections = [{ id: "", start: 0, end: 0 }] as selection_type[];
 
 // 自由元素移动
-let free_o_e: MouseEvent;
+let free_old_point: p_point;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
 let free_o_a = NaN;
 let free_move = false;
 let free_target_id = "";
 let free_drag = false;
 document.addEventListener("pointermove", (e: PointerEvent) => {
-    if (模式 == "设计" && free_o_e) {
+    if (模式 == "设计" && free_old_point) {
         e.preventDefault();
         free_mouse(e);
         free_move = true;
@@ -948,7 +948,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         free_drag = false;
     }
 
-    if (free_o_e && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
+    if (free_old_point && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
             集.中转站.push({
                 id: i.id,
@@ -966,7 +966,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
 
-    if (!free_move && free_o_e) {
+    if (!free_move && free_old_point) {
         document.querySelectorAll("x-x").forEach((el: x) => {
             if (el.contains(e.target as x)) {
                 z.focus(el);
@@ -975,21 +975,22 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         });
         data_changed();
     }
-    if (free_drag || free_o_e) z.reflash();
-    free_o_e = null;
+    if (free_drag || free_old_point) z.reflash();
+    free_old_point = null;
     free_move = false;
     free_o_rects = [];
 });
 
 /** 调整元素大小、位置以及元素聚焦 */
 var free_mouse = (e: MouseEvent) => {
-    if (free_o_e) {
+    if (free_old_point) {
         for (const xel of free_o_rects) {
             let f =
                 xel.el.parentElement.classList.contains("flex-column") ||
                 xel.el.parentElement.classList.contains("flex-row");
-            let dx = (e.clientX - free_o_e.clientX) / zoom,
-                dy = (e.clientY - free_o_e.clientY) / zoom;
+            let np = e2p(e);
+            let dx = np.x - free_old_point.x,
+                dy = np.y - free_old_point.y;
             let x = xel.x,
                 y = xel.y,
                 w = xel.w,
@@ -3934,7 +3935,7 @@ class x extends HTMLElement {
                     xel.value = this.value;
                     this.remove();
                     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
-                    free_o_e = e;
+                    free_old_point = e2p(e);
                     free_o_a = -1;
 
                     set_模式("设计");
@@ -3957,12 +3958,12 @@ class x extends HTMLElement {
             if (x_h.includes(el)) {
                 e.stopPropagation();
                 free_o_a = x_h.indexOf(el);
-                free_o_e = e;
+                free_old_point = e2p(e);
                 free_o_rects = [
                     { el: this, x: this.offsetLeft, y: this.offsetTop, w: this.offsetWidth, h: this.offsetHeight },
                 ];
             } else {
-                free_o_e = e;
+                free_old_point = e2p(e);
                 free_o_a = -1;
 
                 if (selected_el.length <= 1) {
