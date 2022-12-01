@@ -4843,7 +4843,7 @@ class file extends HTMLElement {
 window.customElements.define("x-file", file);
 
 import * as pdfjsLib from "pdfjs-dist";
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.1.81/build/pdf.worker.min.js";
 
 var pdf_cache = {} as { [key: string]: pdfjsLib.PDFDocumentProxy };
 
