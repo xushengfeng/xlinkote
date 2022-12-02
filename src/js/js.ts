@@ -4167,7 +4167,8 @@ class markdown extends HTMLElement {
             if (模式 != "浏览") e.preventDefault();
             if (e.key == "Enter") {
                 e.preventDefault();
-                O.style.top = O.offsetTop - this.offsetHeight * zoom + "px";
+                if (this._value.type != "text" && this._value.type != "code")
+                    O.style.top = O.offsetTop - this.offsetHeight * zoom + "px";
                 data_changed();
                 if (this._value.type == "text") {
                     let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
@@ -4374,13 +4375,10 @@ class markdown extends HTMLElement {
         };
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
-            let el = <HTMLElement>s.querySelector(`#h > *`);
-            if (el) {
-                let x = el_offset2(el, this.h).x,
-                    y = el_offset2(el, this.h).y + el.offsetHeight;
-                text.style.left = x + "px";
-                text.style.top = y + "px";
-            }
+            let x = el_offset2(this.h).x,
+                y = el_offset2(this.h).y + s.offsetHeight;
+            text.style.left = x + "px";
+            text.style.top = y + "px";
 
             selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
         };
@@ -4470,8 +4468,8 @@ class markdown extends HTMLElement {
                     window.open((el as HTMLAnchorElement).href);
                 }
             }
-            text.style.left = el_offset2(el, this.h).x + "px";
-            text.style.top = el_offset2(el, this.h).y + el.offsetHeight + "px";
+            text.style.left = el_offset2(this.h).x + "px";
+            text.style.top = el_offset2(this.h).y + s.offsetHeight + "px";
             if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
                 this.edit = true;
             text.focus();
