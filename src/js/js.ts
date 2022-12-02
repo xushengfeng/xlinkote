@@ -1152,6 +1152,7 @@ function tmp_s_reflash() {
         xel.setAttribute("style", x.style);
         xel.style.left = "0px";
         xel.style.top = "0px";
+        xel.className = x.class;
         xel.value = x.子元素;
     }
 }
