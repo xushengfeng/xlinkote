@@ -3161,6 +3161,7 @@ function move_to_x_link(el: x | xlink) {
         xel.setAttribute("style", x.el.getAttribute("style"));
         xel.style.left = x.x - out_rect.left + "px";
         xel.style.top = x.y - out_rect.top + "px";
+        xel.className = x.el.className;
         view_el.append(xel);
         xel.value = x.el.value;
     }
