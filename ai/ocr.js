@@ -45,6 +45,7 @@ async function x(img) {
     let image;
     let canvas;
     ({ transposedData, resize_w, image, canvas } = 检测前处理(h, w, img));
+    console.log(image.width, image.height);
     const det_results = await 检测(transposedData, image, det);
 
     let box = 检测后处理(det_results.data, det_results.dims[3], det_results.dims[2], canvas);
@@ -55,6 +56,16 @@ async function x(img) {
         const rec_results = await 识别(b, imgH, imgW, rec);
         let line = 识别后处理(rec_results, dic);
         main_line = line.concat(main_line);
+    }
+    for (let i in main_line) {
+        let rx = w / image.width,
+            ry = h / image.height;
+        let b = box[main_line.length - Number(i) - 1].box;
+        for (let p of b) {
+            p[0] = p[0] * rx;
+            p[1] = p[1] * ry;
+        }
+        main_line[i]["box"] = b;
     }
     console.log(main_line);
     console.timeEnd();

@@ -5884,15 +5884,23 @@ function to_text(img: HTMLImageElement | HTMLCanvasElement) {
         let p = el_offset2(img, O);
         let pxel = <x>document.createElement("x-x");
         pxel.id = uuid_id();
-        pxel.style.left = 0 + "px";
-        pxel.style.top = 0 + "px";
+        pxel.style.left = p.x + "px";
+        pxel.style.top = p.y + "px";
         z.push(pxel);
         for (let i of v) {
             if (!i.text) continue;
             tl.push(i.text);
+            let x0 = i.box[0][0];
+            let y0 = i.box[0][1];
+            let x1 = i.box[2][0];
+            let y1 = i.box[2][1];
             let xel = <x>document.createElement("x-x");
-            xel.style.left = p.x + 0 + "px";
-            xel.style.top = p.y + 0 + "px";
+            xel.style.left = x0 + "px";
+            xel.style.top = y0 + "px";
+            xel.style.width = x1 - x0 + "px";
+            xel.style.height = y1 - y0 + "px";
+            xel.style.color = "transparent";
+            xel.style.fontSize = `${(x1 - x0) / i.text.length}px`;
             z.push(xel, pxel);
             var md = document.createElement("x-md") as markdown;
             xel.append(md);
