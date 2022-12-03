@@ -334,6 +334,12 @@ x-pdf > div > div {
     border-radius: 4px;
     box-shadow: var(--shadow1);
 }
+x-img > div {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
 
 @media (any-pointer: coarse) {
 }

@@ -1061,6 +1061,25 @@ x-img {
 x-img > img {
     @apply w-full h-full;
 }
+x-img:hover > div {
+    opacity: 1;
+    pointer-events: all;
+}
+x-img > div {
+    position: absolute;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left top;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+x-img > div > .icon {
+    width: 16px;
+    height: 16px;
+}
 
 x-link {
     @apply cursor-pointer;

@@ -18,6 +18,7 @@ import remove_svg from "../../assets/icons/remove.svg";
 import update_svg from "../../assets/icons/update.svg";
 import more1_svg from "../../assets/icons/more1.svg";
 import edit_svg from "../../assets/icons/edit.svg";
+import ocr_svg from "../../assets/icons/ocr.svg";
 
 // el
 var 设置_el = document.getElementById("设置");
@@ -5859,6 +5860,12 @@ class img extends HTMLElement {
     connectedCallback() {
         this.img = document.createElement("img");
         this.append(this.img);
+        let ocr = document.createElement("div");
+        ocr.innerHTML = icon(ocr_svg);
+        ocr.onclick = () => {
+            to_text(this.img);
+        };
+        this.append(ocr);
     }
     set value(s: string) {
         this.img.src = s;
@@ -5866,6 +5873,35 @@ class img extends HTMLElement {
 }
 
 window.customElements.define("x-img", img);
+
+function to_text(img: HTMLImageElement | HTMLCanvasElement) {
+    let canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    canvas.getContext("2d").drawImage(img, 0, 0);
+    ocr.ocr(canvas.getContext("2d").getImageData(0, 0, img.width, img.height)).then((v) => {
+        let tl = [];
+        let p = el_offset2(img, O);
+        let pxel = <x>document.createElement("x-x");
+        pxel.id = uuid_id();
+        pxel.style.left = 0 + "px";
+        pxel.style.top = 0 + "px";
+        z.push(pxel);
+        for (let i of v) {
+            if (!i.text) continue;
+            tl.push(i.text);
+            let xel = <x>document.createElement("x-x");
+            xel.style.left = p.x + 0 + "px";
+            xel.style.top = p.y + 0 + "px";
+            z.push(xel, pxel);
+            var md = document.createElement("x-md") as markdown;
+            xel.append(md);
+            let v = JSON.stringify({ type: "p", text: i.text });
+            md.value = v;
+        }
+        console.log(tl);
+    });
+}
 
 import ocr from "../../ai/ocr";
 
