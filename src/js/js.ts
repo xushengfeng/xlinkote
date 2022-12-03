@@ -4808,22 +4808,9 @@ class file extends HTMLElement {
         if (this._value.r) {
             this.div.classList.remove("file");
             if (type[0] == "image") {
-                let img = document.createElement("img");
+                let img = document.createElement("x-img") as img;
                 this.div.append(img);
-                img.src = f.base64;
-                img.onload = () => {
-                    let canvas = document.createElement("canvas");
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    canvas.getContext("2d").drawImage(img, 0, 0);
-                    ocr.ocr(canvas.getContext("2d").getImageData(0, 0, img.width, img.height)).then((v) => {
-                        let tl = [];
-                        for (let i of v) {
-                            tl.push(i.text);
-                        }
-                        console.log(tl);
-                    });
-                };
+                img.value = f.base64;
             }
             if (type[0] == "video") {
                 let video = document.createElement("video");
@@ -5861,6 +5848,24 @@ class three extends HTMLElement {
 window.customElements.define("x-three", three);
 
 ignore_el.push("x-three");
+/** 3d元素 */
+class img extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    img: HTMLImageElement;
+
+    connectedCallback() {
+        this.img = document.createElement("img");
+        this.append(this.img);
+    }
+    set value(s: string) {
+        this.img.src = s;
+    }
+}
+
+window.customElements.define("x-img", img);
 
 import ocr from "../../ai/ocr";
 

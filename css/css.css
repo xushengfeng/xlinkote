@@ -1054,6 +1054,14 @@ x-pdf input {
 x-pdf #page_i::before {
     content: "/";
 }
+
+x-img {
+    @apply block relative;
+}
+x-img > img {
+    @apply w-full h-full;
+}
+
 x-link {
     @apply cursor-pointer;
 }
