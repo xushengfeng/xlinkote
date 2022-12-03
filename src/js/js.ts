@@ -2692,7 +2692,7 @@ var now_dav_data = "";
 
 /** 获取云文件数据并渲染 */
 async function get_xln_value(path: string) {
-    let str = await client.getFileContents(path, { format: "text" });
+    let str = (await client.getFileContents(path, { format: "text" })) as string;
     let o: any;
     try {
         o = JSON.parse(<string>str);
@@ -3511,23 +3511,26 @@ ink_el.onpointerup = () => {
         ],
     });
     ink_t[
-        setTimeout(() => {
-            fetch(
-                store.ink.网址 || `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`,
-                {
-                    method: "POST",
-                    body: data,
-                    headers: { "content-type": "application/json" },
-                }
-            )
-                .then((v) => v.json())
-                .then((v) => {
-                    console.log(v);
-                    let text_l = v[1][0][1];
-                    set_text(text_l[0]);
-                    ink_reset();
-                });
-        }, Number(store.ink.延时) * 1000 || 600)
+        Number(
+            setTimeout(() => {
+                fetch(
+                    store.ink.网址 ||
+                        `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`,
+                    {
+                        method: "POST",
+                        body: data,
+                        headers: { "content-type": "application/json" },
+                    }
+                )
+                    .then((v) => v.json())
+                    .then((v) => {
+                        console.log(v);
+                        let text_l = v[1][0][1];
+                        set_text(text_l[0]);
+                        ink_reset();
+                    });
+            }, Number(store.ink.延时) * 1000 || 600)
+        )
     ] = "";
     function set_text(t: string) {
         textel.setRangeText(t);
