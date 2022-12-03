@@ -4811,6 +4811,19 @@ class file extends HTMLElement {
                 let img = document.createElement("img");
                 this.div.append(img);
                 img.src = f.base64;
+                img.onload = () => {
+                    let canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    canvas.getContext("2d").drawImage(img, 0, 0);
+                    ocr.ocr(canvas.getContext("2d").getImageData(0, 0, img.width, img.height)).then((v) => {
+                        let tl = [];
+                        for (let i of v) {
+                            tl.push(i.text);
+                        }
+                        console.log(tl);
+                    });
+                };
             }
             if (type[0] == "video") {
                 let video = document.createElement("video");
@@ -5848,3 +5861,19 @@ class three extends HTMLElement {
 window.customElements.define("x-three", three);
 
 ignore_el.push("x-three");
+
+import ocr from "../../ai/ocr";
+
+start();
+
+import dic from "../../public/ocr/ppocr_keys_v1.txt?raw";
+
+async function start() {
+    await ocr.init({
+        det_path: "./ocr/ppocr_det.onnx",
+        rec_path: "./ocr/ppocr_rec.onnx",
+        dic: dic,
+        dev: false,
+        node: true,
+    });
+}
