@@ -5880,10 +5880,12 @@ window.customElements.define("x-img", img);
 
 function to_text(img: HTMLImageElement | HTMLCanvasElement) {
     let canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
+    let w = (img as HTMLImageElement).naturalWidth || img.width,
+        h = (img as HTMLImageElement).naturalHeight || img.height;
+    canvas.width = w;
+    canvas.height = h;
     canvas.getContext("2d").drawImage(img, 0, 0);
-    ocr.ocr(canvas.getContext("2d").getImageData(0, 0, img.width, img.height)).then((v) => {
+    ocr.ocr(canvas.getContext("2d").getImageData(0, 0, w, h)).then((v) => {
         let tl = [];
         let p = el_offset2(img, O);
         let pxel = <x>document.createElement("x-x");
