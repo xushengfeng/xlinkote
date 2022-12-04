@@ -24,8 +24,9 @@
 
 ```shell
 npm i # 安装依赖
+node init.js # 下载ocr相关文件
 npm run build # 编译
-npx http-server ./dist # 打开服务器
+npm run preview # 打开服务器
 ```
 
 ## 功能
