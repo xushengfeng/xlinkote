@@ -314,6 +314,9 @@ document.getElementById("成组").onclick = () => {
 document.getElementById("转为一行").onclick = () => {
     to_one_line(selected_el);
 };
+document.getElementById("拆分为多行").onclick = () => {
+    to_more_line(selected_el);
+};
 
 function put_toast(t: string, time?: number) {
     if (!time) time = 1;
@@ -3511,6 +3514,28 @@ function to_one_line(xels: x[]) {
             let md = document.createElement("x-md") as markdown;
             el.append(md);
             md.value = JSON.stringify({ text: t, type });
+            data_changed();
+        }
+    }
+}
+
+/** 按换行拆分 */
+function to_more_line(xels: x[], c?: string | RegExp) {
+    for (let el of xels) {
+        if (is_smallest_el(el) && el.querySelector("x-md")) {
+            let v = (el.querySelector("x-md") as markdown)._value;
+            let l = v.text.trim().split(c || "\n");
+            el.querySelector("x-md").remove();
+            el.classList.add("flex-column");
+            for (let t of l) {
+                if (!t) continue;
+                let x = document.createElement("x-x") as x;
+                x.setAttribute("style", "");
+                let md = document.createElement("x-md") as markdown;
+                x.append(md);
+                z.push(x, el);
+                md.value = JSON.stringify({ text: t, type: v.type });
+            }
             data_changed();
         }
     }
