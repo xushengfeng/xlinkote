@@ -2303,7 +2303,7 @@ function new_draw() {
     xel.append(draw);
 
     focus_draw_el = draw;
-    O.lastElementChild.append(xel);
+    z.push(xel, O.lastElementChild as x);
 }
 var focus_draw_el = null as draw;
 画布.onpointerdown = (e) => {
