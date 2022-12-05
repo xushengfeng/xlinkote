@@ -5692,6 +5692,7 @@ class link_value extends HTMLElement {
                                 return JSON.parse(i.value).text;
                             } else {
                                 if (i.子元素) return w(i.子元素);
+                                else return "";
                             }
                         }
                     };
