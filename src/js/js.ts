@@ -1126,6 +1126,17 @@ var free_mouse = (e: MouseEvent) => {
     }
 };
 
+document.addEventListener("dblclick", (e) => {
+    if (模式 == "设计") {
+        console.log(free_o_a);
+        let el = z.聚焦元素;
+        let xl = [1, 3, 4, 5, 6, 7],
+            yl = [0, 2, 4, 5, 6, 7];
+        if (xl.includes(free_o_a)) el.style.width = "";
+        if (yl.includes(free_o_a)) el.style.height = "";
+    }
+});
+
 /** 通过画布坐标创建主元素 */
 function creat_x_x(x: number, y: number, w: number) {
     let xel = <x>document.createElement("x-x");
