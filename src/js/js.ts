@@ -311,6 +311,9 @@ document.getElementById("横向堆叠").onclick = () => {
 document.getElementById("成组").onclick = () => {
     to_none_layout(selected_el);
 };
+document.getElementById("转为一行").onclick = () => {
+    to_one_line(selected_el);
+};
 
 function put_toast(t: string, time?: number) {
     if (!time) time = 1;
@@ -3433,6 +3436,19 @@ function to_flex(els: x[], d: "x" | "y") {
     z.reflash();
 }
 
+/** 判断是否为flex */
+function is_flex(el: x) {
+    if (el.classList.contains("flex-column") || el.classList.contains("flex-row")) {
+        return "flex";
+    }
+    if (el.classList.contains("flex-column")) {
+        return "col";
+    }
+    if (el.classList.contains("flex-row")) {
+        return "row";
+    }
+}
+
 /** 添加一个固定布局元素 */
 function add_none_layout() {
     let x = document.createElement("x-x") as x;
@@ -3479,6 +3495,25 @@ function to_none_layout(els: x[]) {
     }
     x.value = data;
     reflash_none_layout(x);
+}
+
+/** 把flex所有文字转为一行 */
+function to_one_line(xels: x[]) {
+    for (let el of xels) {
+        if (is_flex(el) == "flex") {
+            let t = "";
+            let type: md_type;
+            el.querySelectorAll("x-md").forEach((md: markdown, i) => {
+                t += md._value.text;
+                if (i == 0) type = md._value.type;
+            });
+            el.querySelectorAll("x-x").forEach((el) => z.remove(el as x));
+            let md = document.createElement("x-md") as markdown;
+            el.append(md);
+            md.value = JSON.stringify({ text: t, type });
+            data_changed();
+        }
+    }
 }
 
 window["xln"] = {};
