@@ -2893,6 +2893,10 @@ search_el.oninput = search_el.click = () => {
     let l = search(search_el.value, "str");
     console.log(l);
     show_search_l(l);
+    if (l.length == 0) {
+        view_el.classList.add("viewer_hide");
+        return;
+    }
     select_index = 0;
     let el = select_search(select_index);
     move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
