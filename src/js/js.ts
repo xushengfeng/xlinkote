@@ -3483,7 +3483,7 @@ var ink_t = {}; // 确保清除所有计时器
 ink_el.onpointerdown = (e) => {
     e.preventDefault();
 
-    ink_points.push([[], []]);
+    ink_points.push([[e.offsetX], [e.offsetY]]);
     ink_move = true;
 
     ink_cxt.beginPath();
