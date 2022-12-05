@@ -3014,15 +3014,15 @@ let now_focus_id = "0";
 cmd_el.oninput = () => {
     const el = get_x_by_id(cmd_el.getAttribute("data-id"));
     const md = el.querySelector("x-md") as markdown;
-    if ((cmd_el.value = "/")) {
+    if (cmd_el.value == "/") {
         md.text.setRangeText("/");
         md.text.selectionStart = md.text.selectionEnd = md.text.selectionStart + 1;
         md.text.dispatchEvent(new Event("input"));
         data_changed();
         md.edit = true;
+        cmd_el.value = "";
+        cmd_pel.classList.add("cmd_hide");
     }
-    cmd_el.value = "";
-    cmd_pel.classList.add("cmd_hide");
 };
 
 cmd_el.onchange = () => {
