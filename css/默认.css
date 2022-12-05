@@ -195,6 +195,9 @@ body > #cmd {
     box-shadow: var(--shadow1);
     border-radius: 4px;
 }
+body > #cmd > #命令输出 > div > span > span {
+    font-weight: bold;
+}
 
 body > #viewer {
     background-color: var(--bg-color2);

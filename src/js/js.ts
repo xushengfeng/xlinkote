@@ -3022,6 +3022,39 @@ cmd_el.oninput = () => {
         md.edit = true;
         cmd_el.value = "";
         cmd_pel.classList.add("cmd_hide");
+    } else {
+        cmd_r.innerHTML = "";
+        let arg = cmd_el.value;
+        let args = arg.split(/\s+/);
+        const fuse = new Fuse(md_type_l, {
+            includeMatches: true,
+            findAllMatches: true,
+            useExtendedSearch: true,
+        });
+        let fr = fuse.search(args[0]);
+        for (let i of fr) {
+            for (let j of i.matches) {
+                let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
+                let line = document.createElement("div");
+                let p = document.createElement("span");
+                for (let i = 0; i < indices.length; i++) {
+                    const k = indices[i];
+                    let h = document.createElement("span");
+                    h.innerText = j.value.slice(k[0], k[1] + 1);
+                    if (Number(i) == indices.length - 1) {
+                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
+                    } else {
+                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
+                    }
+                }
+                line.append(p);
+                cmd_r.append(line);
+                line.onpointerdown = () => {
+                    cmd_el.value = j.value;
+                    run_cmd();
+                };
+            }
+        }
     }
 };
 
@@ -3031,6 +3064,7 @@ cmd_el.onchange = () => {
 cmd_el.onblur = () => {
     cmd_el.value = "";
     cmd_pel.classList.add("cmd_hide");
+    cmd_r.innerHTML = "";
 };
 
 const md_type_l: md_type[] = [
