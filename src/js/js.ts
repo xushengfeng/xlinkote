@@ -203,7 +203,7 @@ document.getElementById("保存设置").onclick = () => {
 };
 document.getElementById("新建元素").onclick = () => {
     const margin = 8 / zoom;
-    creat_x_x(-el_offset2(O).x + margin, -el_offset2(O).y + margin, 画布.offsetWidth / zoom - margin * 2);
+    create_x_x(-el_offset2(O).x + margin, -el_offset2(O).y + margin);
 };
 document.getElementById("删除元素").onclick = () => {
     for (let i of selected_el) {
@@ -529,7 +529,7 @@ document.onmouseup = (e) => {
             add_blank(o_ab_p, e2p(e));
         } else {
             let r = p2rect(o_ab_p, e2p(e));
-            creat_x_x(r.x, r.y, r.w);
+            create_x_x(r.x, r.y);
         }
     }
     o_e = null;
@@ -1138,11 +1138,10 @@ document.addEventListener("dblclick", (e) => {
 });
 
 /** 通过画布坐标创建主元素 */
-function creat_x_x(x: number, y: number, w: number) {
+function create_x_x(x: number, y: number) {
     let xel = <x>document.createElement("x-x");
     xel.style.left = x + "px";
     xel.style.top = y + "px";
-    xel.style.width = w + "px";
     z.push(xel);
     var md = document.createElement("x-md");
     xel.append(md);
