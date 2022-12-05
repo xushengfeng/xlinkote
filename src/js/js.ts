@@ -1225,6 +1225,19 @@ document.onkeydown = (e) => {
                 e.preventDefault();
                 undo(false);
             }
+            break;
+        case "i":
+            if (模式 != "浏览") {
+                set_模式("浏览");
+                e.preventDefault();
+                if (z.聚焦元素.querySelector("x-md")) (z.聚焦元素.querySelector("x-md") as markdown).edit = true;
+            }
+            break;
+        case "Escape":
+            if (模式 == "浏览") {
+                set_模式("设计");
+            }
+            break;
     }
 };
 
