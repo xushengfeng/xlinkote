@@ -153,7 +153,7 @@ if (window.showOpenFilePicker) {
     document.getElementById("绑定文件").style.display = "none";
 }
 document.getElementById("导出文件").onclick = () => {
-    download_file(json2md(get_data()));
+    download_file(xln_out(get_data()));
 };
 
 document.getElementById("从云加载").onclick = () => {
@@ -1747,42 +1747,13 @@ function set_css(t: string) {
     document.body.append(style);
 }
 
-function json2md(obj: 集type) {
-    let t = JSON.stringify(obj, (k, v) => {
-        if (k == "value") {
-            return ` -->\n${v}\n<!-- `;
-        }
-        return v;
-    });
-    return `<!-- ${t.replace(/\\n/g, "\n")} -->`;
+function xln_out(obj: 集type) {
+    let t = JSON.stringify(obj, null, 2);
+    return t;
 }
 
-function md2json(t: string) {
-    if (!t.match(/<!-- (.*?) -->/))
-        return {
-            meta: { focus_page: "上传的md", url: "", UUID: uuid(), file_name: "" },
-            数据: [
-                {
-                    name: "上传的md",
-                    data: [
-                        {
-                            id: "上传的md",
-                            style: `left: 0px; top: 0px; z-index: ${当前画布.data.length};`,
-                            values: { value: t, edit: true },
-                            type: "X-MD",
-                            fixed: false,
-                        },
-                    ],
-                },
-            ],
-        };
-    t = t.slice(5, t.length - 4).replace(/\n/g, "\\n");
-    let obj = JSON.parse(t, (k, v) => {
-        if (k == "value") {
-            return v.slice(5, v.length - 6);
-        }
-        return v;
-    });
+function xln_in(t: string) {
+    let obj = JSON.parse(t);
     return obj;
 }
 
@@ -1795,9 +1766,9 @@ async function file_load() {
         [fileHandle] = await window.showOpenFilePicker({
             types: [
                 {
-                    description: "markdown 文件",
+                    description: "xlinkote 文件",
                     accept: {
-                        "text/*": [".md"],
+                        "text/*": [".xln"],
                     },
                 },
             ],
@@ -1807,12 +1778,12 @@ async function file_load() {
         fileHandle.requestPermission({ mode: "readwrite" });
         file = await fileHandle.getFile();
     }
-    集.meta.file_name = file.name.replace(/\.md$/, "");
+    集.meta.file_name = file.name.replace(/\.xln$/, "");
     document.title = get_title();
 
     let reader = new FileReader();
     reader.onload = () => {
-        let o = md2json(<string>reader.result) as any;
+        let o = xln_in(<string>reader.result) as any;
         set_data(o);
         data_changed();
     };
@@ -2104,8 +2075,8 @@ async function download_file(text: string) {
             suggestedName: get_file_name(),
             types: [
                 {
-                    description: "markdown 文件",
-                    accept: { "text/*": [".md"] },
+                    description: "xlinkote 文件",
+                    accept: { "text/*": [".xln"] },
                 },
             ],
         });
@@ -2116,7 +2087,7 @@ async function download_file(text: string) {
         let a = document.createElement("a");
         let blob = new Blob([text]);
         let name = get_file_name();
-        a.download = `${name}.md`;
+        a.download = `${name}.xln`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
@@ -2138,7 +2109,7 @@ function data_changed() {
         }
         const data = get_data();
         if (集.meta.file_name) {
-            write_file(json2md(data));
+            write_file(xln_out(data));
             db_put(data);
         }
         push_undo();
@@ -2627,7 +2598,7 @@ if (location.search) {
         fetch(p.get("src"))
             .then((v) => v.text())
             .then((v) => {
-                let o = md2json(v) as any;
+                let o = xln_in(v) as any;
                 set_data(o);
             });
     }
