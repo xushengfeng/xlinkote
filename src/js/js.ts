@@ -4547,6 +4547,16 @@ class markdown extends HTMLElement {
                             }
                         }
                         z.reflash();
+                    } else if (this._value.type != "text") {
+                        e.preventDefault();
+                        let t = e.clipboardData.getData("text/plain").replace("\n", "");
+                        this.text.setRangeText(t);
+                        let s = this.text.selectionStart;
+                        if (s == this.text.selectionEnd) {
+                            this.text.setSelectionRange(s + t.length, s + t.length);
+                        }
+                        this._value.text = this.text.value;
+                        this.reload();
                     }
                 }
             }
