@@ -214,14 +214,6 @@ x-draw-width > div > div {
     border-radius: 50%;
 }
 
-body > #main > #nav > #search_bar {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-}
-body > #main > #nav #search {
-    flex-grow: 1;
-}
 body > #main > #nav #切换侧栏 {
     display: none;
 }

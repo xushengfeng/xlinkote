@@ -16,7 +16,6 @@ import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
 import remove_svg from "../../assets/icons/remove.svg";
 import update_svg from "../../assets/icons/update.svg";
-import more1_svg from "../../assets/icons/more1.svg";
 import edit_svg from "../../assets/icons/edit.svg";
 import ocr_svg from "../../assets/icons/ocr.svg";
 
@@ -2094,8 +2093,6 @@ async function download_file(text: string) {
     }
 }
 
-let xpre_data;
-
 var save_timeout = NaN,
     save_dt = 200;
 
@@ -4090,8 +4087,6 @@ class x extends HTMLElement {
 
 window.customElements.define("x-x", x);
 
-var parse;
-
 type md_type =
     | "text"
     | "h1"
@@ -4536,101 +4531,8 @@ class markdown extends HTMLElement {
 
 window.customElements.define("x-md", markdown);
 
-// 获取行->元素
-function line_el(l: Array<any>) {
-    let o = {};
-    let line2el = [];
-    let list = false;
-    let el_n = [],
-        n = -1,
-        el_path = [];
-    for (let i of l) {
-        if (i.nesting == -1) {
-            n += i.nesting;
-            continue;
-        }
-        if (i.type == "html_block") {
-            i.tag = i.content.match(/<(\S*?)[ >]/)?.[1] || "";
-            i.nesting = 1;
-        }
-        if (i.type == "mathjax_block") i.nesting = 1;
-        if (i.type == "container_spoiler_open") {
-            i.tag = "details";
-        }
-        n += i.nesting;
-        el_n = el_n.slice(0, n + 1);
-        if (i.type == "inline") continue;
-        if (n == -1) continue;
-        if (!el_n[n]) el_n[n] = {};
-        if (i.nesting != -1) el_n[n][i.tag] = (el_n[n]?.[i.tag] || 0) + i.nesting;
-        el_path[n] = i.tag;
-        if (i.tag == "p" && el_path?.[n - 1] == "li") continue;
-        let t = [];
-        for (let e = 0; e <= n; e++) {
-            t.push(`${el_path[e]}:nth-of-type(${el_n[e][el_path[e]]})`);
-        }
-        line2el.push([t.join(">"), null, i.map]);
-        if (i.type == "html_block") n--;
-        if (i.type == "mathjax_block") n--;
-    }
-    return line2el;
-}
-
-// 获取当前定位的行数
-function text_get_line(text: HTMLTextAreaElement) {
-    let value = <any>text.value;
-    let line = 1;
-    for (let t in value) {
-        if (value[t] == "\n") line++;
-        if (Number(t) + 1 == text.selectionStart) return line - 1;
-    }
-    return 0;
-}
-
-// 获取元素->行
-function el_line(
-    text: HTMLTextAreaElement,
-    index: Array<[number, number, [number, number]]>,
-    s: HTMLElement,
-    iel: HTMLElement
-) {
-    for (let l_i of index) {
-        let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
-        if (el == iel) return l_i[2];
-    }
-    let o = null;
-    for (let l_i of index) {
-        let el = <HTMLElement>s.querySelector(`#h > ${l_i[0]}`);
-        if (el.contains(iel)) o = l_i[2];
-    }
-    return o;
-}
-
-// 定位到行
-function text_set_line(text: HTMLTextAreaElement, n: number) {
-    let line = 1;
-    let value = <any>text.value;
-    for (let t in value) {
-        if (line == n) text.selectionStart = text.selectionEnd = Number(t) + (Number(t) == value.length - 1 ? 1 : 0);
-        if (value[t] == "\n") line++;
-    }
-}
-
-function set_el_text_value(el: HTMLElement, value: any) {
-    let pel = el.parentElement as markdown;
-    while (pel && el.parentElement != document.body) {
-        if ("X-MD" == pel.tagName) break;
-        pel = pel.parentElement as markdown;
-    }
-    let ln = el_line(null, pel.index, pel.querySelector("#h"), el);
-    let l = pel.querySelector("textarea").value.split("\n");
-    let r = new RegExp(`(<${el.tagName.toLowerCase()}.*?value=)(.*?)([>\s"])`);
-    l[ln[0]] = l[ln[0]].replace(r, `$1${value}$3`);
-    pel.querySelector("textarea").value = l.join("\n");
-}
-
 // 几何图形
-import JXG, { boards } from "jsxgraph";
+import JXG from "jsxgraph";
 class graph extends HTMLElement {
     constructor() {
         super();
@@ -5767,7 +5669,6 @@ window.customElements.define("x-record", record);
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { equalPath } from "html2canvas/dist/types/render/path";
 
 /** 3d元素 */
 class three extends HTMLElement {
