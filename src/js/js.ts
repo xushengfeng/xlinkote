@@ -132,7 +132,7 @@ function uuid() {
 
 /** 七位uuid */
 function uuid_id() {
-    return uuid().slice(0, 7);
+    return uuid().slice(0, 8);
 }
 
 if ("serviceWorker" in navigator) {
