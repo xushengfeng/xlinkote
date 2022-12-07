@@ -1324,17 +1324,13 @@ function get_data() {
     for (let O of 画布s.children) {
         let data = [] as data;
         let els = O.querySelectorAll(":scope > *");
-        let map = [];
+        let map: { index: number; z: number }[] = [];
         els.forEach((el: HTMLElement, i) => {
-            if (el.style.zIndex) {
-                map[Number(el.style.zIndex) - 1] = i;
-            } else {
-                map.push(i);
-            }
+            map.push({ index: i, z: Number(el.style.zIndex) || 1 });
         });
-        map = map.flat();
+        map = map.sort((a, b) => a.z - b.z);
         for (let i of map) {
-            let el = <x>els[i];
+            let el = <x>els[i.index];
             let type = "X-X";
             data.push({ id: el.id, style: "", 子元素: el.value, type, fixed: el.fixed });
             if (el.getAttribute("style")) data[data.length - 1].style = el.getAttribute("style");
@@ -4149,18 +4145,15 @@ class x extends HTMLElement {
     get value() {
         let list = [] as data;
         let els = this.querySelectorAll(":scope > *");
-        let map = [];
+        let map: { index: number; z: number }[] = [];
+        const _is_flex = is_flex(this);
         els.forEach((el: HTMLElement, i) => {
             if (el.id == "x-x_bar" || el.id == "x-x_handle") return;
-            if (el.style.zIndex && !map[Number(el.style.zIndex) - 1]) {
-                map[Number(el.style.zIndex) - 1] = i;
-            } else {
-                map.push(i);
-            }
+            map.push({ index: i, z: Number(el.style.zIndex) || 1 });
         });
-        map = map.flat();
+        if (!_is_flex) map = map.sort((a, b) => a.z - b.z);
         for (let n of map) {
-            const l = els[n];
+            const l = els[n.index];
             let el = l as HTMLElement;
             if (el.tagName == "X-X") {
                 list.push({
