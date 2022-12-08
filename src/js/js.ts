@@ -2696,14 +2696,14 @@ async function get_xln_value(path: string) {
         o = JSON.parse(<string>str);
     } catch (e) {
         if (store.webdav.加密密钥) {
-            let bytes = CryptoJS.AES.decrypt(str, store.webdav.加密密钥);
-            str = bytes.toString(CryptoJS.enc.Utf8);
-            if (!str) {
-                let password = prompt("密钥错误，请输入其他密钥");
-                let bytes = CryptoJS.AES.decrypt(str, password);
-                str = bytes.toString(CryptoJS.enc.Utf8);
-            }
-            str = 解压(str);
+            let b = (await client.getFileContents(path)) as ArrayBuffer;
+            let blob = new Blob([b]);
+            const zipFileReader = new zip.BlobReader(blob);
+            const zipWriter = new zip.TextWriter();
+            const zipReader = new zip.ZipReader(zipFileReader);
+            const firstEntry = (await zipReader.getEntries())[0];
+            str = await firstEntry.getData(zipWriter, { password: store.webdav.加密密钥 });
+            await zipReader.close();
             o = JSON.parse(<string>str);
         }
     }
@@ -2727,10 +2727,20 @@ async function put_xln_value() {
     }
     let t = JSON.stringify(get_data());
     if (store.webdav.加密密钥) {
-        t = 压缩(t);
-        t = CryptoJS.AES.encrypt(t, store.webdav.加密密钥).toString();
+        let b = await 压缩(t);
+        let reader = new FileReader();
+        reader.onload = async function () {
+            console.log(this.result);
+            let v = await client.putFileContents(path, this.result);
+            show_upload_pro(v);
+        };
+        reader.readAsArrayBuffer(b);
+    } else {
+        let v = await client.putFileContents(path, t);
+        show_upload_pro(v);
     }
-    let v = await client.putFileContents(path, t);
+}
+function show_upload_pro(v: boolean) {
     if (v) {
         put_toast("✅文件上传成功");
     } else {
@@ -2752,29 +2762,16 @@ function auto_put_xln() {
     }
 }
 
-import pako from "pako";
+import * as zip from "@zip.js/zip.js";
 
-function 压缩(t: string): string {
-    let c = pako.deflate(t);
-    let res = "";
-    let chunk = 8 * 1024;
-    let i: number;
-    for (i = 0; i < c.length / chunk; i++) {
-        res += String.fromCharCode.apply(null, c.slice(i * chunk, (i + 1) * chunk));
-    }
-    res += String.fromCharCode.apply(null, c.slice(i * chunk));
-    return res;
-}
-
-function 解压(t: string): string {
-    let arr = [];
-    for (var i = 0, j = t.length; i < j; ++i) {
-        arr.push(t.charCodeAt(i));
-    }
-
-    let tmpUint8Array = new Uint8Array(arr);
-    let r = pako.inflate(tmpUint8Array, { to: "string" });
-    return r;
+async function 压缩(t: string) {
+    const zipFileWriter = new zip.BlobWriter("application/zip");
+    const textReader = new zip.TextReader(t);
+    const zipWriter = new zip.ZipWriter(zipFileWriter, { password: store.webdav.加密密钥 });
+    await zipWriter.add(get_file_name() + ".xln", textReader);
+    await zipWriter.close();
+    const zipFileBlob = await zipFileWriter.getData();
+    return zipFileBlob;
 }
 
 // 设置

@@ -4,6 +4,7 @@ specifiers:
   '@types/color': ^3.0.3
   '@types/deep-diff': ^1.0.1
   '@types/three': ^0.144.0
+  '@zip.js/zip.js': ^2.6.60
   autoprefixer: ^10.4.12
   color: ^4.2.3
   crypto-js: ^4.1.1
@@ -18,7 +19,6 @@ specifiers:
   markdown-it-task-lists: ^2.1.1
   mathjax: ^3.2.2
   mermaid: ^9.1.7
-  pako: ^2.0.4
   pdfjs-dist: ^3.1.81
   postcss: ^8.4.17
   tailwindcss: ^3.1.8
@@ -29,6 +29,7 @@ specifiers:
   webdav: ^4.11.0
 
 dependencies:
+  '@zip.js/zip.js': 2.6.60
   color: 4.2.3
   crypto-js: 4.1.1
   deep-diff: 1.0.2
@@ -41,7 +42,6 @@ dependencies:
   markdown-it-task-lists: 2.1.1
   mathjax: 3.2.2
   mermaid: 9.1.7
-  pako: 2.0.4
   pdfjs-dist: 3.1.81
   three: 0.146.0
   turndown: 7.1.1
@@ -172,6 +172,11 @@ packages:
   /@types/webxr/0.5.0:
     resolution: {integrity: sha512-IUMDPSXnYIbEO2IereEFcgcqfDREOgmbGqtrMpVPpACTU6pltYLwHgVkrnYv0XhWEcjio9sYEfIEzgn3c7nDqA==}
     dev: true
+
+  /@zip.js/zip.js/2.6.60:
+    resolution: {integrity: sha512-95Vd9cmbiIGIBrR6kzMIkxPJp6xo67NYMAcEFS9fNgETHX87/kEpLrh48MM9JEbe+ghizb5gf2+9gGUfGsQ4nw==}
+    engines: {deno: '>=1.0.0', node: '>=16.5.0'}
+    dev: false
 
   /abbrev/1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -2164,10 +2169,6 @@ packages:
     dependencies:
       p-finally: 1.0.0
     dev: true
-
-  /pako/2.0.4:
-    resolution: {integrity: sha512-v8tweI900AUkZN6heMU/4Uy4cXRc2AYNRggVmTR+dEncawDJgCdLMximOVA2p4qO57WMynangsfGRb5WD6L1Bg==}
-    dev: false
 
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
