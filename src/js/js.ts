@@ -1879,7 +1879,7 @@ var file_list: meta[] = [];
 function load_file_side_bar() {
     文件_el.innerHTML = "";
     let load_dav = document.createElement("div");
-    load_dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
+    load_dav.innerHTML = icon(cloud_down);
     文件_el.append(load_dav);
     load_dav.onclick = () => {
         get_all_xln();
@@ -2280,7 +2280,7 @@ function assets_reflash() {
 
         let bar = document.createElement("div");
         let r = document.createElement("div");
-        r.innerHTML = `<img src="${remove_svg}" class="icon">`;
+        r.innerHTML = icon(remove_svg);
         div.append(bar);
         bar.append(r);
         r.onclick = () => {
@@ -2662,7 +2662,7 @@ async function get_all_xln() {
                     document.title = get_title();
                     侧栏.classList.remove("侧栏显示");
                 };
-                dav.innerHTML = `<img src="${cloud_down}" class="icon">`;
+                dav.innerHTML = icon(cloud_down);
                 dav_files = dav_files.filter((v) => v != fi);
                 break;
             }
@@ -2675,7 +2675,7 @@ async function get_all_xln() {
         t.value = fi.basename.replace(/\.xln$/, "") || "";
         t.title = "/" + fi.filename.replace(new RegExp(`^${删除路径}`), "");
         let dav = document.createElement("div");
-        dav.innerHTML = `<img src="${cloud}" class="icon">`;
+        dav.innerHTML = icon(cloud);
         d.append(dav, t);
         文件_el.append(d);
         t.onclick = dav.onclick = () => {
@@ -4014,11 +4014,11 @@ class x extends HTMLElement {
         var bar = document.createElement("div");
         bar.id = "x-x_bar";
         const m = document.createElement("div");
-        m.innerHTML = `<img src="${handle_svg}" class="icon">`;
+        m.innerHTML = icon(handle_svg);
         var f = document.createElement("div");
-        f.innerHTML = `<img src="${ding_svg}" class="icon">`;
+        f.innerHTML = icon(ding_svg);
         var d = document.createElement("div");
-        d.innerHTML = `<img src="${close_svg}" class="icon">`;
+        d.innerHTML = icon(close_svg);
 
         var x_h = [
             document.createElement("div"),
@@ -4870,7 +4870,7 @@ class file extends HTMLElement {
         } else {
             this.div.classList.add("file");
             let i = document.createElement("div");
-            i.innerHTML = `<img src="${file_svg}" class="icon">`;
+            i.innerHTML = icon(file_svg);
             let file_name_el = document.createElement("p");
             this.div.append(i);
             this.div.append(file_name_el);
@@ -5682,7 +5682,7 @@ class link_value extends HTMLElement {
                     jump_to_x_link(get_x_by_id(i));
                 };
                 let rm = document.createElement("div");
-                rm.innerHTML = `<img src="${close_svg}" class="icon">`;
+                rm.innerHTML = icon(close_svg);
                 rm.onclick = () => {
                     link(this._id).rm(i);
                     el.remove();
@@ -5690,8 +5690,8 @@ class link_value extends HTMLElement {
                 const add_el = document.createElement("div");
                 const down_el = document.createElement("div");
 
-                add_el.innerHTML = `<img src="${add_svg}" class="icon">`;
-                down_el.innerHTML = `<img src="${minus_svg}" class="icon">`;
+                add_el.innerHTML = icon(add_svg);
+                down_el.innerHTML = icon(minus_svg);
                 add_el.onclick = () => {
                     link(this._id).value(i, 0.1, true);
                     n.innerText = v_text(i);
