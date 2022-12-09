@@ -2691,13 +2691,23 @@ var now_dav_data = "";
 
 /** 获取云文件数据并渲染 */
 async function get_xln_value(path: string) {
-    let str = (await client.getFileContents(path, { format: "text" })) as string;
+    show_upload_pro();
+    let str = (await client.getFileContents(path, {
+        format: "text",
+        onDownloadProgress: (e) => {
+            show_upload_pro(e.loaded, e.total);
+        },
+    })) as string;
     let o: any;
     try {
         o = JSON.parse(<string>str);
     } catch (e) {
         if (store.webdav.加密密钥) {
-            let b = (await client.getFileContents(path)) as ArrayBuffer;
+            let b = (await client.getFileContents(path, {
+                onDownloadProgress: (e) => {
+                    show_upload_pro(e.loaded, e.total);
+                },
+            })) as ArrayBuffer;
             let blob = new Blob([b]);
             const zipFileReader = new zip.BlobReader(blob);
             const zipWriter = new zip.TextWriter();
@@ -2732,20 +2742,35 @@ async function put_xln_value() {
         let reader = new FileReader();
         reader.onload = async function () {
             console.log(this.result);
-            let v = await client.putFileContents(path, this.result);
-            show_upload_pro(v);
+            show_upload_pro();
+            let v = await client.putFileContents(path, this.result, {
+                onUploadProgress: (e) => {
+                    show_upload_pro(e.loaded, e.total);
+                },
+            });
+            show_upload_v(v);
         };
         reader.readAsArrayBuffer(b);
     } else {
         let v = await client.putFileContents(path, t);
-        show_upload_pro(v);
+        show_upload_v(v);
     }
 }
-function show_upload_pro(v: boolean) {
+function show_upload_v(v: boolean) {
     if (v) {
         put_toast("✅文件上传成功");
     } else {
         put_toast("❌文件上传失败", 5);
+    }
+}
+function show_upload_pro(l?: number, t?: number) {
+    let p = document.createElement("progress");
+    if (l) p.value = l / t;
+    toast.classList.add("toast_show");
+    toast.innerHTML = "";
+    toast.append(p);
+    if (l == t) {
+        toast.classList.remove("toast_show");
     }
 }
 

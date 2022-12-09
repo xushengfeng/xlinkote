@@ -683,6 +683,21 @@ body > #toast {
     opacity: 1 !important;
     pointer-events: all !important;
 }
+body > #toast progress {
+    @apply appearance-none h-2 border-none rounded-full overflow-hidden block w-32;
+    @apply bg-gray-200;
+}
+body > #toast progress::-moz-progress-bar {
+    @apply bg-gray-900;
+    @apply rounded-full;
+}
+body > #toast progress::-webkit-progress-bar {
+    @apply rounded-full;
+    background: none;
+}
+body > #toast progress[value]::-webkit-progress-value {
+    @apply bg-gray-900;
+}
 
 x-sinppet {
     float: left;
