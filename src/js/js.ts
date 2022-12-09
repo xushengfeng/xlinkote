@@ -4177,6 +4177,8 @@ class x extends HTMLElement {
         d.onclick = () => {
             selected_el = selected_el.filter((el) => el != this);
             z.remove(this);
+
+            if (this.querySelector("x-file")) assets_reflash();
         };
 
         if (this.getAttribute("value")) {
