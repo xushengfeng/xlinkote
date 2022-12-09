@@ -2281,8 +2281,10 @@ function assets_reflash() {
         let bar = document.createElement("div");
         let r = document.createElement("div");
         r.innerHTML = icon(remove_svg);
+        let id_el = document.createElement("div");
+        id_el.innerText = i;
         div.append(bar);
-        bar.append(r);
+        bar.append(id_el, r);
         r.onclick = () => {
             delete 集.assets[i];
             div.remove();
