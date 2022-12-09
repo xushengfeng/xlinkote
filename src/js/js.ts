@@ -2284,7 +2284,6 @@ function assets_reflash() {
         let id_el = document.createElement("div");
         id_el.innerText = i;
         div.append(bar);
-        bar.append(id_el, r);
         r.onclick = () => {
             delete 集.assets[i];
             div.remove();
@@ -2295,6 +2294,21 @@ function assets_reflash() {
                 r.classList.add("not_click");
             }
         });
+
+        let add = document.createElement("div");
+        add.onclick = (e) => {
+            let p = e2p(e);
+            let xel = <x>document.createElement("x-x");
+            xel.style.left = p.x + "px";
+            xel.style.top = p.y + "px";
+            z.push(xel);
+            let file = <file>document.createElement("x-file");
+            xel.append(file);
+            file.value = JSON.stringify({ r: true, id: i });
+        };
+        add.innerHTML = icon(add_svg);
+
+        bar.append(id_el, add, r);
     }
 }
 
