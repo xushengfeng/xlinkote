@@ -604,6 +604,7 @@ body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
     top: var(--icon-p-b-size);
     left: var(--icon-p-b-size);
     width: calc(100vw - var(--icon-p-b-size));
+    height: 0;
 }
 
 .bci {
