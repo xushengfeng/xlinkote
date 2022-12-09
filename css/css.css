@@ -366,23 +366,21 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #层容器 {
     display: flex;
     flex-direction: column;
+    @apply overflow-hidden;
 }
 .侧栏 > #items > #层容器 > div:nth-child(1) {
-    position: sticky;
     top: 0;
 }
 
 .侧栏 > #items > #层容器 > div:nth-child(2) {
-    position: sticky;
     top: var(--icon-p-b-size);
 }
 #xywh > input {
     width: 25%;
 }
-.层容器 {
-    overflow: auto;
+.层容器 > #层 {
+    @apply overflow-auto;
 }
-
 .层容器 > #层 ul {
     list-style: none;
     padding-inline-start: 16px;
