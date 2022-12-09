@@ -480,6 +480,9 @@ body #main > #nav #ink_r {
     height: 16px;
     border-radius: 4px;
 }
+.侧栏 > #items > #资源 x-img > div {
+    @apply hidden;
+}
 .not_click {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
 }
