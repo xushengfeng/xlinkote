@@ -480,6 +480,9 @@ body #main > #nav #ink_r {
     height: 16px;
     border-radius: 4px;
 }
+.not_click {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+}
 
 .侧栏 > #items > #设置 > form input {
     width: 100%;

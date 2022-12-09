@@ -2289,6 +2289,12 @@ function assets_reflash() {
             delete 集.assets[i];
             div.remove();
         };
+
+        画布s.querySelectorAll("x-file").forEach((el: file) => {
+            if (el._value.id == i) {
+                r.classList.add("not_click");
+            }
+        });
     }
 }
 
