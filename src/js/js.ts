@@ -5956,6 +5956,9 @@ function to_text(img: HTMLImageElement | HTMLCanvasElement) {
         pxel.style.left = p.x + "px";
         pxel.style.top = p.y + "px";
         pxel.style.color = "transparent";
+        pxel.style.textAlign = "justify";
+        pxel.style.textAlignLast = "justify";
+        pxel.style.fontSize = "12px";
         z.push(pxel);
         for (let i of v) {
             if (!i.text) continue;
@@ -5969,7 +5972,6 @@ function to_text(img: HTMLImageElement | HTMLCanvasElement) {
             xel.style.top = y0 + "px";
             xel.style.width = x1 - x0 + "px";
             xel.style.height = y1 - y0 + "px";
-            xel.style.fontSize = `${(x1 - x0) / i.text.length}px`;
             z.push(xel, pxel);
             var md = document.createElement("x-md") as markdown;
             xel.append(md);
