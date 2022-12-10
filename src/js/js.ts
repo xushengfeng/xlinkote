@@ -2525,11 +2525,11 @@ class 图层 {
 
     push(el: x, pel?: x) {
         el.id = el.id === "undefined" || !el.id ? `${uuid_id()}` : el.id;
-        if (pel) {
-            pel.append(el);
-        } else {
-            O.append(el);
+        let ppel = pel || O;
+        if (!el.style.zIndex && !(is_flex(ppel) == "flex")) {
+            el.style.zIndex = String(ppel.childElementCount + 1);
         }
+        ppel.append(el);
         get_data();
         this.focus(el);
         this.reflash();
@@ -3488,7 +3488,7 @@ function to_flex(els: x[], d: "x" | "y") {
 }
 
 /** 判断是否为flex */
-function is_flex(el: x) {
+function is_flex(el: HTMLElement) {
     if (el.classList.contains("flex-column") || el.classList.contains("flex-row")) {
         return "flex";
     }
