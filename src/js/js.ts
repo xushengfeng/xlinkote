@@ -576,7 +576,7 @@ var mouse = (e: MouseEvent) => {
 var o_touch_e: TouchEvent;
 var o_touch_zoom_e: TouchEvent;
 var o_zoom = NaN;
-document.ontouchstart = (e) => {
+画布.ontouchstart = (e) => {
     if (模式 == "绘制") return;
     let el = <HTMLElement>e.changedTouches[0].target;
     if (模式 == "设计" && el != 画布) return;
@@ -604,7 +604,7 @@ document.ontouchstart = (e) => {
         }
     }
 };
-document.ontouchmove = (e) => {
+画布.ontouchmove = (e) => {
     if (e.targetTouches.length == 1) {
         touch_move(e);
         if (o_touch_e) move = true;
@@ -614,7 +614,7 @@ document.ontouchmove = (e) => {
         if (o_touch_zoom_e) move = true;
     }
 };
-document.ontouchend = (e) => {
+画布.ontouchend = (e) => {
     o_touch_e = null;
     move = false;
     o_touch_zoom_e = null;
