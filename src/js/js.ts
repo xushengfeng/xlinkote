@@ -3682,7 +3682,7 @@ ink_el.onpointerup = () => {
         textel.selectionEnd += t.length;
         textel.selectionStart = textel.selectionEnd;
         selections[0].start = selections[0].end = textel.selectionStart;
-        md.reload();
+        md.set_text();
     }
 };
 function ink_reset() {
@@ -4701,6 +4701,11 @@ class markdown extends HTMLElement {
     set type(type: md_type) {
         this._value.type = type;
         this.h.className = type;
+        this.render();
+    }
+
+    set_text() {
+        this._value.text = this.text.value;
         this.render();
     }
 }
