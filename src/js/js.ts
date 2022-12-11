@@ -3749,6 +3749,11 @@ function create_ys_item(item: ys_item, index?: number) {
     jump.onclick = () => {
         ys_jump(item);
     };
+    remove.onclick = () => {
+        div.remove();
+        集.extra.slide.list = 集.extra.slide.list.filter((i) => i != item);
+        data_changed();
+    };
     tran.onchange = () => {
         item.transition = tran.value;
         data_changed();
