@@ -427,6 +427,9 @@ body #main > #nav #ink_r {
 .侧栏 #ys_list > div {
     @apply flex;
 }
+.侧栏 #ys_list > div > .ys_tran {
+    width: calc(100% - var(--icon-p-b-size) * 3)
+}
 .侧栏 #ys_list > div > div {
     @apply icon-m;
 }

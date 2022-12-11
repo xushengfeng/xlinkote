@@ -3716,6 +3716,7 @@ function ink_reset() {
 type ys_item = {
     id?: string;
     position?: { O: string; p: { x: number; y: number; zoom: number } };
+    transition: string;
 };
 type ys_type = {
     list: ys_item[];
@@ -3734,6 +3735,10 @@ function create_ys_item(item: ys_item, index?: number) {
     let jump = document.createElement("div");
     let play = document.createElement("div");
     let remove = document.createElement("div");
+    let tran = document.createElement("input");
+    tran.contentEditable = "true";
+    tran.classList.add("ys_tran");
+    tran.value = item.transition;
     play.innerHTML = icon(play_svg);
     remove.innerHTML = icon(close_svg);
     play.onclick = () => {
@@ -3744,8 +3749,12 @@ function create_ys_item(item: ys_item, index?: number) {
     jump.onclick = () => {
         ys_jump(item);
     };
+    tran.onchange = () => {
+        item.transition = tran.value;
+        data_changed();
+    };
 
-    div.append(play, jump, remove);
+    div.append(play, jump, tran, remove);
     return div;
 }
 function ys_jump(item: ys_item) {
@@ -3758,6 +3767,10 @@ function ys_jump(item: ys_item) {
                 (el as HTMLElement).style.display = "none";
             }
         }
+        O.style.transition = item.transition;
+        O.ontransitioncancel = O.ontransitionend = () => {
+            O.style.transition = "";
+        };
         let zoom = item.position.p.zoom;
         zoom_o(zoom);
         O.style.left = item.position.p.x * zoom - el_offset(画布).w / 2 + "px";
@@ -3777,7 +3790,7 @@ function ys_bn(fx: "back" | "next") {
 ys_add.onclick = () => {
     if (!集.extra?.slide) 集.extra["slide"] = { list: [] } as ys_type;
     let list = 集.extra.slide.list;
-    let i: ys_item = { position: { O: "", p: { x: 0, y: 0, zoom: 1 } } };
+    let i: ys_item = { position: { O: "", p: { x: 0, y: 0, zoom: 1 } }, transition: "" };
     let x = (el_offset(O).x + el_offset(画布).w / 2) / zoom;
     let y = (el_offset(O).y + el_offset(画布).h / 2) / zoom;
     i.position = { O: O.id, p: { x, y, zoom } };
