@@ -413,6 +413,24 @@ body #main > #nav #ink_r {
     @apply float-left;
 }
 
+.侧栏 #ys_add {
+    @apply relative cursor-pointer;
+    height: var(--icon-p-b-size);
+}
+.侧栏 #ys_add > .icon {
+    height: var(--icon-size);
+    width: var(--icon-size);
+    top: var(--icon-margin);
+    left: calc(50% - var(--icon-size) / 2);
+}
+
+.侧栏 #ys_list > div {
+    @apply flex;
+}
+.侧栏 #ys_list > div > div {
+    @apply icon-m;
+}
+
 .侧栏 > #items > #中转站 {
     display: flex;
     flex-direction: column;
@@ -520,6 +538,7 @@ body > #main > #画布 {
 /* 画布 */
 body > #main > #画布 > #画布们 {
     position: relative;
+    background-color: var(--bg1);
 }
 body > #main > #画布 > #画布们 > div {
     position: absolute;

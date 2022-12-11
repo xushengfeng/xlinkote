@@ -18,6 +18,7 @@ import remove_svg from "../../assets/icons/remove.svg";
 import update_svg from "../../assets/icons/update.svg";
 import edit_svg from "../../assets/icons/edit.svg";
 import ocr_svg from "../../assets/icons/ocr.svg";
+import play_svg from "../../assets/icons/play.svg";
 
 // el
 var 设置_el = document.getElementById("设置");
@@ -86,6 +87,9 @@ const view_el = document.getElementById("viewer");
 const ink_el = document.getElementById("ink") as HTMLCanvasElement;
 let ink_cxt = ink_el.getContext("2d");
 let ink_points: [number[], number[]][] = [];
+
+const ys_list = document.getElementById("ys_list");
+const ys_add = document.getElementById("ys_add");
 
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
@@ -829,7 +833,7 @@ function el_offset(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
-    return { x: ox, y: oy };
+    return { x: ox, y: oy, w: el.getBoundingClientRect().width, h: el.getBoundingClientRect().height };
 }
 
 /**元素大小和相对位置（画布坐标） */
@@ -1243,6 +1247,18 @@ document.onkeydown = (e) => {
                 set_模式("设计");
             }
             break;
+        case "ArrowUp":
+            ys_bn("back");
+            break;
+        case "ArrowDown":
+            ys_bn("next");
+            break;
+        case "ArrowLeft":
+            ys_bn("back");
+            break;
+        case "ArrowRight":
+            ys_bn("next");
+            break;
     }
 };
 
@@ -1253,6 +1269,7 @@ type 集type = {
     meta: meta;
     extra: {
         style: string;
+        slide?: ys_type;
     };
     数据: 画布type[];
     链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
@@ -1580,6 +1597,7 @@ function set_data(l: 集type) {
     document.title = get_title();
 
     set_css(l.extra.style || "./md.css");
+    if (l.extra?.slide) ys_init(l.extra.slide);
 }
 
 /** 侧栏刷新 */
@@ -3693,6 +3711,82 @@ function ink_reset() {
     ink_cxt.clearRect(0, 0, ink_el.width, ink_el.height);
     ink_points = [];
 }
+
+// 演示
+type ys_item = {
+    id?: string;
+    position?: { O: string; p: { x: number; y: number; zoom: number } };
+};
+type ys_type = {
+    list: ys_item[];
+};
+var ys_page_i = -1;
+function ys_init(data: ys_type) {
+    let p = document.createDocumentFragment();
+    for (let i in data.list) {
+        let item = create_ys_item(data.list[i], Number(i));
+        p.append(item);
+    }
+    ys_list.append(p);
+}
+function create_ys_item(item: ys_item, index?: number) {
+    let div = document.createElement("div");
+    let jump = document.createElement("div");
+    let play = document.createElement("div");
+    let remove = document.createElement("div");
+    play.innerHTML = icon(play_svg);
+    remove.innerHTML = icon(close_svg);
+    play.onclick = () => {
+        画布s.requestFullscreen();
+        ys_page_i = index;
+        ys_jump(item);
+    };
+    jump.onclick = () => {
+        ys_jump(item);
+    };
+
+    div.append(play, jump, remove);
+    return div;
+}
+function ys_jump(item: ys_item) {
+    if (item.position) {
+        for (let el of 画布s.children) {
+            if (el.id == item.position.O) {
+                O = el as HTMLElement;
+                O.style.display = "block";
+            } else {
+                (el as HTMLElement).style.display = "none";
+            }
+        }
+        let zoom = item.position.p.zoom;
+        zoom_o(zoom);
+        O.style.left = item.position.p.x * zoom - el_offset(画布).w / 2 + "px";
+        O.style.top = item.position.p.y * zoom - el_offset(画布).h / 2 + "px";
+    }
+}
+function ys_bn(fx: "back" | "next") {
+    if (document.fullscreenElement != 画布s) return;
+    if (fx == "back") {
+        ys_page_i = Math.max(0, ys_page_i - 1);
+    }
+    if (fx == "next") {
+        ys_page_i = Math.min(集.extra.slide.list.length - 1, ys_page_i + 1);
+    }
+    ys_jump(集.extra.slide.list[ys_page_i]);
+}
+ys_add.onclick = () => {
+    if (!集.extra?.slide) 集.extra["slide"] = { list: [] } as ys_type;
+    let list = 集.extra.slide.list;
+    let i: ys_item = { position: { O: "", p: { x: 0, y: 0, zoom: 1 } } };
+    let x = (el_offset(O).x + el_offset(画布).w / 2) / zoom;
+    let y = (el_offset(O).y + el_offset(画布).h / 2) / zoom;
+    i.position = { O: O.id, p: { x, y, zoom } };
+    list.push(i);
+    let div = create_ys_item(i);
+    ys_list.append(div);
+
+    data_changed();
+};
 
 // MD
 import markdownit from "markdown-it";
