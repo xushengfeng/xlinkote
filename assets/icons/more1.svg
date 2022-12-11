@@ -73,19 +73,19 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        id="path234"
        cx="120"
        cy="60"
        r="10" />
     <circle
-       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        id="path236"
        cx="120"
        cy="120"
        r="10" />
     <circle
-       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        id="path238"
        cx="120"
        cy="180"

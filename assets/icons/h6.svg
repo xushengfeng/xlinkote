@@ -81,20 +81,20 @@
     <text
        xml:space="preserve"
        id="text344"
-       style="font-size:144px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect346);display:inline;stroke:#333333;stroke-opacity:1;stroke-width:15;stroke-dasharray:none;stroke-linecap:round;stroke-linejoin:round" />
+       style="font-size:144px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect346);display:inline;stroke:#000000;stroke-opacity:1;stroke-width:15;stroke-dasharray:none;stroke-linecap:round;stroke-linejoin:round" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 40,40 v 160 -60 c 0,0 0,-40 30,-40 30,0 30,40 30,40 v 60"
        id="path354"
        sodipodi:nodetypes="cccscc" />
     <circle
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        id="path388"
        cx="160"
        cy="160"
        r="40" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
        d="m 120,160 c 0,0 4.57674,-38.30695 10,-60 10,-40 40,-60 40,-60"
        id="path453"
        sodipodi:nodetypes="csc" />

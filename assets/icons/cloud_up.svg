@@ -74,15 +74,15 @@
      id="layer1">
     <path
        id="path234"
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        d="m 90,40 c -27.61424,0 -50,22.385763 -50,50 0,27.61424 22.38576,50 50,50 40,0 42.2782,-0.58384 70,0 22.09139,0 40,-17.90861 40,-40 0,-22.09139 -17.90861,-40 -40,-40 -8.99895,0.03199 -17.72422,3.097531 -24.76562,8.701172 C 126.98591,51.182193 109.36367,40.000902 90,40 Z"
        sodipodi:nodetypes="csccsccc" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 120,160 v 40"
        id="path409" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 90,180 30,-30 30,30"
        id="path411"
        sodipodi:nodetypes="ccc" />

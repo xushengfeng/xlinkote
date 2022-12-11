@@ -81,19 +81,19 @@
     <text
        xml:space="preserve"
        id="text344"
-       style="font-size:144px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect346);display:inline;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" />
+       style="font-size:144px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect346);display:inline;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 40,40 v 160 -60 c 0,0 0,-40 30,-40 30,0 30,40 30,40 v 60"
        id="path354"
        sodipodi:nodetypes="cccscc" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 180,40 -60,130 h 80"
        id="path357"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        d="M 180,40 V 200"
        id="path359"
        sodipodi:nodetypes="cc" />

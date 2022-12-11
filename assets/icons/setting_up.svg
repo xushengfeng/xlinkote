@@ -74,7 +74,7 @@
      id="layer1">
     <path
        sodipodi:type="star"
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
        id="path403"
        inkscape:flatsided="true"
        sodipodi:sides="6"
@@ -88,11 +88,11 @@
        inkscape:randomized="0"
        d="m 120,40 69.28203,40.000002 0,79.999998 L 120,200 50.717967,160 l 2e-6,-80.000002 z" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
        d="m 100,100 20,-20 20,20"
        id="path291" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
        d="m 120,80 v 80"
        id="path293" />
   </g>

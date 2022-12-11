@@ -73,7 +73,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
        d="M 80,160 160,80"
        id="path684" />
     <path
@@ -82,7 +82,7 @@
        id="path1240"
        sodipodi:nodetypes="csssc" />
     <path
-       style="fill:none;stroke:#333333;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
        d="m 60,120 -20,20 c -20,20 -10,50 0,60 10,10 40.000001,20 60,0 l 20,-20"
        id="path1240-6"
        sodipodi:nodetypes="csssc" />
