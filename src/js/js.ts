@@ -3066,11 +3066,15 @@ function show_search_l(l: search_result, exid?: string) {
             div.append(line);
         }
         div.setAttribute("data-id", i.id);
+        add_div_event(div, i.id);
+    }
+
+    function add_div_event(div: HTMLElement, id: string) {
         div.onpointerdown = (e) => {
-            click_search_item(i.id);
+            click_search_item(id);
         };
         div.onpointerenter = (e) => {
-            let el = document.getElementById(i.id);
+            let el = document.getElementById(id);
             move_to_x_link(el as x & xlink);
             select_index = Number(div.getAttribute("data-i"));
             select_search(select_index);
@@ -3081,6 +3085,23 @@ function show_search_l(l: search_result, exid?: string) {
             });
         };
     }
+
+    let all_l: { id: string; value: number }[] = [];
+    for (let l in 集.链接["0"]) {
+        let el = get_x_by_id(l);
+        if (l && el) all_l.push({ id: l, value: 集.链接["0"][l].value });
+    }
+    all_l.sort((a, b) => b.value - a.value);
+    for (let i of all_l) {
+        let div = document.createElement("div");
+        div.setAttribute("data-id", i.id);
+        els.unshift(div);
+        let p = document.createElement("div");
+        p.innerText = `#${i.id}`;
+        div.append(p);
+        add_div_event(div, i.id);
+    }
+
     for (let div of els) {
         if (search_r.firstChild) {
             search_r.firstChild.before(div);
