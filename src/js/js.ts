@@ -1517,6 +1517,7 @@ function version_tr(obj): 集type {
         case "0.13.0":
             obj.meta["create_time"] = new Date().getTime();
             obj.meta["change_time"] = new Date().getTime();
+        case "0.13.1":
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
