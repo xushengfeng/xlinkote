@@ -1284,6 +1284,10 @@ type meta = {
     UUID: string;
     file_name: string;
     version: string;
+    create_time: number;
+    change_time: number;
+    author?: string;
+    dependencies?: { url: string; version: string }[];
 };
 
 /** 主元素 */
@@ -1318,6 +1322,8 @@ function new_集(pname: string): 集type {
             UUID: uuid(),
             file_name: "",
             version: packagejson.version,
+            create_time: new Date().getTime(),
+            change_time: new Date().getTime(),
         },
         extra: {
             style: "",
@@ -1509,6 +1515,8 @@ function version_tr(obj): 集type {
         case "0.12.5":
         case "0.12.6":
         case "0.13.0":
+            obj.meta["create_time"] = new Date().getTime();
+            obj.meta["change_time"] = new Date().getTime();
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
