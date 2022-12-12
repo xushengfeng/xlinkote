@@ -3810,6 +3810,10 @@ function ys_bn(fx: "back" | "next") {
         ys_page_i = Math.max(0, ys_page_i - 1);
     }
     if (fx == "next") {
+        if (ys_page_i == 集.extra.slide.list.length - 1) {
+            document.exitFullscreen();
+            return;
+        }
         ys_page_i = Math.min(集.extra.slide.list.length - 1, ys_page_i + 1);
     }
     ys_jump(集.extra.slide.list[ys_page_i]);
