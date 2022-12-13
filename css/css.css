@@ -428,7 +428,7 @@ body #main > #nav #ink_r {
     @apply flex;
 }
 .侧栏 #ys_list > div > .ys_tran {
-    width: calc(100% - var(--icon-p-b-size) * 3)
+    width: calc(100% - var(--icon-p-b-size) * 3);
 }
 .侧栏 #ys_list > div > div {
     @apply icon-m;
@@ -506,7 +506,7 @@ body #main > #nav #ink_r {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
 }
 
-.侧栏 > #items > #设置 > form input {
+.侧栏 > #items > #设置 > form > fieldset > input {
     width: 100%;
 }
 .侧栏 > #items > #设置 > *:not(:last-child) {

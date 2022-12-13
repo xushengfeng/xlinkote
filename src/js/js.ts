@@ -96,7 +96,8 @@ function icon(src: string) {
 }
 
 // 获取设置
-var store = JSON.parse(localStorage.getItem("config"));
+type setting = typeof default_setting;
+var store: setting = JSON.parse(localStorage.getItem("config"));
 const default_setting = {
     webdav: { 网址: "", 用户名: "", 密码: "", 自动上传: "0", 加密密钥: "" },
     ink: {
@@ -104,6 +105,7 @@ const default_setting = {
         语言: "zh_CN",
         延时: "0.6",
     },
+    sort: { type: "change_time", reverse: false } as sort_type,
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -1968,7 +1970,29 @@ function db_get() {
     };
 }
 
+let collator = new Intl.Collator("cn");
+type sort_type = { type: "change_time" | "create_time" | "name"; reverse: boolean };
+
 function reload_file_list() {
+    file_list = file_list.sort((a, b) => {
+        let n = 0;
+        switch (store.sort.type) {
+            case "change_time":
+                n = a.change_time - b.change_time;
+                break;
+            case "create_time":
+                n = a.create_time - b.create_time;
+                break;
+            case "name":
+                n = collator.compare(a.file_name, b.file_name);
+                break;
+        }
+        if (store.sort.reverse) {
+            return -1 * n;
+        } else {
+            return 1 * n;
+        }
+    });
     for (let f of file_list) {
         let d = document.createElement("div");
         d.setAttribute("data-uuid", f.UUID);
@@ -2863,7 +2887,7 @@ function save_setting() {
             o[f.name][v[0]] = v[1];
         }
     }
-    store = o;
+    store = o as setting;
     localStorage.setItem("config", JSON.stringify(o));
 
     arter_save_setting();

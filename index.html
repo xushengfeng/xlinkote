@@ -189,6 +189,19 @@
                         延时<br><input type="number" name="延时" min="0.1" step="0.1">
                     </fieldset>
                 </form>
+                <form name="sort">
+                    <fieldset>
+                        <legend class="text-lg font-semibold">排序</legend>
+                        方式
+                        <select name="type">
+                            <option value="change_time">修改时间</option>
+                            <option value="create_time">创建时间</option>
+                            <option value="name">文件名</option>
+                        </select>
+                        <br>
+                        <label><input type="checkbox" name="reverse">逆序</label>
+                    </fieldset>
+                </form>
                 <div id="about">
                     <div id="about_main" class="gap-2 flex items-center justify-center"><strong>xlinkote</strong><img
                             src="./public/logo/logo.svg" width="24"></div>
