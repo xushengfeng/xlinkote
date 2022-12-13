@@ -2164,6 +2164,7 @@ function data_changed() {
             saved = false;
         }
         const data = get_data();
+        data.meta.change_time = new Date().getTime();
         if (集.meta.file_name) {
             write_file(xln_out(data));
             db_put(data);
