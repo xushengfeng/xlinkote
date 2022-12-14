@@ -86,13 +86,18 @@ body > #main > #nav #search {
     background-color: var(--bg-color4);
 }
 .侧栏 {
-    background-color: var(--bg1);
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
     transition: var(--transition) transform;
 }
 .侧栏显示 {
     box-shadow: var(--shadow1) !important;
 }
 
+.侧栏 > #tabs {
+    backdrop-filter: blur(60px);
+    border-radius: 4px;
+}
 .selected_item {
     background-color: var(--bg-color1);
     border-radius: 4px;
