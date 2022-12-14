@@ -871,22 +871,27 @@ document.getElementById("画布").onwheel = (e) => {
                 if (qel.contains(el)) return;
             }
         }
-        let dx = 0,
-            dy = 0;
-        if (e.shiftKey && !e.deltaX) {
-            if (fxsd == 0 || fxsd == 2) dx = -e.deltaY;
-        } else {
-            if (fxsd == 0 || fxsd == 2) dx = -e.deltaX;
-            if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
-        }
-        O.style.left = el_offset(O).x + dx + "px";
-        O.style.top = el_offset(O).y + dy + "px";
+        if (document.fullscreenElement != 画布s) {
+            let dx = 0,
+                dy = 0;
+            if (e.shiftKey && !e.deltaX) {
+                if (fxsd == 0 || fxsd == 2) dx = -e.deltaY;
+            } else {
+                if (fxsd == 0 || fxsd == 2) dx = -e.deltaX;
+                if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
+            }
+            O.style.left = el_offset(O).x + dx + "px";
+            O.style.top = el_offset(O).y + dy + "px";
 
-        link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
-        link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
-        if (!search_pel.getAttribute("data-fid")) {
-            search_pel.style.left = el_offset(search_pel).x + dx + "px";
-            search_pel.style.top = el_offset(search_pel).y + dy + "px";
+            link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
+            link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
+            if (!search_pel.getAttribute("data-fid")) {
+                search_pel.style.left = el_offset(search_pel).x + dx + "px";
+                search_pel.style.top = el_offset(search_pel).y + dy + "px";
+            }
+        } else {
+            let a = e.deltaY > 0 ? "next" : "back";
+            ys_bn(a);
         }
     }
     data_changed();
