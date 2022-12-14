@@ -716,10 +716,10 @@ body > #toast {
 }
 body > #toast progress {
     @apply appearance-none h-2 border-none rounded-full overflow-hidden block w-32;
-    @apply bg-gray-200;
+    background-color: var(--bg-color3);
 }
 body > #toast progress::-moz-progress-bar {
-    @apply bg-gray-900;
+    background-color: var(--color6);
     @apply rounded-full;
 }
 body > #toast progress::-webkit-progress-bar {
@@ -727,7 +727,7 @@ body > #toast progress::-webkit-progress-bar {
     background: none;
 }
 body > #toast progress[value]::-webkit-progress-value {
-    @apply bg-gray-900;
+    background-color: var(--color6);
 }
 
 x-sinppet {
