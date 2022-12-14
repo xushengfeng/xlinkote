@@ -2928,7 +2928,14 @@ version_el.onclick = async () => {
 
 // 搜索
 import Fuse from "fuse.js";
-type search_result = { id: string; l: readonly Fuse.FuseResultMatch[]; n?: number; type?: "str" | "regex" }[];
+type search_result = {
+    id: string;
+    l?: readonly Fuse.FuseResultMatch[];
+    text?: string;
+    n?: number;
+    type?: "str" | "regex";
+    score: number;
+}[];
 function search(s: string, type: "str" | "regex") {
     let result = [] as search_result;
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
@@ -2940,16 +2947,25 @@ function search(s: string, type: "str" | "regex") {
         } else {
             text = el.innerText;
         }
+        let is_search = false;
         switch (type) {
             case "str":
                 const fuse = new Fuse(text.split("\n"), {
                     includeMatches: true,
                     findAllMatches: true,
                     useExtendedSearch: true,
+                    includeScore: true,
                 });
                 let fr = fuse.search(s);
                 for (let i of fr) {
-                    result.push({ id: el.parentElement.id, l: i.matches, n: i.refIndex, type: "str" });
+                    is_search = true;
+                    result.push({
+                        id: el.parentElement.id,
+                        l: i.matches,
+                        n: i.refIndex,
+                        type: "str",
+                        score: search_score(el.parentElement.id, 1 - i.score),
+                    });
                 }
                 break;
             case "regex":
@@ -2965,9 +2981,13 @@ function search(s: string, type: "str" | "regex") {
                     l.push({ value: i, indices: s_i(i, text).map((v) => [v, v + i.length]) });
                 }
                 if (l.length != 0) {
-                    result.push({ id: el.parentElement.id, l });
+                    is_search = true;
+                    result.push({ id: el.parentElement.id, l, score: search_score(el.parentElement.id, 1) });
                 }
                 break;
+        }
+        if (!is_search) {
+            result.push({ id: el.parentElement.id, score: search_score(el.parentElement.id, 0), text: text });
         }
     });
 
@@ -2983,6 +3003,17 @@ function search(s: string, type: "str" | "regex") {
         return l;
     }
     return result;
+}
+
+/** 计算 时间 值 搜索匹配度 距离 */
+function search_score(id: string, search_s: number) {
+    const now_t = new Date().getTime();
+    const vt = 集.链接[0][id];
+    let t = (now_t - vt.time) / 1000 / 60 / 60 / 24 / 7;
+    t = 1 / (t + 1);
+    let v = vt.value;
+    let s = search_s;
+    return Math.sqrt(t ** 2 + (1 * v) ** 2 + (2 * s) ** 2);
 }
 
 let select_index = 0;
@@ -3068,7 +3099,7 @@ search_r.onpointerleave = () => {
 /** 展示搜索结果 */
 function show_search_l(l: search_result, exid?: string) {
     l = l.sort((a, b) => {
-        return link(a.id).get_v() - link(b.id).get_v();
+        return a.score - b.score;
     });
     if (exid) l = l.filter((i) => i.id != exid);
     search_r.innerHTML = "";
@@ -3082,23 +3113,27 @@ function show_search_l(l: search_result, exid?: string) {
             ids[i.id] = els.length - 1;
         }
         let div = els[ids[i.id]];
-        for (let j of i.l) {
-            let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
-            let line = document.createElement("div");
-            let p = document.createElement("span");
-            for (let i = 0; i < indices.length; i++) {
-                const k = indices[i];
-                let h = document.createElement("span");
-                h.innerText = j.value.slice(k[0], k[1] + 1);
-                if (Number(i) == indices.length - 1) {
-                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
-                } else {
-                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
+        let line = document.createElement("div");
+        let p = document.createElement("span");
+        if (i.l) {
+            for (let j of i.l) {
+                let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
+                for (let i = 0; i < indices.length; i++) {
+                    const k = indices[i];
+                    let h = document.createElement("span");
+                    h.innerText = j.value.slice(k[0], k[1] + 1);
+                    if (Number(i) == indices.length - 1) {
+                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
+                    } else {
+                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
+                    }
                 }
             }
-            line.append(p);
-            div.append(line);
+        } else {
+            p.append(`#${i.id}`);
         }
+        line.append(p);
+        div.append(line);
         div.setAttribute("data-id", i.id);
         add_div_event(div, i.id);
     }
@@ -3118,22 +3153,6 @@ function show_search_l(l: search_result, exid?: string) {
                 set_viewer_posi(e.clientX, e.clientY);
             });
         };
-    }
-
-    let all_l: { id: string; value: number }[] = [];
-    for (let l in 集.链接["0"]) {
-        let el = get_x_by_id(l);
-        if (l && el) all_l.push({ id: l, value: 集.链接["0"][l].value });
-    }
-    all_l.sort((a, b) => b.value - a.value);
-    for (let i of all_l) {
-        let div = document.createElement("div");
-        div.setAttribute("data-id", i.id);
-        els.unshift(div);
-        let p = document.createElement("div");
-        p.innerText = `#${i.id}`;
-        div.append(p);
-        add_div_event(div, i.id);
     }
 
     for (let div of els) {
