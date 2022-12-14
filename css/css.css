@@ -4,7 +4,7 @@
 
 :root {
     --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    --blur: blur(10px);
+    --blur: blur(24px);
     --icon-color: none;
     --icon-p-b-size: 32px;
     --icon-size: 24px;
@@ -677,7 +677,8 @@ body > #搜索 > #搜索结果 > div > div:last-child {
     top: 0;
 }
 .search_item_select {
-    background-color: var(--bg-color1);
+    background-color: var(--bg-color5);
+    backdrop-filter: var(--blur);
 }
 
 body > #cmd {
