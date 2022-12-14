@@ -32,7 +32,7 @@
 }
 
 .icon-pel > div {
-    @apply icon-m;
+    @apply icon-m flex-shrink-0;
 }
 .icon-m {
     @apply h-8 w-8 relative cursor-pointer;
@@ -1211,6 +1211,8 @@ x-link {
     .侧栏 > #tabs {
         width: 100%;
         flex-direction: row;
+        flex-shrink: 0;
+        overflow: auto;
     }
 
     x-color {
