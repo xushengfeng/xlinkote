@@ -891,7 +891,7 @@ document.getElementById("画布").onwheel = (e) => {
             }
         } else {
             let a = e.deltaY > 0 ? "next" : "back";
-            ys_bn(a);
+            ys_bn(a as "next" | "back");
         }
     }
     data_changed();
