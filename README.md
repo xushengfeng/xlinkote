@@ -58,6 +58,7 @@ npm run preview # 打开服务器
         -   [x] 视频
         -   [x] pdf
         -   [x] glb 3D 模型
+        -   [x] Geogebra
     -   [x] 录音
     -   [ ] 思维导图
 -   [ ] 搜索

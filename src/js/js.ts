@@ -5066,7 +5066,13 @@ class file extends HTMLElement {
         let f = 集.assets[this._value.id];
         if (!f) return;
         let type = f.base64.match(/data:(.*?);/)[1].split("/");
-        if (type[0] != "image" && type[0] != "video" && type[1] != "pdf" && type[1] != "gltf-binary")
+        if (
+            type[0] != "image" &&
+            type[0] != "video" &&
+            type[1] != "pdf" &&
+            type[1] != "gltf-binary" &&
+            type[1] != "vnd.geogebra.file"
+        )
             this._value.r = false;
         this.div.innerHTML = "";
         if (this._value.r) {
@@ -5092,6 +5098,11 @@ class file extends HTMLElement {
                 let td = document.createElement("x-three") as three;
                 this.div.append(td);
                 td.value = this._value.id;
+            }
+            if (type[1] == "vnd.geogebra.file") {
+                let ggb = document.createElement("x-ggb") as ggb;
+                this.div.append(ggb);
+                ggb.value = this._value.id;
             }
         } else {
             this.div.classList.add("file");
@@ -6193,3 +6204,49 @@ async function start() {
         node: true,
     });
 }
+
+// geogebra
+
+let ggb_script = document.createElement("script");
+ggb_script.src = "https://www.geogebra.org/apps/deployggb.js";
+document.body.append(ggb_script);
+
+class ggb extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value;
+    applet;
+    p;
+
+    connectedCallback() {
+        this.p = {
+            id: `ggb${this._value}`,
+            width: 500,
+            height: 500,
+            showResetIcon: true,
+            borderColor: "white",
+            language: "cn",
+            ggbBase64: "",
+        };
+        this.applet = new window["GGBApplet"](this.p, "5.0");
+    }
+    async set_m() {
+        const url = 集.assets[this._value];
+        this.p.id = `ggb${this._value}`;
+        this.p.ggbBase64 = url.base64;
+        this.applet.inject(this);
+    }
+
+    get value() {
+        return this._value;
+    }
+    set value(s) {
+        this._value = s;
+        this.set_m();
+    }
+}
+
+window.customElements.define("x-ggb", ggb);
+ignore_el.push("x-ggb");
