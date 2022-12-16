@@ -4943,60 +4943,6 @@ class markdown extends HTMLElement {
 
 window.customElements.define("x-md", markdown);
 
-// 几何图形
-import JXG from "jsxgraph";
-class graph extends HTMLElement {
-    constructor() {
-        super();
-    }
-
-    _value = "";
-
-    connectedCallback() {
-        var b = document.createElement("div");
-        b.id = "t_md";
-        var s = document.createElement("div");
-        s.id = `g${new Date().getTime()}`;
-        // s.style.width = "500px";
-        // s.style.height = "500px";
-        var text = document.createElement("textarea");
-        text.value = this.getAttribute("value") || this.innerText;
-        this.setAttribute("value", text.value);
-        this.innerHTML = "";
-        this.append(b);
-        this.append(s);
-        this.append(text);
-
-        if (JXG) {
-            if (text.value)
-                eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
-        }
-
-        b.onclick = () => {
-            text.classList.toggle("show_md");
-            text.focus();
-        };
-        text.oninput = () => {
-            this._value = text.value;
-            this.setAttribute("value", text.value);
-        };
-        text.onchange = () => {
-            eval(text.value.replace("gid", s.id));
-        };
-    }
-
-    set value(v) {
-        this._value = this.querySelector("textarea").value = v;
-        eval(this.querySelector("textarea").value.replace("gid", this.querySelector("div:not(#t_md)").id));
-    }
-
-    get value() {
-        return this._value;
-    }
-}
-
-window.customElements.define("x-graph", graph);
-
 import mathSymbols from "../../lib/tex/x.js";
 class symbols extends HTMLElement {
     constructor() {
