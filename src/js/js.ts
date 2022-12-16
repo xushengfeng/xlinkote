@@ -161,8 +161,11 @@ document.getElementById("导出文件").onclick = () => {
     download_file(xln_out(get_data()));
 };
 
-document.getElementById("从云加载").onclick = () => {
-    if (集.meta.url) get_xln_value(集.meta.url);
+document.getElementById("从云加载").onclick = async () => {
+    if (集.meta.url) {
+        let o = await get_xln_value(集.meta.url);
+        set_data(o);
+    }
 };
 document.getElementById("上传到云").onclick = put_xln_value;
 
@@ -2748,18 +2751,16 @@ async function get_all_xln() {
     删除路径 = rplf.filename.replace(b, "");
     for (let f of file_list) {
         let dav: HTMLElement;
-        for (let el of 文件_el.querySelectorAll("input")) {
-            if (el.value == f.file_name) {
-                dav = el.previousElementSibling as HTMLElement;
+        for (let el of 文件_el.querySelectorAll(":scope > div")) {
+            if (el.getAttribute("data-uuid") == f.UUID) {
+                dav = el.firstElementChild as HTMLElement;
                 break;
             }
         }
         for (let fi of dav_files) {
             if ("/" + fi.filename.replace(new RegExp(`^${删除路径}`), "") == f.url) {
                 dav.onclick = () => {
-                    get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
-                    document.title = get_title();
-                    侧栏.classList.remove("侧栏显示");
+                    get_file(fi.filename);
                 };
                 dav.innerHTML = icon(cloud_down);
                 dav_files = dav_files.filter((v) => v != fi);
@@ -2768,7 +2769,6 @@ async function get_all_xln() {
         }
     }
     for (let fi of dav_files) {
-        let new_t = 文件_el.querySelector("div:nth-child(2)") as HTMLElement;
         let d = document.createElement("div");
         let t = rename_el();
         t.value = fi.basename.replace(/\.xln$/, "") || "";
@@ -2778,17 +2778,31 @@ async function get_all_xln() {
         d.append(dav, t);
         文件_el.append(d);
         t.onclick = dav.onclick = () => {
-            if (!集.meta.file_name) new_t.remove();
-            get_xln_value("/" + fi.filename.replace(new RegExp(`^${删除路径}`), ""));
-            document.title = get_title();
-            侧栏.classList.remove("侧栏显示");
+            get_file(fi.filename);
+        };
+    }
+    async function get_file(filename: string) {
+        let o = await get_xln_value("/" + filename.replace(new RegExp(`^${删除路径}`), ""));
+        let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+        let r = customerObjectStore.get(o.meta.UUID);
+        r.onsuccess = () => {
+            let r = customerObjectStore.put(o);
+            r.onsuccess = () => {
+                open_in_win(o.meta.UUID);
+            };
+        };
+        r.onerror = () => {
+            let r = customerObjectStore.put(o);
+            r.onsuccess = () => {
+                open_in_win(o.meta.UUID);
+            };
         };
     }
 }
 
 var now_dav_data = "";
 
-/** 获取云文件数据并渲染 */
+/** 获取云文件数据 */
 async function get_xln_value(path: string) {
     show_upload_pro();
     let str = (await client.getFileContents(path, {
@@ -2818,10 +2832,7 @@ async function get_xln_value(path: string) {
         }
     }
     now_dav_data = str;
-    set_data(o);
-    data_changed();
-    if (fileHandle) fileHandle = null;
-    集.meta.url = path;
+    return o as 集type;
 }
 
 /** 上传到云 */
@@ -2897,6 +2908,12 @@ async function 压缩(t: string) {
     await zipWriter.close();
     const zipFileBlob = await zipFileWriter.getData();
     return zipFileBlob;
+}
+
+function open_in_win(uuid: string) {
+    let url = new URL(location.origin);
+    url.hash = uuid;
+    window.open(url);
 }
 
 // 设置
