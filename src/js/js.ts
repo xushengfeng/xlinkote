@@ -1538,13 +1538,15 @@ import diff from "deep-diff";
 window["diff"] = diff;
 
 /** 设置集 */
-function set_data(l: 集type) {
+async function set_data(l: 集type) {
     l = version_tr(l);
     for (let i in l) {
         if (集[i]) 集[i] = l[i];
     }
     画布s.innerHTML = "";
     集_el.innerHTML = "";
+
+    await set_dependencies(集.meta.dependencies || []);
 
     let ps = {};
     for (const p of 集.数据) {
@@ -1810,6 +1812,22 @@ function set_css(t: string) {
     }
     style.id = "css";
     document.body.append(style);
+}
+
+function set_dependencies(ds: meta["dependencies"]) {
+    let p = [];
+    for (let i of ds) {
+        let sc = document.createElement("script");
+        sc.src = i.url;
+        p.push(
+            new Promise((re) => {
+                sc.onload = () => {
+                    re("");
+                };
+            })
+        );
+    }
+    return Promise.all(p);
 }
 
 function xln_out(obj: 集type) {
