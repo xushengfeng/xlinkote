@@ -900,6 +900,28 @@ document.getElementById("画布").onwheel = (e) => {
     data_changed();
 };
 
+/** 中键移动画布 */
+let middle_b: PointerEvent;
+let middle_p = { x: 0, y: 0 };
+画布.addEventListener("pointerdown", (e) => {
+    if (e.button == 1) {
+        middle_b = e;
+        middle_p.x = el_offset(O).x;
+        middle_p.y = el_offset(O).y;
+    }
+});
+画布.addEventListener("pointermove", (e) => {
+    if (middle_b) {
+        let dx = e.clientX - middle_b.clientX,
+            dy = e.clientY - middle_b.clientY;
+        O.style.left = middle_p.x + dx + "px";
+        O.style.top = middle_p.y + dy + "px";
+    }
+});
+画布.addEventListener("pointerup", (e) => {
+    middle_b = null;
+});
+
 zoom_o(1);
 
 var now_mouse_e = null;
