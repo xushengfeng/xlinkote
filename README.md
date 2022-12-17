@@ -43,7 +43,8 @@ npm run preview # 打开服务器
     -   [x] webDAV（默认压缩，支持加密）
 -   [ ] 元素(组件)
     -   [x] markdown 元素（支持补全括号和引号）
-    -   [x] 数学公式（$\LaTeX$数学公式,图形化点击输入）
+    -   [x] 数学公式（$\LaTeX$ 数学公式，图形化点击输入，基于[MathJax](https://github.com/mathjax/MathJax)）
+    -   [x] $\LaTeX$ 支持（基于[tikzjax](https://github.com/kisonecat/tikzjax)和[obsidian-tikzjax](https://github.com/artisticat1/obsidian-tikzjax)，可使用 tikzjax）
     -   [x] 待办 todo
     -   [x] 画板
         -   [x] 压感
