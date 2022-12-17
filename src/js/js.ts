@@ -3772,7 +3772,9 @@ document.getElementById("ink_icon").onpointerdown = (e) => {
 };
 var ink_color = "#000";
 var mqList = window.matchMedia("(prefers-color-scheme: dark)");
+var is_dark = Boolean(mqList.matches);
 mqList.addEventListener("change", (event) => {
+    is_dark = event.matches;
     if (event.matches) {
         ink_color = "#FFF";
     } else {
@@ -4006,6 +4008,35 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
             o = svg;
         });
         return o;
+    }
+    return f(tokens, idx, options, env, self);
+};
+// 代码来自 https://github.com/artisticat1/obsidian-tikzjax 和 https://github.com/kisonecat/tikzjax
+import tikzjaxJs from "../../lib/tikzjax.js?raw";
+const tikzjax = document.createElement("script");
+tikzjax.id = "tikzjax";
+tikzjax.type = "text/javascript";
+tikzjax.innerText = tikzjaxJs;
+document.body.append(tikzjax);
+document.addEventListener("tikzjax-load-finished", (e) => {
+    const svgEl = e.target as HTMLElement;
+    if (is_dark) svgEl.style.filter = "invert(1)";
+});
+md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+    if (tokens[idx].info == "tikz") {
+        let s = document.createElement("script");
+        s.setAttribute("type", "text/tikz");
+        s.setAttribute("data-show-console", "true");
+        function tidyTikzSource(tikzSource: string) {
+            const remove = "&nbsp;";
+            tikzSource = tikzSource.replaceAll(remove, "");
+            let lines = tikzSource.split("\n");
+            lines = lines.map((line) => line.trim());
+            lines = lines.filter((line) => line);
+            return lines.join("\n");
+        }
+        s.innerHTML = tidyTikzSource(tokens[idx].content);
+        return s.outerHTML;
     }
     return f(tokens, idx, options, env, self);
 };

@@ -24,3 +24,12 @@ if (!existsSync("./public/ocr")) {
         })
     );
 }
+
+if (!existsSync("./lib/tikzjax.js")) {
+    writeFileSync(
+        "./lib/tikzjax.js",
+        await download("https://raw.githubusercontent.com/artisticat1/obsidian-tikzjax/0.5.1/tikzjax.js", {
+            rejectUnauthorized: false,
+        })
+    );
+}
