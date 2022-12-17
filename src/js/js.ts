@@ -2029,10 +2029,10 @@ function reload_file_list() {
         let n = 0;
         switch (store.sort.type) {
             case "change_time":
-                n = a.change_time - b.change_time;
+                n = b.change_time - a.change_time;
                 break;
             case "create_time":
-                n = a.create_time - b.create_time;
+                n = b.create_time - a.create_time;
                 break;
             case "name":
                 n = collator.compare(a.file_name, b.file_name);
