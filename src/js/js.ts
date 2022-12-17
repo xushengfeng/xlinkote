@@ -1977,6 +1977,7 @@ function load_file_side_bar() {
         let fn = prompt("文件名", new_t.innerText);
         if (fn) {
             集.meta.file_name = new_t.innerText = fn;
+            db_can_save = true;
             data_changed();
         }
     };
@@ -2012,6 +2013,7 @@ function db_get() {
                 set_data(f);
                 文件_el.children[1].remove();
                 文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
+                db_can_save = true;
             }
         }
 
@@ -2230,6 +2232,15 @@ async function download_file(text: string) {
 var save_timeout = NaN,
     save_dt = 200;
 
+/**
+ * # 文件是否可以被保存
+ * - 一般db文件可保存；
+ * - 新建集不保存，除非设定保存；
+ * - 网络来源不保存，除非设定保存；
+ * - 本地文件不保存，除非设定保存；
+ */
+var db_can_save = false;
+
 /** 文件状态改变触发 */
 function data_changed() {
     clearTimeout(save_timeout);
@@ -2240,8 +2251,8 @@ function data_changed() {
         }
         const data = get_data();
         data.meta.change_time = new Date().getTime();
-        if (集.meta.file_name) {
-            write_file(xln_out(data));
+        write_file(xln_out(data));
+        if (db_can_save) {
             db_put(data);
         }
         push_undo();
