@@ -4027,6 +4027,7 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
 
 var will_load_math = false;
 var mathjax_cache = {};
+var math_loaded = false;
 function get_svg(c: string) {
     let html: string,
         ca = mathjax_cache?.[c];
@@ -4034,40 +4035,40 @@ function get_svg(c: string) {
         html = ca[0];
         mathjax_cache[c][1] = 2;
     } else {
-        if (window?.MathJax?.tex2svg) {
+        if (math_loaded) {
             html = window.MathJax.tex2svg(c).outerHTML;
             mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
         } else {
-            html = "<mjx-container></mjx-container>";
-            if (!will_load_math) {
-                window.MathJax = {
-                    tex: {
-                        inlineMath: [["$", "$"]],
-                    },
-                    options: {
-                        enableMenu: false,
-                    },
-                    startup: {
-                        ready: () => {
-                            window.MathJax.startup.defaultReady();
-                            window.MathJax.startup.promise.then(() => {
-                                console.log("MathJax initial typesetting complete");
-                                setTimeout(l_math, 600);
-                                setTimeout(l_math, 200);
-                                l_math();
-                            });
-                        },
-                    },
-                };
-                (function () {
-                    let s = document.createElement("script");
-                    s.src = "https://unpkg.com/mathjax@3.2.2/es5/tex-svg.js";
-                    s.async = true;
-                    will_load_math = true;
-                    document.body.append(s);
-                })();
-            }
+            html = `<mjx-container>${c}</mjx-container>`;
         }
+    }
+    if (!math_loaded && !will_load_math) {
+        window.MathJax = {
+            tex: {
+                inlineMath: [["$", "$"]],
+            },
+            options: {
+                enableMenu: false,
+            },
+
+            startup: {
+                pageReady: () => {
+                    return window.MathJax.startup.defaultPageReady().then(() => {
+                        console.log("MathJax initial typesetting complete");
+                        math_loaded = true;
+                        l_math();
+                    });
+                },
+            },
+        };
+        (function () {
+            if (will_load_math) return;
+            let s = document.createElement("script");
+            s.src = "https://unpkg.com/mathjax@3.2.2/es5/tex-svg-full.js";
+            s.async = true;
+            will_load_math = true;
+            document.body.append(s);
+        })();
     }
     return html;
 }
