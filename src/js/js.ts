@@ -4033,6 +4033,39 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
             let lines = tikzSource.split("\n");
             lines = lines.map((line) => line.trim());
             lines = lines.filter((line) => line);
+            const pack = [
+                "chemfig",
+                "tikz-cd",
+                "circuitikz",
+                "pgfplots",
+                "array",
+                "amsmath",
+                "amstext",
+                "amsfonts",
+                "amssymb",
+                "tikz-3dplot",
+            ];
+            for (let i of pack) {
+                if (tikzSource.includes(i)) {
+                    let has = false;
+                    for (let t of lines) {
+                        if (t == `\\usepackage{${i}}`) has = true;
+                    }
+                    if (!has) {
+                        lines.unshift(`\\usepackage{${i}}`);
+                    }
+                }
+            }
+            if (!tikzSource.includes("\\begin{document}")) {
+                let packi = 0;
+                for (let i in lines) {
+                    if (lines[i].includes(`\\usepackage{`)) packi = Number(i);
+                }
+                lines.splice(packi + 1, 0, "\\begin{document}");
+            }
+            if (!tikzSource.includes("\\end{document}")) {
+                lines.push("\\end{document}");
+            }
             return lines.join("\n");
         }
         s.innerHTML = tidyTikzSource(tokens[idx].content);
