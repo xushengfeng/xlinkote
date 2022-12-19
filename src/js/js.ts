@@ -6231,7 +6231,8 @@ class img extends HTMLElement {
 
 window.customElements.define("x-img", img);
 
-function to_text(img: HTMLImageElement | HTMLCanvasElement) {
+async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
+    if (!ocr_init) await ocr_start();
     let canvas = document.createElement("canvas");
     let w = (img as HTMLImageElement).naturalWidth || img.width,
         h = (img as HTMLImageElement).naturalHeight || img.height;
@@ -6272,13 +6273,25 @@ function to_text(img: HTMLImageElement | HTMLCanvasElement) {
     });
 }
 
-import ocr from "../../ai/ocr";
+var ocr_init = false;
+var ocr;
 
-start();
+function import_script(url: string) {
+    let script = document.createElement("script");
+    script.src = url;
+    document.body.append(script);
+    return new Promise((re, rj) => {
+        script.onload = () => {
+            re(true);
+        };
+    });
+}
 
-import dic from "../../public/ocr/ppocr_keys_v1.txt?raw";
-
-async function start() {
+async function ocr_start() {
+    await import_script("https://unpkg.com/opencv.js@1.2.1/opencv.js");
+    await import_script("https://unpkg.com/onnxruntime-web@1.13.1/dist/ort.min.js");
+    ocr = (await import("../../ai/ocr")).default;
+    var dic = (await import("../../public/ocr/ppocr_keys_v1.txt?raw")).default;
     await ocr.init({
         det_path: "./ocr/ppocr_det.onnx",
         rec_path: "./ocr/ppocr_rec.onnx",
@@ -6286,6 +6299,7 @@ async function start() {
         dev: false,
         node: true,
     });
+    ocr_init = true;
 }
 
 // geogebra
