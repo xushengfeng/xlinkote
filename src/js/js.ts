@@ -4013,18 +4013,17 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     return f(tokens, idx, options, env, self);
 };
 // 代码来自 https://github.com/artisticat1/obsidian-tikzjax 和 https://github.com/kisonecat/tikzjax
-import tikzjaxJs from "../../lib/tikzjax.js?raw";
-const tikzjax = document.createElement("script");
-tikzjax.id = "tikzjax";
-tikzjax.type = "text/javascript";
-tikzjax.innerText = tikzjaxJs;
-document.body.append(tikzjax);
+var import_latex = false;
 document.addEventListener("tikzjax-load-finished", (e) => {
     const svgEl = e.target as HTMLElement;
     if (is_dark) svgEl.style.filter = "invert(1)";
 });
 md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     if (tokens[idx].info == "tikz") {
+        if (!import_latex) {
+            import_script("../../lib/tikzjax.js?raw", true);
+            import_latex = true;
+        }
         let s = document.createElement("script");
         s.setAttribute("type", "text/tikz");
         s.setAttribute("data-show-console", "true");
@@ -6276,9 +6275,14 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
 var ocr_init = false;
 var ocr;
 
-function import_script(url: string) {
+async function import_script(url: string, use_import?: boolean) {
     let script = document.createElement("script");
-    script.src = url;
+    if (use_import) {
+        const js = (await import("../../lib/tikzjax.js?raw")).default;
+        script.innerText = js;
+    } else {
+        script.src = url;
+    }
     document.body.append(script);
     return new Promise((re, rj) => {
         script.onload = () => {
