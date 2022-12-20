@@ -19,6 +19,8 @@ import update_svg from "../../assets/icons/update.svg";
 import edit_svg from "../../assets/icons/edit.svg";
 import ocr_svg from "../../assets/icons/ocr.svg";
 import play_svg from "../../assets/icons/play.svg";
+import down_svg from "../../assets/icons/down.svg";
+import binding_svg from "../../assets/icons/binding_file.svg";
 
 // el
 var 设置_el = document.getElementById("设置");
@@ -2425,7 +2427,70 @@ function assets_reflash() {
         };
         add.innerHTML = icon(add_svg);
 
-        bar.append(id_el, add, r);
+        let fileHandle;
+        let download = document.createElement("div");
+        download.onclick = async () => {
+            if (window.showSaveFilePicker) {
+                fileHandle = await window.showSaveFilePicker({
+                    suggestedName: `${get_file_name()}资源文件${i}`,
+                });
+                const writable = await fileHandle.createWritable();
+
+                let arr = 集.assets[i].base64.split(","),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = window.atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                let blob = new Blob([u8arr], { type: mime });
+                await writable.write(blob);
+                await writable.close();
+                async.style.display = "";
+                async_init = true;
+                async_file();
+            } else {
+                let a = document.createElement("a");
+                let name = get_file_name();
+                a.download = `${name}资源文件${i}`;
+                a.href = 集.assets[i].base64;
+                a.click();
+                URL.revokeObjectURL(集.assets[i].base64);
+            }
+        };
+        download.innerHTML = icon(down_svg);
+
+        let async_init = false;
+        let async = document.createElement("div");
+        async.onclick = async () => {
+            if (!fileHandle) return;
+            if (async_init) {
+                async_init = false;
+            } else {
+                async_init = true;
+                async_file();
+            }
+        };
+        async.innerHTML = icon(binding_svg);
+        async function async_file() {
+            let r: File = await fileHandle.getFile();
+            let a = new FileReader();
+            a.onload = () => {
+                let t = a.result as string;
+                if (t != 集.assets[i].base64) {
+                    集.assets[i].base64 = t;
+                    集.assets[i].sha = CryptoJS.SHA256(a.result as string).toString();
+                }
+            };
+            a.readAsDataURL(r);
+            if (async_init) {
+                setTimeout(async_file, 1000);
+            }
+        }
+        async.style.display = "none";
+
+        bar.append(id_el, add, download, async, r);
     }
 }
 
