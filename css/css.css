@@ -663,6 +663,7 @@ body > #搜索 {
 }
 body > #搜索 > input {
     width: 100%;
+    padding-left: 4px;
 }
 body > #搜索 > #搜索结果 {
     overflow: auto;
