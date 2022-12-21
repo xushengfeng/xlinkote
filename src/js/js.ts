@@ -2770,7 +2770,7 @@ class 图层 {
         if (!nosave) data_changed();
 
         if (O.querySelectorAll("x-x").length > 128) {
-            O.style.willChange = "left, top";
+            O.style.willChange = "left, top, transform";
         } else {
             O.style.willChange = "";
         }
