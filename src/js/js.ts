@@ -587,6 +587,7 @@ var mouse = (e: MouseEvent) => {
 var o_touch_e: TouchEvent;
 var o_touch_zoom_e: TouchEvent;
 var o_zoom = NaN;
+var o_touch_t = NaN;
 画布.ontouchstart = (e) => {
     if (模式 == "绘制") return;
     let el = <HTMLElement>e.changedTouches[0].target;
@@ -601,6 +602,8 @@ var o_zoom = NaN;
         ) &&
         !document.querySelector("x-sinppet").contains(el)
     ) {
+        o_touch_t = new Date().getTime();
+        O.style.transition = "";
         o_touch_e = o_touch_zoom_e = e;
         o_rect = { x: el_offset(O).x, y: el_offset(O).y };
         o_vb_sb = {
@@ -626,6 +629,26 @@ var o_zoom = NaN;
     }
 };
 画布.ontouchend = (e) => {
+    let dt = new Date().getTime() - o_touch_t;
+    let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0,
+        dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
+    let ds = Math.sqrt(dx ** 2 + dy ** 2);
+    const m = 1,
+        a = 0.0015;
+    let p = 0.5 * m * (ds / dt / 2) ** 2;
+    let s = p / (m * a);
+    let t = Math.sqrt((2 * s) / a);
+    console.log(s, t);
+    let x = el_offset(O).x + s * (dx / ds),
+        y = el_offset(O).y + s * (dy / ds);
+    O.style.transition = `${t / 1000}s`;
+    O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
+    setTimeout(() => {
+        O.style.transition = ``;
+    }, t);
+    O.style.left = x + "px";
+    O.style.top = y + "px";
+
     o_touch_e = null;
     move = false;
     o_touch_zoom_e = null;
