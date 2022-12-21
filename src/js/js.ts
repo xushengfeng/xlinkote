@@ -1061,6 +1061,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                     let xel = document.createElement("x-x") as x;
                     xel.id = x.id;
                     xel.setAttribute("style", x.getAttribute("style"));
+                    xel.style.left = "";
+                    xel.style.top = "";
                     xel.className = x.className;
                     const xx = get_x_by_id(x.id);
                     if (before) {
