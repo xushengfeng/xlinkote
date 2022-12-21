@@ -377,7 +377,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
         v.classList.remove("模式突出");
     });
     nav.querySelector(`#${模式x}`).classList.add("模式突出");
-    if (O) O.className = 模式x;
+    画布s.className = 模式x;
     switch (模式x) {
         case "浏览":
             if (<draw>focus_draw_el) {
