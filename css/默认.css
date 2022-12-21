@@ -280,6 +280,11 @@ x-x > .xxhandle > div:hover {
     background-color: #0000ff;
 }
 
+.free_drag_tip {
+    background-color: #000;
+    position: fixed;
+}
+
 #t_md {
     border-radius: 4px;
     box-shadow: var(--shadow1);

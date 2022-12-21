@@ -973,11 +973,50 @@ let free_o_a = NaN;
 let free_move = false;
 let free_target_id = "";
 let free_drag = false;
+let free_drag_tip: HTMLElement;
 document.addEventListener("pointermove", (e: PointerEvent) => {
     if (模式 == "设计" && free_old_point) {
         e.preventDefault();
         free_mouse(e);
         free_move = true;
+        if (free_drag) {
+            let els = document.elementsFromPoint(e.clientX, e.clientY) as HTMLElement[];
+            for (let el of els) {
+                if (el.tagName == "X-X") {
+                    let rect = el.getBoundingClientRect();
+                    for (let x of selected_el) {
+                        if (
+                            el.parentElement.classList.contains("flex-column") ||
+                            el.parentElement.classList.contains("flex-row")
+                        ) {
+                            free_drag_tip.style.opacity = "1";
+                            if (el.parentElement.classList.contains("flex-column")) {
+                                if (e.clientY - rect.y < rect.height / 2) {
+                                    free_drag_tip.style.top = rect.top + "px";
+                                } else {
+                                    free_drag_tip.style.top = rect.bottom + "px";
+                                }
+                                free_drag_tip.style.left = rect.left + "px";
+                                free_drag_tip.style.width = rect.width + "px";
+                                free_drag_tip.style.height = "1px";
+                            }
+                            if (el.parentElement.classList.contains("flex-row")) {
+                                if (e.clientX - rect.x < rect.width / 2) {
+                                    free_drag_tip.style.left = rect.left + "px";
+                                } else {
+                                    free_drag_tip.style.left = rect.right + "px";
+                                }
+                                free_drag_tip.style.top = rect.top + "px";
+                                free_drag_tip.style.width = "1px";
+                                free_drag_tip.style.height = rect.height + "px";
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+            free_drag_tip.style.opacity = "0";
+        }
     }
 });
 document.addEventListener("pointerup", (e: PointerEvent) => {
@@ -989,6 +1028,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
     free_mouse(e);
 
     if (free_drag) {
+        O.classList.remove("拖拽");
+        free_drag_tip.remove();
         let els = document.elementsFromPoint(e.clientX, e.clientY);
         for (let el of els) {
             if (el.tagName == "X-X") {
@@ -1203,6 +1244,12 @@ document.addEventListener("dblclick", (e) => {
         if (yl.includes(free_o_a)) el.style.height = "";
     }
 });
+
+function new_free_drag_tip() {
+    free_drag_tip = document.createElement("div");
+    free_drag_tip.classList.add("free_drag_tip");
+    document.body.append(free_drag_tip);
+}
 
 /** 通过画布坐标创建主元素 */
 function create_x_x(x: number, y: number) {
@@ -4514,6 +4561,8 @@ class x extends HTMLElement {
                 e.preventDefault();
                 e.stopPropagation();
                 free_drag = true;
+                O.classList.add("拖拽");
+                new_free_drag_tip();
                 if (this.parentElement != O) {
                     let x = e.clientX - O.getBoundingClientRect().x,
                         y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetX;

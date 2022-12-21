@@ -876,6 +876,10 @@ x-x > .xxhandle > div {
     cursor: move;
 }
 
+.拖拽 .xxhandle {
+    display: none;
+}
+
 x-md {
     position: relative;
     display: block;
