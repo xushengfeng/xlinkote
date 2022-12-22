@@ -1778,11 +1778,15 @@ function render_data(inputdata: 画布type) {
     画布s.append(el);
 
     function v(data: data, pid?: string) {
-        for (let i of data) {
-            if (values[pid]) {
-                (<markdown>get_x_by_id(pid).querySelector(i.type)).value = values[pid];
+        try {
+            for (let i of data) {
+                if (values[pid]) {
+                    (<markdown>get_x_by_id(pid).querySelector(i.type)).value = values[pid];
+                }
+                if (i.子元素) v(i.子元素, i.id);
             }
-            if (i.子元素) v(i.子元素, i.id);
+        } catch (error) {
+            console.log(pid);
         }
     }
     v(inputdata.data);
