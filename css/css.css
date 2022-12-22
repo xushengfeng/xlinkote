@@ -370,6 +370,8 @@ body #main > #nav #ink_r {
 }
 .侧栏 > #items > #层容器 > div:nth-child(1) {
     top: 0;
+    min-height: var(--icon-p-b-size);
+    overflow-x: auto;
 }
 
 .侧栏 > #items > #层容器 > div:nth-child(2) {
