@@ -219,7 +219,7 @@ elFromId("导出设置").onclick = () => {
 elFromId("放弃设置").onclick = () => {
     show_setting();
 };
-elFromId("保存设置").onclick = () => {
+elFromId("偏好设置").onclick = () => {
     save_setting();
 };
 elFromId("新建元素").onclick = () => {
