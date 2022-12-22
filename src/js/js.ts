@@ -803,6 +803,7 @@ var zoom = 1;
 
 /** 缩放 */
 function zoom_o(z: number) {
+    z = Math.max(z, 0);
     zoom = z;
     O.style.transform = `scale(${z})`;
     zoom_el.value = `${(z * 100).toFixed(1)}`;
@@ -885,6 +886,7 @@ document.getElementById("画布").onwheel = (e) => {
         let ozoom = zoom,
             dzoom = -e.deltaY / (800 / zoom);
         zoom += dzoom;
+        zoom = Math.abs(zoom);
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;
         O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
