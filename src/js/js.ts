@@ -5873,6 +5873,7 @@ class draw extends HTMLElement {
     complete() {
         this.main_svg.append(this.tmp_svg.childNodes[0]);
         this.pointer_ignore();
+        clearTimeout(this.t);
     }
 
     pointer_ignore() {
