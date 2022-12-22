@@ -41,6 +41,13 @@
     @apply h-6 w-6 top-1 left-1;
 }
 
+.hide_scrool_bar::-webkit-scrollbar {
+    display: none;
+}
+.hide_scrool_bar {
+    scrollbar-width: none;
+}
+
 html {
     height: 100%;
 }
