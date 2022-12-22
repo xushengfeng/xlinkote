@@ -5546,6 +5546,21 @@ class pdf_viewer extends HTMLElement {
 window.customElements.define("x-pdf", pdf_viewer);
 
 /** 绘画元素 */
+import nDollar from "ndollar-js";
+let recognizer = new nDollar.Recognizer(false);
+
+recognizer.AddGesture("triangle", [
+    [new nDollar.Point(30, 7), new nDollar.Point(103, 7)],
+    [new nDollar.Point(103, 7), new nDollar.Point(66, 87)],
+    [new nDollar.Point(66, 87), new nDollar.Point(30, 7)],
+]);
+recognizer.AddGesture("rect", [
+    [new nDollar.Point(0, 0), new nDollar.Point(100, 0)],
+    [new nDollar.Point(100, 0), new nDollar.Point(100, 100)],
+    [new nDollar.Point(100, 100), new nDollar.Point(0, 100)],
+    [new nDollar.Point(0, 100), new nDollar.Point(0, 0)],
+]);
+
 class draw extends HTMLElement {
     constructor() {
         super();
@@ -5594,6 +5609,7 @@ class draw extends HTMLElement {
     oy = 0;
     width = NaN;
     height = NaN;
+    t;
 
     draw(e: PointerEvent) {
         if (!e.pressure) return;
@@ -5609,6 +5625,18 @@ class draw extends HTMLElement {
             let t = `translate(${this.ox},${this.oy})`;
             el.setAttribute("transform", t);
         }
+
+        clearTimeout(this.t);
+        this.t = setTimeout(() => {
+            console.log(this.points);
+            let l = [];
+            for (let p of this.points) {
+                if (!p.p) continue;
+                l.push(new nDollar.Point(p.x, p.y));
+            }
+            let result = recognizer.Recognize([l], false, false);
+            console.log(result);
+        }, 600);
 
         // 画
         let type = "p";

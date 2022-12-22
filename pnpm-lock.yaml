@@ -19,6 +19,7 @@ specifiers:
   markdown-it-task-lists: ^2.1.1
   mathjax: ^3.2.2
   mermaid: ^9.2.2
+  ndollar-js: ^0.6.1
   pdfjs-dist: ^3.1.81
   postcss: ^8.4.20
   tailwindcss: ^3.2.4
@@ -42,6 +43,7 @@ dependencies:
   markdown-it-task-lists: 2.1.1
   mathjax: 3.2.2
   mermaid: 9.2.2
+  ndollar-js: 0.6.1
   pdfjs-dist: 3.1.81
   three: 0.147.0
   turndown: 7.1.1
@@ -262,6 +264,10 @@ packages:
     dev: true
     optional: true
 
+  /@lib/autolink/0.0.2:
+    resolution: {integrity: sha512-bIrykfOshe8CKt301VZ1+YpBea4L8XKAlRX3AuXlqkwkm5M4wnBEZqllWaGUgp4uq5J7ZwtWVQJ+LH+nw2dzZg==}
+    dev: false
+
   /@mapbox/node-pre-gyp/1.0.10:
     resolution: {integrity: sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA==}
     hasBin: true
@@ -437,6 +443,15 @@ packages:
 
   /asynckit/0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+    dev: false
+
+  /autodts/0.0.6:
+    resolution: {integrity: sha512-Ey9Sw4sqt2CQVPPLgiVw7qwJDcoT6skAFKYbVdxWTShj9rJF41g3Knv7hN5pNuJkawb6W2thu4oP8ro1sy3JJQ==}
+    hasBin: true
+    dependencies:
+      '@lib/autolink': 0.0.2
+      minimist: 1.2.6
+      mkdirp: 0.5.6
     dev: false
 
   /autoprefixer/10.4.13_postcss@8.4.20:
@@ -2030,7 +2045,6 @@ packages:
 
   /minimist/1.2.6:
     resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
-    dev: true
 
   /minipass/3.3.4:
     resolution: {integrity: sha512-I9WPbWHCGu8W+6k1ZiGpPu0GkoKBeorkfKNuAFBNS1HNFJvke82sxvI5bzcCNpWPorkOO5QQ+zomzzwRxejXiw==}
@@ -2048,6 +2062,13 @@ packages:
       yallist: 4.0.0
     dev: false
     optional: true
+
+  /mkdirp/0.5.6:
+    resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
+    hasBin: true
+    dependencies:
+      minimist: 1.2.6
+    dev: false
 
   /mkdirp/1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
@@ -2075,6 +2096,13 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
     dev: true
+
+  /ndollar-js/0.6.1:
+    resolution: {integrity: sha512-gOk/fiZhI0/ZSSY2Az/qT/97SXPjZXvsOI8IMneGmZOD353PYXwgT+/UuJ9Hi+fW7K1z3YtpfahDQcRuHheKAA==}
+    requiresBuild: true
+    dependencies:
+      autodts: 0.0.6
+    dev: false
 
   /nested-property/4.0.0:
     resolution: {integrity: sha512-yFehXNWRs4cM0+dz7QxCd06hTbWbSkV0ISsqBfkntU6TOY4Qm3Q88fRRLOddkGh2Qq6dZvnKVAahfhjcUvLnyA==}
