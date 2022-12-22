@@ -5614,6 +5614,7 @@ class draw extends HTMLElement {
     width = NaN;
     height = NaN;
     t;
+    xz: { center: { x: number; y: number }; w: number; h: number };
 
     draw(e: PointerEvent) {
         if (!e.pressure) return;
@@ -5632,14 +5633,124 @@ class draw extends HTMLElement {
 
         clearTimeout(this.t);
         this.t = setTimeout(() => {
-            console.log(this.points);
-            let l = [];
+            let points = [];
             for (let p of this.points) {
+                if (!p.p) continue;
+                points.push(p);
+            }
+            console.log(points);
+            let l = [];
+            for (let p of points) {
                 if (!p.p) continue;
                 l.push(new nDollar.Point(p.x, p.y));
             }
             let result = recognizer.Recognize([l], false, false);
             console.log(result);
+            function convexHull(points) {
+                // 将点按照横坐标排序
+                points.sort(function (a, b) {
+                    return a.x != b.x ? a.x - b.x : a.y - b.y;
+                });
+
+                // 初始化下凸包
+                var lower = [];
+                for (var i = 0; i < points.length; i++) {
+                    while (
+                        lower.length >= 2 &&
+                        cross(lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0
+                    ) {
+                        lower.pop();
+                    }
+                    lower.push(points[i]);
+                }
+
+                // 初始化上凸包
+                var upper = [];
+                for (var i = points.length - 1; i >= 0; i--) {
+                    while (
+                        upper.length >= 2 &&
+                        cross(upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0
+                    ) {
+                        upper.pop();
+                    }
+                    upper.push(points[i]);
+                }
+
+                // 去除重复的点
+                upper.pop();
+                lower.pop();
+
+                // 返回凸包
+                return lower.concat(upper);
+            }
+
+            // 计算向量的叉积
+            function cross(o, a, b) {
+                return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+            }
+            function getMinimumBoundingBox(points) {
+                // 初始化变量
+                let minArea = Infinity;
+                let rect: { center: { x: number; y: number }; w: number; h: number };
+
+                // 对于每个点对 (p, q)，计算矩形的最小面积
+                for (let i = 0; i < points.length; i++) {
+                    for (let j = i + 1; j < points.length; j++) {
+                        // 计算点对 (p, q) 所在直线的方程
+                        let p = points[i];
+                        let q = points[j];
+                        let a = p.y - q.y;
+                        let b = q.x - p.x;
+                        let c = p.x * q.y - q.x * p.y;
+                        let sqrtab = Math.sqrt(a ** 2 + b ** 2);
+
+                        let maxd = -Infinity,
+                            maxd2 = -Infinity,
+                            mind2 = Infinity;
+                        let maxd_p;
+
+                        // 遍历点集并更新最小和最大 x 和 y 坐标
+                        for (let k = 0; k < points.length; k++) {
+                            let x = points[k].x;
+                            let y = points[k].y;
+                            let d = Math.abs(a * x + b * y + c) / sqrtab;
+                            let d2 = (-b * x + a * y + c) / sqrtab; // 距离垂线
+                            if (d > maxd) {
+                                maxd = d;
+                                maxd_p = points[k];
+                            }
+                            maxd2 = Math.max(maxd2, d2);
+                            mind2 = Math.min(mind2, d2);
+                        }
+
+                        let area = (maxd2 - mind2) * maxd;
+                        if (area < minArea) {
+                            minArea = area;
+                            // 新的c，矩形两条垂直平分线
+                            let cn = (a * maxd_p.x + b * maxd_p.y + c) / 2 + c;
+                            let cn2 = ((maxd2 + mind2) / 2) * sqrtab;
+                            // 焦点
+                            let x = (-cn + cn2) / (a + b),
+                                y = (-a * cn - b * cn2) / (a ** 2 + b ** 2);
+                            rect = { center: { x, y }, w: maxd, h: maxd2 - mind2 };
+                        }
+                    }
+                }
+
+                return rect;
+            }
+            console.log(points);
+            points = convexHull(points);
+            console.log(points);
+
+            let rect = getMinimumBoundingBox(points);
+            console.log(rect);
+
+            switch (result.Name) {
+                case "triangle":
+                    // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
+                    break;
+            }
         }, 600);
 
         // 画
