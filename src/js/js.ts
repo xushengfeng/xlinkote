@@ -639,6 +639,7 @@ var o_touch_t = NaN;
     }
 };
 画布.ontouchend = (e) => {
+    // 惯性滚动
     let dt = new Date().getTime() - o_touch_t;
     let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0,
         dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
@@ -648,16 +649,18 @@ var o_touch_t = NaN;
     let p = 0.5 * m * (ds / dt / 2) ** 2;
     let s = p / (m * a);
     let t = Math.sqrt((2 * s) / a);
-    console.log(s, t);
-    let x = el_offset(O).x + s * (dx / ds),
-        y = el_offset(O).y + s * (dy / ds);
-    O.style.transition = `${t / 1000}s`;
-    O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
-    setTimeout(() => {
-        O.style.transition = ``;
-    }, t);
-    O.style.left = x + "px";
-    O.style.top = y + "px";
+    console.log(ds);
+    if (ds > 30) {
+        let x = el_offset(O).x + s * (dx / ds),
+            y = el_offset(O).y + s * (dy / ds);
+        O.style.transition = `${t / 1000}s`;
+        O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
+        setTimeout(() => {
+            O.style.transition = ``;
+        }, t);
+        O.style.left = x + "px";
+        O.style.top = y + "px";
+    }
 
     o_touch_e = null;
     move = false;
