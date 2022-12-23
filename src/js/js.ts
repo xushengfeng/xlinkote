@@ -4953,7 +4953,7 @@ class markdown extends HTMLElement {
                     this.remove();
                     p.append(x);
                     x.append(md);
-                    md.value = JSON.stringify({ type: this.type, text: t });
+                    md.value = this.value;
                     p.id = uuid_id();
                     link(p.id).add();
                     md.edit = true;
