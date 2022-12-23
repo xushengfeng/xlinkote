@@ -5780,6 +5780,15 @@ class draw extends HTMLElement {
                 case "line":
                     this.tmp_svg.innerHTML = `<line x1="${this.xz.start_p.x}" y1="${this.xz.start_p.y}" x2="${this.xz.end_p.x}" y2="${this.xz.end_p.y}" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px"/>`;
                     break;
+                case "rect":
+                    let x = this.xz.rect.center.x - Math.abs((this.xz.rect.w / 2) * Math.cos(this.xz.rect.a));
+                    let y = this.xz.rect.center.y - Math.abs((this.xz.rect.h / 2) * Math.cos(this.xz.rect.a));
+                    this.tmp_svg.innerHTML = `<rect x="${x}" y="${y}" width="${this.xz.rect.w}" height="${
+                        this.xz.rect.h
+                    }" transform="rotate(${this.xz.rect.a / (Math.PI / 180) + 90} ${this.xz.rect.center.x} ${
+                        this.xz.rect.center.y
+                    })" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px;fill:#0000"/>`;
+                    break;
                 case "triangle":
                     // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
                     break;
