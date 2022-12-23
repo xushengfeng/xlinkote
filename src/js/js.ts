@@ -5699,6 +5699,7 @@ class draw extends HTMLElement {
             }
             let result = recognizer.Recognize([l], false, false);
             console.log(result);
+            if (result.Score < 0.89) return;
             function convexHull(points) {
                 // 将点按照横坐标排序
                 points.sort(function (a, b) {
