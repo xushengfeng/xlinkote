@@ -4502,6 +4502,7 @@ function tlink(state, silent: boolean) {
 
     // start tag
     let t = state.push("x-link_open", TAG, 1);
+    t.markup = "[[";
     // parse inner
     state.pos += 2;
     state.posMax = end;
@@ -4510,7 +4511,8 @@ function tlink(state, silent: boolean) {
     state.pos = end + id_l + 2;
     state.posMax = max;
     // end tag
-    state.push("x-link_close", TAG, -1);
+    let e = state.push("x-link_close", TAG, -1);
+    e.markup = `#${id}]]`;
 
     return true;
 }
