@@ -5121,9 +5121,89 @@ class markdown extends HTMLElement {
             }
             text.style.left = el_offset2(this.h).x + "px";
             text.style.top = el_offset2(this.h).y + s.offsetHeight + "px";
-            if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
-                this.edit = true;
-            text.focus();
+            // if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
+            // this.edit = true;
+            // text.focus();
+        };
+        s.contentEditable = "true";
+        s.onpointerup = (e) => {
+            console.log(document.getSelection().getRangeAt(0));
+            let r = document.getSelection().getRangeAt(0);
+            function get_text(node: Node, of: number) {
+                let before = "",
+                    after = "",
+                    x = false;
+                let w = (pn: Node) => {
+                    for (let n of pn.childNodes) {
+                        if (!n.contains(node)) {
+                            if (!x) {
+                                before += n.textContent;
+                            } else {
+                                after += n.textContent;
+                            }
+                        } else {
+                            if (n == node) {
+                                before += n.textContent.slice(0, of);
+                                after += n.textContent.slice(of);
+                                x = true;
+                            } else {
+                                w(n);
+                            }
+                        }
+                    }
+                };
+                w(s);
+                return { before, after };
+            }
+            let start_t = get_text(r.startContainer, r.startOffset);
+            let end_t = get_text(r.endContainer, r.endOffset);
+            console.log(start_t, end_t);
+            let p2p = (of: number) => {
+                let list = [];
+                let w = (l) => {
+                    for (let i of l) {
+                        if (i.children) {
+                            w(i.children);
+                        } else {
+                            if (i.markup) {
+                                if (i.type == "emoji") {
+                                    list.push({ text: `:${i.markup}`, type: "mu" });
+                                    // 删去一个冒号以匹配
+                                } else {
+                                    list.push({ text: i.markup, type: "mu" });
+                                }
+                            } else if (i.type == "html_inline" || i.type == "html_block") {
+                                list.push({ text: i.content, type: "mu" });
+                            } else if (i.content) {
+                                list.push({ text: i.content, type: "ct" });
+                            }
+                        }
+                    }
+                };
+                w(this.index);
+                console.log(list);
+                let true_o = 0;
+                let tmp_o = 0;
+                for (let i of list) {
+                    if (i.type == "ct") {
+                        if (tmp_o <= of && of <= tmp_o + i.text.length) {
+                            return true_o + (of - tmp_o);
+                        }
+                        tmp_o += i.text.length;
+                    }
+                    true_o += i.text.length;
+                }
+            };
+            let start_p = 0;
+            let end_p = 0;
+            start_p = p2p(start_t.before.length);
+            end_p = p2p(end_t.before.length);
+            if (start_p > end_p) {
+                [start_p, end_p] = [end_p, start_p];
+            }
+            console.log(start_p, end_p);
+            this.text.setSelectionRange(start_p, end_p);
+            this.edit = true;
         };
     }
 
@@ -5166,12 +5246,14 @@ class markdown extends HTMLElement {
         let type = this._value.type;
         let text = this.text.value;
         if (type == "text") {
+            this.index = md.parse(text);
             this.h.innerHTML = md.render(text);
         } else if (type == "todo") {
             this.init_v("todo");
             if (!集.values[this.parentElement.id].todo["checked"])
                 集.values[this.parentElement.id].todo["checked"] = false;
             let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
+            this.index = md.parse(text);
             this.h.innerHTML = i + md.render(text);
         } else if (type == "math") {
             this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
@@ -5181,9 +5263,12 @@ class markdown extends HTMLElement {
             if (集.values?.[this.parentElement.id]?.code?.["html"]) {
                 this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
             } else {
+                this.index = md.parse(text);
                 this.h.innerHTML = md.render(text);
             }
         } else {
+            this.index = md.parse(text);
+            console.log(this.index);
             this.h.innerHTML = md.render(text);
         }
     }
