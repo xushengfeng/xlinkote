@@ -5614,7 +5614,7 @@ class draw extends HTMLElement {
     width = NaN;
     height = NaN;
     t;
-    xz: { center: { x: number; y: number }; w: number; h: number };
+    xz: { center: { x: number; y: number }; a: number; w: number; h: number };
 
     draw(e: PointerEvent) {
         if (!e.pressure) return;
@@ -5690,8 +5690,16 @@ class draw extends HTMLElement {
             }
             function getMinimumBoundingBox(points: { x: number; y: number }[]) {
                 // 初始化变量
+                let maxd = -Infinity,
+                    maxd2 = -Infinity,
+                    mind2 = Infinity;
+                let maxd_p;
                 let minArea = Infinity;
-                let rect: { center: { x: number; y: number }; w: number; h: number };
+                let main_a: number;
+                let main_b: number;
+                let main_c: number;
+                let main_sqrtab: number;
+                let rect: { center: { x: number; y: number }; a: number; w: number; h: number };
 
                 // 对于每个点对 (p, q)，计算矩形的最小面积
                 for (let i = 0; i < points.length; i++) {
@@ -5704,10 +5712,10 @@ class draw extends HTMLElement {
                         let c = p.x * q.y - q.x * p.y;
                         let sqrtab = Math.sqrt(a ** 2 + b ** 2);
 
-                        let maxd = -Infinity,
-                            maxd2 = -Infinity,
-                            mind2 = Infinity;
-                        let maxd_p;
+                        let mmaxd = -Infinity,
+                            mmaxd2 = -Infinity,
+                            mmind2 = Infinity;
+                        let mmaxd_p;
 
                         // 遍历点集并更新最小和最大 x 和 y 坐标
                         for (let k = 0; k < points.length; k++) {
@@ -5715,27 +5723,39 @@ class draw extends HTMLElement {
                             let y = points[k].y;
                             let d = Math.abs(a * x + b * y + c) / sqrtab;
                             let d2 = (-b * x + a * y + c) / sqrtab; // 距离垂线
-                            if (d > maxd) {
-                                maxd = d;
-                                maxd_p = points[k];
+                            if (d > mmaxd) {
+                                mmaxd = d;
+                                mmaxd_p = points[k];
                             }
-                            maxd2 = Math.max(maxd2, d2);
-                            mind2 = Math.min(mind2, d2);
+                            mmaxd2 = Math.max(mmaxd2, d2);
+                            mmind2 = Math.min(mmind2, d2);
                         }
 
-                        let area = (maxd2 - mind2) * maxd;
+                        let area = (mmaxd2 - mmind2) * mmaxd;
                         if (area < minArea) {
                             minArea = area;
-                            // 新的c，矩形两条垂直平分线
-                            let cn = -(a * maxd_p.x + b * maxd_p.y + c) / 2 + c;
-                            let cn2 = -((maxd2 + mind2) / 2) * sqrtab + c;
-                            // 交点
-                            let x = (-a * cn + b * cn2) / (a ** 2 + b ** 2),
-                                y = (-a * cn2 - b * cn) / (a ** 2 + b ** 2);
-                            rect = { center: { x, y }, w: maxd, h: maxd2 - mind2 };
+                            maxd = mmaxd;
+                            maxd2 = mmaxd2;
+                            mind2 = mmind2;
+                            maxd_p = mmaxd_p;
+                            main_a = a;
+                            main_b = b;
+                            main_c = c;
+                            main_sqrtab = sqrtab;
                         }
                     }
                 }
+                let a = main_a,
+                    b = main_b,
+                    c = main_c,
+                    sqrtab = main_sqrtab;
+                // 新的c，矩形两条垂直平分线
+                let cn = -(a * maxd_p.x + b * maxd_p.y + c) / 2 + c;
+                let cn2 = -((maxd2 + mind2) / 2) * sqrtab + c;
+                // 交点
+                let x = (-a * cn + b * cn2) / (a ** 2 + b ** 2),
+                    y = (-a * cn2 - b * cn) / (a ** 2 + b ** 2);
+                rect = { center: { x, y }, w: maxd, a: Math.atan2(2 - 1, (-b * 2 + b * 1) / a), h: maxd2 - mind2 };
 
                 return rect;
             }
@@ -5748,7 +5768,9 @@ class draw extends HTMLElement {
             this.xz = rect;
             this.tmp_svg.innerHTML = `<ellipse cx="${rect.center.x}" cy="${rect.center.y}" rx="${rect.h / 2}" ry="${
                 rect.w / 2
-            }" style="stroke:${this.pen.color};fill:#0000"></ellipse>`;
+            }" transform="rotate(${rect.a / (Math.PI / 180)} ${rect.center.x} ${rect.center.y})" style="stroke:${
+                this.pen.color
+            };fill:#0000;"></ellipse>`;
             switch (result.Name) {
                 case "triangle":
                     // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
@@ -5941,7 +5963,7 @@ class draw extends HTMLElement {
         this.oy -= min_y - pb.top / zoom;
         for (let el of els) {
             let t = `translate(${this.ox},${this.oy})`;
-            el.setAttribute("transform", t);
+            el.setAttribute("transform", t + " " + (el.getAttribute("transform") || ""));
         }
 
         this.width = max_x - min_x;
