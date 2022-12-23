@@ -5688,7 +5688,7 @@ class draw extends HTMLElement {
             function cross(o, a, b) {
                 return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
             }
-            function getMinimumBoundingBox(points) {
+            function getMinimumBoundingBox(points: { x: number; y: number }[]) {
                 // 初始化变量
                 let minArea = Infinity;
                 let rect: { center: { x: number; y: number }; w: number; h: number };
@@ -5727,11 +5727,11 @@ class draw extends HTMLElement {
                         if (area < minArea) {
                             minArea = area;
                             // 新的c，矩形两条垂直平分线
-                            let cn = (a * maxd_p.x + b * maxd_p.y + c) / 2 + c;
-                            let cn2 = ((maxd2 + mind2) / 2) * sqrtab;
-                            // 焦点
-                            let x = (-cn + cn2) / (a + b),
-                                y = (-a * cn - b * cn2) / (a ** 2 + b ** 2);
+                            let cn = -(a * maxd_p.x + b * maxd_p.y + c) / 2 + c;
+                            let cn2 = -((maxd2 + mind2) / 2) * sqrtab + c;
+                            // 交点
+                            let x = (-a * cn + b * cn2) / (a ** 2 + b ** 2),
+                                y = (-a * cn2 - b * cn) / (a ** 2 + b ** 2);
                             rect = { center: { x, y }, w: maxd, h: maxd2 - mind2 };
                         }
                     }
@@ -5745,7 +5745,10 @@ class draw extends HTMLElement {
 
             let rect = getMinimumBoundingBox(points);
             console.log(rect);
-
+            this.xz = rect;
+            this.tmp_svg.innerHTML = `<ellipse cx="${rect.center.x}" cy="${rect.center.y}" rx="${rect.h / 2}" ry="${
+                rect.w / 2
+            }" style="stroke:${this.pen.color};fill:#0000"></ellipse>`;
             switch (result.Name) {
                 case "triangle":
                     // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
