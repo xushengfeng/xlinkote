@@ -5568,6 +5568,50 @@ recognizer.AddGesture("rect", [
     [new nDollar.Point(100, 100), new nDollar.Point(0, 100)],
     [new nDollar.Point(0, 100), new nDollar.Point(0, 0)],
 ]);
+recognizer.AddGesture("circle", [
+    [
+        new nDollar.Point(382, 310),
+        new nDollar.Point(377, 308),
+        new nDollar.Point(373, 307),
+        new nDollar.Point(366, 307),
+        new nDollar.Point(360, 310),
+        new nDollar.Point(356, 313),
+        new nDollar.Point(353, 316),
+        new nDollar.Point(349, 321),
+        new nDollar.Point(347, 326),
+        new nDollar.Point(344, 331),
+        new nDollar.Point(342, 337),
+        new nDollar.Point(341, 343),
+        new nDollar.Point(341, 350),
+        new nDollar.Point(341, 358),
+        new nDollar.Point(342, 362),
+        new nDollar.Point(344, 366),
+        new nDollar.Point(347, 370),
+        new nDollar.Point(351, 374),
+        new nDollar.Point(356, 379),
+        new nDollar.Point(361, 382),
+        new nDollar.Point(368, 385),
+        new nDollar.Point(374, 387),
+        new nDollar.Point(381, 387),
+        new nDollar.Point(390, 387),
+        new nDollar.Point(397, 385),
+        new nDollar.Point(404, 382),
+        new nDollar.Point(408, 378),
+        new nDollar.Point(412, 373),
+        new nDollar.Point(416, 367),
+        new nDollar.Point(418, 361),
+        new nDollar.Point(419, 353),
+        new nDollar.Point(418, 346),
+        new nDollar.Point(417, 341),
+        new nDollar.Point(416, 336),
+        new nDollar.Point(413, 331),
+        new nDollar.Point(410, 326),
+        new nDollar.Point(404, 320),
+        new nDollar.Point(400, 317),
+        new nDollar.Point(393, 313),
+        new nDollar.Point(392, 312),
+    ],
+]);
 
 class draw extends HTMLElement {
     constructor() {
@@ -5788,6 +5832,23 @@ class draw extends HTMLElement {
                     }" transform="rotate(${this.xz.rect.a / (Math.PI / 180) + 90} ${this.xz.rect.center.x} ${
                         this.xz.rect.center.y
                     })" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px;fill:#0000"/>`;
+                    break;
+                case "circle":
+                    if (this.xz.rect.w / this.xz.rect.h > 2 || this.xz.rect.h / this.xz.rect.w > 2) {
+                        this.tmp_svg.innerHTML = `<ellipse cx="${rect.center.x}" cy="${rect.center.y}" rx="${
+                            rect.h / 2
+                        }" ry="${rect.w / 2}" transform="rotate(${rect.a / (Math.PI / 180)} ${rect.center.x} ${
+                            rect.center.y
+                        })" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px;fill:#0000;"></ellipse>`;
+                    } else {
+                        let r = (this.xz.rect.h + this.xz.rect.w) / 2 / 2;
+                        this.tmp_svg.innerHTML = `<circle cx="${rect.center.x}" cy="${
+                            rect.center.y
+                        }" r="${r}" transform="rotate(${rect.a / (Math.PI / 180)} ${rect.center.x} ${
+                            rect.center.y
+                        })" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px;fill:#0000;"></circle>`;
+                    }
+                    // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
                     break;
                 case "triangle":
                     // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
