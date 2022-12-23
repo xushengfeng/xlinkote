@@ -4443,7 +4443,8 @@ const MARKER_OPEN = "[";
 const MARKER_CLOSE = "]";
 const ESCAPE_CHARACTER = "\\";
 const TAG = "x-link";
-function tlink(state, silent: boolean) {
+
+md.inline.ruler.before("link", "x-link", (state, silent: boolean) => {
     if (silent) {
         return false;
     }
@@ -4515,9 +4516,7 @@ function tlink(state, silent: boolean) {
     e.markup = `#${id}]]`;
 
     return true;
-}
-
-md.inline.ruler.before("link", "x-link", tlink);
+});
 
 // template
 /** 主元素 */
