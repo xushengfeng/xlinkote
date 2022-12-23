@@ -37,6 +37,7 @@
   "devDependencies": {
     "@types/color": "^3.0.3",
     "@types/deep-diff": "^1.0.2",
+    "@types/markdown-it": "^12.2.3",
     "@types/three": "^0.146.0",
     "autoprefixer": "^10.4.13",
     "download": "^8.0.0",

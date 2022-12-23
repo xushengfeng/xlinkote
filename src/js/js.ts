@@ -5246,14 +5246,14 @@ class markdown extends HTMLElement {
         let type = this._value.type;
         let text = this.text.value;
         if (type == "text") {
-            this.index = md.parse(text);
+            this.index = md.parse(text, null);
             this.h.innerHTML = md.render(text);
         } else if (type == "todo") {
             this.init_v("todo");
             if (!集.values[this.parentElement.id].todo["checked"])
                 集.values[this.parentElement.id].todo["checked"] = false;
             let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
-            this.index = md.parse(text);
+            this.index = md.parse(text, null);
             this.h.innerHTML = i + md.render(text);
         } else if (type == "math") {
             this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
@@ -5263,11 +5263,11 @@ class markdown extends HTMLElement {
             if (集.values?.[this.parentElement.id]?.code?.["html"]) {
                 this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
             } else {
-                this.index = md.parse(text);
+                this.index = md.parse(text, null);
                 this.h.innerHTML = md.render(text);
             }
         } else {
-            this.index = md.parse(text);
+            this.index = md.parse(text, null);
             console.log(this.index);
             this.h.innerHTML = md.render(text);
         }
