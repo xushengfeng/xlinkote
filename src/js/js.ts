@@ -5617,7 +5617,12 @@ class draw extends HTMLElement {
     width = NaN;
     height = NaN;
     t;
-    xz: { center: { x: number; y: number }; a: number; w: number; h: number };
+    xz: {
+        rect: { center: { x: number; y: number }; a: number; w: number; h: number };
+        xz: string;
+        start_p: { x: number; y: number };
+        end_p: { x: number; y: number };
+    } = { rect: { center: { x: 0, y: 0 }, a: 0, w: 0, h: 0 }, xz: "", start_p: { x: 0, y: 0 }, end_p: { x: 0, y: 0 } };
 
     draw(e: PointerEvent) {
         if (!e.pressure) return;
@@ -5768,7 +5773,10 @@ class draw extends HTMLElement {
 
             let rect = getMinimumBoundingBox(points);
             console.log(rect);
-            this.xz = rect;
+            this.xz.rect = rect;
+            this.xz.xz = result.Name;
+            this.xz.start_p = points[0];
+            this.xz.end_p = points[points.length - 1];
             this.tmp_svg.innerHTML = `<ellipse cx="${rect.center.x}" cy="${rect.center.y}" rx="${rect.h / 2}" ry="${
                 rect.w / 2
             }" transform="rotate(${rect.a / (Math.PI / 180)} ${rect.center.x} ${rect.center.y})" style="stroke:${
