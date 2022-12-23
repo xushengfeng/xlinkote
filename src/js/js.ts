@@ -959,6 +959,9 @@ let middle_p = { x: 0, y: 0 };
     }
 });
 画布.addEventListener("pointerup", (e) => {
+    if (middle_b) {
+        data_changed();
+    }
     middle_b = null;
 });
 
