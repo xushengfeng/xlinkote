@@ -5556,6 +5556,7 @@ window.customElements.define("x-pdf", pdf_viewer);
 import nDollar from "ndollar-js";
 let recognizer = new nDollar.Recognizer(false);
 
+recognizer.AddGesture("line", [[new nDollar.Point(0, 0), new nDollar.Point(100, 0)]]);
 recognizer.AddGesture("triangle", [
     [new nDollar.Point(30, 7), new nDollar.Point(103, 7)],
     [new nDollar.Point(103, 7), new nDollar.Point(66, 87)],
@@ -5767,26 +5768,23 @@ class draw extends HTMLElement {
 
                 return rect;
             }
-            console.log(points);
-            points = convexHull(points);
-            console.log(points);
+            let conpoints = convexHull(points);
 
-            let rect = getMinimumBoundingBox(points);
+            let rect = getMinimumBoundingBox(conpoints);
             console.log(rect);
             this.xz.rect = rect;
             this.xz.xz = result.Name;
             this.xz.start_p = points[0];
             this.xz.end_p = points[points.length - 1];
-            this.tmp_svg.innerHTML = `<ellipse cx="${rect.center.x}" cy="${rect.center.y}" rx="${rect.h / 2}" ry="${
-                rect.w / 2
-            }" transform="rotate(${rect.a / (Math.PI / 180)} ${rect.center.x} ${rect.center.y})" style="stroke:${
-                this.pen.color
-            };fill:#0000;"></ellipse>`;
             switch (result.Name) {
+                case "line":
+                    this.tmp_svg.innerHTML = `<line x1="${this.xz.start_p.x}" y1="${this.xz.start_p.y}" x2="${this.xz.end_p.x}" y2="${this.xz.end_p.y}" style="stroke:${this.pen.color};stroke-width:${this.pen.width}px"/>`;
+                    break;
                 case "triangle":
                     // this.tmp_svg.innerHTML = `<polygon points="10,0 60,0 35,50" style="stroke:${this.pen.color};" />`;
                     break;
             }
+            console.log(this.tmp_svg.innerHTML);
         }, 600);
 
         // 画
