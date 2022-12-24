@@ -5122,9 +5122,6 @@ class markdown extends HTMLElement {
             }
             text.style.left = el_offset2(this.h).x + "px";
             text.style.top = el_offset2(this.h).y + s.offsetHeight + "px";
-            // if (模式 == "浏览" && document.getSelection().anchorOffset == document.getSelection().focusOffset)
-            // this.edit = true;
-            // text.focus();
         };
         s.contentEditable = "true";
         s.spellcheck = false;
