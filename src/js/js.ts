@@ -3316,7 +3316,16 @@ function select_search(i: number) {
     search_r.querySelectorAll(".search_item_select").forEach((el) => {
         el.classList.remove("search_item_select");
     });
-    (<HTMLElement>search_r.children[i]).classList.add("search_item_select");
+    let el = <HTMLElement>search_r.children[i];
+    el.classList.add("search_item_select");
+    let ri = search_r.children[i].getBoundingClientRect();
+    let r = search_r.getBoundingClientRect();
+    if (ri.top < r.top) {
+        search_r.scrollTop = el.offsetTop - (<HTMLElement>search_r.children[0]).offsetTop;
+    }
+    if (ri.bottom > r.bottom) {
+        search_r.scrollTop = el.offsetTop + el.offsetHeight - r.height - (<HTMLElement>search_r.children[0]).offsetTop;
+    }
     return search_r.children[i];
 }
 
