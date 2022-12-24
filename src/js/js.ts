@@ -5159,8 +5159,24 @@ class markdown extends HTMLElement {
             }
             if (el.tagName == "A") {
                 e.preventDefault();
+                let a = el as HTMLAnchorElement;
                 if (e.ctrlKey) {
-                    window.open((el as HTMLAnchorElement).href);
+                    if (a.getAttribute("href")[0] == "#") {
+                        let ml = a.getAttribute("href").split(":");
+                        const id = ml[0].slice(1);
+                        let el = elFromId(id);
+                        jump_to_x_link(el as x);
+                        let mel = el.querySelector("audio") || el.querySelector("video");
+                        if (ml[1]) {
+                            let ar = ml[1].split(",");
+                            ar.forEach((x) => x.trim());
+                            if (mel.tagName == "AUDIO" || mel.tagName == "VIDEO") {
+                                (mel as HTMLMediaElement).currentTime = Number(ar[0]);
+                            }
+                        }
+                    } else {
+                        window.open((el as HTMLAnchorElement).href);
+                    }
                 }
             }
             text.style.left = el_offset2(this.h).x + "px";
