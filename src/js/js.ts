@@ -4677,6 +4677,12 @@ class x extends HTMLElement {
 
             if (this.querySelector("x-file")) assets_reflash();
         };
+        d.onpointerenter = () => {
+            this.style.opacity = "0.5";
+        };
+        d.onpointerleave = () => {
+            this.style.opacity = "";
+        };
 
         if (this.getAttribute("value")) {
             this.set_v(JSON.parse(this.getAttribute("value")));
