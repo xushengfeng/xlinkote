@@ -917,6 +917,7 @@ x-md > textarea {
 x-md > #h {
     min-width: 0.5rem;
     min-height: 0.5rem;
+    outline: none;
 }
 x-md > #h *:hover > .handle {
     opacity: 1;
