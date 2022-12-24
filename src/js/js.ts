@@ -5020,6 +5020,34 @@ class markdown extends HTMLElement {
                     }
                 }
             }
+            if (e.key == "ArrowUp") {
+                if (
+                    this._value.type != "text" &&
+                    this._value.type != "code" &&
+                    is_flex(this.parentElement.parentElement) == "flex" &&
+                    this.parentElement.previousElementSibling &&
+                    this.parentElement.previousElementSibling.querySelector("x-md")
+                ) {
+                    e.preventDefault();
+                    let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
+                    md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
+                    md.edit = true;
+                }
+            }
+            if (e.key == "ArrowDown") {
+                if (
+                    this._value.type != "text" &&
+                    this._value.type != "code" &&
+                    is_flex(this.parentElement.parentElement) == "flex" &&
+                    this.parentElement.nextElementSibling &&
+                    this.parentElement.nextElementSibling.querySelector("x-md")
+                ) {
+                    e.preventDefault();
+                    let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
+                    md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
+                    md.edit = true;
+                }
+            }
         };
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
