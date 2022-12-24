@@ -5127,6 +5127,7 @@ class markdown extends HTMLElement {
             // text.focus();
         };
         s.contentEditable = "true";
+        s.spellcheck = false;
         s.onpointerup = (e) => {
             console.log(document.getSelection().getRangeAt(0));
             let r = document.getSelection().getRangeAt(0);
