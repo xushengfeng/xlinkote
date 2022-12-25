@@ -86,6 +86,8 @@ var xywh_y_el = <HTMLInputElement>elFromId("xywh_y");
 var xywh_w_el = <HTMLInputElement>elFromId("xywh_w");
 var xywh_h_el = <HTMLInputElement>elFromId("xywh_h");
 
+const value_el = elFromId("值");
+
 const about = elFromId("about");
 const version_el = <HTMLElement>about.querySelector("#version");
 
@@ -2844,6 +2846,7 @@ class 图层 {
         selected_el.push(el);
         el_style.value = el.getAttribute("style").replaceAll("; ", ";\n");
         load_xywh();
+        load_value();
 
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
@@ -4137,6 +4140,28 @@ ys_add.onclick = () => {
 
     data_changed();
 };
+
+// 值
+
+function load_value() {
+    if (!集.values) return;
+    let el = z.聚焦元素;
+    let t = createEl("textarea");
+    let value = "";
+    if (集.values[el.id]) value = JSON.stringify(集.values[el.id], null, 2);
+    t.value = value;
+    value_el.innerHTML = "";
+    value_el.append(t);
+    t.oninput = () => {
+        try {
+            let v = JSON.parse(t.value);
+            集.values[el.id] = v;
+            if (el.querySelector("x-md")) {
+                (el.querySelector("x-md") as markdown).reload();
+            }
+        } catch (error) {}
+    };
+}
 
 // MD
 import markdownit from "markdown-it";

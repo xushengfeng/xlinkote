@@ -515,6 +515,9 @@ body #main > #nav #ink_r {
     @apply opacity-50 cursor-not-allowed pointer-events-none;
 }
 
+.侧栏 > #items > #值 > textarea {
+    height: 100%;
+}
 .侧栏 > #items > #设置 > form > fieldset > input {
     width: 100%;
 }
