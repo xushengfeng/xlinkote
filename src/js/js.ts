@@ -6706,7 +6706,7 @@ class audio extends HTMLElement {
     connectedCallback() {
         if (!this.id) this.id = uuid_id();
         this.audio = createEl("audio");
-        this.audio.controls = true;
+        this.audio.style.display = "none";
         let button = createEl("div");
         button.classList.add("audio_button");
         let playtime = createEl("div");
@@ -6718,6 +6718,7 @@ class audio extends HTMLElement {
         let yl2 = createEl("div"); // 按钮
         let yl3 = createEl("div"); // 滑槽
         let yl4 = createEl("div"); // 滑块
+        this.append(this.audio);
         this.append(button, jd, playtime, yl);
         button.innerHTML = icon(play_svg);
         button.onclick = () => {
