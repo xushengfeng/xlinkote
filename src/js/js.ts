@@ -21,6 +21,10 @@ import ocr_svg from "../../assets/icons/ocr.svg";
 import play_svg from "../../assets/icons/play.svg";
 import down_svg from "../../assets/icons/down.svg";
 import binding_svg from "../../assets/icons/binding_file.svg";
+import pause_svg from "../../assets/icons/pause.svg";
+import yl0_svg from "../../assets/icons/yl0.svg";
+import yl1_svg from "../../assets/icons/yl1.svg";
+import yl2_svg from "../../assets/icons/yl2.svg";
 
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -5456,6 +5460,7 @@ class file extends HTMLElement {
         let type = f.base64.match(/data:(.*?);/)[1].split("/");
         if (
             type[0] != "image" &&
+            type[0] != "audio" &&
             type[0] != "video" &&
             type[1] != "pdf" &&
             type[1] != "gltf-binary" &&
@@ -5469,6 +5474,11 @@ class file extends HTMLElement {
                 let img = createEl("x-img") as img;
                 this.div.append(img);
                 img.value = f.base64;
+            }
+            if (type[0] == "audio") {
+                let audio = createEl("x-audio") as audio;
+                this.div.append(audio);
+                audio.value = f.base64;
             }
             if (type[0] == "video") {
                 let video = createEl("video");
@@ -6684,6 +6694,161 @@ class record extends HTMLElement {
 }
 
 window.customElements.define("x-record", record);
+/** 录音元素 */
+class audio extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    audio: HTMLAudioElement;
+    _value: string;
+
+    connectedCallback() {
+        if (!this.id) this.id = uuid_id();
+        this.audio = createEl("audio");
+        this.audio.controls = true;
+        let button = createEl("div");
+        button.classList.add("audio_button");
+        let playtime = createEl("div");
+        let jd = createEl("div");
+        jd.classList.add("audio_jd");
+        let jd2 = createEl("div");
+        let yl = createEl("div");
+        yl.classList.add("audio_yl");
+        let yl2 = createEl("div"); // 按钮
+        let yl3 = createEl("div"); // 滑槽
+        let yl4 = createEl("div"); // 滑块
+        this.append(button, jd, playtime, yl);
+        button.innerHTML = icon(play_svg);
+        button.onclick = () => {
+            if (this.audio.paused) {
+                this.audio.play();
+            } else {
+                this.audio.pause();
+            }
+        };
+        this.audio.onplay = () => {
+            button.innerHTML = icon(pause_svg);
+        };
+        this.audio.onpause = () => {
+            button.innerHTML = icon(play_svg);
+        };
+        let show_t = (n: number, t: number) => {
+            let s0 = Math.round(n);
+            let m0 = Math.floor(s0 / 60);
+            let ss0 = `${s0 % 60 < 10 ? "0" : ""}${s0 % 60}`;
+            let s1 = Math.round(t);
+            let m1 = Math.floor(s1 / 60);
+            let ss1 = `${s1 % 60 < 10 ? "0" : ""}${s1 % 60}`;
+            return `${m0}:${ss0}/${m1}:${ss1}`;
+        };
+        this.audio.oncanplay = () => {
+            playtime.innerText = show_t(this.audio.currentTime, this.audio.duration);
+        };
+        this.audio.ontimeupdate = () => {
+            playtime.innerText = show_t(this.audio.currentTime, this.audio.duration);
+            jd2.style.width = `${(this.audio.currentTime / this.audio.duration) * 100}%`;
+        };
+        jd.append(jd2);
+        let jde: PointerEvent;
+        jd.onpointerdown = (e) => {
+            jde = e;
+            f(e);
+            e.preventDefault();
+        };
+        document.addEventListener("pointermove", (e) => {
+            if (jde) {
+                e.preventDefault();
+                f(e);
+            }
+        });
+        document.addEventListener("pointerup", (e) => {
+            if (jde) {
+                e.preventDefault();
+                jde = null;
+                f(e);
+            }
+        });
+
+        let f = (e: PointerEvent) => {
+            let r = jd.getBoundingClientRect();
+            let pw = e.clientX - r.x;
+            let p = pw / r.width;
+            p = Math.max(Math.min(1, p), 0);
+
+            this.audio.currentTime = this.audio.duration * p;
+        };
+
+        this.audio.volume = 1;
+        yl3.title = "100%";
+        this.audio.onvolumechange = () => {
+            yl4.style.width = `${(this.audio.volume / 1) * 100}%`;
+            yl_icon();
+        };
+        let yl_icon = () => {
+            if (this.audio.volume == 0 || this.audio.muted) {
+                yl2.innerHTML = icon(yl0_svg);
+            } else if (this.audio.volume < 0.5) {
+                yl2.innerHTML = icon(yl1_svg);
+            } else {
+                yl2.innerHTML = icon(yl2_svg);
+            }
+        };
+        yl.onpointerenter = () => {
+            jd.style.width = "calc(256px - 48px)";
+        };
+        yl.onpointerleave = () => {
+            jd.style.width = "";
+        };
+        yl.append(yl3, yl2);
+        yl3.append(yl4);
+        yl2.innerHTML = icon(yl2_svg);
+        yl2.onclick = () => {
+            this.audio.muted = !this.audio.muted;
+            yl_icon();
+        };
+        let yle: PointerEvent;
+        yl3.onpointerdown = (e) => {
+            yle = e;
+            ylf(e);
+            e.preventDefault();
+        };
+        document.addEventListener("pointermove", (e) => {
+            if (yle) {
+                e.preventDefault();
+                ylf(e);
+            }
+        });
+        document.addEventListener("pointerup", (e) => {
+            if (yle) {
+                e.preventDefault();
+                yle = null;
+                ylf(e);
+            }
+        });
+
+        let ylf = (e: PointerEvent) => {
+            let r = yl3.getBoundingClientRect();
+            let pw = e.clientX - r.x;
+            let p = pw / r.width;
+            p = Math.max(Math.min(1, p), 0);
+
+            this.audio.volume = p;
+
+            yl3.title = `${Math.round(p * 100)}%`;
+        };
+    }
+
+    set value(v) {
+        this._value = v;
+        this.audio.src = v;
+    }
+    get value() {
+        return this._value;
+    }
+}
+
+window.customElements.define("x-audio", audio);
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";

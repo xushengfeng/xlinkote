@@ -354,6 +354,23 @@ x-img > div {
     border-radius: 4px;
     box-shadow: var(--shadow1);
 }
+x-audio {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
+.audio_jd {
+    background-color: var(--bg-color3);
+}
+.audio_jd > div {
+    background-color: var(--color6);
+}
+.audio_yl > :nth-child(1) {
+    background-color: var(--bg-color3);
+}
+.audio_yl > :nth-child(1) > div {
+    background-color: var(--color6);
+}
 
 @media (any-pointer: coarse) {
 }
