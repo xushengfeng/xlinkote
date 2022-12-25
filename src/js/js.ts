@@ -4810,7 +4810,7 @@ class markdown extends HTMLElement {
             let v = this.getAttribute("value");
             this._value = JSON.parse(v);
             let t = this._value.text;
-            (<HTMLTextAreaElement>this.childNodes[1]).value = t;
+            this.text.value = t;
             this.render();
         }
 
@@ -5273,7 +5273,7 @@ class markdown extends HTMLElement {
     }
 
     set edit(v: boolean | "cr") {
-        var text = <HTMLTextAreaElement>this.childNodes[1];
+        var text = this.text;
         if (v) {
             text.classList.add("show_md");
             if (v != "cr") text.focus();
@@ -5287,7 +5287,7 @@ class markdown extends HTMLElement {
     }
 
     get edit() {
-        var text = <HTMLTextAreaElement>this.childNodes[1];
+        var text = this.text;
         return text.classList.contains("show_md");
     }
 
@@ -5295,7 +5295,7 @@ class markdown extends HTMLElement {
         this._value = JSON.parse(v);
         this.type = this._value.type;
         let t = this._value.text;
-        (<HTMLTextAreaElement>this.childNodes[1]).value = t;
+        this.text.value = t;
         this.render();
     }
 
