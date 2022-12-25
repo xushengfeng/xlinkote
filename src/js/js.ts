@@ -6800,6 +6800,16 @@ class audio extends HTMLElement {
         yl.onpointerleave = () => {
             jd.style.width = "";
         };
+        yl.onwheel = (e) => {
+            let p = this.audio.volume;
+            if (e.deltaY < 0) {
+                p += 0.1;
+            } else {
+                p -= 0.1;
+            }
+            p = Math.max(Math.min(1, p), 0);
+            this.audio.volume = p;
+        };
         yl.append(yl3, yl2);
         yl3.append(yl4);
         yl2.innerHTML = icon(yl2_svg);
@@ -6849,6 +6859,8 @@ class audio extends HTMLElement {
 }
 
 window.customElements.define("x-audio", audio);
+
+ignore_el.push("x-audio");
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
