@@ -5242,7 +5242,10 @@ class markdown extends HTMLElement {
                         }
                     }
                 };
-                w(this.index);
+                if (this.index) w(this.index);
+                if (this._value.type == "code") {
+                    list = [{ text: this._value.text, type: "ct" }];
+                }
                 console.log(list);
                 let true_o = 0;
                 let tmp_o = 0;
@@ -5322,11 +5325,12 @@ class markdown extends HTMLElement {
         } else if (type == "iframe") {
             this.h.innerHTML = `<iframe src="${text}"></iframe>`;
         } else if (type == "code") {
+            this.init_v("code");
+            if (!集.values[this.parentElement.id].code?.lan) 集.values[this.parentElement.id].code["lan"] = "";
             if (集.values?.[this.parentElement.id]?.code?.["html"]) {
                 this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
             } else {
-                this.index = md.parse(text, null);
-                this.h.innerHTML = md.render(text);
+                this.h.innerText = text;
             }
         } else {
             this.index = md.parse(text, null);
