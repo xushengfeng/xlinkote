@@ -5214,6 +5214,7 @@ class markdown extends HTMLElement {
         s.contentEditable = "true";
         s.spellcheck = false;
         s.onpointerup = (e) => {
+            if (模式 != "浏览") return;
             console.log(document.getSelection().getRangeAt(0));
             let r = document.getSelection().getRangeAt(0);
             function get_text(node: Node, of: number) {
