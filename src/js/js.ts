@@ -525,6 +525,15 @@ var select_id = "";
 var fxsd_el = elFromId("方向锁定");
 var fxsd = 0;
 
+function set_O_p(x: number | null, y: number | null) {
+    if (x) {
+        O.style.left = x + "px";
+    }
+    if (y) {
+        O.style.top = y + "px";
+    }
+}
+
 fxsd_el.onclick = () => {
     let o = { 0: 1, 1: 2, 2: 0 };
     fxsd = o[fxsd];
@@ -579,8 +588,7 @@ var mouse = (e: MouseEvent) => {
         if (e.buttons == 2) {
             let x = o_rect.x + (fxsd == 0 || fxsd == 2 ? e.clientX - o_e.clientX : 0),
                 y = o_rect.y + (fxsd == 0 || fxsd == 1 ? e.clientY - o_e.clientY : 0);
-            O.style.left = x + "px";
-            O.style.top = y + "px";
+            set_O_p(x, y);
         } else if (e.button == 0) {
             if (select_id) {
                 画布.querySelectorAll(".x-x_selected").forEach((el) => {
@@ -664,8 +672,7 @@ var o_touch_t = NaN;
         setTimeout(() => {
             O.style.transition = ``;
         }, t);
-        O.style.left = x + "px";
-        O.style.top = y + "px";
+        set_O_p(x, y);
     }
 
     o_touch_e = null;
@@ -694,8 +701,7 @@ var touch_move = (e: TouchEvent) => {
                 dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
             let x = o_rect.x + dx,
                 y = o_rect.y + dy;
-            O.style.left = x + "px";
-            O.style.top = y + "px";
+            set_O_p(x, y);
 
             link_value_bar.style.left = o_vb_sb.x0 + dx + "px";
             link_value_bar.style.top = o_vb_sb.y0 + dy + "px";
@@ -728,8 +734,7 @@ var touch_zoom = (e: TouchEvent) => {
                 dzoom = z - zoom;
             let dx = p[0] - O.getBoundingClientRect().x,
                 dy = p[1] - O.getBoundingClientRect().y;
-            O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-            O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+            set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
             zoom_o(z);
         }
     }
@@ -810,8 +815,7 @@ function add_blank(op: p_point, p: p_point) {
 
 归位.onclick = () => {
     O.style.transition = "0.4s";
-    O.style.left = `${画布.offsetWidth / 2}px`;
-    O.style.top = `${画布.offsetHeight / 2}px`;
+    set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
     setTimeout(() => {
         O.style.transition = "";
     }, 400);
@@ -847,8 +851,7 @@ zoom_el.onchange = () => {
     zoom += dzoom;
     let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
         dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
-    O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-    O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+    set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
     zoom_o(zoom);
     zoom_list.classList.add("zoom_list_hide");
 };
@@ -870,13 +873,11 @@ for (let i = 25; i <= 200; i += 25) {
             dzoom = nzoom - zoom;
         let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
             dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
-        O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-        O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
         zoom_o(nzoom);
     };
 }
-O.style.left = `${画布.offsetWidth / 2}px`;
-O.style.top = `${画布.offsetHeight / 2}px`;
+set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
 
 /**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {
@@ -908,8 +909,7 @@ elFromId("画布").onwheel = (e) => {
         zoom = Math.abs(zoom);
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;
-        O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-        O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
         zoom_o(zoom);
     } else {
         let el = <HTMLElement>e.target;
@@ -929,8 +929,7 @@ elFromId("画布").onwheel = (e) => {
                 if (fxsd == 0 || fxsd == 2) dx = -e.deltaX;
                 if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
             }
-            O.style.left = el_offset(O).x + dx + "px";
-            O.style.top = el_offset(O).y + dy + "px";
+            set_O_p(el_offset(O).x + dx, el_offset(O).y + dy);
 
             link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
             link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
@@ -960,8 +959,7 @@ let middle_p = { x: 0, y: 0 };
     if (middle_b) {
         let dx = e.clientX - middle_b.clientX,
             dy = e.clientY - middle_b.clientY;
-        O.style.left = middle_p.x + dx + "px";
-        O.style.top = middle_p.y + dy + "px";
+        set_O_p(middle_p.x + dx, middle_p.y + dy);
     }
 });
 画布.addEventListener("pointerup", (e) => {
@@ -1336,8 +1334,7 @@ document.onkeydown = (e) => {
                 zoom += dzoom;
                 let dx = now_mouse_e.clientX - O.getBoundingClientRect().x,
                     dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
-                O.style.left = el_offset(O).x - dx * (dzoom / ozoom) + "px";
-                O.style.top = el_offset(O).y - dy * (dzoom / ozoom) + "px";
+                set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
                 zoom_o(1);
                 data_changed();
             }
@@ -3634,8 +3631,7 @@ function jump_to_x_link(el: x | xlink) {
                         O.style.transitionDuration = "";
                     }, t);
                     zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
-                    O.style.left = ex + "px";
-                    O.style.top = ey + "px";
+                    set_O_p(ex, ey);
                     if (el.tagName == "X-X") {
                         z.focus(el as x);
                     }
@@ -4112,8 +4108,7 @@ function ys_jump(item: ys_item) {
         };
         let zoom = item.position.p.zoom;
         zoom_o(zoom);
-        O.style.left = item.position.p.x * zoom - el_offset(画布).w / 2 + "px";
-        O.style.top = item.position.p.y * zoom - el_offset(画布).h / 2 + "px";
+        set_O_p(item.position.p.x * zoom - el_offset(画布).w / 2, item.position.p.y * zoom - el_offset(画布).h / 2);
     }
 }
 function ys_bn(fx: "back" | "next") {
@@ -4844,7 +4839,7 @@ class markdown extends HTMLElement {
             if (e.key == "Enter") {
                 e.preventDefault();
                 if (this._value.type != "text" && this._value.type != "code")
-                    O.style.top = O.offsetTop - this.offsetHeight * zoom + "px";
+                    set_O_p(null, O.offsetTop - this.offsetHeight * zoom);
                 data_changed();
                 if (this._value.type == "text") {
                     let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
