@@ -25,6 +25,7 @@ import pause_svg from "../../assets/icons/pause.svg";
 import yl0_svg from "../../assets/icons/yl0.svg";
 import yl1_svg from "../../assets/icons/yl1.svg";
 import yl2_svg from "../../assets/icons/yl2.svg";
+import asr_svg from "../../assets/icons/asr.svg";
 
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -124,6 +125,9 @@ const default_setting = {
         延时: "0.6",
     },
     sort: { type: "change_time", reverse: false } as sort_type,
+    asr: {
+        url: "",
+    },
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -6749,8 +6753,9 @@ class audio extends HTMLElement {
         let yl2 = createEl("div"); // 按钮
         let yl3 = createEl("div"); // 滑槽
         let yl4 = createEl("div"); // 滑块
+        let asr = createEl("div");
         this.append(this.audio);
-        this.append(button, jd, playtime, yl);
+        this.append(button, jd, playtime, yl, asr);
         button.innerHTML = icon(play_svg);
         button.onclick = () => {
             if (this.audio.paused) {
@@ -6879,6 +6884,12 @@ class audio extends HTMLElement {
 
             yl3.title = `${Math.round(p * 100)}%`;
         };
+
+        asr.innerHTML = icon(asr_svg);
+        asr.classList.add("asr");
+        asr.onclick = () => {
+            audio_to_text(this.audio, this.id);
+        };
     }
 
     set value(v) {
@@ -6893,6 +6904,42 @@ class audio extends HTMLElement {
 window.customElements.define("x-audio", audio);
 
 ignore_el.push("x-audio");
+
+function audio_to_text(el: HTMLAudioElement, id: string) {
+    let arr = el.src.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = window.atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    let blob = new Blob([u8arr], { type: mime });
+
+    const form = new FormData();
+    form.append("file", blob, "x.flac");
+    fetch(store.asr.url, {
+        method: "POST",
+        body: form,
+    })
+        .then((r) => r.json())
+        .then((j) => {
+            console.log(j);
+            let pel = createEl("x-x") as x;
+            pel.style.left = el_offset2(el.parentElement, O).x + "px";
+            pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
+            z.push(pel);
+            for (let i of j.segments) {
+                let x = createEl("x-x") as x;
+                z.push(x, pel);
+                let md = createEl("x-md") as markdown;
+                x.append(md);
+                let text = `[${i.start}](#${id}:${i.start})${i.text}`;
+                md.value = JSON.stringify({ type: "p", text });
+            }
+            pel.classList.add("flex-column");
+        });
+}
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";

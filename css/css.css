@@ -1181,6 +1181,9 @@ x-audio {
     height: 100%;
     @apply rounded-full;
 }
+.asr {
+    @apply relative w-8 h-8;
+}
 
 x-link {
     @apply cursor-pointer;
