@@ -28,6 +28,7 @@ import yl2_svg from "../../assets/icons/yl2.svg";
 import asr_svg from "../../assets/icons/asr.svg";
 import right_svg from "../../assets/icons/right.svg";
 import left_svg from "../../assets/icons/left.svg";
+import copy_svg from "../../assets/icons/copy.svg";
 
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -4621,6 +4622,8 @@ class x extends HTMLElement {
         f.innerHTML = icon(ding_svg);
         var d = createEl("div");
         d.innerHTML = icon(close_svg);
+        let copy = createEl("div");
+        copy.innerHTML = icon(copy_svg);
 
         var x_h = [
             createEl("div"),
@@ -4646,6 +4649,7 @@ class x extends HTMLElement {
 
         bar.append(m);
         bar.append(f);
+        bar.append(copy);
         bar.append(d);
         this.append(bar);
 
@@ -4755,6 +4759,27 @@ class x extends HTMLElement {
                     f.classList.add("buttom_a");
                     break;
                 }
+
+        copy.onpointerdown = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            free_drag = true;
+            O.classList.add("拖拽");
+            new_free_drag_tip();
+            let x = e.clientX - O.getBoundingClientRect().x - copy.offsetLeft - e.offsetX,
+                y = e.clientY - O.getBoundingClientRect().y + copy.offsetHeight - e.offsetY;
+            let xel = <x>createEl("x-x");
+            xel.id = uuid_id();
+            xel.setAttribute("style", this.getAttribute("style"));
+            z.push(xel);
+            xel.style.left = el_offset2(this, O).x + "px";
+            xel.style.top = el_offset2(this, O).y + "px";
+            xel.style.position = "absolute";
+            xel.value = this.value;
+            free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+            free_old_point = e2p(e);
+            free_o_a = -1;
+        };
 
         d.onclick = () => {
             selected_el = selected_el.filter((el) => el != this);
