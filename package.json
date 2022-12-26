@@ -21,7 +21,6 @@
     "deep-diff": "^1.0.2",
     "fuse.js": "^6.6.2",
     "html2canvas": "^1.4.1",
-    "jsxgraph": "^1.4.5",
     "markdown-it": "^13.0.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-emoji": "^2.0.2",
