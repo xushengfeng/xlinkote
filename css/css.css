@@ -541,6 +541,13 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #设置 > #about > #version > img {
     @apply w-4 h-4;
 }
+.password {
+    color: transparent;
+}
+.password:focus {
+    color: inherit;
+}
+
 body > #main > #画布 {
     flex-grow: 1;
     position: relative;
