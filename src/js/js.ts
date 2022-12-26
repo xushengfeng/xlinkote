@@ -4681,7 +4681,7 @@ class x extends HTMLElement {
                 new_free_drag_tip();
                 if (this.parentElement != O) {
                     let x = e.clientX - O.getBoundingClientRect().x,
-                        y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetX;
+                        y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetY;
                     let xel = <x>createEl("x-x");
                     xel.id = this.id;
                     xel.setAttribute("style", this.getAttribute("style"));
