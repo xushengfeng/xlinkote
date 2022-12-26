@@ -1791,6 +1791,8 @@ function render_data(inputdata: 画布type) {
     el.style.transform = `scale(${inputdata.p.zoom})`;
     画布s.append(el);
 
+    fixed_el();
+
     function v(data: data, pid?: string) {
         try {
             for (let i of data) {
@@ -3937,6 +3939,36 @@ function to_more_line(xels: x[], c?: string | RegExp) {
             data_changed();
         }
     }
+}
+
+/** 刷新定位元素 */
+function fixed_el() {
+    for (let i in 集.values) {
+        if (集.values[i]?.fixed) {
+            const el = elFromId(i);
+            if (!el) return;
+            let fixed: { left?: string; top?: string; right?: string; bottom?: string } = 集.values[i].fixed;
+            try {
+                let top = el_offset2(O).y,
+                    left = el_offset2(O).x,
+                    width = el_offset2(画布).w,
+                    height = el_offset2(画布).h;
+                if (fixed.left) {
+                    el.style.left = `calc(${-left}px + ${fixed.left})`;
+                }
+                if (fixed.top) {
+                    el.style.top = `calc(${-top}px + ${fixed.top})`;
+                }
+                if (fixed.right) {
+                    el.style.left = `calc(${-left + width - el_offset2(el).w}px - ${fixed.right})`;
+                }
+                if (fixed.bottom) {
+                    el.style.top = `calc(${-top + height - el_offset2(el).h}px - ${fixed.bottom})`;
+                }
+            } catch (error) {}
+        }
+    }
+    requestAnimationFrame(fixed_el);
 }
 
 window["xln"] = {};
