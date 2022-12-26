@@ -39,6 +39,10 @@ function elFromId(id: string) {
     return document.getElementById(id);
 }
 
+function is_input_el(el: HTMLElement) {
+    return el.tagName == "INPUT" || el.tagName == "TEXTAREA" || el.isContentEditable;
+}
+
 // el
 var 设置_el = elFromId("设置");
 var 侧栏 = elFromId("侧栏");
@@ -1315,11 +1319,14 @@ var global_x = [] as data;
 
 // 快捷键
 document.onkeydown = (e) => {
+    const target = e.target as HTMLElement;
     switch (e.key) {
         case "Delete":
-            for (let el of selected_el) {
-                z.remove(el);
-            }
+            if (模式 != "设计") return;
+            if (!is_input_el(target))
+                for (let el of selected_el) {
+                    z.remove(el);
+                }
             selected_el = [];
             break;
         case "Home":
