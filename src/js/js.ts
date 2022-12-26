@@ -6923,19 +6923,25 @@ function audio_to_text(el: HTMLAudioElement, id: string) {
         body: form,
     })
         .then((r) => r.json())
-        .then((j) => {
+        .then(async (j) => {
             console.log(j);
             let pel = createEl("x-x") as x;
             pel.style.left = el_offset2(el.parentElement, O).x + "px";
             pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
             z.push(pel);
+            if (j.language == "zh" && navigator.language == "zh-CN") {
+                let t = (await import("../../lib/hant2hans")).default;
+                for (let i of j.segments) {
+                    i.text = t(i.text);
+                }
+            }
             for (let i of j.segments) {
                 let x = createEl("x-x") as x;
                 z.push(x, pel);
                 let md = createEl("x-md") as markdown;
                 x.append(md);
-                let text = `[${i.start}](#${id}:${i.start})${i.text}`;
-                md.value = JSON.stringify({ type: "p", text });
+                let mdtext = `[${i.start}](#${id}:${i.start})${i.text}`;
+                md.value = JSON.stringify({ type: "p", text: mdtext });
             }
             pel.classList.add("flex-column");
         });
