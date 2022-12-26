@@ -21,6 +21,7 @@
     "deep-diff": "^1.0.2",
     "fuse.js": "^6.6.2",
     "html2canvas": "^1.4.1",
+    "json5": "^2.2.2",
     "markdown-it": "^13.0.1",
     "markdown-it-emoji": "^2.0.2",
     "markdown-it-task-lists": "^2.1.1",

@@ -13,6 +13,7 @@ specifiers:
   download: ^8.0.0
   fuse.js: ^6.6.2
   html2canvas: ^1.4.1
+  json5: ^2.2.2
   markdown-it: ^13.0.1
   markdown-it-emoji: ^2.0.2
   markdown-it-task-lists: ^2.1.1
@@ -35,6 +36,7 @@ dependencies:
   deep-diff: 1.0.2
   fuse.js: 6.6.2
   html2canvas: 1.4.1
+  json5: 2.2.2
   markdown-it: 13.0.1
   markdown-it-emoji: 2.0.2
   markdown-it-task-lists: 2.1.1
@@ -1874,6 +1876,12 @@ packages:
   /json-buffer/3.0.0:
     resolution: {integrity: sha512-CuUqjv0FUZIdXkHPI8MezCnFCdaTAacej1TZYulLoAg1h/PhwkdXFN4V/gzY4g+fMBCOV2xF+rp7t2XD2ns/NQ==}
     dev: true
+
+  /json5/2.2.2:
+    resolution: {integrity: sha512-46Tk9JiOL2z7ytNQWFLpj99RZkVgeHf87yGQKsIkaPz1qSH9UczKH1rO7K3wgRselo0tYMUNfecYpm/p1vC7tQ==}
+    engines: {node: '>=6'}
+    hasBin: true
+    dev: false
 
   /keyv/3.0.0:
     resolution: {integrity: sha512-eguHnq22OE3uVoSYG0LVWNP+4ppamWr9+zWBe1bsNcovIMy6huUJFPgy4mGwCd/rnl3vOLGW1MTlu4c57CT1xA==}
