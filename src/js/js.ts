@@ -5219,10 +5219,15 @@ class markdown extends HTMLElement {
             text.style.left = el_offset2(this.h).x + "px";
             text.style.top = el_offset2(this.h).y + s.offsetHeight + "px";
         };
-        s.contentEditable = "true";
         s.spellcheck = false;
         s.onpointerup = (e) => {
             if (模式 != "浏览") return;
+            let el = <HTMLElement>e.target;
+            if (el.tagName != "INPUT") {
+                s.contentEditable = "true";
+            } else {
+                return;
+            }
             console.log(document.getSelection().getRangeAt(0));
             let r = document.getSelection().getRangeAt(0);
             function get_text(node: Node, of: number) {
@@ -5303,6 +5308,7 @@ class markdown extends HTMLElement {
             console.log(start_p, end_p);
             this.text.setSelectionRange(start_p, end_p);
             this.edit = true;
+            s.contentEditable = "false";
         };
     }
 
