@@ -14,7 +14,6 @@ specifiers:
   fuse.js: ^6.6.2
   html2canvas: ^1.4.1
   markdown-it: ^13.0.1
-  markdown-it-container: ^3.0.0
   markdown-it-emoji: ^2.0.2
   markdown-it-task-lists: ^2.1.1
   mathjax: ^3.2.2
@@ -37,7 +36,6 @@ dependencies:
   fuse.js: 6.6.2
   html2canvas: 1.4.1
   markdown-it: 13.0.1
-  markdown-it-container: 3.0.0
   markdown-it-emoji: 2.0.2
   markdown-it-task-lists: 2.1.1
   mathjax: 3.2.2
@@ -1946,10 +1944,6 @@ packages:
       semver: 6.3.0
     dev: false
     optional: true
-
-  /markdown-it-container/3.0.0:
-    resolution: {integrity: sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==}
-    dev: false
 
   /markdown-it-emoji/2.0.2:
     resolution: {integrity: sha512-zLftSaNrKuYl0kR5zm4gxXjHaOI3FAOEaloKmRA5hijmJZvSjmxcokOLlzycb/HXlUFWzXqpIEoyEMCE4i9MvQ==}

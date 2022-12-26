@@ -4169,7 +4169,6 @@ function load_value() {
 // MD
 import markdownit from "markdown-it";
 import markdownitTaskLists from "markdown-it-task-lists";
-import markdownitContainer from "markdown-it-container";
 import markdownitEmoji from "markdown-it-emoji";
 var md = markdownit({
     html: true,
@@ -4177,24 +4176,6 @@ var md = markdownit({
     typographer: true,
 })
     .use(markdownitTaskLists, { enabled: true })
-    .use(markdownitContainer, "spoiler", {
-        validate: function (params) {
-            return params.trim().match(/^(.*)$/);
-        },
-
-        render: function (tokens, idx) {
-            var m = tokens[idx].info.trim().match(/^(.*)$/);
-
-            if (tokens[idx].nesting === 1) {
-                // opening tag
-                return "<details><summary>" + md.render(m[1]) + "</summary>\n";
-            } else {
-                // closing tag
-                return "</details>\n";
-            }
-        },
-        marker: "+",
-    })
     .use(markdownitEmoji);
 
 var defaultRender =
