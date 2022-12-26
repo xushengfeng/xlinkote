@@ -5363,7 +5363,17 @@ class markdown extends HTMLElement {
             if (集.values?.[this.parentElement.id]?.code?.["html"]) {
                 this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
             } else {
-                this.h.innerText = text;
+                switch (集.values[this.parentElement.id].code["lan"]) {
+                    case "mermaid":
+                        this.h.innerHTML = mermaid_code(text);
+                        break;
+                    case "tikz":
+                        this.h.innerHTML = tikz_code(text);
+                        break;
+                    default:
+                        this.h.innerText = text;
+                        break;
+                }
             }
         } else {
             this.index = md.parse(text, {});
