@@ -4185,7 +4185,10 @@ function load_value() {
     let el = z.聚焦元素;
     let t = createEl("textarea");
     let value = "";
-    if (集.values[el.id]) value = JSON5.stringify(集.values[el.id], null, 2);
+    if (集.values[el.id]) {
+        let t = JSON5.stringify(集.values[el.id], null, 2);
+        value = t.slice(1, t.length - 2).replace(/^  /gm, "");
+    }
     t.value = value;
     value_el.innerHTML = "";
     value_el.append(t);
@@ -4204,7 +4207,7 @@ function load_value() {
             }
         }
         try {
-            let v = JSON5.parse(t.value);
+            let v = JSON5.parse(`{${t.value}}`);
             集.values[el.id] = v;
             if (el.querySelector("x-md")) {
                 (el.querySelector("x-md") as markdown).reload();
