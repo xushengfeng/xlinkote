@@ -372,6 +372,11 @@ x-audio {
     background-color: var(--color6);
 }
 
+.calendar_today {
+    background-color: var(--color6);
+    color: var(--color5);
+}
+
 @media (any-pointer: coarse) {
 }
 

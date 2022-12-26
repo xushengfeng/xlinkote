@@ -26,6 +26,8 @@ import yl0_svg from "../../assets/icons/yl0.svg";
 import yl1_svg from "../../assets/icons/yl1.svg";
 import yl2_svg from "../../assets/icons/yl2.svg";
 import asr_svg from "../../assets/icons/asr.svg";
+import right_svg from "../../assets/icons/right.svg";
+import left_svg from "../../assets/icons/left.svg";
 
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -7193,3 +7195,107 @@ class ggb extends HTMLElement {
 
 window.customElements.define("x-ggb", ggb);
 ignore_el.push("x-ggb");
+
+class calendar extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value;
+    applet;
+    p;
+
+    connectedCallback() {
+        const today = new Date();
+        let year = today.getFullYear();
+        let month = today.getMonth();
+        let day = today.getDate();
+        let bar = createEl("div");
+        bar.classList.add("calendar_bar");
+        let last = createEl("div");
+        let next = createEl("div");
+        let text = createEl("div");
+        last.innerHTML = icon(left_svg);
+        next.innerHTML = icon(right_svg);
+        bar.append(last, text, next);
+        last.onclick = () => {
+            month--;
+            if (month == -1) {
+                month = 11;
+                year--;
+            }
+            render(year, month, day);
+        };
+        next.onclick = () => {
+            month++;
+            if (month == 12) {
+                month = 0;
+                year++;
+            }
+            render(year, month, day);
+        };
+        let c = createEl("div");
+        c.classList.add("calendar");
+
+        render(year, month, day);
+
+        function render(year: number, month: number, day: number) {
+            text.innerText = `${year} / ${month + 1} / ${day}`;
+            let date_list: Date[] = [];
+            let now_date = new Date(year, month, 1);
+            while (now_date.getDay() != 0) {
+                now_date = new Date(now_date.getTime() - 24 * 60 * 60 * 1000);
+                date_list.unshift(now_date);
+            }
+            now_date = new Date(year, month, 1);
+            while (now_date.getMonth() == month) {
+                date_list.push(now_date);
+                now_date = new Date(now_date.getTime() + 24 * 60 * 60 * 1000);
+            }
+            now_date = new Date(year, month, date_list[date_list.length - 1].getDate());
+            while (now_date.getDay() != 6) {
+                now_date = new Date(now_date.getTime() + 24 * 60 * 60 * 1000);
+                date_list.push(now_date);
+            }
+            console.log(date_list);
+            let pel = document.createDocumentFragment();
+            let day_list = ["日", "一", "二", "三", "四", "五", "六"];
+            for (let i of day_list) {
+                let div = createEl("div");
+                div.innerText = `${i}`;
+                div.classList.add("calendar_week");
+                pel.append(div);
+            }
+            for (let i of date_list) {
+                let div = createEl("div");
+                div.innerText = `${i.getDate()}`;
+                if (i.getMonth() == month) {
+                    div.classList.add("calendar_month");
+                }
+                if (i.getDate() == day && i.getMonth() == month) {
+                    div.classList.add("calendar_today");
+
+                    div.onclick = () => {
+                        render(today.getFullYear(), today.getMonth(), today.getDate());
+                    };
+                }
+                pel.append(div);
+            }
+            c.innerHTML = "";
+            c.append(pel);
+        }
+
+        this.append(bar, c);
+    }
+    async set_m() {}
+
+    get value() {
+        return this._value;
+    }
+    set value(s) {
+        this._value = s;
+        this.set_m();
+    }
+}
+
+window.customElements.define("x-calendar", calendar);

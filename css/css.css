@@ -1192,6 +1192,27 @@ x-audio {
     @apply relative w-8 h-8;
 }
 
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.calendar_bar {
+    @apply flex w-full justify-between;
+}
+.calendar_bar > :first-child,
+.calendar_bar > :last-child {
+    @apply w-6 h-6 relative;
+}
+.calendar > div {
+    @apply text-center align-middle opacity-60 w-6 h-6 rounded;
+}
+.calendar_week {
+    opacity: 1 !important;
+}
+.calendar_month {
+    opacity: 1 !important;
+}
+
 x-link {
     @apply cursor-pointer;
 }
