@@ -1213,6 +1213,13 @@ x-audio {
     opacity: 1 !important;
 }
 
+x-time {
+    @apply flex;
+}
+.time_play {
+    @apply w-6 h-6 relative;
+}
+
 x-link {
     @apply cursor-pointer;
 }

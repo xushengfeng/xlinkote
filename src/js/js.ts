@@ -503,6 +503,8 @@ elFromId("常驻").onpointerdown = (e) => {
     let el_n = "";
     if ((<HTMLElement>e.target).id == "录音") {
         el_n = "x-record";
+    } else if ((<HTMLElement>e.target).id == "x-time") {
+        el_n = "x-time";
     } else {
         el_n = "x-md";
     }
@@ -7351,3 +7353,122 @@ class calendar extends HTMLElement {
 }
 
 window.customElements.define("x-calendar", calendar);
+
+class time extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value: string;
+    _value2: { pro: number; end: number; run: number[]; countdown: boolean } = {
+        pro: 0,
+        end: 0,
+        run: [],
+        countdown: false,
+    };
+    count_down: HTMLInputElement;
+    process: HTMLInputElement;
+    end: HTMLInputElement;
+    time_t: HTMLDivElement;
+
+    connectedCallback() {
+        this.count_down = createEl("input");
+        this.count_down.type = "checkbox";
+        this.process = createEl("input");
+        this.process.type = "time";
+        this.end = createEl("input");
+        this.end.type = "datetime-local";
+        this.count_down.oninput = () => {
+            this._value2.countdown = this.count_down.checked;
+            this._value = JSON.stringify(this._value2);
+        };
+        this.process.oninput = () => {
+            if (this.process.value) {
+                let t = this.process.value.split(":");
+                this._value2.pro = (Number(t[0]) * 60 + Number(t[1])) * 60 * 1000;
+            } else {
+                this._value2.pro = 0;
+            }
+            this._value = JSON.stringify(this._value2);
+        };
+        this.end.oninput = () => {
+            if (this.end.value) {
+                this._value2.end = new Date(this.end.value).getTime();
+            } else {
+                this._value2.end = 0;
+            }
+            this._value = JSON.stringify(this._value2);
+        };
+        let start_b = createEl("div");
+        start_b.innerHTML = icon(play_svg);
+        start_b.classList.add("time_play");
+        start_b.onclick = () => {
+            this._value2.run.push(new Date().getTime());
+            this._value = JSON.stringify(this._value2);
+            this.render();
+        };
+        this.time_t = createEl("div");
+
+        this.append(this.count_down, this.process, this.end, start_b, this.time_t);
+    }
+
+    render() {
+        let now = new Date().getTime();
+        if (this._value2.countdown) {
+            if (this._value2.end) {
+                this.time_t.innerText = String((this._value2.end - now) / 1000);
+            } else {
+                if (this._value2.run.length % 2 != 0) {
+                    this.time_t.innerText = String((this._value2.pro - this.add_times(this._value2.run, now)) / 1000);
+                }
+            }
+        } else {
+            if (this._value2.run.length % 2 != 0) {
+                this.time_t.innerText = String(this.add_times(this._value2.run, now) / 1000);
+            }
+        }
+    }
+
+    add_times(input_list: number[], now: number) {
+        let list: number[] = [];
+        for (let i of input_list) list.push(i);
+        let t = 0;
+        if (list.length % 2 != 0) {
+            list.push(now);
+        }
+        for (let i = 0; i < list.length; i += 2) {
+            t += list[i + 1] - list[i];
+        }
+        return t;
+    }
+
+    async set_m() {
+        this._value2 = JSON.parse(this._value);
+        this.count_down.checked = this._value2.countdown;
+        if (this._value2.pro) this.process.value = "";
+        if (this._value2.end) {
+            let t = new Date(this._value2.end).toLocaleString();
+            t = t
+                .slice(0, t.length - 3)
+                .replaceAll("/", "-")
+                .replace(" ", "T");
+            this.end.value = t;
+        }
+    }
+
+    get value() {
+        return this._value;
+    }
+    set value(s) {
+        this._value = s;
+        this.set_m();
+    }
+}
+
+window.customElements.define("x-time", time);
+
+setInterval(() => {
+    document.querySelectorAll("x-time").forEach((el: time) => {
+        el.render();
+    });
+});
