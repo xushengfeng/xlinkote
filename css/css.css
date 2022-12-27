@@ -1219,6 +1219,9 @@ x-calendar {
     opacity: 1 !important;
 }
 
+time-b {
+    @apply flex;
+}
 time-b > input {
     width: 2ch;
     text-align: center;
@@ -1227,8 +1230,38 @@ time-b > input {
 x-time {
     @apply flex items-center;
 }
+x-time > :nth-child(1) {
+    @apply flex items-center flex-grow overflow-hidden;
+}
+x-time > :nth-child(1) > div {
+    @apply flex items-center;
+}
 .time_play {
-    @apply w-6 h-6 relative;
+    @apply w-8 h-8 relative flex-shrink-0;
+}
+.time_jdt {
+    @apply h-6 relative rounded overflow-hidden;
+    background-color: var(--bg-color3);
+}
+
+.time_jdt > :nth-child(1) {
+    @apply absolute left-0 mix-blend-difference text-white z-10;
+}
+.time_jdt > :nth-child(2) {
+    @apply absolute left-0 h-full rounded;
+    background-color: var(--color6);
+}
+.x-time > :nth-child(1) {
+    @apply w-0 flex-grow-0;
+}
+.x-time > .time_jdt {
+    @apply flex-grow;
+}
+.x-time:hover > :nth-child(1) {
+    @apply flex-grow;
+}
+.x-time:hover > .time_jdt {
+    @apply flex-grow-0;
 }
 
 x-link {

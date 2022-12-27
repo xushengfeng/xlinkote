@@ -7535,6 +7535,9 @@ class time extends HTMLElement {
     end: HTMLInputElement;
     time_t: HTMLDivElement;
     start_b: HTMLElement;
+    time_setting: HTMLElement;
+    time_group: HTMLElement;
+    jd: HTMLElement;
 
     connectedCallback() {
         this.count_down = createEl("input");
@@ -7567,13 +7570,23 @@ class time extends HTMLElement {
         this.start_b.innerHTML = icon(play_svg);
         this.start_b.classList.add("time_play");
         this.start_b.onclick = () => {
+            this.classList.add("x-time");
             this._value2.run.push(new Date().getTime());
             this._value = JSON.stringify(this._value2);
             this.render();
         };
         this.time_t = createEl("div");
 
-        this.append(this.count_down, this.process, this.end, this.start_b, this.time_t);
+        let jdt = createEl("div");
+        this.jd = createEl("div");
+        jdt.append(this.time_t, this.jd);
+        jdt.classList.add("time_jdt");
+
+        this.time_setting = createEl("div");
+        this.time_group = createEl("div");
+        this.time_group.append(this.process, this.end);
+        this.time_setting.append(this.count_down, this.time_group);
+        this.append(this.time_setting, this.start_b, jdt);
     }
 
     is_no = false;
@@ -7593,6 +7606,7 @@ class time extends HTMLElement {
             if (this._value2.end) {
                 let t = this._value2.end - now;
                 this.time_t.innerText = time_text(Math.max(0, t)).hms();
+                this.jd.style.width = ((this._value2.end - now) / (this._value2.end - this._value2.run[0])) * 100 + "%";
                 if (t <= 0) {
                     no("停止");
                     this._value2.run = [];
@@ -7602,6 +7616,7 @@ class time extends HTMLElement {
                 if (this._value2.run.length % 2 != 0) {
                     let t = this._value2.pro - this.add_times(this._value2.run, now);
                     this.time_t.innerText = time_text(Math.max(0, t)).hms();
+                    this.jd.style.width = (t / this._value2.pro) * 100 + "%";
                     if (t <= 0) {
                         no("停止");
                         this._value2.run = [];
@@ -7611,6 +7626,7 @@ class time extends HTMLElement {
             }
         } else {
             if (this._value2.run.length % 2 != 0) {
+                this.jd.style.width = (this.add_times(this._value2.run, now) / this._value2.pro) * 100 + "%";
                 this.time_t.innerText = time_text(this.add_times(this._value2.run, now)).hms();
                 if (this.add_times(this._value2.run, now) > this._value2.pro) no("超时");
             }
