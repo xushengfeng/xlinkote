@@ -7470,19 +7470,39 @@ class time extends HTMLElement {
         this.append(this.count_down, this.process, this.end, start_b, this.time_t);
     }
 
+    is_no = false;
     render() {
+        let no = (t: string) => {
+            if (this.is_no) return;
+            this.is_no = true;
+            put_toast(`计时器已${t}`);
+            Notification.requestPermission(() => {
+                new Notification(`计时器已${t}`, {
+                    body: `${get_title()} 中的${this._value2.countdown ? "倒" : ""}计时器已${t}`,
+                });
+            });
+        };
         let now = new Date().getTime();
         if (this._value2.countdown) {
             if (this._value2.end) {
                 this.time_t.innerText = time_text(this._value2.end - now).hms();
+                if (this._value2.end - now <= 0) {
+                    no("停止");
+                    this._value2.run = [];
+                }
             } else {
                 if (this._value2.run.length % 2 != 0) {
                     this.time_t.innerText = time_text(this._value2.pro - this.add_times(this._value2.run, now)).hms();
+                    if (this._value2.pro - this.add_times(this._value2.run, now) <= 0) {
+                        no("停止");
+                        this._value2.run = [];
+                    }
                 }
             }
         } else {
             if (this._value2.run.length % 2 != 0) {
                 this.time_t.innerText = time_text(this.add_times(this._value2.run, now)).hms();
+                if (this.add_times(this._value2.run, now) > this._value2.pro) no("超时");
             }
         }
     }
