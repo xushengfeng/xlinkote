@@ -7412,6 +7412,112 @@ class calendar extends HTMLElement {
 
 window.customElements.define("x-calendar", calendar);
 
+class time_s extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value: number;
+    h: HTMLInputElement;
+    m: HTMLInputElement;
+    s: HTMLInputElement;
+
+    connectedCallback() {
+        this.h = document.createElement("input");
+        this.m = document.createElement("input");
+        this.s = document.createElement("input");
+        this.h.style.width = "1ch";
+        this.h.inputMode = "tel";
+        this.m.inputMode = "tel";
+        this.s.inputMode = "tel";
+        this.h.value = "--";
+        this.m.value = "--";
+        this.s.value = "--";
+        this.h.onfocus = () => {
+            this.h.select();
+        };
+        this.m.onfocus = () => {
+            this.m.select();
+        };
+        this.s.onfocus = () => {
+            this.s.select();
+        };
+        this.h.oninput = () => {
+            if (isNaN(Number(this.h.value))) {
+                this.h.value = String(Math.floor(this._value / 1000 / 60 / 60));
+            } else {
+                this.h.style.width = this.h.value.length + "ch";
+            }
+        };
+        this.m.oninput = () => {
+            if (isNaN(Number(this.m.value))) {
+                this.m.value = String(Math.floor(this._value / 1000 / 60) % 6).padStart(2, "0");
+            } else {
+                if (Number(this.m.value) >= 60) {
+                    this.value = this.value;
+                }
+            }
+        };
+        this.s.oninput = () => {
+            if (isNaN(Number(this.s.value))) {
+                this.s.value = String(Math.floor(this._value / 1000) % 60).padStart(2, "0");
+            } else {
+                if (Number(this.s.value) >= 60) {
+                    this.value = this.value;
+                }
+            }
+        };
+        this.m.onblur = () => {
+            this.m.value = this.m.value.padStart(2, "0");
+        };
+        this.s.onblur = () => {
+            this.s.value = this.s.value.padStart(2, "0");
+        };
+        this.h.onkeyup = (e) => {
+            switch (e.key) {
+                case "ArrowRight":
+                    this.m.select();
+                    break;
+            }
+        };
+        this.m.onkeyup = (e) => {
+            switch (e.key) {
+                case "ArrowRight":
+                    this.s.select();
+                    break;
+                case "ArrowLeft":
+                    this.h.select();
+                    break;
+            }
+        };
+        this.s.onkeyup = (e) => {
+            switch (e.key) {
+                case "ArrowLeft":
+                    this.m.select();
+                    break;
+            }
+        };
+        this.append(this.h, ":", this.m, ":", this.s);
+    }
+
+    set value(time: number) {
+        this._value = time;
+        let h = Math.floor(time / 1000 / 60 / 60);
+        let m = Math.floor(time / 1000 / 60) % 60;
+        let s = Math.floor(time / 1000) % 60;
+        this.h.value = String(h);
+        this.m.value = String(m).padStart(2, "0");
+        this.s.value = String(s).padStart(2, "0");
+        this.h.style.width = String(h).length + "ch";
+    }
+
+    get value() {
+        return (Number(this.h.value) * 60 * 60 + Number(this.m.value) * 60 + Number(this.s.value)) * 1000;
+    }
+}
+
+window.customElements.define("time-b", time_s);
+
 class time extends HTMLElement {
     constructor() {
         super();
@@ -7425,15 +7531,14 @@ class time extends HTMLElement {
         countdown: false,
     };
     count_down: HTMLInputElement;
-    process: HTMLInputElement;
+    process: time_s;
     end: HTMLInputElement;
     time_t: HTMLDivElement;
 
     connectedCallback() {
         this.count_down = createEl("input");
         this.count_down.type = "checkbox";
-        this.process = createEl("input");
-        this.process.type = "time";
+        this.process = createEl("time-b") as time_s;
         this.end = createEl("input");
         this.end.type = "datetime-local";
         this.count_down.oninput = () => {
@@ -7442,8 +7547,8 @@ class time extends HTMLElement {
         };
         this.process.oninput = () => {
             if (this.process.value) {
-                let t = this.process.value.split(":");
-                this._value2.pro = (Number(t[0]) * 60 + Number(t[1])) * 60 * 1000;
+                let t = this.process.value;
+                this._value2.pro = t;
             } else {
                 this._value2.pro = 0;
             }
@@ -7527,7 +7632,7 @@ class time extends HTMLElement {
     async set_m() {
         this._value2 = JSON.parse(this._value);
         this.count_down.checked = this._value2.countdown;
-        if (this._value2.pro) this.process.value = "";
+        if (this._value2.pro) this.process.value = this._value2.pro;
         if (this._value2.end) {
             let t = new Date(this._value2.end).toLocaleString();
             t = t

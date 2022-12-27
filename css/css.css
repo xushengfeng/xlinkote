@@ -1219,6 +1219,11 @@ x-calendar {
     opacity: 1 !important;
 }
 
+time-b > input {
+    width: 2ch;
+    text-align: center;
+}
+
 x-time {
     @apply flex items-center;
 }
