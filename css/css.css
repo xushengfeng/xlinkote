@@ -479,10 +479,10 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #中转站 > #临时 #x-x_bar {
     transform: none;
 }
-.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(2) {
+.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
     display: block;
 }
-.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
+.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(4) {
     display: none;
 }
 .侧栏 > #items > #中转站 > #临时 .xxhandle {
@@ -801,7 +801,7 @@ x-x > #x-x_bar > div > .icon {
     width: var(--x-x-bar-w);
     height: var(--x-x-bar-w);
 }
-x-x > #x-x_bar > div:nth-child(2) {
+x-x > #x-x_bar > div:nth-child(3) {
     display: none;
 }
 x-x:focus-within {

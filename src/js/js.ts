@@ -4649,8 +4649,8 @@ class x extends HTMLElement {
         this.append(h);
 
         bar.append(m);
-        bar.append(f);
         bar.append(copy);
+        bar.append(f);
         bar.append(d);
         this.append(bar);
 
