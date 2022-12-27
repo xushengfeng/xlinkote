@@ -4192,39 +4192,66 @@ ys_add.onclick = () => {
 import JSON5 from "json5";
 
 function load_value() {
-    if (!集.values) return;
     let el = z.聚焦元素;
-    let t = createEl("textarea");
-    let value = "";
-    if (集.values[el.id]) {
-        let t = JSON5.stringify(集.values[el.id], null, 2);
-        value = t.slice(1, t.length - 2).replace(/^  /gm, "");
-    }
-    t.value = value;
     value_el.innerHTML = "";
-    value_el.append(t);
-    t.oninput = (e: InputEvent) => {
-        const a = [
-            ["'", "'"],
-            ['"', '"'],
-            ["{", "}"],
-            ["(", ")"],
-        ];
-        if (e.inputType == "insertText") {
-            for (let i of a) {
-                if (i[0] == t.value[t.selectionStart - 1]) {
-                    t.setRangeText(i[1]);
+    if (el.value && is_smallest_el(el)) {
+        let t = createEl("textarea");
+        let value = JSON5.stringify(el.value, null, 2);
+        t.value = value;
+        value_el.append(t);
+        t.oninput = (e: InputEvent) => {
+            const a = [
+                ["'", "'"],
+                ['"', '"'],
+                ["{", "}"],
+                ["(", ")"],
+            ];
+            if (e.inputType == "insertText") {
+                for (let i of a) {
+                    if (i[0] == t.value[t.selectionStart - 1]) {
+                        t.setRangeText(i[1]);
+                    }
                 }
             }
+            try {
+                let v = JSON5.parse(t.value);
+                el.innerHTML = "";
+                el.value = v;
+            } catch (error) {}
+        };
+    }
+    if (集.values) {
+        let t = createEl("textarea");
+        let value = "";
+        if (集.values[el.id]) {
+            let t = JSON5.stringify(集.values[el.id], null, 2);
+            value = t.slice(1, t.length - 2).replace(/^  /gm, "");
         }
-        try {
-            let v = JSON5.parse(`{${t.value}}`);
-            集.values[el.id] = v;
-            if (el.querySelector("x-md")) {
-                (el.querySelector("x-md") as markdown).reload();
+        t.value = value;
+        value_el.append(t);
+        t.oninput = (e: InputEvent) => {
+            const a = [
+                ["'", "'"],
+                ['"', '"'],
+                ["{", "}"],
+                ["(", ")"],
+            ];
+            if (e.inputType == "insertText") {
+                for (let i of a) {
+                    if (i[0] == t.value[t.selectionStart - 1]) {
+                        t.setRangeText(i[1]);
+                    }
+                }
             }
-        } catch (error) {}
-    };
+            try {
+                let v = JSON5.parse(`{${t.value}}`);
+                集.values[el.id] = v;
+                if (el.querySelector("x-md")) {
+                    (el.querySelector("x-md") as markdown).reload();
+                }
+            } catch (error) {}
+        };
+    }
 }
 
 // MD
