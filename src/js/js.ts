@@ -7534,6 +7534,7 @@ class time extends HTMLElement {
     process: time_s;
     end: HTMLInputElement;
     time_t: HTMLDivElement;
+    start_b: HTMLElement;
 
     connectedCallback() {
         this.count_down = createEl("input");
@@ -7562,17 +7563,17 @@ class time extends HTMLElement {
             }
             this._value = JSON.stringify(this._value2);
         };
-        let start_b = createEl("div");
-        start_b.innerHTML = icon(play_svg);
-        start_b.classList.add("time_play");
-        start_b.onclick = () => {
+        this.start_b = createEl("div");
+        this.start_b.innerHTML = icon(play_svg);
+        this.start_b.classList.add("time_play");
+        this.start_b.onclick = () => {
             this._value2.run.push(new Date().getTime());
             this._value = JSON.stringify(this._value2);
             this.render();
         };
         this.time_t = createEl("div");
 
-        this.append(this.count_down, this.process, this.end, start_b, this.time_t);
+        this.append(this.count_down, this.process, this.end, this.start_b, this.time_t);
     }
 
     is_no = false;
@@ -7613,6 +7614,11 @@ class time extends HTMLElement {
                 this.time_t.innerText = time_text(this.add_times(this._value2.run, now)).hms();
                 if (this.add_times(this._value2.run, now) > this._value2.pro) no("超时");
             }
+        }
+        if ((this._value2.countdown && this._value2.end) || this._value2.run.length % 2 != 0) {
+            this.start_b.innerHTML = icon(pause_svg);
+        } else {
+            this.start_b.innerHTML = icon(play_svg);
         }
     }
 
