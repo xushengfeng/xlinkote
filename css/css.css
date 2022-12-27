@@ -1192,9 +1192,17 @@ x-audio {
     @apply relative w-8 h-8;
 }
 
+x-calendar {
+    @apply flex flex-col h-full;
+    min-height: calc(7 * 1.5rem);
+    min-width: calc(7 * 1.5rem);
+}
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    flex-grow: 1;
+    justify-items: center;
+    align-items: center;
 }
 .calendar_bar {
     @apply flex w-full justify-between;

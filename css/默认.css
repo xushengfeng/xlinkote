@@ -371,7 +371,16 @@ x-audio {
 .audio_yl > :nth-child(1) > div {
     background-color: var(--color6);
 }
-
+x-calendar {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
+.calendar_bar {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+}
 .calendar_today {
     background-color: var(--color6);
     color: var(--color5);
