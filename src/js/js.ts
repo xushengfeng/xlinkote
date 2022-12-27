@@ -4838,7 +4838,9 @@ class x extends HTMLElement {
             xel.style.left = el_offset2(this, O).x + "px";
             xel.style.top = el_offset2(this, O).y + "px";
             xel.style.position = "absolute";
+            xel.className = this.className;
             xel.value = this.value;
+            xel.querySelectorAll("x-x").forEach((el) => (el.id = uuid_id()));
             free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
             free_o_a = -1;
