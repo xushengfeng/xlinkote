@@ -6767,12 +6767,11 @@ class record extends HTMLElement {
 
     connectedCallback() {
         if (!this.id) this.id = uuid_id();
-        let mediaRecorder = null;
+        let mediaRecorder: MediaRecorder = null;
         let i = createEl("input");
         i.type = "checkbox";
-        let b = createEl("div");
-        b.onclick = () => {
-            i.checked = !i.checked;
+        let t = 0;
+        i.onclick = () => {
             if (i.checked) {
                 navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
                     let chunks = [];
@@ -6780,6 +6779,8 @@ class record extends HTMLElement {
                     mediaRecorder.start();
                     mediaRecorder.onstart = () => {
                         console.log("开始录制");
+                        t = new Date().getTime();
+                        reflash();
                     };
 
                     mediaRecorder.ondataavailable = (e) => {
@@ -6791,26 +6792,30 @@ class record extends HTMLElement {
                         let blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
                         let a = new FileReader();
                         a.onload = () => {
-                            audio.src = a.result as string;
-                            if (!集.assets[this.id]) 集.assets[this.id] = { url: "", base64: "", sha: "" };
-                            集.assets[this.id].base64 = a.result as string;
-                            集.assets[this.id].sha = CryptoJS.SHA256(a.result as string).toString();
+                            let id = put_assets("", a.result as string);
+                            let file = <file>createEl("x-file");
+                            this.parentElement.append(file);
+                            file.value = JSON.stringify({ r: true, id });
+                            this.remove();
                         };
                         a.readAsDataURL(blob);
                         stream.getAudioTracks()[0].stop();
                     };
                 });
-                b.classList.add("recording");
+                i.classList.add("recording");
             } else {
                 mediaRecorder.stop();
-                b.classList.remove("recording");
+                i.classList.remove("recording");
             }
         };
-        let audio = createEl("audio");
-        audio.controls = true;
+        let time = createEl("div");
         this.append(i);
-        this.append(b);
-        this.append(audio);
+        this.append(time);
+        let reflash = () => {
+            let now = new Date().getTime();
+            time.innerText = String(now - t);
+            if (mediaRecorder.state == "recording") requestAnimationFrame(reflash);
+        };
     }
 }
 

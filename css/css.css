@@ -1014,17 +1014,15 @@ x-record {
     display: flex;
 }
 x-record > input {
-    display: none;
-}
-.recording {
-    border-radius: 8px;
-}
-x-record > div {
+    appearance: none;
     width: 16px;
     height: 16px;
     background-color: #f00;
     border-radius: 4px;
     transition: var(--transition);
+}
+.recording {
+    border-radius: 8px;
 }
 x-record > audio {
     height: 16px;
