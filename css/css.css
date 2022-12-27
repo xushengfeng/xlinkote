@@ -1222,7 +1222,7 @@ x-calendar {
 }
 
 x-time {
-    @apply flex;
+    @apply flex items-center;
 }
 .time_play {
     @apply w-6 h-6 relative;
