@@ -6872,7 +6872,7 @@ class record extends HTMLElement {
         this.append(time);
         let reflash = () => {
             let now = new Date().getTime();
-            time.innerText = String(now - t);
+            time.innerText = time_text(now - t).hms();
             if (mediaRecorder.state == "recording") requestAnimationFrame(reflash);
         };
     }
@@ -6921,13 +6921,9 @@ class audio extends HTMLElement {
             button.innerHTML = icon(play_svg);
         };
         let show_t = (n: number, t: number) => {
-            let s0 = Math.round(n);
-            let m0 = Math.floor(s0 / 60);
-            let ss0 = `${s0 % 60 < 10 ? "0" : ""}${s0 % 60}`;
-            let s1 = Math.round(t);
-            let m1 = Math.floor(s1 / 60);
-            let ss1 = `${s1 % 60 < 10 ? "0" : ""}${s1 % 60}`;
-            return `${m0}:${ss0}/${m1}:${ss1}`;
+            let t0 = time_text(n * 1000).hms();
+            let t1 = time_text(t * 1000).hms();
+            return `${t0}/${t1}`;
         };
         this.audio.oncanplay = () => {
             playtime.innerText = show_t(this.audio.currentTime, this.audio.duration);
@@ -7478,15 +7474,15 @@ class time extends HTMLElement {
         let now = new Date().getTime();
         if (this._value2.countdown) {
             if (this._value2.end) {
-                this.time_t.innerText = String((this._value2.end - now) / 1000);
+                this.time_t.innerText = time_text(this._value2.end - now).hms();
             } else {
                 if (this._value2.run.length % 2 != 0) {
-                    this.time_t.innerText = String((this._value2.pro - this.add_times(this._value2.run, now)) / 1000);
+                    this.time_t.innerText = time_text(this._value2.pro - this.add_times(this._value2.run, now)).hms();
                 }
             }
         } else {
             if (this._value2.run.length % 2 != 0) {
-                this.time_t.innerText = String(this.add_times(this._value2.run, now) / 1000);
+                this.time_t.innerText = time_text(this.add_times(this._value2.run, now)).hms();
             }
         }
     }
