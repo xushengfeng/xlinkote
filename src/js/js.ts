@@ -4634,6 +4634,38 @@ md.inline.ruler.before("link", "x-link", (state, silent: boolean) => {
     return true;
 });
 
+function time_text(time: number) {
+    return {
+        ss() {
+            return `${time % 1000}`;
+        },
+        s() {
+            return `${Math.floor(time / 1000)}`;
+        },
+        m() {
+            return `${Math.floor(time / 1000 / 60)}`;
+        },
+        ms() {
+            return `${Math.floor(time / 1000 / 60)}:${Math.floor(time / 1000)}`;
+        },
+        hms() {
+            let h = Math.floor(time / 1000 / 60 / 60);
+            let m = Math.floor(time / 1000 / 60) % 60;
+            let s = Math.floor(time / 1000) % 60;
+            let t = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+            if (h > 0) t = `${h}:` + t;
+            return t;
+        },
+        hms2() {
+            let h = Math.floor(time / 1000 / 60 / 60);
+            let m = Math.floor(time / 1000 / 60) % 60;
+            let s = Math.floor(time / 1000) % 60;
+            let t = `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+            return t;
+        },
+    };
+}
+
 // template
 /** 主元素 */
 class x extends HTMLElement {
