@@ -7485,17 +7485,21 @@ class time extends HTMLElement {
         let now = new Date().getTime();
         if (this._value2.countdown) {
             if (this._value2.end) {
-                this.time_t.innerText = time_text(this._value2.end - now).hms();
-                if (this._value2.end - now <= 0) {
+                let t = this._value2.end - now;
+                this.time_t.innerText = time_text(Math.max(0, t)).hms();
+                if (t <= 0) {
                     no("停止");
                     this._value2.run = [];
+                    this._value = JSON.stringify(this._value2);
                 }
             } else {
                 if (this._value2.run.length % 2 != 0) {
-                    this.time_t.innerText = time_text(this._value2.pro - this.add_times(this._value2.run, now)).hms();
-                    if (this._value2.pro - this.add_times(this._value2.run, now) <= 0) {
+                    let t = this._value2.pro - this.add_times(this._value2.run, now);
+                    this.time_t.innerText = time_text(Math.max(0, t)).hms();
+                    if (t <= 0) {
                         no("停止");
                         this._value2.run = [];
+                        this._value = JSON.stringify(this._value2);
                     }
                 }
             }
