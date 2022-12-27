@@ -501,10 +501,8 @@ elFromId("常驻").onpointerdown = (e) => {
     console.log((<HTMLElement>e.target).id);
     let v = null;
     let el_n = "";
-    if ((<HTMLElement>e.target).id == "录音") {
-        el_n = "x-record";
-    } else if ((<HTMLElement>e.target).id == "x-time") {
-        el_n = "x-time";
+    if ((<HTMLElement>e.target).id && e.target != elFromId("常驻")) {
+        el_n = (<HTMLElement>e.target).id;
     } else {
         el_n = "x-md";
     }
