@@ -35,6 +35,7 @@ interface x_tag_map {
     "x-md": markdown;
     "x-sinppet": symbols;
     "x-pro": progress;
+    "x-progress": progress2;
     "x-file": file;
     "x-pdf": pdf_viewer;
     "x-draw": draw;
@@ -5672,6 +5673,59 @@ class progress extends HTMLElement {
 
 window.customElements.define("x-pro", progress);
 
+class progress2 extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    jd: HTMLElement;
+    _value: number;
+
+    connectedCallback() {
+        this.jd = createEl("div");
+        this.append(this.jd);
+        let yle: PointerEvent;
+        this.onpointerdown = (e) => {
+            yle = e;
+            ylf(e);
+            e.preventDefault();
+        };
+        document.addEventListener("pointermove", (e) => {
+            if (yle) {
+                e.preventDefault();
+                ylf(e);
+            }
+        });
+        document.addEventListener("pointerup", (e) => {
+            if (yle) {
+                e.preventDefault();
+                yle = null;
+                ylf(e);
+            }
+        });
+
+        let ylf = (e: PointerEvent) => {
+            let r = this.getBoundingClientRect();
+            let pw = e.clientX - r.x;
+            let p = pw / r.width;
+            p = Math.max(Math.min(1, p), 0);
+
+            this.jd.style.width = p * 100 + "%";
+            this._value = p;
+            this.dispatchEvent(new InputEvent("input"));
+        };
+    }
+    get value() {
+        return this._value;
+    }
+    set value(v) {
+        this._value = v;
+        this.jd.style.width = v * 100 + "%";
+    }
+}
+
+window.customElements.define("x-progress", progress2);
+
 /** 文件预览元素 */
 class file extends HTMLElement {
     constructor() {
@@ -6955,14 +7009,12 @@ class audio extends HTMLElement {
         let button = createEl("div");
         button.classList.add("audio_button");
         let playtime = createEl("div");
-        let jd = createEl("div");
+        let jd = createEl("x-progress");
         jd.classList.add("audio_jd");
-        let jd2 = createEl("div");
         let yl = createEl("div");
         yl.classList.add("audio_yl");
         let yl2 = createEl("div"); // 按钮
-        let yl3 = createEl("div"); // 滑槽
-        let yl4 = createEl("div"); // 滑块
+        let yl3 = createEl("x-progress"); // 滑槽
         let asr = createEl("div");
         this.append(this.audio);
         this.append(button, jd, playtime, yl, asr);
@@ -6990,42 +7042,16 @@ class audio extends HTMLElement {
         };
         this.audio.ontimeupdate = () => {
             playtime.innerText = show_t(this.audio.currentTime, this.audio.duration);
-            jd2.style.width = `${(this.audio.currentTime / this.audio.duration) * 100}%`;
+            jd.value = this.audio.currentTime / this.audio.duration;
         };
-        jd.append(jd2);
-        let jde: PointerEvent;
-        jd.onpointerdown = (e) => {
-            jde = e;
-            f(e);
-            e.preventDefault();
-        };
-        document.addEventListener("pointermove", (e) => {
-            if (jde) {
-                e.preventDefault();
-                f(e);
-            }
-        });
-        document.addEventListener("pointerup", (e) => {
-            if (jde) {
-                e.preventDefault();
-                jde = null;
-                f(e);
-            }
-        });
-
-        let f = (e: PointerEvent) => {
-            let r = jd.getBoundingClientRect();
-            let pw = e.clientX - r.x;
-            let p = pw / r.width;
-            p = Math.max(Math.min(1, p), 0);
-
-            this.audio.currentTime = this.audio.duration * p;
+        jd.oninput = () => {
+            this.audio.currentTime = this.audio.duration * jd.value;
         };
 
         this.audio.volume = 1;
         yl3.title = "100%";
         this.audio.onvolumechange = () => {
-            yl4.style.width = `${(this.audio.volume / 1) * 100}%`;
+            yl3.value = this.audio.volume;
             yl_icon();
         };
         let yl_icon = () => {
@@ -7054,38 +7080,13 @@ class audio extends HTMLElement {
             this.audio.volume = p;
         };
         yl.append(yl3, yl2);
-        yl3.append(yl4);
         yl2.innerHTML = icon(yl2_svg);
         yl2.onclick = () => {
             this.audio.muted = !this.audio.muted;
             yl_icon();
         };
-        let yle: PointerEvent;
-        yl3.onpointerdown = (e) => {
-            yle = e;
-            ylf(e);
-            e.preventDefault();
-        };
-        document.addEventListener("pointermove", (e) => {
-            if (yle) {
-                e.preventDefault();
-                ylf(e);
-            }
-        });
-        document.addEventListener("pointerup", (e) => {
-            if (yle) {
-                e.preventDefault();
-                yle = null;
-                ylf(e);
-            }
-        });
-
-        let ylf = (e: PointerEvent) => {
-            let r = yl3.getBoundingClientRect();
-            let pw = e.clientX - r.x;
-            let p = pw / r.width;
-            p = Math.max(Math.min(1, p), 0);
-
+        yl3.oninput = () => {
+            let p = yl3.value;
             this.audio.volume = p;
 
             yl3.title = `${Math.round(p * 100)}%`;
