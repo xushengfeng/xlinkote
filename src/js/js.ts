@@ -5071,7 +5071,7 @@ class markdown extends HTMLElement {
 
     _value: { type: md_type; text: string } = { type: "p", text: "" };
 
-    index;
+    index: ReturnType<typeof md.parse>;
 
     text: HTMLTextAreaElement;
 
@@ -5550,7 +5550,7 @@ class markdown extends HTMLElement {
             console.log(start_t, end_t);
             let p2p = (of: number) => {
                 let list = [];
-                let w = (l) => {
+                let w = (l: ReturnType<typeof md.parse>) => {
                     for (let i of l) {
                         if (i.children) {
                             w(i.children);
