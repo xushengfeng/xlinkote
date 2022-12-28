@@ -1422,7 +1422,7 @@ document.onkeydown = (e) => {
             break;
         case "Escape":
             if (模式 == "浏览") {
-                if (!is_input_el(target)) set_模式("设计");
+                if (画布.contains(target)) set_模式("设计");
             }
             break;
         case "ArrowUp":
