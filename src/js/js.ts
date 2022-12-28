@@ -1427,15 +1427,31 @@ document.onkeydown = (e) => {
             break;
         case "ArrowUp":
             ys_bn("back");
+            if (!is_input_el(target)) {
+                let el = get_nearest_x(z.聚焦元素, "up");
+                jump_to_x_link(el);
+            }
             break;
         case "ArrowDown":
             ys_bn("next");
+            if (!is_input_el(target)) {
+                let el = get_nearest_x(z.聚焦元素, "down");
+                jump_to_x_link(el);
+            }
             break;
         case "ArrowLeft":
             ys_bn("back");
+            if (!is_input_el(target)) {
+                let el = get_nearest_x(z.聚焦元素, "left");
+                jump_to_x_link(el);
+            }
             break;
         case "ArrowRight":
             ys_bn("next");
+            if (!is_input_el(target)) {
+                let el = get_nearest_x(z.聚焦元素, "right");
+                jump_to_x_link(el);
+            }
             break;
     }
 };
@@ -3677,7 +3693,7 @@ function move_to_x_link(el: x | xlink) {
 var now_data_id = "0";
 
 /** 跳转到元素位置并记录 */
-function jump_to_x_link(el: x | xlink) {
+function jump_to_x_link(el: x | xlink, nrc?: boolean) {
     view_el.classList.add("viewer_hide");
 
     for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
@@ -3709,7 +3725,7 @@ function jump_to_x_link(el: x | xlink) {
             (画布el as HTMLElement).style.display = "none";
         }
     }
-    add_bci(el);
+    if (!nrc) add_bci(el);
 }
 
 /** 添加到面包屑栏 */
@@ -4052,6 +4068,49 @@ function fixed_el() {
         }
     }
     requestAnimationFrame(fixed_el);
+}
+
+/** 获取从近到远元素列表 */
+function match_nearest_x(x: x) {
+    let l: { el: x; x: number; y: number; r: number }[] = [];
+    let r = el_offset2(x, O);
+    let center = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+    画布.querySelectorAll("x-x").forEach((el: x) => {
+        if (is_smallest_el(el)) {
+            let r = el_offset2(el, O);
+            let center2 = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+            l.push({
+                el: el,
+                x: center2.x - center.x,
+                y: center2.y - center.y,
+                r: Math.sqrt((center2.x - center.x) ** 2 + (center2.y - center.y) ** 2),
+            });
+        }
+    });
+    l.sort((a, b) => a.r - b.r);
+    return l;
+}
+
+function get_nearest_x(x: x, a: "left" | "right" | "up" | "down") {
+    console.log(match_nearest_x(x));
+    for (let i of match_nearest_x(x)) {
+        if (i.el == x) continue;
+        switch (a) {
+            case "down":
+                if (i.y > 0) return i.el;
+                break;
+            case "up":
+                if (i.y <= 0) return i.el;
+                break;
+            case "left":
+                if (i.x <= 0) return i.el;
+                break;
+            case "right":
+                if (i.x > 0) return i.el;
+                break;
+        }
+    }
+    return x;
 }
 
 window["xln"] = {};
