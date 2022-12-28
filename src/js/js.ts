@@ -1129,7 +1129,6 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             if (had) continue;
             集.中转站.push({
                 id: i.id,
-                fixed: i.fixed,
                 style: i.getAttribute("style"),
                 type: i.tagName,
                 子元素: i.value,
@@ -1452,7 +1451,6 @@ type data = Array<{
     style: string;
     class?: string;
     type: string;
-    fixed?: boolean;
     子元素?: data;
     value?: string;
     global?: boolean;
@@ -1511,7 +1509,7 @@ function get_data() {
         for (let i of map) {
             let el = <x>els[i.index];
             let type = "X-X";
-            data.push({ id: el.id, style: "", 子元素: el.value, type, fixed: el.fixed });
+            data.push({ id: el.id, style: "", 子元素: el.value, type });
             if (el.getAttribute("style")) data[data.length - 1].style = el.getAttribute("style");
             if (el.className) data[data.length - 1].class = el.className;
         }
@@ -1685,6 +1683,17 @@ function version_tr(obj): 集type {
         case "0.16.2":
         case "0.17.0":
         case "0.17.1":
+            {
+                for (let i of obj.数据) {
+                    w(i.data);
+                }
+                w(obj.中转站);
+                function w(data) {
+                    for (let i of data) {
+                        delete i.fixed;
+                    }
+                }
+            }
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
@@ -2493,7 +2502,6 @@ document.addEventListener("message", (msg: any) => {
                 j.meta.file_name = "摘录";
                 j.中转站.push({
                     id: uuid_id(),
-                    fixed: false,
                     style: "",
                     value: data.text,
                     type: "X-MD",
@@ -4899,7 +4907,6 @@ class x extends HTMLElement {
                     class: el.className,
                     子元素: (el as x).value,
                     type: el.tagName,
-                    fixed: (el as x).fixed,
                 });
             } else {
                 list.push({
