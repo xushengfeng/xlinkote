@@ -1449,7 +1449,7 @@ type meta = {
 type data = Array<{
     id: string;
     style: string;
-    class?: string;
+    class: string;
     type: string;
     子元素?: data;
     value?: string;
@@ -1509,9 +1509,9 @@ function get_data() {
         for (let i of map) {
             let el = <x>els[i.index];
             let type = "X-X";
-            data.push({ id: el.id, style: "", 子元素: el.value, type });
+            data.push({ id: el.id, style: "", 子元素: el.value, type, class: "" });
             if (el.getAttribute("style")) data[data.length - 1].style = el.getAttribute("style");
-            if (el.className) data[data.length - 1].class = el.className;
+            data[data.length - 1].class = el.className;
         }
         if ((O as HTMLElement).style.display == "block") {
             p[O.id] = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
@@ -2505,6 +2505,7 @@ document.addEventListener("message", (msg: any) => {
                 j.中转站.push({
                     id: uuid_id(),
                     style: "",
+                    class: "",
                     value: data.text,
                     type: "X-MD",
                 });
@@ -3868,7 +3869,13 @@ function to_flex(els: x[], d: "x" | "y") {
         el.style.left = "";
         el.style.top = "";
         el.style.position = "relative";
-        data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
+        data.push({
+            id: el.id,
+            style: el.getAttribute("style"),
+            class: el.className,
+            type: el.tagName,
+            子元素: el.value,
+        });
         el.remove();
     }
     xel.value = data;
@@ -3930,7 +3937,13 @@ function to_none_layout(els: x[]) {
     let data = [] as data;
     let xels = els_to_rels(els);
     for (let el of xels) {
-        data.push({ id: el.id, style: el.getAttribute("style"), type: el.tagName, 子元素: el.value });
+        data.push({
+            id: el.id,
+            style: el.getAttribute("style"),
+            class: el.className,
+            type: el.tagName,
+            子元素: el.value,
+        });
         z.remove(el);
     }
     x.value = data;
