@@ -7573,7 +7573,10 @@ class time_s extends HTMLElement {
     }
 
     get value() {
-        return (Number(this.h.value) * 60 * 60 + Number(this.m.value) * 60 + Number(this.s.value)) * 1000;
+        return (
+            ((Number(this.h.value) || 0) * 60 * 60 + (Number(this.m.value) || 0) * 60 + (Number(this.s.value) || 0)) *
+            1000
+        );
     }
 }
 
