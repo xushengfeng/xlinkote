@@ -32,6 +32,7 @@ import copy_svg from "../../assets/icons/copy.svg";
 
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
+function createEl(tagName: "x-x"): x;
 function createEl(tagName: string): HTMLElement;
 function createEl(tagname: string) {
     return document.createElement(tagname);
@@ -509,7 +510,7 @@ elFromId("常驻").onpointerdown = (e) => {
     let x = e.clientX - O.getBoundingClientRect().x,
         y = e.clientY - O.getBoundingClientRect().y;
 
-    let xel = <x>createEl("x-x");
+    let xel = createEl("x-x");
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
     z.push(xel);
@@ -1091,7 +1092,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                     }
                 }
                 function cx(pel: Element, x: x, before: boolean) {
-                    let xel = createEl("x-x") as x;
+                    let xel = createEl("x-x");
                     xel.id = x.id;
                     xel.setAttribute("style", x.getAttribute("style"));
                     xel.style.left = "";
@@ -1300,7 +1301,7 @@ function new_free_drag_tip() {
 
 /** 通过画布坐标创建主元素 */
 function create_x_x(x: number, y: number) {
-    let xel = <x>createEl("x-x");
+    let xel = createEl("x-x");
     xel.style.left = x + "px";
     xel.style.top = y + "px";
     z.push(xel);
@@ -1317,7 +1318,7 @@ function tmp_s_reflash() {
     for (let x of l) {
         let t = createEl("div");
         临时中转站.append(t);
-        let xel = createEl("x-x") as x;
+        let xel = createEl("x-x");
         xel.id = x.id;
         t.append(xel);
         xel.setAttribute("style", x.style);
@@ -2459,7 +2460,7 @@ import TurndownService from "turndown";
 /** 添加文件或文字到画布 */
 function add_file(type: string, text: string, data: string, x: number, y: number) {
     let types = type.split("/");
-    let xel = <x>createEl("x-x");
+    let xel = createEl("x-x");
     xel.style.left = x / zoom + "px";
     xel.style.top = y / zoom + "px";
     z.push(xel);
@@ -2563,7 +2564,7 @@ function assets_reflash() {
         let add = createEl("div");
         add.onclick = (e) => {
             let p = e2p(e);
-            let xel = <x>createEl("x-x");
+            let xel = createEl("x-x");
             xel.style.left = p.x + "px";
             xel.style.top = p.y + "px";
             z.push(xel);
@@ -2642,7 +2643,7 @@ function assets_reflash() {
 
 /** 新建绘制元素 */
 function new_draw() {
-    let xel = <x>createEl("x-x");
+    let xel = createEl("x-x");
     xel.id = uuid_id();
     xel.style.left = -el_offset(O).x / zoom + "px";
     xel.style.top = -el_offset(O).y / zoom + "px";
@@ -3641,7 +3642,7 @@ function move_to_x_link(el: x | xlink) {
     view_el.innerHTML = "";
     view_el.classList.remove("viewer_hide");
     for (let x of els) {
-        let xel = createEl("x-x") as x;
+        let xel = createEl("x-x");
         xel.setAttribute("style", x.el.getAttribute("style"));
         xel.style.left = x.x - out_rect.left + "px";
         xel.style.top = x.y - out_rect.top + "px";
@@ -3846,7 +3847,7 @@ function els_to_rels(els: x[]) {
 }
 
 function copy_x(x: x, pel?: x) {
-    let new_x = createEl("x-x") as x;
+    let new_x = createEl("x-x");
     z.push(new_x, pel);
     new_x.id = x.id;
     new_x.setAttribute("style", x.getAttribute("style"));
@@ -3862,7 +3863,7 @@ function to_flex(els: x[], d: "x" | "y") {
         let rel = find_root_layout(el);
         if (!xels.includes(rel)) xels.push(rel);
     }
-    let xel = createEl("x-x") as x;
+    let xel = createEl("x-x");
     xel.id = uuid_id();
     if (d == "x") {
         xel.classList.add("flex-row");
@@ -3908,7 +3909,7 @@ function is_flex(el: HTMLElement) {
 
 /** 添加一个固定布局元素 */
 function add_none_layout() {
-    let x = createEl("x-x") as x;
+    let x = createEl("x-x");
     x.style.left = "0";
     x.style.top = "0";
     z.push(x);
@@ -3989,7 +3990,7 @@ function to_more_line(xels: x[], c?: string | RegExp) {
             el.classList.add("flex-column");
             for (let t of l) {
                 if (!t) continue;
-                let x = createEl("x-x") as x;
+                let x = createEl("x-x");
                 x.setAttribute("style", "");
                 let md = createEl("x-md") as markdown;
                 x.append(md);
@@ -5060,7 +5061,7 @@ class markdown extends HTMLElement {
                 if (e.ctrlKey) {
                     if (e.shiftKey) {
                         let rel = find_root_layout(this.parentElement);
-                        let xel = <x>createEl("x-x");
+                        let xel = createEl("x-x");
                         xel.style.left = rel.offsetLeft + "px";
                         xel.style.top = rel.offsetTop + rel.offsetHeight + 16 + "px";
                         xel.style.width = rel.offsetWidth + "px";
@@ -5091,14 +5092,14 @@ class markdown extends HTMLElement {
                             pxel = p.parentElement as x;
                         } else {
                             // 不存在上级堆叠元素，需要新建并把此元素套进去
-                            pxel = createEl("x-x") as x;
+                            pxel = createEl("x-x");
                             pxel.id = uuid_id();
                             link(pxel.id).add();
                             pxel.style.left = p.offsetLeft + "px";
                             pxel.style.top = p.offsetTop + "px";
                             pxel.classList.add("flex-column");
                             z.push(pxel);
-                            let x = createEl("x-x") as x;
+                            let x = createEl("x-x");
                             x.id = p.id;
                             x.setAttribute("style", p.getAttribute("style"));
                             pxel.append(x);
@@ -5110,7 +5111,7 @@ class markdown extends HTMLElement {
                             p = x;
                         }
 
-                        let xel = <x>createEl("x-x");
+                        let xel = createEl("x-x");
                         let md = createEl("x-md") as markdown;
                         xel.append(md);
                         xel.id = uuid_id();
@@ -5298,7 +5299,7 @@ class markdown extends HTMLElement {
                         let pel = el.parentElement;
                         let md: markdown;
                         if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
-                            let nel = createEl("x-x") as x;
+                            let nel = createEl("x-x");
                             nel.id = el.id;
                             el.id = uuid_id();
                             link(el.id).add();
@@ -5324,7 +5325,7 @@ class markdown extends HTMLElement {
                                 md.text.setRangeText(tt);
                                 md.reload();
                             } else {
-                                let x = createEl("x-x") as x;
+                                let x = createEl("x-x");
                                 let md = createEl("x-md") as markdown;
                                 last_el.after(x);
                                 x.append(md);
@@ -7110,7 +7111,7 @@ function audio_to_text(el: HTMLAudioElement, id: string) {
         .then((r) => r.json())
         .then(async (j) => {
             console.log(j);
-            let pel = createEl("x-x") as x;
+            let pel = createEl("x-x");
             pel.style.left = el_offset2(el.parentElement, O).x + "px";
             pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
             z.push(pel);
@@ -7121,7 +7122,7 @@ function audio_to_text(el: HTMLAudioElement, id: string) {
                 }
             }
             for (let i of j.segments) {
-                let x = createEl("x-x") as x;
+                let x = createEl("x-x");
                 z.push(x, pel);
                 let md = createEl("x-md") as markdown;
                 x.append(md);
@@ -7236,7 +7237,7 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
     ocr.ocr(canvas.getContext("2d").getImageData(0, 0, w, h)).then((v) => {
         let tl = [];
         let p = el_offset2(img, O);
-        let pxel = <x>createEl("x-x");
+        let pxel = createEl("x-x");
         pxel.id = uuid_id();
         pxel.style.left = p.x + "px";
         pxel.style.top = p.y + "px";
@@ -7252,7 +7253,7 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
             let y0 = i.box[0][1];
             let x1 = i.box[2][0];
             let y1 = i.box[2][1];
-            let xel = <x>createEl("x-x");
+            let xel = createEl("x-x");
             xel.style.left = x0 + "px";
             xel.style.top = y0 + "px";
             xel.style.width = x1 - x0 + "px";
