@@ -5085,7 +5085,6 @@ class markdown extends HTMLElement {
                         let xel = createEl("x-x");
                         xel.style.left = rel.offsetLeft + "px";
                         xel.style.top = rel.offsetTop + rel.offsetHeight + 16 + "px";
-                        xel.style.width = rel.offsetWidth + "px";
                         z.push(xel);
                         var md = createEl("x-md");
                         xel.append(md);
