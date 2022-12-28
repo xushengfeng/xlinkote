@@ -1113,6 +1113,20 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 
     if (free_old_point && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
         for (let i of selected_el) {
+            let had = false;
+            for (let x of global_x) {
+                if (x.id == i.id) {
+                    had = true;
+                    break;
+                }
+            }
+            for (let x of 集.中转站) {
+                if (x.id == i.id) {
+                    had = true;
+                    break;
+                }
+            }
+            if (had) continue;
             集.中转站.push({
                 id: i.id,
                 fixed: i.fixed,
