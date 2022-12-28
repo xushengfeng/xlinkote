@@ -3845,6 +3845,16 @@ function els_to_rels(els: x[]) {
     return xels;
 }
 
+function copy_x(x: x, pel?: x) {
+    let new_x = createEl("x-x") as x;
+    z.push(new_x, pel);
+    new_x.id = x.id;
+    new_x.setAttribute("style", x.getAttribute("style"));
+    new_x.className = x.className;
+    new_x.value = x.value;
+    return new_x;
+}
+
 /** 转化为堆叠布局 */
 function to_flex(els: x[], d: "x" | "y") {
     let xels = [] as x[];
@@ -4781,14 +4791,11 @@ class x extends HTMLElement {
                 if (this.parentElement != O) {
                     let x = e.clientX - O.getBoundingClientRect().x,
                         y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetY;
-                    let xel = <x>createEl("x-x");
-                    xel.id = this.id;
-                    xel.setAttribute("style", this.getAttribute("style"));
-                    z.push(xel);
+
+                    let xel = copy_x(this);
                     xel.style.left = el_offset2(this, O).x + "px";
                     xel.style.top = el_offset2(this, O).y + "px";
                     xel.style.position = "absolute";
-                    xel.value = this.value;
                     this.remove();
                     free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
                     free_old_point = e2p(e);
@@ -4865,15 +4872,11 @@ class x extends HTMLElement {
             new_free_drag_tip();
             let x = e.clientX - O.getBoundingClientRect().x - copy.offsetLeft - e.offsetX,
                 y = e.clientY - O.getBoundingClientRect().y + copy.offsetHeight - e.offsetY;
-            let xel = <x>createEl("x-x");
+            let xel = copy_x(this);
             xel.id = uuid_id();
-            xel.setAttribute("style", this.getAttribute("style"));
-            z.push(xel);
             xel.style.left = el_offset2(this, O).x + "px";
             xel.style.top = el_offset2(this, O).y + "px";
             xel.style.position = "absolute";
-            xel.className = this.className;
-            xel.value = this.value;
             xel.querySelectorAll("x-x").forEach((el) => (el.id = uuid_id()));
             free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
