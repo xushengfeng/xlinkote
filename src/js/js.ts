@@ -5523,16 +5523,18 @@ class markdown extends HTMLElement {
                     x = false;
                 let w = (pn: Node) => {
                     for (let n of pn.childNodes) {
+                        let text = n.textContent;
+                        if (n?.firstChild?.nodeName == "MJX-CONTAINER") text = "";
                         if (!n.contains(node)) {
                             if (!x) {
-                                before += n.textContent;
+                                before += text;
                             } else {
-                                after += n.textContent;
+                                after += text;
                             }
                         } else {
                             if (n == node) {
-                                before += n.textContent.slice(0, of);
-                                after += n.textContent.slice(of);
+                                before += text.slice(0, of);
+                                after += text.slice(of);
                                 x = true;
                             } else {
                                 w(n);
@@ -5561,6 +5563,8 @@ class markdown extends HTMLElement {
                                     list.push({ text: i.markup, type: "mu" });
                                 }
                             } else if (i.type == "html_inline" || i.type == "html_block") {
+                                list.push({ text: i.content, type: "mu" });
+                            } else if (i.type == "mathjax_inline") {
                                 list.push({ text: i.content, type: "mu" });
                             } else if (i.content) {
                                 list.push({ text: i.content, type: "ct" });
