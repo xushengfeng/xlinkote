@@ -30,9 +30,30 @@ import right_svg from "../../assets/icons/right.svg";
 import left_svg from "../../assets/icons/left.svg";
 import copy_svg from "../../assets/icons/copy.svg";
 
+interface x_tag_map {
+    "x-x": x;
+    "x-md": markdown;
+    "x-sinppet": symbols;
+    "x-pro": progress;
+    "x-file": file;
+    "x-pdf": pdf_viewer;
+    "x-draw": draw;
+    "x-color": xcolor;
+    "x-draw-width": xdraw_width;
+    "x-link": xlink;
+    "x-link-value": link_value;
+    "x-record": record;
+    "x-audio": audio;
+    "x-three": three;
+    "x-img": img;
+    "x-ggb": ggb;
+    "x-calendar": calendar;
+    "time-b": time_s;
+    "x-time": time;
+}
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
-function createEl(tagName: "x-x"): x;
+function createEl<K extends keyof x_tag_map>(tagName: K): x_tag_map[K];
 function createEl(tagName: string): HTMLElement;
 function createEl(tagname: string) {
     return document.createElement(tagname);
@@ -58,7 +79,7 @@ const 画布 = elFromId("画布");
 const 画布s = elFromId("画布们");
 var O = elFromId("O");
 
-const link_value_bar = createEl("x-link-value") as link_value;
+const link_value_bar = createEl("x-link-value");
 画布.append(link_value_bar);
 
 const breadcrumbs_el = elFromId("breadcrumbs");
@@ -2465,7 +2486,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
     xel.style.top = y / zoom + "px";
     z.push(xel);
     if (types[0] == "text") {
-        let md = <markdown>createEl("x-md");
+        let md = createEl("x-md");
         xel.append(md);
         if (type == "text/html") {
             let turndownService = new TurndownService({ headingStyle: "atx" });
@@ -2475,7 +2496,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         }
     } else {
         let id = put_assets("", data);
-        let file = <file>createEl("x-file");
+        let file = createEl("x-file");
         xel.append(file);
         file.value = JSON.stringify({ r: true, id });
     }
@@ -2540,7 +2561,7 @@ function assets_reflash() {
     for (let i in 集.assets) {
         let div = createEl("div");
         assets_el.append(div);
-        let file = <file>createEl("x-file");
+        let file = createEl("x-file");
         div.append(file);
         file.value = JSON.stringify({ r: true, id: i });
 
@@ -2568,7 +2589,7 @@ function assets_reflash() {
             xel.style.left = p.x + "px";
             xel.style.top = p.y + "px";
             z.push(xel);
-            let file = <file>createEl("x-file");
+            let file = createEl("x-file");
             xel.append(file);
             file.value = JSON.stringify({ r: true, id: i });
         };
@@ -2647,7 +2668,7 @@ function new_draw() {
     xel.id = uuid_id();
     xel.style.left = -el_offset(O).x / zoom + "px";
     xel.style.top = -el_offset(O).y / zoom + "px";
-    let draw = createEl("x-draw") as draw;
+    let draw = createEl("x-draw");
     draw.setAttribute("width", String(画布.offsetWidth / zoom));
     draw.setAttribute("height", String(画布.offsetHeight / zoom));
     xel.append(draw);
@@ -3972,7 +3993,7 @@ function to_one_line(xels: x[]) {
                 if (i == 0) type = md._value.type;
             });
             el.querySelectorAll("x-x").forEach((el) => z.remove(el as x));
-            let md = createEl("x-md") as markdown;
+            let md = createEl("x-md");
             el.append(md);
             md.value = JSON.stringify({ text: t, type });
             data_changed();
@@ -3992,7 +4013,7 @@ function to_more_line(xels: x[], c?: string | RegExp) {
                 if (!t) continue;
                 let x = createEl("x-x");
                 x.setAttribute("style", "");
-                let md = createEl("x-md") as markdown;
+                let md = createEl("x-md");
                 x.append(md);
                 z.push(x, el);
                 md.value = JSON.stringify({ text: t, type: v.type });
@@ -5068,7 +5089,7 @@ class markdown extends HTMLElement {
                         z.push(xel);
                         var md = createEl("x-md");
                         xel.append(md);
-                        (<markdown>md).edit = true;
+                        md.edit = true;
 
                         z.reflash();
                     }
@@ -5112,7 +5133,7 @@ class markdown extends HTMLElement {
                         }
 
                         let xel = createEl("x-x");
-                        let md = createEl("x-md") as markdown;
+                        let md = createEl("x-md");
                         xel.append(md);
                         xel.id = uuid_id();
                         link(xel.id).add();
@@ -5165,7 +5186,7 @@ class markdown extends HTMLElement {
                     let p = this.parentElement as x;
                     let t = this.text.value;
                     let x = createEl("x-x"),
-                        md = createEl("x-md") as markdown;
+                        md = createEl("x-md");
                     x.id = p.id;
                     x.setAttribute("style", p.getAttribute("style"));
                     p.classList.add("flex-column");
@@ -5305,7 +5326,7 @@ class markdown extends HTMLElement {
                             link(el.id).add();
                             this.remove();
                             el.append(nel);
-                            md = createEl("x-md") as markdown;
+                            md = createEl("x-md");
                             nel.append(md);
                             md.value = this.value;
                             md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
@@ -5326,7 +5347,7 @@ class markdown extends HTMLElement {
                                 md.reload();
                             } else {
                                 let x = createEl("x-x");
-                                let md = createEl("x-md") as markdown;
+                                let md = createEl("x-md");
                                 last_el.after(x);
                                 x.append(md);
                                 x.id = uuid_id();
@@ -5691,12 +5712,12 @@ class file extends HTMLElement {
         if (this._value.r) {
             this.div.classList.remove("file");
             if (type[0] == "image") {
-                let img = createEl("x-img") as img;
+                let img = createEl("x-img");
                 this.div.append(img);
                 img.value = f.base64;
             }
             if (type[0] == "audio") {
-                let audio = createEl("x-audio") as audio;
+                let audio = createEl("x-audio");
                 this.div.append(audio);
                 audio.value = f.base64;
             }
@@ -5707,18 +5728,18 @@ class file extends HTMLElement {
                 video.src = f.base64;
             }
             if (type[1] == "pdf") {
-                let pdf = createEl("x-pdf") as pdf_viewer;
+                let pdf = createEl("x-pdf");
                 this.parentElement.append(pdf);
                 pdf.value = JSON.stringify({ id: this._value.id, page: 1 });
                 this.remove();
             }
             if (type[1] == "gltf-binary") {
-                let td = createEl("x-three") as three;
+                let td = createEl("x-three");
                 this.div.append(td);
                 td.value = this._value.id;
             }
             if (type[1] == "vnd.geogebra.file") {
-                let ggb = createEl("x-ggb") as ggb;
+                let ggb = createEl("x-ggb");
                 this.div.append(ggb);
                 ggb.value = this._value.id;
             }
@@ -6892,7 +6913,7 @@ class record extends HTMLElement {
                         let a = new FileReader();
                         a.onload = () => {
                             let id = put_assets("", a.result as string);
-                            let file = <file>createEl("x-file");
+                            let file = createEl("x-file");
                             this.parentElement.append(file);
                             file.value = JSON.stringify({ r: true, id });
                             this.remove();
@@ -7124,7 +7145,7 @@ function audio_to_text(el: HTMLAudioElement, id: string) {
             for (let i of j.segments) {
                 let x = createEl("x-x");
                 z.push(x, pel);
-                let md = createEl("x-md") as markdown;
+                let md = createEl("x-md");
                 x.append(md);
                 let mdtext = `[${i.start}](#${id}:${i.start})${i.text}`;
                 md.value = JSON.stringify({ type: "p", text: mdtext });
@@ -7259,7 +7280,7 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
             xel.style.width = x1 - x0 + "px";
             xel.style.height = y1 - y0 + "px";
             z.push(xel, pxel);
-            var md = createEl("x-md") as markdown;
+            var md = createEl("x-md");
             xel.append(md);
             let v = JSON.stringify({ type: "p", text: i.text });
             md.value = v;
@@ -7582,7 +7603,7 @@ class time extends HTMLElement {
     connectedCallback() {
         this.count_down = createEl("input");
         this.count_down.type = "checkbox";
-        this.process = createEl("time-b") as time_s;
+        this.process = createEl("time-b");
         this.end = createEl("input");
         this.end.type = "datetime-local";
         this.count_down.oninput = () => {
