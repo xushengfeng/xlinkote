@@ -454,9 +454,9 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #中转站 > #临时 {
     flex-grow: 1;
     overflow-y: auto;
-    padding-top: 16px;
 }
 .侧栏 > #items > #中转站 > #临时 > div {
+    margin-top: 16px;
     position: relative;
 }
 .侧栏 > #items > #中转站 > #临时 > div > x-x {
@@ -486,6 +486,9 @@ body #main > #nav #ink_r {
     display: none;
 }
 .侧栏 > #items > #中转站 > #临时 .xxhandle {
+    display: none;
+}
+.侧栏 > #items > #中转站 > #临时 > div > x-x x-x > #x-x_bar {
     display: none;
 }
 .侧栏 > #items > #资源 {
