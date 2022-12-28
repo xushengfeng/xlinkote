@@ -1119,6 +1119,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 style: i.getAttribute("style"),
                 type: i.tagName,
                 子元素: i.value,
+                class: i.className,
             });
             if (!e.shiftKey) {
                 i.remove();
