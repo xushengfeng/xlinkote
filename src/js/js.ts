@@ -7598,7 +7598,7 @@ class time extends HTMLElement {
     start_b: HTMLElement;
     time_setting: HTMLElement;
     time_group: HTMLElement;
-    jd: HTMLElement;
+    jd: progress2;
 
     connectedCallback() {
         this.count_down = createEl("input");
@@ -7639,7 +7639,7 @@ class time extends HTMLElement {
         this.time_t = createEl("div");
 
         let jdt = createEl("div");
-        this.jd = createEl("div");
+        this.jd = createEl("x-progress");
         jdt.append(this.time_t, this.jd);
         jdt.classList.add("time_jdt");
 
@@ -7667,7 +7667,7 @@ class time extends HTMLElement {
             if (this._value2.end) {
                 let t = this._value2.end - now;
                 this.time_t.innerText = time_text(Math.max(0, t)).hms();
-                this.jd.style.width = ((this._value2.end - now) / (this._value2.end - this._value2.run[0])) * 100 + "%";
+                this.jd.value = (this._value2.end - now) / (this._value2.end - this._value2.run[0]);
                 if (t <= 0) {
                     no("停止");
                     this._value2.run = [];
@@ -7677,7 +7677,7 @@ class time extends HTMLElement {
                 if (this._value2.run.length % 2 != 0) {
                     let t = this._value2.pro - this.add_times(this._value2.run, now);
                     this.time_t.innerText = time_text(Math.max(0, t)).hms();
-                    this.jd.style.width = (t / this._value2.pro) * 100 + "%";
+                    this.jd.value = t / this._value2.pro;
                     if (t <= 0) {
                         no("停止");
                         this._value2.run = [];
@@ -7687,7 +7687,7 @@ class time extends HTMLElement {
             }
         } else {
             if (this._value2.run.length % 2 != 0) {
-                this.jd.style.width = (this.add_times(this._value2.run, now) / this._value2.pro) * 100 + "%";
+                this.jd.value = this.add_times(this._value2.run, now) / this._value2.pro;
                 this.time_t.innerText = time_text(this.add_times(this._value2.run, now)).hms();
                 if (this.add_times(this._value2.run, now) > this._value2.pro) no("超时");
             }

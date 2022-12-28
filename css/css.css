@@ -1331,6 +1331,13 @@ x-img > div > .icon {
     height: 16px;
 }
 
+x-progress {
+    @apply overflow-hidden;
+}
+x-progress > div {
+    @apply h-full;
+}
+
 x-audio {
     @apply flex items-center gap-1;
     height: 2em !important;
@@ -1467,15 +1474,20 @@ x-time > :nth-child(1) > div {
     @apply w-8 h-8 relative flex-shrink-0;
 }
 .time_jdt {
-    @apply h-6 relative rounded overflow-hidden;
-    background-color: var(--bg-color3);
+    @apply h-8 relative rounded overflow-hidden;
 }
 
 .time_jdt > :nth-child(1) {
-    @apply absolute left-0 mix-blend-difference text-white z-10;
+    @apply absolute m-1 mix-blend-difference text-white z-10;
 }
-.time_jdt > :nth-child(2) {
-    @apply absolute left-0 h-full rounded;
+.time_jdt > x-progress {
+    @apply absolute left-0 rounded m-1 pointer-events-none;
+    height: calc(2rem - 0.25rem * 2);
+    width: calc(100% - 0.25rem * 2);
+    background-color: var(--bg-color3);
+}
+.time_jdt > x-progress > div {
+    @apply rounded;
     background-color: var(--color6);
 }
 .x-time > :nth-child(1) {
