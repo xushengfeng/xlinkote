@@ -5346,6 +5346,41 @@ class markdown extends HTMLElement {
                     set_模式("设计");
                 }
             }
+            if (e.key == "ArrowLeft") {
+                if (is_flex(this.parentElement.parentElement) == "flex" && this.text.selectionStart == 0) {
+                    if (
+                        this.parentElement.previousElementSibling &&
+                        this.parentElement.previousElementSibling.querySelector("x-md")
+                    ) {
+                        e.preventDefault();
+                        let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
+                        md.edit = true;
+                        md.text.setSelectionRange(md.text.value.length, md.text.value.length);
+                    } else {
+                        z.focus(this.parentElement as x);
+                        set_模式("设计");
+                    }
+                }
+            }
+            if (e.key == "ArrowRight") {
+                if (
+                    is_flex(this.parentElement.parentElement) == "flex" &&
+                    this.text.selectionEnd == this.text.value.length
+                ) {
+                    if (
+                        this.parentElement.nextElementSibling &&
+                        this.parentElement.nextElementSibling.querySelector("x-md")
+                    ) {
+                        e.preventDefault();
+                        let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
+                        md.edit = true;
+                        md.text.setSelectionRange(0, 0);
+                    } else {
+                        z.focus(this.parentElement as x);
+                        set_模式("设计");
+                    }
+                }
+            }
         };
         text.onclick = text.onkeyup = () => {
             if (模式 != "浏览") return;
