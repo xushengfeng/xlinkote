@@ -1445,7 +1445,7 @@ x-time {
     backdrop-filter: var(--blur);
     border-radius: 4px;
 }
-x-time > :nth-child(1) {
+x-time > :nth-child(2) {
     @apply flex items-center flex-grow overflow-hidden;
 }
 x-time input[type="checkbox"] {
@@ -1467,7 +1467,7 @@ x-time input[type="checkbox"]:checked {
     background-repeat: no-repeat;
 }
 
-x-time > :nth-child(1) > div {
+x-time > :nth-child(2) > div {
     @apply flex items-center;
 }
 .time_play {
@@ -1490,13 +1490,13 @@ x-time > :nth-child(1) > div {
     @apply rounded;
     background-color: var(--color6);
 }
-.x-time > :nth-child(1) {
+.x-time > :nth-child(2) {
     @apply w-0 flex-grow-0;
 }
 .x-time > .time_jdt {
     @apply flex-grow;
 }
-.x-time:hover > :nth-child(1) {
+.x-time:hover > :nth-child(2) {
     @apply flex-grow;
 }
 .x-time:hover > .time_jdt {

@@ -7650,7 +7650,7 @@ class time extends HTMLElement {
         this.time_group = createEl("div");
         this.time_group.append(this.process, this.end);
         this.time_setting.append(this.count_down, this.time_group);
-        this.append(this.time_setting, this.start_b, jdt);
+        this.append(this.start_b, this.time_setting, jdt);
     }
 
     is_no = false;
