@@ -5324,6 +5324,9 @@ class markdown extends HTMLElement {
                     let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
                     md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
                     md.edit = true;
+                } else {
+                    z.focus(this.parentElement as x);
+                    set_模式("设计");
                 }
             }
             if (e.key == "ArrowDown") {
@@ -5338,6 +5341,9 @@ class markdown extends HTMLElement {
                     let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
                     md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
                     md.edit = true;
+                } else {
+                    z.focus(this.parentElement as x);
+                    set_模式("设计");
                 }
             }
         };
