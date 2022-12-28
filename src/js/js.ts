@@ -1121,9 +1121,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 子元素: i.value,
                 class: i.className,
             });
-            if (!e.shiftKey) {
-                i.remove();
-            }
+            i.remove();
         }
         free_o_rects = [];
         console.log(集.中转站);
@@ -4764,11 +4762,9 @@ class x extends HTMLElement {
                     for (let i of 集.中转站) {
                         if (xel.id == i.id) {
                             drag_block = true;
-                            if (!e.shiftKey && !i.global) {
+                            if (!i.global) {
                                 集.中转站 = 集.中转站.filter((x) => x != i);
                                 tmp_s_reflash();
-                            } else {
-                                xel.id = uuid_id();
                             }
                             data_changed();
                         }
