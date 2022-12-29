@@ -4649,7 +4649,7 @@ md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
 
 md.renderer.rules["mathjax_block"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_block = (tokens, idx, options, env, self) => {
-    return get_svg(`\\displaylines{${tokens[idx].content}}`);
+    return get_svg(`\\displaylines{${tokens[idx].content} }`);
 };
 
 function math_b(state, startLine, endLine, silent) {
@@ -5692,7 +5692,7 @@ class markdown extends HTMLElement {
             this.index = md.parse(text, {});
             this.h.innerHTML = i + md.render(text);
         } else if (type == "math") {
-            this.h.innerHTML = get_svg(`\\displaylines{${text}}`);
+            this.h.innerHTML = get_svg(`\\displaylines{${text} }`);
         } else if (type == "iframe") {
             this.h.innerHTML = `<iframe src="${text}"></iframe>`;
         } else if (type == "code") {
