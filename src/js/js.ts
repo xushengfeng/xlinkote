@@ -3916,6 +3916,14 @@ function copy_x(x: x, pel?: x) {
     return new_x;
 }
 
+/** 复制值 */
+function copy_value(id: string, new_id: string) {
+    let v = 集.values[id];
+    if (v) {
+        集.values[new_id] = JSON.parse(JSON.stringify(v));
+    }
+}
+
 /** 转化为堆叠布局 */
 function to_flex(els: x[], d: "x" | "y") {
     let xels = [] as x[];
@@ -4979,11 +4987,17 @@ class x extends HTMLElement {
             let x = e.clientX - O.getBoundingClientRect().x - copy.offsetLeft - e.offsetX,
                 y = e.clientY - O.getBoundingClientRect().y + copy.offsetHeight - e.offsetY;
             let xel = copy_x(this);
-            xel.id = uuid_id();
+            let nid = uuid_id();
+            copy_value(this.id, nid);
+            xel.id = nid;
             xel.style.left = el_offset2(this, O).x + "px";
             xel.style.top = el_offset2(this, O).y + "px";
             xel.style.position = "absolute";
-            xel.querySelectorAll("x-x").forEach((el) => (el.id = uuid_id()));
+            xel.querySelectorAll("x-x").forEach((el) => {
+                let nid = uuid_id();
+                copy_value(el.id, nid);
+                el.id = nid;
+            });
             free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
             free_o_a = -1;
