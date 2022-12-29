@@ -5719,7 +5719,6 @@ class markdown extends HTMLElement {
             }
         } else {
             this.index = md.parse(text, {});
-            console.log(this.index);
             this.h.innerHTML = md.render(text);
         }
     }
