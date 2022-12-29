@@ -283,6 +283,10 @@ elFromId("搜索操作").onclick = () => {
     show_g_search();
 };
 
+elFromId("资源tab").onclick = () => {
+    assets_reflash();
+};
+
 侧栏.onclick = (e) => {
     document.querySelectorAll("#侧栏 > #tabs > div").forEach((el, i) => {
         if (el == e.target) {
