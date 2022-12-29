@@ -150,7 +150,7 @@ var store: setting = JSON.parse(localStorage.getItem("config"));
 const default_setting = {
     webdav: { 网址: "", 用户名: "", 密码: "", 自动上传: "0", 加密密钥: "" },
     ink: {
-        网址: "https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8",
+        网址: "https://www.google.com/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8",
         语言: "zh_CN",
         延时: "0.6",
     },
@@ -4187,7 +4187,7 @@ ink_el.onpointerup = () => {
             setTimeout(() => {
                 fetch(
                     store.ink.网址 ||
-                        `https://pem.app/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`,
+                        `https://www.google.com/inputtools/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8`,
                     {
                         method: "POST",
                         body: data,
