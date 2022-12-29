@@ -3844,7 +3844,8 @@ function link(key0: string) {
             if (is_small || is_smallest_el(get_link_el_by_id(key0))) {
                 if (集.链接[0][key0]) {
                     let l = link(key0).get();
-                    let n = 集.链接[0][key0].value;
+                    let n = 0;
+                    l["0"] = 集.链接[0][key0];
                     for (let i in l) {
                         n += l[i].value;
                     }
