@@ -5027,7 +5027,8 @@ class x extends HTMLElement {
             this.set_v(JSON.parse(this.getAttribute("value")));
         }
 
-        this.onpointerenter = () => {
+        this.onpointerover = (e) => {
+            e.stopPropagation();
             show_link_value_bar(this);
         };
     }
