@@ -2018,17 +2018,30 @@ set_css("./md.css");
 /** 设置文件css样式 */
 function set_css(t: string) {
     let style: HTMLElement;
-    elFromId("css")?.remove();
+    const css = elFromId("css");
     if (t.includes("\n")) {
-        style = createEl("style");
-        style.innerHTML = t;
+        if (css && css.tagName == "STYLE") {
+            css.innerHTML = t;
+        } else {
+            style = createEl("style");
+            style.innerHTML = t;
+            _new();
+        }
     } else {
-        style = createEl("link");
-        (style as HTMLLinkElement).href = t;
-        (style as HTMLLinkElement).rel = "stylesheet";
+        if (css && css.tagName == "LINK") {
+            (css as HTMLLinkElement).href = t;
+        } else {
+            style = createEl("link");
+            (style as HTMLLinkElement).href = t;
+            (style as HTMLLinkElement).rel = "stylesheet";
+            _new();
+        }
     }
-    style.id = "css";
-    document.body.append(style);
+    function _new() {
+        css?.remove();
+        style.id = "css";
+        document.body.append(style);
+    }
 }
 
 function set_dependencies(ds: meta["dependencies"]) {
