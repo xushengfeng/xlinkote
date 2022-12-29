@@ -4509,6 +4509,8 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
     return defaultRender(tokens, idx, options, env, self);
 };
 
+import "iconify-icon";
+
 var will_load_math = false;
 var mathjax_cache = {};
 var math_loaded = false;
@@ -7420,6 +7422,7 @@ async function import_script(url: string, use_import?: boolean) {
     } else {
         script.src = url;
     }
+    console.log(url);
     document.body.append(script);
     return new Promise((re, rj) => {
         script.onload = () => {

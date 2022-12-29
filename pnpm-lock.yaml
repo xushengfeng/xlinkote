@@ -13,6 +13,7 @@ specifiers:
   download: ^8.0.0
   fuse.js: ^6.6.2
   html2canvas: ^1.4.1
+  iconify-icon: ^1.0.2
   json5: ^2.2.2
   markdown-it: ^13.0.1
   markdown-it-emoji: ^2.0.2
@@ -36,6 +37,7 @@ dependencies:
   deep-diff: 1.0.2
   fuse.js: 6.6.2
   html2canvas: 1.4.1
+  iconify-icon: 1.0.2
   json5: 2.2.2
   markdown-it: 13.0.1
   markdown-it-emoji: 2.0.2
@@ -263,6 +265,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@iconify/types/2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: false
 
   /@lib/autolink/0.0.2:
     resolution: {integrity: sha512-bIrykfOshe8CKt301VZ1+YpBea4L8XKAlRX3AuXlqkwkm5M4wnBEZqllWaGUgp4uq5J7ZwtWVQJ+LH+nw2dzZg==}
@@ -1751,6 +1757,12 @@ packages:
       - supports-color
     dev: false
     optional: true
+
+  /iconify-icon/1.0.2:
+    resolution: {integrity: sha512-mehAvz2a4eUAlPo76Wul4zzsPNr3hbOHiauMhPrTVIdLOt0AnccnNloh1EeTO3tYeBv7iaJZfdCPHczvi+CkXQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
