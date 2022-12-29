@@ -561,9 +561,15 @@ var fxsd = 0;
 
 function set_O_p(x: number | null, y: number | null) {
     if (x) {
+        let dx = x - el_offset(O).x;
+        link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
+        if (!search_pel.getAttribute("data-fid")) search_pel.style.left = el_offset(search_pel).x + dx + "px";
         O.style.left = x + "px";
     }
     if (y) {
+        let dy = y - el_offset(O).y;
+        link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
+        if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
         O.style.top = y + "px";
     }
 }
@@ -736,13 +742,6 @@ var touch_move = (e: TouchEvent) => {
             let x = o_rect.x + dx,
                 y = o_rect.y + dy;
             set_O_p(x, y);
-
-            link_value_bar.style.left = o_vb_sb.x0 + dx + "px";
-            link_value_bar.style.top = o_vb_sb.y0 + dy + "px";
-            if (!search_pel.getAttribute("data-fid")) {
-                search_pel.style.left = o_vb_sb.x1 + dx + "px";
-                search_pel.style.top = o_vb_sb.y1 + dy + "px";
-            }
         }
     }
 };
@@ -964,13 +963,6 @@ elFromId("画布").onwheel = (e) => {
                 if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
             }
             set_O_p(el_offset(O).x + dx, el_offset(O).y + dy);
-
-            link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
-            link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
-            if (!search_pel.getAttribute("data-fid")) {
-                search_pel.style.left = el_offset(search_pel).x + dx + "px";
-                search_pel.style.top = el_offset(search_pel).y + dy + "px";
-            }
         } else {
             let a = e.deltaY > 0 ? "next" : "back";
             ys_bn(a as "next" | "back");
