@@ -3776,7 +3776,9 @@ function link(key0: string) {
     // key1存在，作用于边，否则作用于点
     return {
         add: (key1?: string) => {
+            if (!key0) return;
             if (key1) {
+                if (key0 == key1) return;
                 link(key0).add();
                 link(key1).add();
                 link(key0).value(key1);
