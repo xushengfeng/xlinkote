@@ -3918,6 +3918,17 @@ function copy_value(id: string, new_id: string) {
 
 /** 转化为堆叠布局 */
 function to_flex(els: x[], d: "x" | "y") {
+    if (els.length == 1) {
+        if (els[0].classList.contains("flex-row") && d == "y") {
+            els[0].classList.replace("flex-row", "flex-column");
+        }
+        if (els[0].classList.contains("flex-column") && d == "x") {
+            els[0].classList.replace("flex-column", "flex-row");
+        }
+        get_data();
+        z.reflash();
+        return;
+    }
     let xels = [] as x[];
     for (let el of els) {
         let rel = find_root_layout(el);
