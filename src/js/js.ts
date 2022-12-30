@@ -920,7 +920,8 @@ for (let i = 25; i <= 200; i += 25) {
 set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
 
 mini_map_el.parentElement.classList.add("mini_map_hide");
-mini_map_el.parentElement.parentElement.onclick = () => {
+mini_map_el.parentElement.parentElement.onclick = (e) => {
+    if (e.target != mini_map_el.parentElement.parentElement) return;
     mini_map_el.parentElement.classList.toggle("mini_map_hide");
     render_map();
 };
