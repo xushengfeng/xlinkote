@@ -774,8 +774,8 @@ var touch_zoom = (e: TouchEvent) => {
                 dzoom = z - zoom;
             let dx = p[0] - O.getBoundingClientRect().x,
                 dy = p[1] - O.getBoundingClientRect().y;
-            set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
             zoom_o(z);
+            set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
         }
     }
 };
@@ -891,8 +891,8 @@ zoom_el.onchange = () => {
     zoom += dzoom;
     let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
         dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
-    set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
     zoom_o(zoom);
+    set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
     zoom_list.classList.add("zoom_list_hide");
 };
 
@@ -913,8 +913,8 @@ for (let i = 25; i <= 200; i += 25) {
             dzoom = nzoom - zoom;
         let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
             dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
-        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
         zoom_o(nzoom);
+        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
     };
 }
 set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
@@ -1003,8 +1003,8 @@ elFromId("画布").onwheel = (e) => {
         zoom = Math.abs(zoom);
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;
-        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
         zoom_o(zoom);
+        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
     } else {
         let el = <HTMLElement>e.target;
         if (el.tagName == "TEXTAREA") return;
@@ -1436,8 +1436,8 @@ document.onkeydown = (e) => {
                 zoom += dzoom;
                 let dx = now_mouse_e.clientX - O.getBoundingClientRect().x,
                     dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
-                set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
                 zoom_o(1);
+                set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
                 data_changed();
             }
             break;
