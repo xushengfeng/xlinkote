@@ -3986,9 +3986,31 @@ function link(key0: string) {
                 }
             }
             function down(value: number, t0: number, t1: number) {
-                let h = (t1 - t0) / 1000 / 60 / 60;
-                let r = Math.max(value - h * (value / 50), 0.1);
-                return r;
+                const one_k = Math.E;
+                const xv_c = 0.9;
+                const xv_s = 8;
+                // 归一
+                function one(number: number) {
+                    return -one_k / (number + one_k) + 1;
+                }
+                // 反归一
+                function one2more(num: number) {
+                    return -one_k - one_k / (num - 1);
+                }
+                // 计算衰减值
+                function x2v(x: number) {
+                    return Math.exp((x * Math.log(xv_c)) / xv_s);
+                }
+                // 通过值反推原先输入的x
+                function v2x(v: number) {
+                    return Math.log(v) * (xv_s / Math.log(xv_c));
+                }
+                let old_x = v2x(one(value));
+                // 半天为一个单位
+                let t = (t1 - t0) / 1000 / 60 / 60 / 12;
+                let new_x = t + old_x;
+                let new_v = Math.max(x2v(new_x), 0.1);
+                return one2more(new_v);
             }
         },
     };
