@@ -954,6 +954,7 @@ mini_map_el.onpointerup = (e) => {
     e.stopPropagation();
     mini_down = false;
 };
+ignore_el.push("#mini_map");
 
 /**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {

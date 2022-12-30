@@ -718,7 +718,8 @@ body > #main > #画布 > #导航 > #缩放 {
     pointer-events: none;
 }
 body > #main > #画布 > #导航 #mini_map_p {
-    @apply absolute right-0 bar p-1 rounded;
+    @apply absolute right-0 bar p-1 rounded overflow-auto;
+    max-height: 80vh;
     bottom: calc(100% + 4px);
 }
 .mini_map_hide {
