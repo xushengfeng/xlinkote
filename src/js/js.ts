@@ -94,6 +94,8 @@ const zoom_pel = elFromId("缩放");
 const zoom_el = elFromId("zoom") as HTMLInputElement;
 const zoom_list = elFromId("zooms");
 
+const mini_map_el = elFromId("mini_map") as HTMLCanvasElement;
+
 const 集_el = elFromId("集");
 
 const 文件_el = elFromId("文件");
@@ -576,6 +578,7 @@ function set_O_p(x: number | null, y: number | null) {
         if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
         O.style.top = y + "px";
     }
+    render_map();
 }
 
 fxsd_el.onclick = () => {
@@ -916,6 +919,12 @@ for (let i = 25; i <= 200; i += 25) {
 }
 set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
 
+mini_map_el.parentElement.classList.add("mini_map_hide");
+mini_map_el.parentElement.parentElement.onclick = () => {
+    mini_map_el.parentElement.classList.toggle("mini_map_hide");
+    render_map();
+};
+
 /**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
@@ -935,6 +944,54 @@ function el_offset2(el: Element, pel?: Element) {
         w: el.getBoundingClientRect().width / zoom,
         h: el.getBoundingClientRect().height / zoom,
     };
+}
+
+/** 获取元素框 */
+function reflash_rect() {
+    let els_rect: { el: x; rect: { x: number; y: number; w: number; h: number } }[] = [];
+    O.querySelectorAll("x-x").forEach((xel: x) => {
+        if (集.values?.[xel.id]?.fixed) return;
+        els_rect.push({ el: xel, rect: el_offset2(xel, O) });
+    });
+    return els_rect;
+}
+
+/** 渲染小地图 */
+function render_map() {
+    if (mini_map_el.parentElement.classList.contains("mini_map_hide")) return;
+    let els_rect = reflash_rect();
+    let out_rect = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+    for (let i of els_rect) {
+        const r = i.rect;
+        out_rect.left = Math.min(r.x, out_rect.left);
+        out_rect.right = Math.max(r.x + r.w, out_rect.right);
+        out_rect.top = Math.min(r.y, out_rect.top);
+        out_rect.bottom = Math.max(r.y + r.h, out_rect.bottom);
+    }
+    let z = mini_map_el.width / (out_rect.right - out_rect.left);
+    mini_map_el.height = (out_rect.bottom - out_rect.top) * z;
+    let ctx = mini_map_el.getContext("2d");
+    ctx.clearRect(0, 0, mini_map_el.offsetWidth, mini_map_el.height);
+    for (let i of els_rect) {
+        const r = i.rect;
+        let x = (r.x - out_rect.left) * z;
+        let y = (r.y - out_rect.top) * z;
+        let w = r.w * z;
+        let h = r.h * z;
+        ctx.fillStyle = "#0002";
+        ctx.fillRect(x, y, w, h);
+    }
+    let main_rect = el_offset2(画布, O);
+    ctx.strokeStyle = "#00f";
+    ctx.fillStyle = "#00f2";
+    ctx.lineWidth = 1;
+    ctx.fillRect((main_rect.x - out_rect.left) * z, (main_rect.y - out_rect.top) * z, main_rect.w * z, main_rect.h * z);
+    ctx.strokeRect(
+        (main_rect.x - out_rect.left) * z,
+        (main_rect.y - out_rect.top) * z,
+        main_rect.w * z,
+        main_rect.h * z
+    );
 }
 
 elFromId("画布").onwheel = (e) => {

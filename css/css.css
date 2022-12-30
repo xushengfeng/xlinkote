@@ -717,6 +717,13 @@ body > #main > #画布 > #导航 > #缩放 {
     opacity: 0;
     pointer-events: none;
 }
+body > #main > #画布 > #导航 #mini_map_p {
+    @apply absolute right-0 bar p-1 rounded;
+    bottom: calc(100% + 4px);
+}
+.mini_map_hide {
+    display: none;
+}
 body > #main > #画布 > #paste {
     opacity: 0;
     pointer-events: none;
