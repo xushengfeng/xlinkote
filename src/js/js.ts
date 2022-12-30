@@ -924,6 +924,35 @@ mini_map_el.parentElement.parentElement.onclick = () => {
     mini_map_el.parentElement.classList.toggle("mini_map_hide");
     render_map();
 };
+let mini_down = false;
+mini_map_el.onpointerdown = (e) => {
+    mini_down = true;
+    e.stopPropagation();
+    let els_rect = reflash_rect();
+    let out_rect = get_out_rect(els_rect);
+    let px = e.offsetX / mini_map_el.offsetWidth;
+    let py = e.offsetY / mini_map_el.offsetHeight;
+
+    let rx = px * (out_rect.right - out_rect.left) + out_rect.left;
+    let ry = py * (out_rect.bottom - out_rect.top) + out_rect.top;
+    set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
+};
+mini_map_el.onpointermove = (e) => {
+    if (mini_down) {
+        let els_rect = reflash_rect();
+        let out_rect = get_out_rect(els_rect);
+        let px = e.offsetX / mini_map_el.offsetWidth;
+        let py = e.offsetY / mini_map_el.offsetHeight;
+
+        let rx = px * (out_rect.right - out_rect.left) + out_rect.left;
+        let ry = py * (out_rect.bottom - out_rect.top) + out_rect.top;
+        set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
+    }
+};
+mini_map_el.onpointerup = (e) => {
+    e.stopPropagation();
+    mini_down = false;
+};
 
 /**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {
@@ -956,18 +985,24 @@ function reflash_rect() {
     return els_rect;
 }
 
-/** 渲染小地图 */
-function render_map() {
-    if (mini_map_el.parentElement.classList.contains("mini_map_hide")) return;
-    let els_rect = reflash_rect();
+/** 获取最大框 */
+function get_out_rect(rect: { el: x; rect: { x: number; y: number; w: number; h: number } }[]) {
     let out_rect = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
-    for (let i of els_rect) {
+    for (let i of rect) {
         const r = i.rect;
         out_rect.left = Math.min(r.x, out_rect.left);
         out_rect.right = Math.max(r.x + r.w, out_rect.right);
         out_rect.top = Math.min(r.y, out_rect.top);
         out_rect.bottom = Math.max(r.y + r.h, out_rect.bottom);
     }
+    return out_rect;
+}
+
+/** 渲染小地图 */
+function render_map() {
+    if (mini_map_el.parentElement.classList.contains("mini_map_hide")) return;
+    let els_rect = reflash_rect();
+    let out_rect = get_out_rect(els_rect);
     let z = mini_map_el.width / (out_rect.right - out_rect.left);
     mini_map_el.height = (out_rect.bottom - out_rect.top) * z;
     let ctx = mini_map_el.getContext("2d");
