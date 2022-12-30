@@ -5595,7 +5595,7 @@ class markdown extends HTMLElement {
             let start_t = get_text(r.startContainer, r.startOffset);
             let end_t = get_text(r.endContainer, r.endOffset);
             console.log(start_t, end_t);
-            let p2p = (of: number) => {
+            let p2p = (of: number, start: boolean) => {
                 let list = [];
                 let w = (l: ReturnType<typeof md.parse>) => {
                     for (let i of l) {
@@ -5628,10 +5628,15 @@ class markdown extends HTMLElement {
                 console.log(list);
                 let true_o = 0;
                 let tmp_o = 0;
-                for (let i of list) {
+                for (let n in list) {
+                    const i = list[n];
                     if (i.type == "ct") {
                         if (tmp_o <= of && of <= tmp_o + i.text.length) {
-                            return true_o + (of - tmp_o);
+                            let up = 0;
+                            let nextn = Number(n) + 1;
+                            if (list?.[nextn]?.type == "mu" && !start && tmp_o + i.text.length == of)
+                                up = list[nextn].text.length;
+                            return true_o + (of - tmp_o) + up;
                         }
                         tmp_o += i.text.length;
                     }
@@ -5641,8 +5646,8 @@ class markdown extends HTMLElement {
             };
             let start_p = 0;
             let end_p = 0;
-            start_p = p2p(start_t.before.length);
-            end_p = p2p(end_t.before.length);
+            start_p = p2p(start_t.before.length, true);
+            end_p = p2p(end_t.before.length, false);
             if (start_p > end_p) {
                 [start_p, end_p] = [end_p, start_p];
             }
