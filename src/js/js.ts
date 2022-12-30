@@ -4561,7 +4561,12 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
 };
 function tikz_code(content: string) {
     if (!import_latex) {
-        import_script("../../lib/tikzjax.js?raw", true);
+        let script = createEl("script");
+        import("../../lib/tikzjax.js?raw").then((v) => {
+            const js = v.default;
+            script.innerText = js;
+            document.body.append(script);
+        });
         import_latex = true;
         document.addEventListener("tikzjax-load-finished", tikz_svg);
     }
@@ -7564,14 +7569,9 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
 var ocr_init = false;
 var ocr;
 
-async function import_script(url: string, use_import?: boolean) {
+async function import_script(url: string) {
     let script = createEl("script");
-    if (use_import) {
-        const js = (await import("../../lib/tikzjax.js?raw")).default;
-        script.innerText = js;
-    } else {
-        script.src = url;
-    }
+    script.src = url;
     console.log(url);
     document.body.append(script);
     return new Promise((re, rj) => {
