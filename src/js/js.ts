@@ -5808,7 +5808,9 @@ class markdown extends HTMLElement {
             }
             console.log(start_p, end_p);
             this.text.setSelectionRange(start_p, end_p);
-            this.edit = true;
+            setTimeout(() => {
+                this.edit = true;
+            }, 10);
             s.contentEditable = "false";
         };
     }
