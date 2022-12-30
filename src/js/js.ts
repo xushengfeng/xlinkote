@@ -4563,6 +4563,7 @@ function tikz_code(content: string) {
     if (!import_latex) {
         import_script("../../lib/tikzjax.js?raw", true);
         import_latex = true;
+        document.addEventListener("tikzjax-load-finished", tikz_svg);
     }
     let s = createEl("script");
     s.setAttribute("type", "text/tikz");
@@ -4611,6 +4612,24 @@ function tikz_code(content: string) {
     s.innerHTML = tidyTikzSource(content);
     return s.outerHTML;
 }
+
+import { optimize } from "svgo";
+/** 修复svg被遮挡 */
+function tikz_svg(e: Event) {
+    const svgEl = e.target as HTMLElement;
+    let svg = svgEl.outerHTML;
+    svg = optimize(svg, { plugins: ["preset-default", "removeViewBox"] }).data;
+    let id = uuid();
+    svg = svg.replace("svg", `svg id="${id}"`);
+    svgEl.outerHTML = svg;
+    let svg1 = elFromId(id);
+    let r = svg1.querySelector("g").getBBox();
+    svg1.setAttribute("viewBox", `${r.x} ${r.y} ${r.width} ${r.height}`);
+    svg1.setAttribute("width", String(r.width));
+    svg1.setAttribute("height", String(r.height));
+    svg1.removeAttribute("id");
+}
+
 md.renderer.rules.image = function (tokens, idx, options, env, self) {
     let value = tokens[idx].attrGet("src");
     let b = 集.assets?.[value]?.base64;
