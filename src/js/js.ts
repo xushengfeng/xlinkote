@@ -5637,6 +5637,7 @@ class markdown extends HTMLElement {
                     }
                     true_o += i.text.length;
                 }
+                return of;
             };
             let start_p = 0;
             let end_p = 0;
