@@ -1005,8 +1005,22 @@ function render_map() {
     if (mini_map_el.parentElement.classList.contains("mini_map_hide")) return;
     let els_rect = reflash_rect();
     let out_rect = get_out_rect(els_rect);
-    let z = mini_map_el.width / (out_rect.right - out_rect.left);
-    mini_map_el.height = (out_rect.bottom - out_rect.top) * z;
+    let z = 1;
+    const min = 600,
+        minstyle = "300px";
+    if (out_rect.right - out_rect.left > out_rect.bottom - out_rect.top) {
+        mini_map_el.height = min;
+        mini_map_el.style.height = minstyle;
+        mini_map_el.style.width = "";
+        z = min / (out_rect.bottom - out_rect.top);
+        mini_map_el.width = (out_rect.right - out_rect.left) * z;
+    } else {
+        mini_map_el.width = min;
+        mini_map_el.style.width = minstyle;
+        mini_map_el.style.height = "";
+        z = min / (out_rect.right - out_rect.left);
+        mini_map_el.height = (out_rect.bottom - out_rect.top) * z;
+    }
     let ctx = mini_map_el.getContext("2d");
     ctx.clearRect(0, 0, mini_map_el.offsetWidth, mini_map_el.height);
     for (let i of els_rect) {
