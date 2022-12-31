@@ -1028,8 +1028,8 @@ x-x {
     min-width: 1em;
 }
 
-.x-x_selected > #x-x_bar,
-.x-x_bar_show {
+.x-x_bar_show,
+.x-x_bar_show2 {
     opacity: 1 !important;
     pointer-events: all !important;
 }

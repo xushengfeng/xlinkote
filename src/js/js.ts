@@ -872,6 +872,12 @@ function render_select_rects() {
         let select_bar = add_r(i);
         select_bar.classList.add("x-x_selected");
     }
+    document.querySelectorAll(".x-x_bar_show2").forEach((el) => {
+        el.classList.remove("x-x_bar_show2");
+    });
+    if (selected_el.length == 1) {
+        selected_el[0].querySelector(":scope > #x-x_bar").classList.add("x-x_bar_show2");
+    }
     function add_r(i: x) {
         let rect = i.getBoundingClientRect();
         let select_bar = (select_con.querySelector(`[data-id="${i.id}"]`) as HTMLElement) || createEl("div");
