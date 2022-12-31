@@ -922,6 +922,9 @@ function render_select_rects() {
                 break;
             }
         }
+        if (!has) {
+            i.classList.remove("x-x_hover");
+        }
         for (let x of selected_el) {
             if (x.id == i.getAttribute("data-id")) {
                 has = true;

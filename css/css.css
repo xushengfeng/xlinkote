@@ -702,7 +702,6 @@ body > #main > #画布 > #选择 {
 }
 body > #main > #画布 > #选择 > div {
     position: absolute;
-    border: 1px solid #000;
     display: var(--x-x-handle-d);
     pointer-events: none;
 }
@@ -714,20 +713,18 @@ body > #main > #画布 > #选择 > div {
     border-radius: 50%;
 }
 
-.x-x_selected > div {
-    background-color: #0000ff;
-}
 .x-x_selected {
-    border: 1px solid #0000ff;
+    border: 1px dashed #0860f2 !important;
 }
 .x-x_hover > div {
-    background-color: #51516b;
+    border: 1px solid #0860f2;
+    background-color: #fff;
 }
 .x-x_hover {
-    border: 1px solid #51516b;
+    border: 1px dashed #000;
 }
 .xxhandle > div:hover {
-    background-color: #0000ff;
+    background-color: #0860f2;
 }
 .xxhandle > .xxhandle0 {
     left: var(--x-x-handle-o);
