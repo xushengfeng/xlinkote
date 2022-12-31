@@ -7307,7 +7307,12 @@ class link_value extends HTMLElement {
 
     set elid(id: string) {
         this._id = id;
-        this.v.innerText = String(link(id).get_v().toFixed(2));
+        let v = link(id).get_v();
+        if (v) {
+            this.v.innerText = String(link(id).get_v().toFixed(2));
+        } else {
+            this.v.innerText = "/";
+        }
     }
     get elid() {
         return this._id;
