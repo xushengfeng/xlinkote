@@ -5218,6 +5218,7 @@ class x extends HTMLElement {
                 let nid = uuid_id();
                 copy_value(el.id, nid);
                 el.id = nid;
+                link(nid).add();
             });
             free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
