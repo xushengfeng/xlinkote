@@ -744,6 +744,7 @@ var pointer_move = true;
 var touch_move = (e: TouchEvent) => {
     if (o_touch_e) {
         if (pointer_move) {
+            if (free_o_a == -1) return;
             let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0,
                 dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
             let x = o_rect.x + dx,
@@ -757,6 +758,7 @@ var touch_move = (e: TouchEvent) => {
 var touch_zoom = (e: TouchEvent) => {
     if (o_touch_zoom_e) {
         if (pointer_move) {
+            if (free_o_a == -1) return;
             let r0 = Math.sqrt(
                 (o_touch_zoom_e.targetTouches[0].clientX - o_touch_zoom_e.targetTouches[1].clientX) ** 2 +
                     (o_touch_zoom_e.targetTouches[0].clientY - o_touch_zoom_e.targetTouches[1].clientY) ** 2
