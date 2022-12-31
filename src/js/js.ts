@@ -877,6 +877,7 @@ function render_select_rects() {
         select_bar.style.top = rect.y - select_con.getBoundingClientRect().top + "px";
         select_bar.style.width = rect.width + "px";
         select_bar.style.height = rect.height + "px";
+        if (select_con.querySelector(`[data-id="${i.id}"]`)) return select_bar;
         select_con.append(select_bar);
         var x_h = [
             createEl("div"),
