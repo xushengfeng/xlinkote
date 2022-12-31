@@ -7798,9 +7798,7 @@ class calendar extends HTMLElement {
         let c = createEl("div");
         c.classList.add("calendar");
 
-        render(year, month, day);
-
-        function render(year: number, month: number, day: number) {
+        let render = (year: number, month: number, day: number) => {
             text.innerText = `${year} / ${month + 1} / ${day}`;
             let date_list: Date[] = [];
             let now_date = new Date(year, month, 1);
@@ -7828,7 +7826,8 @@ class calendar extends HTMLElement {
                 pel.append(div);
             }
             for (let i of date_list) {
-                let div = createEl("div");
+                let div = createEl("x-link");
+                div.id = `${this.parentElement.id}:${i.toLocaleDateString()}`;
                 div.innerText = `${i.getDate()}`;
                 if (i.getMonth() == month) {
                     div.classList.add("calendar_month");
@@ -7844,7 +7843,9 @@ class calendar extends HTMLElement {
             }
             c.innerHTML = "";
             c.append(pel);
-        }
+        };
+
+        render(year, month, day);
 
         this.append(bar, c);
     }

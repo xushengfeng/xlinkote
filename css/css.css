@@ -1423,7 +1423,7 @@ x-calendar {
 .calendar_bar > :last-child {
     @apply w-6 h-6 relative;
 }
-.calendar > div {
+.calendar > * {
     @apply text-center align-middle opacity-60 w-6 h-6 rounded;
 }
 .calendar_week {
