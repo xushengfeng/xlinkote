@@ -7179,8 +7179,8 @@ class xlink extends HTMLElement {
     }
 
     connectedCallback() {
-        var id = this.getAttribute("id");
-        if (!集.链接[id]) {
+        const id = this.getAttribute("id");
+        if (!集.链接[id] && !this.getAttribute("naid")) {
             link(id).add();
         }
         this.onpointerenter = () => {
@@ -7828,6 +7828,7 @@ class calendar extends HTMLElement {
             for (let i of date_list) {
                 let div = createEl("x-link");
                 div.id = `${this.parentElement.id}:${i.toLocaleDateString()}`;
+                div.setAttribute("naid", "true");
                 div.innerText = `${i.getDate()}`;
                 if (i.getMonth() == month) {
                     div.classList.add("calendar_month");
