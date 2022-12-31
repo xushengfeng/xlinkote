@@ -1424,7 +1424,13 @@ x-calendar {
     @apply w-6 h-6 relative;
 }
 .calendar > * {
-    @apply text-center align-middle opacity-60 w-6 h-6 rounded;
+    @apply text-center align-middle opacity-60 w-6 h-6 rounded relative;
+}
+.calendar_schedule {
+    @apply w-full flex justify-center absolute bottom-0;
+}
+.calendar_schedule > div {
+    @apply w-1 h-1 rounded-full bg-current;
 }
 .calendar_week {
     opacity: 1 !important;

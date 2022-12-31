@@ -7835,6 +7835,16 @@ class calendar extends HTMLElement {
                 div.id = `${this.parentElement.id}:${i.toLocaleDateString()}`;
                 div.setAttribute("naid", "true");
                 div.innerText = `${i.getDate()}`;
+                let schedule = createEl("div");
+                schedule.classList.add("calendar_schedule");
+                let links = link(div.id).get() || {};
+                for (let i in links) {
+                    if (i != "0") {
+                        let x = createEl("div");
+                        schedule.append(x);
+                    }
+                }
+                div.append(schedule);
                 if (i.getMonth() == month) {
                     div.classList.add("calendar_month");
                 }
