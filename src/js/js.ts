@@ -7833,12 +7833,12 @@ class calendar extends HTMLElement {
                 if (i.getMonth() == month) {
                     div.classList.add("calendar_month");
                 }
-                if (i.getDate() == day && i.getMonth() == month) {
+                if (
+                    i.getDate() == today.getDate() &&
+                    i.getMonth() == today.getMonth() &&
+                    i.getFullYear() == today.getFullYear()
+                ) {
                     div.classList.add("calendar_today");
-
-                    div.onclick = () => {
-                        render(today.getFullYear(), today.getMonth(), today.getDate());
-                    };
                 }
                 pel.append(div);
             }
