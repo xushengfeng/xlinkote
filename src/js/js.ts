@@ -2954,7 +2954,7 @@ elFromId("笔").onclick = (e) => {
 };
 
 window.onbeforeunload = () => {
-    if (!集.meta.file_name) return true;
+    if (!集.meta.file_name && !(画布s.childElementCount == 1 && O.innerHTML == "")) return true;
 };
 
 // 导出
