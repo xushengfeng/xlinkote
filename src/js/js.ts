@@ -1233,6 +1233,9 @@ let free_move = false;
 let free_target_id = "";
 let free_drag = false;
 let free_drag_tip: HTMLElement;
+function mu_sel_key(e: MouseEvent) {
+    return e.shiftKey;
+}
 document.addEventListener("pointermove", (e: PointerEvent) => {
     if (模式 == "设计" && free_old_point) {
         e.preventDefault();
@@ -1368,7 +1371,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
 
-    if (!free_move && free_old_point) {
+    if (!free_move && free_old_point && !mu_sel_key(e)) {
         document.querySelectorAll("x-x").forEach((el: x) => {
             if (el.contains(e.target as x)) {
                 z.focus(el);
@@ -5158,8 +5161,12 @@ class x extends HTMLElement {
             free_old_point = e2p(e);
             free_o_a = -1;
 
-            if (selected_el.length <= 1) {
-                z.focus(this);
+            if (mu_sel_key(e)) {
+                selected_el.push(this);
+            } else {
+                if (selected_el.length <= 1) {
+                    z.focus(this);
+                }
             }
 
             free_o_rects = [];
