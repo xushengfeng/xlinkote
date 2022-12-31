@@ -718,6 +718,7 @@ var o_touch_t = NaN;
         O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
         setTimeout(() => {
             O.style.transition = ``;
+            render_select_rects();
         }, t);
         set_O_p(x, y);
     }
