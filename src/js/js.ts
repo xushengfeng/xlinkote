@@ -1348,7 +1348,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         for (let i of selected_el) {
             let had = false;
             for (let x of global_x) {
-                if (x.id == i.id) {
+                if (x.data.id == i.id) {
                     had = true;
                     break;
                 }
@@ -1536,7 +1536,10 @@ function create_x_x(x: number, y: number) {
 /** 中转站刷新 */
 function tmp_s_reflash() {
     临时中转站.innerHTML = "";
-    let l = [...集.中转站, ...global_x];
+    let l = [...集.中转站];
+    for (let i of global_x) {
+        l.push(i.data);
+    }
     for (let x of l) {
         let t = createEl("div");
         临时中转站.append(t);
@@ -1551,7 +1554,29 @@ function tmp_s_reflash() {
     }
 }
 
-var global_x = [] as data;
+var global_x: { pid: string; data: data[0] }[] = [];
+
+/** 移除全局中转 */
+function remove_global(id: string) {
+    let l: typeof global_x = [];
+    for (let i of global_x) {
+        if (i.data.id == id) {
+            let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
+            let r = customerObjectStore.get(i.pid);
+            r.onsuccess = () => {
+                let obj = r.result as 集type;
+                for (let i of obj.中转站) {
+                    if (i.id == id) {
+                        i.global = false;
+                    }
+                }
+                customerObjectStore.put(obj);
+            };
+        } else {
+            l.push(i);
+        }
+    }
+}
 
 // 快捷键
 document.onkeydown = (e) => {
@@ -2352,7 +2377,7 @@ function db_get() {
         for (let f of r.result) {
             if ((f as 集type)?.中转站)
                 for (let x of (f as 集type).中转站) {
-                    if (x.global) global_x.push(x);
+                    if (x.global) global_x.push({ pid: (f as 集type).meta.UUID, data: x });
                 }
 
             if (`#${f.meta.UUID}` == location.hash) {
@@ -5172,24 +5197,20 @@ class x extends HTMLElement {
         };
 
         f.onclick = () => {
-            for (let x of 集.中转站) {
-                if (x.id == this.id) {
-                    x.global = !x.global;
-                    if (x.global) {
-                        global_x.push(x);
-                        f.classList.add("buttom_a");
-                    } else {
-                        global_x = global_x.filter((i) => i != x);
-                        f.classList.remove("buttom_a");
-                    }
-                    console.log(集.中转站);
-                }
+            f.classList.toggle("buttom_a");
+            if (f.classList.contains("buttom_a")) {
+                global_x.push({
+                    pid: 集.meta.UUID,
+                    data: { id: this.id, 子元素: this.value, class: this.className, type: "X-X", style: "" },
+                });
+            } else {
+                remove_global(this.id);
             }
         };
 
         for (let x of global_x)
-            if (x.id == this.id)
-                if (x.global) {
+            if (x.data.id == this.id)
+                if (x.data.global) {
                     f.classList.add("buttom_a");
                     break;
                 }
