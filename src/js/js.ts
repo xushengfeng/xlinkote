@@ -3097,7 +3097,21 @@ class 图层 {
                 pel.append(ul);
             }
         };
-        w(当前画布.data, 图层_el);
+        let root_ul = createEl("ul");
+        图层_el.append(root_ul);
+        for (let i of 集.数据) {
+            let li = createEl("li");
+            let s = createEl("span");
+            s.innerText = `${i.name} ${i.id}`;
+            li.setAttribute("data-id", i.id);
+            li.append(s);
+            w(i.data, li);
+            if (i.id != 当前画布.id) {
+                li.classList.add("层ul_hide");
+                li.querySelector("img").src = ul_hide_svg;
+            }
+            root_ul.append(li);
+        }
         document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length - 1));
 
         if (!nosave) data_changed();
