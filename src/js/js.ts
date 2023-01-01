@@ -3935,6 +3935,7 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
 /** 添加到面包屑栏 */
 function add_bci(el: x | xlink) {
     if (el.id == now_data_id) return;
+    if (breadcrumbs_el.offsetHeight == 0) breadcrumbs_el.style.height = "16px";
     let li = createEl("div");
     let main = createEl("div");
     let children = createEl("div");
