@@ -2948,6 +2948,7 @@ class 图层 {
          */
         let w = (data: data, pel: HTMLElement) => {
             let ul = createEl("ul");
+            let ulf = document.createDocumentFragment();
             for (let n in data) {
                 const i = data[n];
 
@@ -3021,12 +3022,13 @@ class 图层 {
                 if (i?.子元素?.length > 0) {
                     w(i.子元素, li);
                 }
-                if (ul.firstElementChild) {
-                    ul.firstElementChild.before(li);
+                if (ulf.firstElementChild) {
+                    ulf.firstElementChild.before(li);
                 } else {
-                    ul.append(li);
+                    ulf.append(li);
                 }
             }
+            ul.append(ulf);
             if (pel.children.length > 0) {
                 pel.querySelector("span").after(ul);
             } else {
