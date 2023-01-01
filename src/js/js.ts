@@ -3041,7 +3041,7 @@ class 图层 {
             let li = createEl("li");
             let s = createEl("span");
             let text = createEl("span");
-            text.innerText = `${i.name} ${i.id}`;
+            text.innerText = `${i.name}`;
             s.append(text);
             li.setAttribute("data-id", i.id);
             li.append(s);
@@ -3052,6 +3052,8 @@ class 图层 {
             }
             let more = createEl("div");
             more.classList.add("more");
+            let idel = createEl("span");
+            idel.innerText = i.id;
             let rename = createEl("div");
             rename.innerHTML = icon(edit_svg);
             rename.onclick = () => {
@@ -3077,7 +3079,7 @@ class 图层 {
                 get_data();
                 z.reflash();
             };
-            more.append(rm, rename);
+            more.append(idel, rm, rename);
             s.append(more);
             root_ul.append(li);
         }
