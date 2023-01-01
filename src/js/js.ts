@@ -2955,12 +2955,14 @@ class 图层 {
                 if (i.id && get_x_by_id(i.id)) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
                 if (i.value) {
                     const type = {
-                        "X-MD": "md",
-                        "X-DRAW": "墨迹",
-                        "X-FILE": "文件",
+                        "x-md": "md",
+                        "x-draw": "墨迹",
+                        "x-file": "文件",
                         "x-record": "录音机",
+                        "x-calendar": "日历",
+                        "x-time": "计时器",
                     };
-                    pel.querySelector("span").innerText += ` ${type[i.type]}`;
+                    pel.querySelector("span").innerText += ` ${type[i.type.toLowerCase()]}`;
                     return;
                 } else {
                     if (!pel.querySelector("img")) {
