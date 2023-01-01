@@ -3033,6 +3033,17 @@ class 图层 {
                         }
                     });
                 };
+                li.onpointerenter = (e) => {
+                    move_to_x_link(get_x_by_id(i.id));
+                };
+                li.onpointerdown = () => {
+                    jump_to_x_link(get_x_by_id(i.id));
+                };
+                li.onpointermove = (e) => {
+                    window.requestAnimationFrame(() => {
+                        set_viewer_posi(e.clientX, e.clientY);
+                    });
+                };
                 if (this.聚焦元素.id == i.id && selected_el.length == 1) {
                     this.focus(get_x_by_id(i.id));
                     c.checked = true;
@@ -3064,6 +3075,9 @@ class 图层 {
         };
         let root_ul = createEl("ul");
         图层_el.append(root_ul);
+        root_ul.onpointerleave = () => {
+            view_el.classList.add("viewer_hide");
+        };
         for (let i of 集.数据) {
             let li = createEl("li");
             let s = createEl("span");
