@@ -7714,6 +7714,9 @@ var ocr_init = false;
 var ocr;
 
 async function import_script(url: string) {
+    for (let i of document.body.children) {
+        if (i.tagName == "SCRIPT" && (i as HTMLScriptElement).src == url) return;
+    }
     let script = createEl("script");
     script.src = url;
     console.log(url);
