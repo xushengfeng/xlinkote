@@ -2953,7 +2953,7 @@ class 图层 {
                 const i = data[n];
 
                 if (i.id && get_x_by_id(i.id)) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
-                if (i.value) {
+                if (i.type != "X-X") {
                     const type = {
                         "x-md": "md",
                         "x-draw": "墨迹",
