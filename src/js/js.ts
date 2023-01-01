@@ -98,8 +98,6 @@ const zoom_list = elFromId("zooms");
 
 const mini_map_el = elFromId("mini_map") as HTMLCanvasElement;
 
-const 集_el = elFromId("集");
-
 const 文件_el = elFromId("文件");
 
 const assets_el = elFromId("资源");
@@ -1964,66 +1962,13 @@ async function set_data(l: 集type) {
         if (集[i]) 集[i] = l[i];
     }
     画布s.innerHTML = "";
-    集_el.innerHTML = "";
 
     await set_dependencies(集.meta.dependencies || []);
 
     let ps = {};
     for (const p of 集.数据) {
-        let div = createEl("div");
-        集_el.append(div);
-        let t = createEl("div");
-        t.innerText = p.name;
         ps[p.id] = render_data(p);
-        div.setAttribute("data-id", p.id);
-        t.onclick = () => {
-            集_el.querySelectorAll(".selected_item").forEach((el) => {
-                el.classList.remove("selected_item");
-            });
-            div.classList.add("selected_item");
-            当前画布 = p;
-            集.meta.focus_page = p.id;
-            O = ps[p.id];
-            for (let el of 画布s.children) {
-                (el as HTMLElement).style.display = "none";
-            }
-            O.style.display = "block";
-            z.focus(O.children[O.children.length - 1] as x);
-            z.reflash(true);
-            zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
-        };
-        let more = createEl("div");
-        more.classList.add("more");
-        let rename = createEl("div");
-        rename.innerHTML = icon(edit_svg);
-        rename.onclick = () => {
-            let n = prompt("重命名画布", p.name);
-            if (n) {
-                elFromId(p.id).setAttribute("data-name", n);
-                data_changed();
-                t.innerText = n;
-            }
-        };
-        let rm = createEl("div");
-        rm.innerHTML = icon(remove_svg);
-        rm.onclick = () => {
-            if (集_el.children.length == 1) return;
-            let x = confirm(`确定删除画布 ${p.name}`);
-            if (!x) return;
-            if (div.classList.contains("selected_item")) {
-                let id = 集_el.children[0].getAttribute("data-id");
-                集_el.children[0].classList.add("selected_item");
-                集.meta.focus_page = id;
-                select_p(id);
-            }
-            div.remove();
-            elFromId(p.id).remove();
-            data_changed();
-        };
-        more.append(rm, rename);
-        div.append(t, more);
         if (集.meta.focus_page == p.id) {
-            div.classList.add("selected_item");
             当前画布 = p;
             集.meta.focus_page = p.id;
             O = ps[p.id];
@@ -2127,15 +2072,6 @@ function set_diff_data(diffl: diff_i[], undo_data: 集type) {
                     let last = d.path[d.path.length - 1];
                     if (last == "focus_page") {
                         let id = d["rhs"];
-                        集_el.querySelectorAll(".selected_item").forEach((el) => {
-                            el.classList.remove("selected_item");
-                        });
-                        集_el.querySelector(`*[data-id="${id}"]`).classList.add("selected_item");
-                        for (let p of 集.数据) {
-                            if (p.id == id) {
-                                当前画布 = p;
-                            }
-                        }
                         集.meta.focus_page = id;
                         for (let el of 画布s.children) {
                             if (el.id == id) {
@@ -3102,7 +3038,9 @@ class 图层 {
         for (let i of 集.数据) {
             let li = createEl("li");
             let s = createEl("span");
-            s.innerText = `${i.name} ${i.id}`;
+            let text = createEl("span");
+            text.innerText = `${i.name} ${i.id}`;
+            s.append(text);
             li.setAttribute("data-id", i.id);
             li.append(s);
             w(i.data, li);
@@ -3110,6 +3048,35 @@ class 图层 {
                 li.classList.add("层ul_hide");
                 li.querySelector("img").src = ul_hide_svg;
             }
+            let more = createEl("div");
+            more.classList.add("more");
+            let rename = createEl("div");
+            rename.innerHTML = icon(edit_svg);
+            rename.onclick = () => {
+                let n = prompt("重命名画布", i.name);
+                if (n) {
+                    elFromId(i.id).setAttribute("data-name", n);
+                    get_data();
+                    z.reflash();
+                }
+            };
+            let rm = createEl("div");
+            rm.innerHTML = icon(remove_svg);
+            rm.onclick = () => {
+                if (画布s.children.length == 1) return;
+                let x = confirm(`确定删除画布 ${i.name}`);
+                if (!x) return;
+                elFromId(i.id).remove();
+                if (i.id == 当前画布.id) {
+                    let id = 画布s.children[0].id;
+                    select_p(id);
+                }
+                li.remove();
+                get_data();
+                z.reflash();
+            };
+            more.append(rm, rename);
+            s.append(more);
             root_ul.append(li);
         }
         document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length - 1));

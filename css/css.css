@@ -437,7 +437,7 @@ body #main > #nav #ink_r {
 }
 
 .more {
-    @apply flex justify-end overflow-hidden opacity-0;
+    @apply inline-flex justify-end overflow-hidden opacity-0 w-min align-bottom;
 }
 .侧栏 > #items > #文件 > div:hover .more {
     @apply opacity-100;
@@ -459,21 +459,6 @@ body #main > #nav #ink_r {
     width: auto !important;
 }
 
-.侧栏 > #items > #集 > * {
-    height: var(--item-height);
-}
-.侧栏 > #items > #集 > div {
-    width: calc(100% - 8px);
-    box-sizing: border-box;
-    display: flex;
-}
-
-.侧栏 > #items > #集 > div > div:nth-child(1) {
-    flex-grow: 1;
-}
-.侧栏 > #items > #集 > div:hover .more {
-    opacity: 1;
-}
 .侧栏 > #items > #层容器 {
     display: flex;
     flex-direction: column;
@@ -511,6 +496,15 @@ body #main > #nav #ink_r {
 }
 .层容器 > #层 > ul::before {
     display: none;
+}
+.层容器 > #层 > ul > li > span {
+    @apply flex;
+}
+.层容器 > #层 > ul > li > span > span {
+    @apply flex-grow;
+}
+.层容器 > #层 > ul > li > span:hover > .more {
+    opacity: 1;
 }
 .层容器 > #层 li {
     position: relative;
