@@ -1359,6 +1359,10 @@ x-progress > div {
     @apply h-full;
 }
 
+x-ggb {
+    @apply block;
+}
+
 x-audio {
     @apply flex items-center gap-1;
     height: 2em !important;
