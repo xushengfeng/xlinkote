@@ -7772,7 +7772,7 @@ class ggb extends HTMLElement {
 
     connectedCallback() {
         this.p = {
-            id: `ggb${this._value}`,
+            id: this.getid(),
             width: 500,
             height: 500,
             showResetIcon: true,
@@ -7803,9 +7803,12 @@ class ggb extends HTMLElement {
         this.div = createEl("div");
         this.append(this.div);
     }
+    getid() {
+        return `ggb${this._value}${临时中转站.contains(this) ? "zzz" : ""}${assets_el.contains(this) ? "zy" : ""}`;
+    }
     async set_m() {
         const url = 集.assets[this._value];
-        this.p.id = `ggb${this._value}`;
+        this.p.id = this.getid();
         this.p.ggbBase64 = url.base64;
         import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
             this.applet.inject(this.div);
