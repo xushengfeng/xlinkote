@@ -7713,16 +7713,26 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
 var ocr_init = false;
 var ocr;
 
+var imported_index: { [key: string]: { loaded: boolean; el: HTMLScriptElement } } = {};
+
 async function import_script(url: string) {
-    for (let i of document.body.children) {
-        if (i.tagName == "SCRIPT" && (i as HTMLScriptElement).src == url) return;
-    }
+    if (imported_index[url])
+        return new Promise((re, rj) => {
+            if (imported_index[url].loaded) {
+                re(true);
+            } else
+                imported_index[url].el.onload = () => {
+                    re(true);
+                };
+        });
     let script = createEl("script");
     script.src = url;
     console.log(url);
     document.body.append(script);
+    imported_index[url] = { loaded: false, el: script };
     return new Promise((re, rj) => {
         script.onload = () => {
+            imported_index[url] = { loaded: true, el: script };
             re(true);
         };
     });
