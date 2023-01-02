@@ -1360,7 +1360,30 @@ x-progress > div {
 }
 
 x-ggb {
-    @apply block;
+    @apply block relative;
+}
+x-ggb > .ggb_bar {
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+    display: flex;
+    position: absolute;
+    top: 0;
+    height: 16px;
+    width: 16px;
+    gap: 4px;
+    z-index: 3;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left top;
+}
+.ggb_bar > div {
+    width: 16px;
+    height: 16px;
+    @apply icon;
+}
+x-ggb > :not(.ggb_bar) {
+    @apply absolute z-0;
 }
 
 x-audio {

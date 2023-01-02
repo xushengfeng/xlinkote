@@ -29,6 +29,7 @@ import asr_svg from "../../assets/icons/asr.svg";
 import right_svg from "../../assets/icons/right.svg";
 import left_svg from "../../assets/icons/left.svg";
 import copy_svg from "../../assets/icons/copy.svg";
+import save_svg from "../../assets/icons/save.svg";
 
 interface x_tag_map {
     "x-x": x;
@@ -7767,6 +7768,7 @@ class ggb extends HTMLElement {
     _value;
     applet;
     p;
+    div: HTMLElement;
 
     connectedCallback() {
         this.p = {
@@ -7777,17 +7779,36 @@ class ggb extends HTMLElement {
             borderColor: "white",
             language: "cn",
             ggbBase64: "",
+            // showToolBar: true,
         };
         import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
             this.applet = new window["GGBApplet"](this.p, "5.0");
         });
+        let bar = createEl("div");
+        bar.classList.add("ggb_bar");
+        let save = createEl("div");
+        save.innerHTML = icon(save_svg);
+        bar.append(save);
+        this.append(bar);
+        bar.onclick = () => {
+            window[this.p.id]["getBase64"]((v) => {
+                console.log(v);
+                let obase = 集.assets[this._value].base64;
+                集.assets[this._value].base64 = obase.match(/(data:.*?;base64,)/)[1] + v;
+                let sha = CryptoJS.SHA256(集.assets[this._value].base64).toString();
+                集.assets[this._value].sha = sha;
+                data_changed();
+            });
+        };
+        this.div = createEl("div");
+        this.append(this.div);
     }
     async set_m() {
         const url = 集.assets[this._value];
         this.p.id = `ggb${this._value}`;
         this.p.ggbBase64 = url.base64;
         import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
-            this.applet.inject(this);
+            this.applet.inject(this.div);
         });
     }
 
