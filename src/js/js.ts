@@ -7721,9 +7721,9 @@ async function import_script(url: string) {
             if (imported_index[url].loaded) {
                 re(true);
             } else
-                imported_index[url].el.onload = () => {
+                imported_index[url].el.addEventListener("load", () => {
                     re(true);
-                };
+                });
         });
     let script = createEl("script");
     script.src = url;
@@ -7731,10 +7731,10 @@ async function import_script(url: string) {
     document.body.append(script);
     imported_index[url] = { loaded: false, el: script };
     return new Promise((re, rj) => {
-        script.onload = () => {
-            imported_index[url] = { loaded: true, el: script };
+        script.addEventListener("load", () => {
+            imported_index[url].loaded = true;
             re(true);
-        };
+        });
     });
 }
 
@@ -7755,9 +7755,9 @@ async function ocr_start() {
 
 // geogebra
 
-let ggb_script = createEl("script");
-ggb_script.src = "https://www.geogebra.org/apps/deployggb.js";
-document.body.append(ggb_script);
+// let ggb_script = createEl("script");
+// ggb_script.src = "https://www.geogebra.org/apps/deployggb.js";
+// document.body.append(ggb_script);
 
 class ggb extends HTMLElement {
     constructor() {
@@ -7778,13 +7778,17 @@ class ggb extends HTMLElement {
             language: "cn",
             ggbBase64: "",
         };
-        this.applet = new window["GGBApplet"](this.p, "5.0");
+        import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
+            this.applet = new window["GGBApplet"](this.p, "5.0");
+        });
     }
     async set_m() {
         const url = 集.assets[this._value];
         this.p.id = `ggb${this._value}`;
         this.p.ggbBase64 = url.base64;
-        this.applet.inject(this);
+        import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
+            this.applet.inject(this);
+        });
     }
 
     get value() {
