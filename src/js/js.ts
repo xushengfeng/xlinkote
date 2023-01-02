@@ -7771,10 +7771,12 @@ class ggb extends HTMLElement {
     div: HTMLElement;
 
     connectedCallback() {
+        let xel = this.parentElement.parentElement.parentElement;
         this.p = {
             id: this.getid(),
-            width: 500,
-            height: 500,
+            width: parseFloat(xel.style.width) || 500,
+            height: parseFloat(xel.style.height) || 500,
+            scale: 1,
             showResetIcon: true,
             borderColor: "white",
             language: "cn",
@@ -7802,6 +7804,12 @@ class ggb extends HTMLElement {
         };
         this.div = createEl("div");
         this.append(this.div);
+        let r = new ResizeObserver((e) => {
+            if (this.applet) {
+                this.applet.getAppletObject().setSize(e[0].contentRect.width, e[0].contentRect.height);
+            }
+        });
+        r.observe(this);
     }
     getid() {
         return `ggb${this._value}${临时中转站.contains(this) ? "zzz" : ""}${assets_el.contains(this) ? "zy" : ""}`;
