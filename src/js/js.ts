@@ -3088,6 +3088,19 @@ class 图层 {
             ul_img.onclick = () => {
                 li.classList.toggle("层ul_hide");
             };
+            s.onclick = () => {
+                for (let el of 画布s.children) {
+                    let this_li = root_ul.querySelector(`li[data-id="${el.id}"]`);
+                    if (el.id == i.id) {
+                        O = el as HTMLElement;
+                        O.style.display = "block";
+                        this_li.classList.remove("层ul_hide");
+                    } else {
+                        (el as HTMLElement).style.display = "none";
+                        this_li.classList.add("层ul_hide");
+                    }
+                }
+            };
             li.append(ul_img, s);
             w(i.data, li);
             if (i.id != 当前画布.id) {
