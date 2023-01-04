@@ -3088,7 +3088,17 @@ class 图层 {
             text.innerText = `${i.name}`;
             s.append(text);
             li.setAttribute("data-id", i.id);
-            li.append(s);
+            let ul_img = createEl("img");
+            ul_img.src = ul_show_svg;
+            ul_img.onclick = () => {
+                li.classList.toggle("层ul_hide");
+                if (li.classList.contains("层ul_hide")) {
+                    ul_img.src = ul_hide_svg;
+                } else {
+                    ul_img.src = ul_show_svg;
+                }
+            };
+            li.append(ul_img, s);
             w(i.data, li);
             if (i.id != 当前画布.id) {
                 li.classList.add("层ul_hide");
