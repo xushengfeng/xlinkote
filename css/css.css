@@ -697,7 +697,7 @@ body > #main > .设计 * {
     user-select: none;
 }
 
-body > #main > .绘制 {
+body > #main > .绘制 > * {
     pointer-events: none;
     user-select: none;
 }
