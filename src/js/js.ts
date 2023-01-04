@@ -9,7 +9,6 @@ import ding_svg from "../../assets/icons/ding.svg";
 import close_svg from "../../assets/icons/close.svg";
 import file_svg from "../../assets/icons/file.svg";
 import handle_svg from "../../assets/icons/handle.svg";
-import ul_hide_svg from "../../assets/icons/ul_hide.svg";
 import ul_show_svg from "../../assets/icons/ul_show.svg";
 import ul_hide2_svg from "../../assets/icons/ul_hide2.svg";
 import add_svg from "../../assets/icons/add.svg";
@@ -3000,11 +2999,6 @@ class 图层 {
                         pel.firstChild?.before(x);
                         x.onclick = () => {
                             pel.classList.toggle("层ul_hide");
-                            if (pel.classList.contains("层ul_hide")) {
-                                x.src = ul_hide_svg;
-                            } else {
-                                x.src = ul_show_svg;
-                            }
                         };
                     }
                 }
@@ -3093,17 +3087,11 @@ class 图层 {
             ul_img.src = ul_show_svg;
             ul_img.onclick = () => {
                 li.classList.toggle("层ul_hide");
-                if (li.classList.contains("层ul_hide")) {
-                    ul_img.src = ul_hide_svg;
-                } else {
-                    ul_img.src = ul_show_svg;
-                }
             };
             li.append(ul_img, s);
             w(i.data, li);
             if (i.id != 当前画布.id) {
                 li.classList.add("层ul_hide");
-                li.querySelector("img").src = ul_hide_svg;
             }
             let more = createEl("div");
             more.classList.add("more");

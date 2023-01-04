@@ -511,6 +511,7 @@ body #main > #nav #ink_r {
 }
 .层容器 > #层 li > img {
     @apply absolute w-4 h-4 -left-5 top-1;
+    transition: var(--transition);
 }
 .层容器 > #层 li > span {
     @apply inline-block h-6;
@@ -520,6 +521,9 @@ body #main > #nav #ink_r {
 }
 .层ul_hide > ul {
     display: none;
+}
+.层ul_hide > img {
+    @apply -rotate-90;
 }
 .层容器 > textarea {
     outline: none;
