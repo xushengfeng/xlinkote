@@ -985,6 +985,10 @@ body > #viewer {
     opacity: 0;
 }
 
+.viewer_target {
+    background-color: #0002;
+}
+
 body > #toast {
     position: fixed;
     bottom: 16px;

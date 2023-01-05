@@ -3947,8 +3947,15 @@ function move_to_x_link(el: x | xlink) {
         xel.style.top = x.y - out_rect.top + "px";
         xel.className = x.el.className;
         view_el.append(xel);
+        xel.id = x.el.id;
         xel.value = x.el.value;
     }
+    view_el.querySelectorAll("x-x").forEach((xcel: x) => {
+        if (xcel.id == el.id) {
+            xcel.classList.add("viewer_target");
+            return;
+        }
+    });
 }
 
 var now_data_id = "0";
