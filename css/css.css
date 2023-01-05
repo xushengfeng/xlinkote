@@ -1089,7 +1089,7 @@ x-x > #x-x_bar > div:nth-child(3) {
     display: none;
 }
 x-x:focus-within {
-    z-index: calc(var(--zest-index) + 1) !important;
+    z-index: calc(var(--z) + 1) !important;
 }
 .设计 x-x,
 .绘制 x-x {

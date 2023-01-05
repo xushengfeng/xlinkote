@@ -3001,6 +3001,8 @@ class 图层 {
                             pel.classList.toggle("层ul_hide");
                         };
                     }
+                    if (i.id && get_x_by_id(i.id) && is_flex(get_x_by_id(i.id)) == "flex")
+                        get_x_by_id(i.id).style.setProperty("--z", String(i.子元素.length));
                 }
                 let li = createEl("li");
                 let c = createEl("input");
