@@ -3971,9 +3971,10 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
                         ey = -y - (el.offsetHeight * zoom) / 2;
                     let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
                     O.style.transitionDuration = `${t / 1000}s`;
-                    setTimeout(() => {
+                    O.ontransitioncancel = O.ontransitionend = () => {
                         O.style.transitionDuration = "";
-                    }, t);
+                        render_select_rects();
+                    };
                     zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
                     set_O_p(ex, ey);
                     if (el.tagName == "X-X") {
