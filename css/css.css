@@ -512,6 +512,7 @@ body #main > #nav #ink_r {
 .层容器 > #层 li > img {
     @apply absolute w-4 h-4 -left-5 top-1;
     transition: var(--transition);
+    filter: var(--icon-color);
 }
 .层容器 > #层 li > span {
     @apply inline-block h-6;
