@@ -3142,7 +3142,7 @@ class 图层 {
             s.append(more);
             root_ul.append(li);
         }
-        document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length - 1));
+        document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length));
 
         if (!nosave) data_changed();
 

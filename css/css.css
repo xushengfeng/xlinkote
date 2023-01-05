@@ -29,7 +29,6 @@
     --shadow1: 0 0 4px #3333;
     --bg1: #ffffff;
     --icon-color: none;
-    --zest-index: 0;
 }
 
 ::-webkit-scrollbar {
@@ -1090,6 +1089,9 @@ x-x > #x-x_bar > div:nth-child(3) {
 }
 x-x:focus-within {
     z-index: calc(var(--z) + 1) !important;
+}
+body > #main > #画布 > #画布们 > div > x-x:focus-within {
+    z-index: calc(var(--zest-index) + 1) !important;
 }
 .设计 x-x,
 .绘制 x-x {
