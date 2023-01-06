@@ -2077,12 +2077,17 @@ function select_p(id: string) {
         if (el.id == id) {
             O = el as HTMLElement;
             O.style.display = "block";
+            set_zoom(O.style.transform);
         } else {
             (el as HTMLElement).style.display = "none";
         }
     }
     z.focus(O.children[O.children.length - 1] as x);
     z.reflash(true);
+}
+
+function set_zoom(zooms: string) {
+    zoom_o(Number(zooms.match(/scale\((.*)\)/)[1]) || zoom);
 }
 
 type diff_i = diff.Diff<any, any>;
@@ -3097,6 +3102,7 @@ class 图层 {
                     if (el.id == i.id) {
                         O = el as HTMLElement;
                         O.style.display = "block";
+                        set_zoom(O.style.transform);
                         this_li.classList.remove("层ul_hide");
                     } else {
                         (el as HTMLElement).style.display = "none";
