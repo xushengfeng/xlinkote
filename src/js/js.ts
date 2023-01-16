@@ -3167,7 +3167,6 @@ class 图层 {
         } else {
             O.style.willChange = "";
         }
-        throw "x";
     }
 
     push(el: x, pel?: x) {
