@@ -4187,12 +4187,14 @@ function link(key0: string) {
                 // 半天为一个单位
                 let t = (t1 - t0) / 1000 / 60 / 60 / 12;
                 let new_x = t + old_x;
-                let new_v = Math.max(x2v(new_x), 0.005);
+                let new_v = Math.max(x2v(new_x), 1 / 10 ** link_value_precision / 2); // 下限为精度四舍五入后保留1，如2->0.005
                 return new_v;
             }
         },
     };
 }
+
+let link_value_precision = 2;
 
 /**
  * 返回裁切精度的数值元素，悬浮提示具体
@@ -4203,7 +4205,7 @@ function link_value_text(num: number) {
     let nt = String(num);
     let span = createEl("span");
     span.title = nt;
-    let t = "." + num.toFixed(2).split(".")[1];
+    let t = "." + num.toFixed(link_value_precision).split(".")[1];
     if (t == ".00") t = "1";
     span.innerText = t;
     return span;
