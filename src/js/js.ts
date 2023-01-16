@@ -4162,7 +4162,6 @@ function link(key0: string) {
         },
         衰减: () => {
             for (let i in 集.链接) {
-                if (i == "0") continue;
                 for (let j in 集.链接[i]) {
                     let target = 集.链接[i][j];
                     集.链接[i][j].value = down(target.value, target.time, t);
