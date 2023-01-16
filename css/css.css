@@ -516,6 +516,9 @@ body #main > #nav #ink_r {
 .层容器 > #层 li > span {
     @apply inline-block h-6;
 }
+.层容器 > #层 > ul > li li > span {
+    width: calc(100% - 16px - 4px - 0.4rem);
+}
 .层容器 > #层 li > input[type="checkbox"] {
     @apply checkbox;
 }
