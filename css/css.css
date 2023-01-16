@@ -970,7 +970,7 @@ body > #viewer {
     position: absolute;
     overflow: hidden;
     pointer-events: none;
-    transition: var(--transition);
+    transition: opacity var(--transition);
     transform-origin: left top;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
