@@ -1973,6 +1973,15 @@ function version_tr(obj): 集type {
         case "0.19.2":
         case "0.19.3":
         case "0.19.4":
+            const one_k = Math.E;
+            for (let i in obj.链接) {
+                for (let j in obj.链接[i]) {
+                    // 归一
+                    obj.链接[i][j].value = -one_k / (obj.链接[i][j].value + one_k) + 1;
+                }
+            }
+            obj.meta.version = "0.20.0";
+        case "0.20.0":
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
@@ -4161,17 +4170,8 @@ function link(key0: string) {
                 }
             }
             function down(value: number, t0: number, t1: number) {
-                const one_k = Math.E;
                 const xv_c = 0.9;
                 const xv_s = 8;
-                // 归一
-                function one(number: number) {
-                    return -one_k / (number + one_k) + 1;
-                }
-                // 反归一
-                function one2more(num: number) {
-                    return -one_k - one_k / (num - 1);
-                }
                 // 计算衰减值
                 function x2v(x: number) {
                     return Math.exp((x * Math.log(xv_c)) / xv_s);
@@ -4180,12 +4180,12 @@ function link(key0: string) {
                 function v2x(v: number) {
                     return Math.log(v) * (xv_s / Math.log(xv_c));
                 }
-                let old_x = v2x(one(value));
+                let old_x = v2x(value);
                 // 半天为一个单位
                 let t = (t1 - t0) / 1000 / 60 / 60 / 12;
                 let new_x = t + old_x;
                 let new_v = Math.max(x2v(new_x), 0.1);
-                return one2more(new_v);
+                return new_v;
             }
         },
     };
