@@ -3603,14 +3603,14 @@ function search(s: string, type: "str" | "regex") {
 }
 
 /** 计算 时间 值 搜索匹配度 距离 */
-function search_score(id: string, search_s: number) {
+function search_score(id: string, search_s: number, time_n?: number, value_n?: number, search_n?: number) {
     const now_t = new Date().getTime();
     const vt = 集.链接[0][id];
     let t = (now_t - vt.time) / 1000 / 60 / 60 / 24 / 7;
     t = 1 / (t + 1);
     let v = vt.value;
     let s = search_s;
-    return Math.sqrt(t ** 2 + (1 * v) ** 2 + (2 * s) ** 2);
+    return Math.sqrt(((time_n || 1) * t) ** 2 + ((value_n || 1) * v) ** 2 + ((search_n || 2) * s) ** 2);
 }
 
 let select_index = 0;
