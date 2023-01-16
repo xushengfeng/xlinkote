@@ -3048,7 +3048,7 @@ class 图层 {
                 };
                 li.onpointermove = (e) => {
                     window.requestAnimationFrame(() => {
-                        set_viewer_posi(e.clientX, e.clientY);
+                        set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
                     });
                 };
                 if (this.聚焦元素.id == i.id && selected_el.length == 1) {
