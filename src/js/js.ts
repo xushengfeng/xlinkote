@@ -1977,7 +1977,11 @@ function version_tr(obj): 集type {
             for (let i in obj.链接) {
                 for (let j in obj.链接[i]) {
                     // 归一
-                    obj.链接[i][j].value = -one_k / (obj.链接[i][j].value + one_k) + 1;
+                    if (i == "0") {
+                        obj.链接[i][j].value = Math.min(obj.链接[i][j].value, 1);
+                    } else {
+                        obj.链接[i][j].value = -one_k / (obj.链接[i][j].value + one_k) + 1;
+                    }
                 }
             }
             obj.meta.version = "0.20.0";
