@@ -1652,28 +1652,28 @@ document.onkeydown = (e) => {
             break;
         case "ArrowUp":
             ys_bn("back");
-            if (!is_input_el(target)) {
+            if (!is_input_el(target) && document.fullscreenElement != 画布s) {
                 let el = get_nearest_x(z.聚焦元素, "up");
                 jump_to_x_link(el, true);
             }
             break;
         case "ArrowDown":
             ys_bn("next");
-            if (!is_input_el(target)) {
+            if (!is_input_el(target) && document.fullscreenElement != 画布s) {
                 let el = get_nearest_x(z.聚焦元素, "down");
                 jump_to_x_link(el, true);
             }
             break;
         case "ArrowLeft":
             ys_bn("back");
-            if (!is_input_el(target)) {
+            if (!is_input_el(target) && document.fullscreenElement != 画布s) {
                 let el = get_nearest_x(z.聚焦元素, "left");
                 jump_to_x_link(el, true);
             }
             break;
         case "ArrowRight":
             ys_bn("next");
-            if (!is_input_el(target)) {
+            if (!is_input_el(target) && document.fullscreenElement != 画布s) {
                 let el = get_nearest_x(z.聚焦元素, "right");
                 jump_to_x_link(el, true);
             }
