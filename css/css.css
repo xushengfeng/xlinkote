@@ -347,6 +347,7 @@ body #main > #nav #ink_r {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     transition: var(--transition) transform;
+    z-index: 2;
 }
 .侧栏显示 {
     transform: translateX(0%);
@@ -920,6 +921,7 @@ body > #搜索 {
     box-shadow: var(--shadow1);
     border-radius: 4px;
     box-sizing: border-box;
+    z-index: 3;
 }
 .搜索展示 {
     opacity: 1 !important;
@@ -961,6 +963,7 @@ body > #cmd {
     backdrop-filter: var(--blur);
     box-shadow: var(--shadow1);
     border-radius: 4px;
+    z-index: 5;
 }
 .cmd_hide {
     opacity: 0;
@@ -979,6 +982,7 @@ body > #viewer {
     backdrop-filter: var(--blur);
     box-shadow: var(--shadow1);
     border-radius: 4px;
+    z-index: 4;
 }
 
 .viewer_hide {
@@ -1002,6 +1006,7 @@ body > #toast {
     border-radius: 4px;
     box-shadow: var(--shadow1);
     transition: var(--transition);
+    z-index: 6;
 }
 
 .toast_show {
