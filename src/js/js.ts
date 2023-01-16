@@ -4203,11 +4203,9 @@ function link_value_text(num: number) {
     let nt = String(num);
     let span = createEl("span");
     span.title = nt;
-    if (nt.length - (nt.indexOf(".") + 1) <= 2) {
-        span.innerText = nt;
-    } else {
-        span.innerText = num.toFixed(2);
-    }
+    let t = "." + num.toFixed(2).split(".")[1];
+    if (t == ".00") t = "1";
+    span.innerText = t;
     return span;
 }
 
