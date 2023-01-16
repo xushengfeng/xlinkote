@@ -4187,7 +4187,7 @@ function link(key0: string) {
                 // 半天为一个单位
                 let t = (t1 - t0) / 1000 / 60 / 60 / 12;
                 let new_x = t + old_x;
-                let new_v = Math.max(x2v(new_x), 0.1);
+                let new_v = Math.max(x2v(new_x), 0.005);
                 return new_v;
             }
         },
