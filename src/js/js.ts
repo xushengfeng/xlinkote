@@ -4117,14 +4117,14 @@ function link(key0: string) {
                         let nt = new Date().getTime();
                         if (nt - 集.链接[key0][key1].time < dt) return;
                     }
-                    集.链接[key0][key1].value = Math.max(0, 集.链接[key0][key1].value + (dv || 1));
+                    集.链接[key0][key1].value = Math.min(1, Math.max(0, 集.链接[key0][key1].value + (dv || 0.1)));
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0]?.value !== undefined) {
                     if (!force) {
                         let nt = new Date().getTime();
                         if (nt - 集.链接[key1][key0].time < dt) return;
                     }
-                    集.链接[key1][key0].value = Math.max(0, 集.链接[key1][key0].value + (dv || 1));
+                    集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + (dv || 0.1)));
                     集.链接[key1][key0].time = t;
                 } else {
                     // 只存储在边的一个方向上，以时间换空间
@@ -7305,13 +7305,13 @@ class link_value extends HTMLElement {
         add_el.src = add_svg;
         down_el.src = minus_svg;
         add_el.onclick = () => {
-            link("0").value(this._id, 1, true);
+            link("0").value(this._id, 0.1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
             now_data_id = "0";
             add_bci(get_link_el_by_id(this._id));
         };
         down_el.onclick = () => {
-            link("0").value(this._id, -1, true);
+            link("0").value(this._id, -0.1, true);
             this.v.innerText = String(集.链接[0][this._id].value);
             now_data_id = "0";
             add_bci(get_link_el_by_id(this._id));
