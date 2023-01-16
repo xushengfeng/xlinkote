@@ -4066,7 +4066,12 @@ function link(key0: string) {
                 delete 集.链接[key0];
             }
         },
-        get: () => {
+        /**
+         * 获取链接
+         * @param chain 关联链接
+         * @returns 指向链接
+         */
+        get: (chain?: number) => {
             let l = { ...集.链接[key0] };
             for (let i in 集.链接[0]) {
                 for (let x in 集.链接[i]) {
@@ -4075,7 +4080,23 @@ function link(key0: string) {
                     }
                 }
             }
-            return l;
+            if (!chain) {
+                return l;
+            } else {
+                let xl: typeof l = {};
+                let walk = (list: typeof l, chain_n: number) => {
+                    for (let i in list) {
+                        let ln = chain_n - list[i].value;
+                        if (ln > 0) {
+                            walk(link(i).get(), ln);
+                        } else {
+                            xl[i] = list[i];
+                        }
+                    }
+                };
+                walk(l, chain);
+                return xl;
+            }
         },
         value: (key1?: string, dv?: number, force?: boolean) => {
             let dt = 5 * 60 * 1000; // 5分钟内增值无效
