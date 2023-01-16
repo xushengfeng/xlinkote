@@ -7306,13 +7306,15 @@ class link_value extends HTMLElement {
         down_el.src = minus_svg;
         add_el.onclick = () => {
             link("0").value(this._id, 0.1, true);
-            this.v.innerText = String(集.链接[0][this._id].value);
+            this.v.innerHTML = "";
+            this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
             add_bci(get_link_el_by_id(this._id));
         };
         down_el.onclick = () => {
             link("0").value(this._id, -0.1, true);
-            this.v.innerText = String(集.链接[0][this._id].value);
+            this.v.innerHTML = "";
+            this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
             add_bci(get_link_el_by_id(this._id));
         };
@@ -7320,7 +7322,9 @@ class link_value extends HTMLElement {
         const vl = createEl("div");
         this.append(vl);
         let v_text = (i: string) => {
-            return `#${i} ${link(this._id).get()[i].value.toFixed(2)}`;
+            let span = link_value_text(link(this._id).get()[i].value);
+            span.innerText = `#${i} ` + span.innerText;
+            return span;
         };
         this.v.onclick = () => {
             // 展示链接
@@ -7330,7 +7334,7 @@ class link_value extends HTMLElement {
                 let el = createEl("div");
                 vl.append(el);
                 let n = createEl("div");
-                n.innerText = v_text(i);
+                n.append(v_text(i));
                 el.onpointerover = (e) => {
                     set_viewer_posi(e.clientX, e.clientY);
                     move_to_x_link(get_x_by_id(i));
@@ -7351,11 +7355,13 @@ class link_value extends HTMLElement {
                 down_el.innerHTML = icon(minus_svg);
                 add_el.onclick = () => {
                     link(this._id).value(i, 0.1, true);
-                    n.innerText = v_text(i);
+                    n.innerHTML = "";
+                    n.append(v_text(i));
                 };
                 down_el.onclick = () => {
                     link(this._id).value(i, -0.1, true);
-                    n.innerText = v_text(i);
+                    n.innerHTML = "";
+                    n.append(v_text(i));
                 };
                 el.append(n, add_el, rm, down_el);
             }
@@ -7403,7 +7409,8 @@ class link_value extends HTMLElement {
         this._id = id;
         let v = link(id).get_v();
         if (v) {
-            this.v.innerText = String(link(id).get_v().toFixed(2));
+            this.v.innerHTML = "";
+            this.v.append(link_value_text(link(id).get_v()));
         } else {
             this.v.innerText = "/";
         }
