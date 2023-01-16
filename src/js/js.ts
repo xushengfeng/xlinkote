@@ -3768,7 +3768,7 @@ function show_search_l(l: search_result, exid?: string) {
             search_r.append(div);
         }
         let value = createEl("div");
-        value.innerText = `${link(div.getAttribute("data-id")).get_v()}`;
+        value.append(link_value_text(link(div.getAttribute("data-id")).get_v()));
         div.append(value);
     }
     [...search_r.children].forEach((div, i) => {
@@ -4189,6 +4189,23 @@ function link(key0: string) {
             }
         },
     };
+}
+
+/**
+ * 返回裁切精度的数值元素，悬浮提示具体
+ * @param num 链接值
+ * @returns span元素
+ */
+function link_value_text(num: number) {
+    let nt = String(num);
+    let span = createEl("span");
+    span.title = nt;
+    if (nt.length - (nt.indexOf(".") + 1) <= 2) {
+        span.innerText = nt;
+    } else {
+        span.innerText = num.toFixed(2);
+    }
+    return span;
 }
 
 /** 获取父根元素 */
