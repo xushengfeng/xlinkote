@@ -344,7 +344,6 @@ body #main > #nav #ink_r {
     left: 0;
     top: var(--icon-p-b-size);
     height: calc(100vh - var(--icon-p-b-size));
-    z-index: calc(var(--zest-index) + 8);
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     transition: var(--transition) transform;
@@ -994,7 +993,6 @@ body > #toast {
     transform: translateX(-50%);
     opacity: 0;
     pointer-events: none;
-    z-index: calc(var(--zest-index) + 8);
     padding: 4px;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
@@ -1620,7 +1618,6 @@ x-link {
         height: calc(100vh * (1 / 2));
         width: 100vw;
         transform: translateY(100%);
-        z-index: calc(var(--zest-index) + 8);
         border-radius: 32px 32px 0 0;
         box-shadow: none;
     }
