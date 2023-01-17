@@ -160,7 +160,7 @@ function xprompt(msg: string, d?: string) {
     cancel.innerText = "取消";
     div.append(text, input, cancel, ok);
     bg.append(div);
-    bg.classList.add("prompt");
+    bg.classList.add("dialog", "prompt");
     document.body.append(bg);
     input.focus();
     input.select();
@@ -182,6 +182,31 @@ function xprompt(msg: string, d?: string) {
                 re(null);
                 bg.remove();
             }
+        };
+    });
+}
+
+function xconfirm(msg: string) {
+    let bg = createEl("div");
+    let div = createEl("div");
+    let text = createEl("span");
+    text.innerText = msg;
+    let ok = createEl("div");
+    let cancel = createEl("div");
+    ok.innerText = "确定";
+    cancel.innerText = "取消";
+    div.append(text, cancel, ok);
+    bg.append(div);
+    bg.classList.add("dialog", "confirm");
+    document.body.append(bg);
+    return new Promise((re: (value: boolean) => void) => {
+        ok.onclick = () => {
+            re(true);
+            bg.remove();
+        };
+        cancel.onclick = () => {
+            re(false);
+            bg.remove();
         };
     });
 }
@@ -2516,8 +2541,8 @@ function reload_file_list() {
         };
         let rm = createEl("div");
         rm.innerHTML = icon(remove_svg);
-        rm.onclick = () => {
-            let x = confirm(`确定删除文件 ${f.file_name}`);
+        rm.onclick = async () => {
+            let x = await xconfirm(`确定删除文件 ${f.file_name}`);
             if (!x) return;
             let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
             let r = customerObjectStore.delete(f.UUID);
@@ -3212,9 +3237,9 @@ class 图层 {
             };
             let rm = createEl("div");
             rm.innerHTML = icon(remove_svg);
-            rm.onclick = () => {
+            rm.onclick = async () => {
                 if (画布s.children.length == 1) return;
-                let x = confirm(`确定删除画布 ${i.name}`);
+                let x = await xconfirm(`确定删除画布 ${i.name}`);
                 if (!x) return;
                 elFromId(i.id).remove();
                 if (i.id == 当前画布.id) {
