@@ -3,6 +3,7 @@ import "../../css/css.css";
 import x_y_svg from "../../assets/icons/x_y.svg";
 import y_svg from "../../assets/icons/y.svg";
 import x_svg from "../../assets/icons/x.svg";
+import cloud_up_svg from "../../assets/icons/cloud_up.svg";
 import cloud_down from "../../assets/icons/cloud_down.svg";
 import cloud from "../../assets/icons/cloud.svg";
 import ding_svg from "../../assets/icons/ding.svg";
@@ -221,7 +222,18 @@ elFromId("从云加载").onclick = async () => {
         set_data(o);
     }
 };
-elFromId("上传到云").onclick = put_xln_value;
+
+const save_b = elFromId("保存");
+save_b.onclick = save_file;
+function set_save_icon() {
+    if (db_can_save) {
+        save_b.innerHTML = icon(cloud_up_svg);
+        save_b.title = "上传到云";
+    } else {
+        save_b.innerHTML = icon(save_svg);
+        save_b.title = "点击保存";
+    }
+}
 
 elFromId("加载数据库").onclick = () => {
     elFromId("db_load").click();
@@ -2368,22 +2380,6 @@ function load_file_side_bar() {
     load_dav.onclick = () => {
         get_all_xln();
     };
-    let new_d = createEl("div");
-    new_d.title = "点击重命名以保存";
-    let new_t = createEl("div");
-    new_t.innerText = `新建集${uuid_id()}`;
-    let dav = createEl("div");
-    new_d.append(dav, new_t);
-    new_d.classList.add("selected_item");
-    new_d.onclick = () => {
-        let fn = prompt("文件名", new_t.innerText);
-        if (fn) {
-            集.meta.file_name = new_t.innerText = fn;
-            db_can_save = true;
-            data_changed();
-        }
-    };
-    文件_el.append(new_d);
 }
 
 /** 获取文件并渲染 */
@@ -2413,9 +2409,9 @@ function db_get() {
             if (`#${f.meta.UUID}` == location.hash) {
                 ihash = true;
                 set_data(f);
-                文件_el.children[1].remove();
                 文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
                 db_can_save = true;
+                set_save_icon();
             }
         }
 
@@ -2651,12 +2647,18 @@ function save_file() {
         data_changed();
         put_xln_value();
     } else {
-        集.meta.file_name = 集.meta.file_name || `新建集${uuid_id()}`;
+        if (!集.meta.file_name) {
+            let fn = prompt("文件名", `新建集${uuid_id()}`);
+            if (fn) {
+                集.meta.file_name = fn;
+            }
+        }
         db_can_save = true;
         data_changed();
         file_list.push(集.meta);
         reload_file_list();
     }
+    set_save_icon();
 }
 
 /** 文件状态改变触发 */
