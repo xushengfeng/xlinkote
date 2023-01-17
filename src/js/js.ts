@@ -5021,10 +5021,11 @@ function get_svg(c: string) {
         (function () {
             if (will_load_math) return;
             let s = createEl("script");
-            s.src = "https://unpkg.com/mathjax@3.2.2/es5/tex-svg-full.js";
-            s.async = true;
             will_load_math = true;
-            document.body.append(s);
+            import("../../lib/mathjax@3.2.2-tex-svg-full.js?raw").then((v) => {
+                s.innerText = v.default;
+                document.body.append(s);
+            });
         })();
     }
     return html;

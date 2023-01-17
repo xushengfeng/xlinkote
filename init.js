@@ -33,3 +33,12 @@ if (!existsSync("./lib/tikzjax.js")) {
         })
     );
 }
+
+if (!existsSync("./lib/mathjax@3.2.2-tex-svg-full.js")) {
+    writeFileSync(
+        "./lib/mathjax@3.2.2-tex-svg-full.js",
+        await download("https://unpkg.com/mathjax@3.2.2/es5/tex-svg-full.js", {
+            rejectUnauthorized: false,
+        })
+    );
+}
