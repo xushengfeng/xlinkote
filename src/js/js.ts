@@ -4297,8 +4297,14 @@ function link_value_text(num: number) {
     let nt = String(num);
     let span = createEl("span");
     span.title = nt;
-    let t = "." + num.toFixed(link_value_precision).split(".")[1];
-    if (t == ".00") t = "1";
+    let l = num.toFixed(link_value_precision).split(".");
+    let t = "";
+    if (l[0] == "0") {
+        t = "." + l[1];
+    } else {
+        t = l.join(".");
+    }
+    if (l[1] == "00") t = l[0];
     span.innerText = t;
     return span;
 }
