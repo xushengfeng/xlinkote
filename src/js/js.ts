@@ -147,6 +147,45 @@ function icon(src: string) {
     return `<img src="${src}" class="icon">`;
 }
 
+function xprompt(msg: string, d?: string) {
+    let bg = createEl("div");
+    let div = createEl("div");
+    let text = createEl("span");
+    let input = createEl("input");
+    input.value = d;
+    text.innerText = msg;
+    let ok = createEl("div");
+    let cancel = createEl("div");
+    ok.innerText = "确定";
+    cancel.innerText = "取消";
+    div.append(text, input, cancel, ok);
+    bg.append(div);
+    bg.classList.add("prompt");
+    document.body.append(bg);
+    input.focus();
+    input.select();
+    return new Promise((re: (value: string | null) => void) => {
+        ok.onclick = () => {
+            re(input.value);
+            bg.remove();
+        };
+        cancel.onclick = () => {
+            re(null);
+            bg.remove();
+        };
+        input.onkeydown = (e) => {
+            if (e.key == "Enter") {
+                re(input.value);
+                bg.remove();
+            }
+            if (e.key == "Escape") {
+                re(null);
+                bg.remove();
+            }
+        };
+    });
+}
+
 // 获取设置
 type setting = typeof default_setting;
 var store: setting = JSON.parse(localStorage.getItem("config"));
@@ -2459,8 +2498,8 @@ function reload_file_list() {
         more.classList.add("more");
         let rename = createEl("div");
         rename.innerHTML = icon(edit_svg);
-        rename.onclick = () => {
-            let n = prompt("重命名文件", f.file_name);
+        rename.onclick = async () => {
+            let n = await xprompt("重命名文件", f.file_name);
             if (n) {
                 let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
                 let r = customerObjectStore.get(f.UUID);
@@ -2643,13 +2682,13 @@ var db_can_save = false;
 /**
  * 保存文件，can save时上传到云
  */
-function save_file() {
+async function save_file() {
     if (db_can_save) {
         data_changed();
         put_xln_value();
     } else {
         if (!集.meta.file_name) {
-            let fn = prompt("文件名", `新建集${uuid_id()}`);
+            let fn = await xprompt("文件名", `新建集${uuid_id()}`);
             if (fn) {
                 集.meta.file_name = fn;
             }
@@ -3163,8 +3202,8 @@ class 图层 {
             idel.innerText = i.id;
             let rename = createEl("div");
             rename.innerHTML = icon(edit_svg);
-            rename.onclick = () => {
-                let n = prompt("重命名画布", i.name);
+            rename.onclick = async () => {
+                let n = await xprompt("重命名画布", i.name);
                 if (n) {
                     elFromId(i.id).setAttribute("data-name", n);
                     get_data();
@@ -3436,7 +3475,7 @@ async function get_xln_value(path: string) {
 async function put_xln_value() {
     let path = 集.meta.url;
     if (!path) {
-        let n = window.prompt("上传的文件名", get_file_name());
+        let n = await xprompt("上传的文件名", get_file_name());
         if (!n) return;
         set_title(n);
         path = `/${n}.xln`;
