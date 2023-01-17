@@ -921,10 +921,9 @@ body > #main > #画布 > x-link-value {
     position: fixed;
     transition: opacity var(--transition);
     cursor: pointer !important;
-    transform-origin: left bottom;
+    @apply flex flex-col-reverse gap-1;
 }
 body > #main > #画布 > x-link-value > div {
-    margin-bottom: 4px;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     border-radius: 4px;
@@ -934,6 +933,7 @@ body > #main > #画布 > x-link-value > div:nth-child(1) {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 4px;
 }
 body > #main > #画布 > x-link-value > div > img {
     width: 16px;
