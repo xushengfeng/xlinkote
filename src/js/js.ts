@@ -3889,6 +3889,8 @@ function show_g_search() {
     search_pel.style.width = "";
     search_el.focus();
     search_pel.setAttribute("data-fid", "0");
+    let l = search(search_el.value, "str");
+    show_search_l(l);
 }
 
 let now_focus_id = "0";
