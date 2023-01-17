@@ -1678,6 +1678,12 @@ document.onkeydown = (e) => {
                 jump_to_x_link(el, true);
             }
             break;
+        case "s":
+            if (e.ctrlKey) {
+                e.preventDefault();
+                save_file();
+            }
+            break;
     }
 };
 
@@ -2636,6 +2642,22 @@ var save_timeout = NaN,
  * - 本地文件不保存，除非设定保存；
  */
 var db_can_save = false;
+
+/**
+ * 保存文件，can save时上传到云
+ */
+function save_file() {
+    if (db_can_save) {
+        data_changed();
+        put_xln_value();
+    } else {
+        集.meta.file_name = 集.meta.file_name || `新建集${uuid_id()}`;
+        db_can_save = true;
+        data_changed();
+        file_list.push(集.meta);
+        reload_file_list();
+    }
+}
 
 /** 文件状态改变触发 */
 function data_changed() {
