@@ -2478,12 +2478,13 @@ function reload_file_list() {
         let rm = createEl("div");
         rm.innerHTML = icon(remove_svg);
         rm.onclick = () => {
-            let x = confirm(`确定删除画布 ${f.file_name}`);
+            let x = confirm(`确定删除文件 ${f.file_name}`);
             if (!x) return;
             let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
             let r = customerObjectStore.delete(f.UUID);
             r.onsuccess = () => {
                 d.remove();
+                if (f.UUID == 集.meta.UUID) window.close();
             };
         };
         more.append(rm, rename);
