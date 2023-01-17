@@ -992,10 +992,14 @@ body > #搜索 {
     border-radius: 4px;
     box-sizing: border-box;
     z-index: 3;
+    @apply flex flex-col-reverse;
 }
 .搜索展示 {
     opacity: 1 !important;
     pointer-events: all !important;
+}
+body > #搜索[data-fid="0"] {
+    @apply flex-col;
 }
 body > #搜索 > input {
     width: 100%;
