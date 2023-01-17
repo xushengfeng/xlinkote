@@ -7473,27 +7473,25 @@ class link_value extends HTMLElement {
 
             // 搜索
             let v = "";
-            if (vl.innerHTML == "") {
-                let el = get_x_by_id(this._id);
-                if (el.tagName == "X-X") {
-                    let w = (v: data) => {
-                        for (let i of v) {
-                            if (i.type == "X-MD") {
-                                return JSON.parse(i.value).text;
-                            } else {
-                                if (i.子元素) return w(i.子元素);
-                                else return "";
-                            }
+            let el = get_x_by_id(this._id);
+            if (el.tagName == "X-X") {
+                let w = (v: data) => {
+                    for (let i of v) {
+                        if (i.type == "X-MD") {
+                            return JSON.parse(i.value).text;
+                        } else {
+                            if (i.子元素) return w(i.子元素);
+                            else return "";
                         }
-                    };
-                    v = w(get_x_by_id(this._id).value);
-                } else {
-                    v = el.innerText;
-                }
-                let l = search(v, "str");
-                console.log(l);
-                show_search_l(l, this._id);
+                    }
+                };
+                v = w(get_x_by_id(this._id).value);
+            } else {
+                v = el.innerText;
             }
+            let l = search(v, "str");
+            console.log(l);
+            show_search_l(l, this._id);
 
             search_el.value = v;
             search_el.focus();
