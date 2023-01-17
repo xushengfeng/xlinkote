@@ -151,6 +151,7 @@ input[type="checkbox"] {
 }
 .prompt > div > :nth-child(1) {
     grid-area: 1 / 1 / 2 / 3;
+    @apply text-center;
 }
 .prompt > div > :nth-child(2) {
     grid-area: 2 / 1 / 3 / 3;
@@ -1668,15 +1669,6 @@ x-link {
 }
 
 @media all and (orientation: portrait) {
-    .dialog {
-        @apply items-end;
-    }
-    .dialog > div {
-        @apply w-full rounded-none rounded-t-lg;
-    }
-    .dialog > div > span {
-        @apply text-center;
-    }
     body > #main {
         grid-template-rows: auto min-content;
     }
