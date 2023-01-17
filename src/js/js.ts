@@ -2656,7 +2656,9 @@ function save_file() {
         db_can_save = true;
         data_changed();
         file_list.push(集.meta);
+        load_file_side_bar();
         reload_file_list();
+        文件_el.querySelector(`[data-uuid="${集.meta.UUID}"]`).classList.add("selected_item");
     }
     set_save_icon();
 }
