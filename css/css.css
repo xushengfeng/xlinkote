@@ -129,6 +129,10 @@ select:focus {
     outline: none;
 }
 
+input[type="checkbox"] {
+    @apply checkbox;
+}
+
 .bar {
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
