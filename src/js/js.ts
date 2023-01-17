@@ -7499,7 +7499,7 @@ class link_value extends HTMLElement {
             search_el.selectionEnd = search_el.value.length;
 
             let x = el_offset(this, document.body).x,
-                y = el_offset(this, document.body).y - search_pel.getBoundingClientRect().height - 4;
+                y = el_offset(this, document.body).y - search_pel.getBoundingClientRect().height;
 
             search_pel.style.left = x + "px";
             search_pel.style.top = y + "px";
