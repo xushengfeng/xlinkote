@@ -764,7 +764,8 @@ body > #main > #画布 > #画布们 > div {
     @apply absolute top-0 left-0 w-0 h-0;
     transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
 }
-body > #main > .浏览 {
+body > #main > .浏览 #x-x_bar {
+    @apply hidden;
 }
 
 body > #main > .设计 * {
