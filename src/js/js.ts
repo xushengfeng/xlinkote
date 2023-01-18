@@ -1527,6 +1527,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             free_link = "";
         }
     }
+    if (free_link) {
+        let el = e.target as HTMLElement;
+        if (!(typeof el?.className == "string" && el.className.includes("xxhandle"))) {
+            z.remove(elFromId(free_link) as x);
+        }
+        free_link = "";
+    }
     free_old_point = null;
     free_move = false;
     free_o_rects = [];
