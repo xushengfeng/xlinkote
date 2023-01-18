@@ -1514,6 +1514,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 集.values[id]["link_arrow"]["start"] = { id: elid, a: free_o_a };
                 let arrow = createEl("x-link-arrow");
                 x.append(arrow);
+                selected_el = selected_el.filter((el) => el != x);
             }, free_db_dtime);
         } else {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
