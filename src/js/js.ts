@@ -1514,6 +1514,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 集.values[id]["link_arrow"]["start"] = { id: elid, a: free_o_a };
                 let arrow = createEl("x-link-arrow");
                 x.append(arrow);
+                x.style.stroke = "var(--color6)";
+                x.style.strokeWidth = "1";
                 selected_el = selected_el.filter((el) => el != x);
             }, free_db_dtime);
         } else {

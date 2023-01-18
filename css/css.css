@@ -1205,8 +1205,6 @@ x-link-arrow > svg {
     @apply pointer-events-none;
 }
 x-link-arrow > svg > path {
-    stroke: #000;
-    stroke-width: 1;
     fill: none;
     @apply pointer-events-auto;
 }
