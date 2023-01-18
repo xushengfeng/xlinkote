@@ -1505,6 +1505,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         } else {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
             render_link_arrow(free_link, e);
+            (elFromId(free_link).querySelector("x-link-arrow") as link_arrow).ob();
             free_link = "";
         }
     }
@@ -8501,20 +8502,17 @@ class link_arrow extends HTMLElement {
         super();
     }
     svg: SVGSVGElement;
+    r: MutationObserver;
     connectedCallback() {
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.append(this.svg);
         setTimeout(() => {
             this.render(now_mouse_e as PointerEvent);
         }, 1000);
-        let value = 集.values[this.parentElement.id]["link_arrow"];
-        if (value.end) {
-            let r = new MutationObserver((e) => {
-                this.render(null);
-            });
-            r.observe(elFromId(value.start.id), { attributes: true, attributeFilter: ["style"] });
-            r.observe(elFromId(value.end.id), { attributes: true, attributeFilter: ["style"] });
-        }
+        this.r = new MutationObserver((e) => {
+            this.render(null);
+        });
+        this.ob();
     }
 
     render(e: PointerEvent) {
@@ -8532,6 +8530,14 @@ class link_arrow extends HTMLElement {
         p.setAttribute("d", at);
         this.svg.innerHTML = "";
         this.svg.append(p);
+    }
+
+    ob() {
+        let value = 集.values[this.parentElement.id]["link_arrow"];
+        if (value.end) {
+            this.r.observe(elFromId(value.start.id), { attributes: true, attributeFilter: ["style"] });
+            this.r.observe(elFromId(value.end.id), { attributes: true, attributeFilter: ["style"] });
+        }
     }
 
     get value() {
