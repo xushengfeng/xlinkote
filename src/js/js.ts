@@ -3321,6 +3321,7 @@ class 图层 {
     remove(el: x) {
         link(el.id).rm();
         el.remove();
+        delete 集.values[el.id];
         get_data();
         this.reflash();
     }
