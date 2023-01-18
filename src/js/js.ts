@@ -1835,6 +1835,10 @@ document.onkeydown = (e) => {
             if (模式 == "浏览") {
                 if (!侧栏.contains(target)) set_模式("设计");
             }
+            if (free_link) {
+                z.remove(elFromId(free_link) as x);
+                free_link = "";
+            }
             break;
         case "ArrowUp":
             ys_bn("back");
