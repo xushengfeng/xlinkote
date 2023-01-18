@@ -8530,6 +8530,13 @@ class link_arrow extends HTMLElement {
         p.setAttribute("d", at);
         this.svg.innerHTML = "";
         this.svg.append(p);
+        let r = el_offset2(p, O);
+        xel.style.left = r.x + "px";
+        xel.style.top = r.y + "px";
+        xel.style.width = r.w + "px";
+        xel.style.height = r.h + "px";
+        let t2 = `translate(${-r.x},${-r.y})`;
+        p.setAttribute("transform", t2);
     }
 
     ob() {
