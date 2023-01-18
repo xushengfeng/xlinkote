@@ -1491,7 +1491,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
     if (free_drag || free_old_point) z.reflash();
-    if (!free_drag && !free_move && free_old_point && free_o_a != -1) {
+    if (
+        !free_drag &&
+        !free_move &&
+        free_old_point &&
+        free_o_a != -1 &&
+        !free_o_rects[0].el.querySelector("x-link-arrow")
+    ) {
         if (!free_link) {
             let id = uuid_id();
             free_link = id;
