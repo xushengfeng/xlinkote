@@ -639,7 +639,13 @@ var o_vb_sb = { x0: 0, y0: 0, x1: 0, y1: 0 };
 var move: boolean = false;
 var select_id = "";
 var fxsd_el = elFromId("方向锁定");
-var fxsd = 0;
+/**
+ * - 0为全向移动
+ * - 1为y
+ * - 2为x
+ * - 3为锁定
+ */
+var fxsd: 0 | 1 | 2 | 3 = 0;
 
 function set_O_p(x: number | null, y: number | null) {
     if (x) {
@@ -659,9 +665,9 @@ function set_O_p(x: number | null, y: number | null) {
 }
 
 fxsd_el.onclick = () => {
-    let o = { 0: 1, 1: 2, 2: 0 };
-    fxsd = o[fxsd];
-    let os = { 0: x_y_svg, 1: y_svg, 2: x_svg };
+    let o = { 0: 1, 1: 2, 2: 3, 3: 0 };
+    fxsd = o[fxsd] as 0 | 1 | 2 | 3;
+    let os = { 0: x_y_svg, 1: y_svg, 2: x_svg, 3: lock_svg };
     fxsd_el.querySelector("img").src = os[fxsd];
 };
 
