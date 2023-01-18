@@ -54,6 +54,7 @@ interface x_tag_map {
     "x-calendar": calendar;
     "time-b": time_s;
     "x-time": time;
+    "x-link-arrow": link_arrow;
 }
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -1384,6 +1385,11 @@ document.addEventListener("pointermove", (e: PointerEvent) => {
             free_drag_tip.style.opacity = "0";
         }
     }
+    if (模式 == "设计") {
+        if (free_link) {
+            render_link_arrow(free_link, e);
+        }
+    }
 });
 document.addEventListener("pointerup", (e: PointerEvent) => {
     if (drag_block) {
@@ -1492,10 +1498,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             let x = createEl("x-x");
             x.id = id;
             z.push(x);
+            let arrow = createEl("x-link-arrow");
+            x.append(arrow);
             init_value(id, "link_arrow");
             集.values[id]["link_arrow"]["start"] = { id: free_o_rects[0].el.id, a: free_o_a };
         } else {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
+            render_link_arrow(free_link, e);
             free_link = "";
         }
     }
@@ -1633,6 +1642,43 @@ function new_free_drag_tip() {
     free_drag_tip = createEl("div");
     free_drag_tip.classList.add("free_drag_tip");
     document.body.append(free_drag_tip);
+}
+
+function render_link_arrow(id: string, e: PointerEvent) {
+    let xel = elFromId(id);
+    if (!xel) {
+        free_link = "";
+        return;
+    }
+    let svg = xel.querySelector("x-link-arrow") as link_arrow;
+    svg.render(e);
+}
+
+function get_link_arrow_p(id: string, a: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): p_point {
+    let xel = elFromId(id);
+    let x = 0,
+        y = 0,
+        rect = el_offset2(xel, O);
+    if (a == 7 || a == 3 || a == 6) x = rect.x;
+    if (a == 0 || a == 2) x = rect.x + rect.w / 2;
+    if (a == 4 || a == 1 || a == 5) x = rect.x + rect.w;
+    if (a == 7 || a == 0 || a == 4) y = rect.y;
+    if (a == 3 || a == 1) y = rect.y + rect.h / 2;
+    if (a == 6 || a == 2 || a == 5) y = rect.y + rect.h;
+    return { x, y };
+}
+function get_link_arrow_a(p: p_point, a: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): p_point {
+    let dx = 0,
+        dy = 0;
+    const x = 60,
+        y = 60;
+    if (a == 7 || a == 3 || a == 6) dx = -x;
+    if (a == 0 || a == 2) dx = 0;
+    if (a == 4 || a == 1 || a == 5) dx = x;
+    if (a == 7 || a == 0 || a == 4) dy = -y;
+    if (a == 3 || a == 1) dy = 0;
+    if (a == 6 || a == 2 || a == 5) dy = y;
+    return { x: p.x + dx, y: p.y + dy };
 }
 
 /** 通过画布坐标创建主元素 */
@@ -8449,3 +8495,40 @@ setInterval(() => {
         el.render();
     });
 });
+
+class link_arrow extends HTMLElement {
+    constructor() {
+        super();
+    }
+    svg: SVGSVGElement;
+    connectedCallback() {
+        this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        this.append(this.svg);
+        setTimeout(() => {
+            this.render(now_mouse_e as PointerEvent);
+        }, 1000);
+    }
+
+    render(e: PointerEvent) {
+        let xel = this.parentElement as x;
+        let id = xel.id;
+        let value = 集.values[id]["link_arrow"];
+        let start_p = get_link_arrow_p(value.start.id, value.start.a);
+        let end_p = value.end ? get_link_arrow_p(value.end.id, value.end.a) : e2p(e);
+        let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        let t = `translate(${-el_offset2(xel).x},${-el_offset2(xel).y})`;
+        p.setAttribute("transform", t);
+        let start_ctrl = get_link_arrow_a(start_p, value.start.a),
+            end_ctrl = get_link_arrow_a(end_p, value?.end?.a || 0);
+        let at = `M ${start_p.x} ${start_p.y} C ${start_ctrl.x} ${start_ctrl.y}, ${end_ctrl.x} ${end_ctrl.y}, ${end_p.x} ${end_p.y}`;
+        p.setAttribute("d", at);
+        this.svg.innerHTML = "";
+        this.svg.append(p);
+    }
+
+    get value() {
+        return "";
+    }
+}
+
+window.customElements.define("x-link-arrow", link_arrow);

@@ -1197,6 +1197,15 @@ body > #main > #画布 > #画布们 > div > x-x:focus-within {
     position: fixed;
 }
 
+x-link-arrow > svg {
+    overflow: initial;
+}
+x-link-arrow > svg > path {
+    stroke: #000;
+    stroke-width: 1;
+    fill: none;
+}
+
 x-md {
     position: relative;
     display: block;
