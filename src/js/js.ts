@@ -8542,8 +8542,15 @@ class link_arrow extends HTMLElement {
         let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
         let t = `translate(${-el_offset2(xel).x},${-el_offset2(xel).y})`;
         p.setAttribute("transform", t);
-        let start_ctrl = get_link_arrow_a(start_p, value.start.a),
-            end_ctrl = get_link_arrow_a(end_p, value?.end?.a || 0);
+        let start_a = value.start.a;
+        let end_a = value?.end?.a || (start_a < 4 ? (start_a + 2) % 4 : ((start_a - 4 + 2) % 4) + 4);
+        if (e) {
+            let el = e.target as HTMLElement;
+            if (el.className && el.className.includes("xxhandle"))
+                end_a = Number(el.className.replace("xxhandle", "")) || end_a;
+        }
+        let start_ctrl = get_link_arrow_a(start_p, start_a),
+            end_ctrl = get_link_arrow_a(end_p, end_a);
         let at = `M ${start_p.x} ${start_p.y} C ${start_ctrl.x} ${start_ctrl.y}, ${end_ctrl.x} ${end_ctrl.y}, ${end_p.x} ${end_p.y}`;
         p.setAttribute("d", at);
         this.svg.innerHTML = "";
