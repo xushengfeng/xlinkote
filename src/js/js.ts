@@ -1510,10 +1510,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 let x = createEl("x-x");
                 x.id = id;
                 z.push(x);
-                let arrow = createEl("x-link-arrow");
-                x.append(arrow);
                 init_value(id, "link_arrow");
                 集.values[id]["link_arrow"]["start"] = { id: elid, a: free_o_a };
+                let arrow = createEl("x-link-arrow");
+                x.append(arrow);
             }, free_db_dtime);
         } else {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
