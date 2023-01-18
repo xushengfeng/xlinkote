@@ -1336,7 +1336,6 @@ let free_old_point: p_point;
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
 let free_o_a = NaN;
 let free_move = false;
-let free_target_id = "";
 let free_drag = false;
 let free_drag_tip: HTMLElement;
 let free_link: string;
@@ -5414,8 +5413,6 @@ class x extends HTMLElement {
         super();
     }
 
-    fixed = false;
-
     connectedCallback() {
         var bar = createEl("div");
         bar.id = "x-x_bar";
@@ -5451,7 +5448,6 @@ class x extends HTMLElement {
         };
 
         this.onpointerdown = (e) => {
-            if (this.fixed) return;
             let el = e.target as HTMLDivElement;
             if (bar.contains(el) && el != m) return;
             if (el == m) {
@@ -5505,7 +5501,6 @@ class x extends HTMLElement {
             for (const el of selected_el) {
                 free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
             }
-            free_target_id = this.id;
         };
 
         f.onclick = () => {
@@ -8058,11 +8053,6 @@ async function ocr_start() {
 }
 
 // geogebra
-
-// let ggb_script = createEl("script");
-// ggb_script.src = "https://www.geogebra.org/apps/deployggb.js";
-// document.body.append(ggb_script);
-
 class ggb extends HTMLElement {
     constructor() {
         super();
