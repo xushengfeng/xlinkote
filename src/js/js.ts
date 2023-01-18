@@ -8547,7 +8547,9 @@ class link_arrow extends HTMLElement {
         let t = `translate(${-el_offset2(xel).x},${-el_offset2(xel).y})`;
         p.setAttribute("transform", t);
         let start_a = value.start.a;
-        let end_a = value?.end?.a || (start_a < 4 ? (start_a + 2) % 4 : ((start_a - 4 + 2) % 4) + 4);
+        let end_a;
+        if (typeof value?.end?.a == "number") end_a = value.end.a;
+        else end_a = start_a < 4 ? (start_a + 2) % 4 : ((start_a - 4 + 2) % 4) + 4;
         if (e) {
             let el = e.target as HTMLElement;
             if (
