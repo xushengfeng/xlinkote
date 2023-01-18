@@ -8510,6 +8510,10 @@ class link_arrow extends HTMLElement {
             this.render(now_mouse_e as PointerEvent);
         }, 1000);
         this.r = new MutationObserver((e) => {
+            if (!集.values[this.parentElement.id]) {
+                this.r.disconnect();
+                return;
+            }
             this.render(null);
         });
         this.ob();
