@@ -8507,6 +8507,14 @@ class link_arrow extends HTMLElement {
         setTimeout(() => {
             this.render(now_mouse_e as PointerEvent);
         }, 1000);
+        let value = 集.values[this.parentElement.id]["link_arrow"];
+        if (value.end) {
+            let r = new MutationObserver((e) => {
+                this.render(null);
+            });
+            r.observe(elFromId(value.start.id), { attributes: true, attributeFilter: ["style"] });
+            r.observe(elFromId(value.end.id), { attributes: true, attributeFilter: ["style"] });
+        }
     }
 
     render(e: PointerEvent) {
