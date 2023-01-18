@@ -1512,6 +1512,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
             render_link_arrow(free_link, e);
             (elFromId(free_link).querySelector("x-link-arrow") as link_arrow).ob();
+            link(集.values[free_link]["link_arrow"]["start"].id).add(free_o_rects[0].el.id);
             free_link = "";
         }
     }
