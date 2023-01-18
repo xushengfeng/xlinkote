@@ -1509,20 +1509,20 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 let x = createEl("x-x");
                 x.id = id;
                 z.push(x);
-                init_value(id, "link_arrow");
-                集.values[id]["link_arrow"]["start"] = { id: elid, a: free_o_a };
                 let arrow = createEl("x-link-arrow");
                 x.append(arrow);
+                arrow._value.start = { id: elid, a: free_o_a };
                 x.style.stroke = "var(--color6)";
                 x.style.strokeWidth = "1";
                 x.classList.add("link_arrow_p");
                 selected_el = selected_el.filter((el) => el != x);
             }, free_db_dtime);
         } else {
-            集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
+            let arrow = elFromId(free_link).querySelector("x-link-arrow") as link_arrow;
+            arrow._value.end = { id: free_o_rects[0].el.id, a: free_o_a };
             render_link_arrow(free_link, e);
-            (elFromId(free_link).querySelector("x-link-arrow") as link_arrow).ob();
-            link(集.values[free_link]["link_arrow"]["start"].id).add(free_o_rects[0].el.id);
+            arrow.ob();
+            link(arrow._value.start.id).add(free_o_rects[0].el.id);
             free_link = "";
         }
     }
@@ -1679,7 +1679,9 @@ function render_link_arrow(id: string, e: PointerEvent) {
     svg.render(e);
 }
 
-function get_link_arrow_p(id: string, a: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): p_point {
+type free_a = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
+function get_link_arrow_p(id: string, a: free_a): p_point {
     let xel = elFromId(id);
     let x = 0,
         y = 0,
@@ -1692,7 +1694,7 @@ function get_link_arrow_p(id: string, a: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): p_point
     if (a == 6 || a == 2 || a == 5) y = rect.y + rect.h;
     return { x, y };
 }
-function get_link_arrow_a(p: p_point, a: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): p_point {
+function get_link_arrow_a(p: p_point, a: free_a): p_point {
     let dx = 0,
         dy = 0;
     const x = 60,
@@ -8523,6 +8525,10 @@ class link_arrow extends HTMLElement {
     }
     svg: SVGSVGElement;
     r: MutationObserver;
+    _value: { start: { id: string; a: any }; end: { id: string; a: any } } = {
+        start: { id: "", a: 0 },
+        end: null,
+    };
     connectedCallback() {
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.append(this.svg);
@@ -8530,27 +8536,24 @@ class link_arrow extends HTMLElement {
             this.render(now_mouse_e as PointerEvent);
         }, 1000);
         this.r = new MutationObserver((e) => {
-            if (!集.values[this.parentElement.id]) {
-                this.r.disconnect();
-                return;
-            }
             this.render(null);
         });
-        this.ob();
+    }
+
+    disconnectedCallback() {
+        this.r.disconnect();
     }
 
     render(e: PointerEvent) {
         let xel = this.parentElement as x;
-        let id = xel.id;
-        let value = 集.values[id]["link_arrow"];
-        let start_p = get_link_arrow_p(value.start.id, value.start.a);
-        let end_p = value.end ? get_link_arrow_p(value.end.id, value.end.a) : e2p(e);
+        let start_p = get_link_arrow_p(this._value.start.id, this._value.start.a);
+        let end_p = this._value.end ? get_link_arrow_p(this._value.end.id, this._value.end.a) : e2p(e);
         let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
         let t = `translate(${-el_offset2(xel).x},${-el_offset2(xel).y})`;
         p.setAttribute("transform", t);
-        let start_a = value.start.a;
+        let start_a = this._value.start.a;
         let end_a;
-        if (typeof value?.end?.a == "number") end_a = value.end.a;
+        if (typeof this._value?.end?.a == "number") end_a = this._value.end.a;
         else end_a = start_a < 4 ? (start_a + 2) % 4 : ((start_a - 4 + 2) % 4) + 4;
         if (e) {
             let el = e.target as HTMLElement;
@@ -8577,15 +8580,19 @@ class link_arrow extends HTMLElement {
     }
 
     ob() {
-        let value = 集.values[this.parentElement.id]["link_arrow"];
-        if (value.end) {
-            this.r.observe(elFromId(value.start.id), { attributes: true, attributeFilter: ["style"] });
-            this.r.observe(elFromId(value.end.id), { attributes: true, attributeFilter: ["style"] });
+        if (this._value.end) {
+            this.r.observe(elFromId(this._value.start.id), { attributes: true, attributeFilter: ["style"] });
+            this.r.observe(elFromId(this._value.end.id), { attributes: true, attributeFilter: ["style"] });
         }
     }
 
     get value() {
-        return "";
+        return JSON.stringify(this._value);
+    }
+
+    set value(s) {
+        this._value = JSON.parse(s);
+        this.ob();
     }
 }
 
