@@ -1197,15 +1197,25 @@ body > #main > #画布 > #画布们 > div > x-x:focus-within {
     position: fixed;
 }
 
+x-link-arrow {
+    @apply pointer-events-none;
+}
 x-link-arrow > svg {
     overflow: initial;
+    @apply pointer-events-none;
 }
 x-link-arrow > svg > path {
     stroke: #000;
     stroke-width: 1;
     fill: none;
+    @apply pointer-events-auto;
 }
-
+x-x:has(x-link-arrow) {
+    @apply w-0 h-0;
+}
+x-x:has(x-link-arrow) > #x-x_bar > :not(div:nth-child(4)) {
+    @apply hidden;
+}
 x-md {
     position: relative;
     display: block;
