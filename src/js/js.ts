@@ -1336,6 +1336,7 @@ let free_move = false;
 let free_target_id = "";
 let free_drag = false;
 let free_drag_tip: HTMLElement;
+let free_link: string;
 function mu_sel_key(e: MouseEvent) {
     return e.shiftKey;
 }
@@ -1484,6 +1485,20 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
     if (free_drag || free_old_point) z.reflash();
+    if (!free_drag && !free_move && free_old_point) {
+        if (!free_link) {
+            let id = uuid_id();
+            free_link = id;
+            let x = createEl("x-x");
+            x.id = id;
+            z.push(x);
+            init_value(id, "link_arrow");
+            集.values[id]["link_arrow"]["start"] = { id: free_o_rects[0].el.id, a: free_o_a };
+        } else {
+            集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
+            free_link = "";
+        }
+    }
     free_old_point = null;
     free_move = false;
     free_o_rects = [];
@@ -4598,6 +4613,11 @@ function get_nearest_x(x: x, a: "left" | "right" | "up" | "down") {
         }
     }
     return x;
+}
+
+function init_value(id: string, type: string) {
+    if (!集.values[id]) 集.values[id] = {};
+    if (!集.values[id][type]) 集.values[id][type] = {};
 }
 
 window["xln"] = {};
