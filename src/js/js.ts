@@ -1004,6 +1004,7 @@ function render_select_rects() {
                     z.focus(i);
                 }
             }
+            clearTimeout(free_db_time);
         };
 
         return select_bar;
@@ -1040,6 +1041,7 @@ document.addEventListener("dblclick", (e) => {
         if (yl.includes(free_o_a)) el.style.height = "";
         render_select_rects();
     }
+    clearTimeout(free_db_time);
 });
 
 归位.onclick = () => {
@@ -1338,6 +1340,8 @@ let free_target_id = "";
 let free_drag = false;
 let free_drag_tip: HTMLElement;
 let free_link: string;
+let free_db_dtime = 300;
+let free_db_time;
 function mu_sel_key(e: MouseEvent) {
     return e.shiftKey;
 }
@@ -1499,15 +1503,18 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         !free_o_rects[0].el.querySelector("x-link-arrow")
     ) {
         if (!free_link) {
-            let id = uuid_id();
-            free_link = id;
-            let x = createEl("x-x");
-            x.id = id;
-            z.push(x);
-            let arrow = createEl("x-link-arrow");
-            x.append(arrow);
-            init_value(id, "link_arrow");
-            集.values[id]["link_arrow"]["start"] = { id: free_o_rects[0].el.id, a: free_o_a };
+            let elid = free_o_rects[0].el.id;
+            free_db_time = setTimeout(() => {
+                let id = uuid_id();
+                free_link = id;
+                let x = createEl("x-x");
+                x.id = id;
+                z.push(x);
+                let arrow = createEl("x-link-arrow");
+                x.append(arrow);
+                init_value(id, "link_arrow");
+                集.values[id]["link_arrow"]["start"] = { id: elid, a: free_o_a };
+            }, free_db_dtime);
         } else {
             集.values[free_link]["link_arrow"]["end"] = { id: free_o_rects[0].el.id, a: free_o_a };
             render_link_arrow(free_link, e);
