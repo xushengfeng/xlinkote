@@ -8550,7 +8550,11 @@ class link_arrow extends HTMLElement {
         let end_a = value?.end?.a || (start_a < 4 ? (start_a + 2) % 4 : ((start_a - 4 + 2) % 4) + 4);
         if (e) {
             let el = e.target as HTMLElement;
-            if (typeof el?.className == "string" && el.className.includes("xxhandle"))
+            if (
+                el.parentElement.getAttribute("data-id") != xel.id &&
+                typeof el?.className == "string" &&
+                el.className.includes("xxhandle")
+            )
                 end_a = Number(el.className.replace("xxhandle", "")) || end_a;
         }
         let start_ctrl = get_link_arrow_a(start_p, start_a),
