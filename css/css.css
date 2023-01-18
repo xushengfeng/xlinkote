@@ -1208,10 +1208,10 @@ x-link-arrow > svg > path {
     fill: none;
     @apply pointer-events-auto;
 }
-x-x:has(x-link-arrow) {
+.link_arrow_p {
     @apply pointer-events-none;
 }
-x-x:has(x-link-arrow) > #x-x_bar > :not(div:nth-child(4)) {
+.link_arrow_p > #x-x_bar > :not(div:nth-child(4)) {
     @apply hidden;
 }
 x-md {

@@ -1516,6 +1516,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 x.append(arrow);
                 x.style.stroke = "var(--color6)";
                 x.style.strokeWidth = "1";
+                x.classList.add("link_arrow_p");
                 selected_el = selected_el.filter((el) => el != x);
             }, free_db_dtime);
         } else {
