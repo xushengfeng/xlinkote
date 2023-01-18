@@ -30,6 +30,8 @@ import right_svg from "../../assets/icons/right.svg";
 import left_svg from "../../assets/icons/left.svg";
 import copy_svg from "../../assets/icons/copy.svg";
 import save_svg from "../../assets/icons/save.svg";
+import lock_svg from "../../assets/icons/lock.svg";
+import unlock_svg from "../../assets/icons/unlock.svg";
 
 interface x_tag_map {
     "x-x": x;
@@ -831,6 +833,7 @@ var touch_move = (e: TouchEvent) => {
 
 /** 双指缩放 */
 var touch_zoom = (e: TouchEvent) => {
+    if (zoom_lock) return;
     if (o_touch_zoom_e) {
         if (pointer_move) {
             if (free_o_a == -1) return;
@@ -1042,6 +1045,7 @@ document.addEventListener("dblclick", (e) => {
 };
 
 var zoom = 1;
+var zoom_lock = false;
 
 /** 缩放 */
 function zoom_o(z: number) {
@@ -1082,6 +1086,17 @@ zoom_pel.onclick = () => {
     zoom_list.classList.toggle("zoom_list_hide");
 };
 
+let zoom_lock_b = createEl("div");
+zoom_lock_b.innerHTML = icon(unlock_svg);
+zoom_lock_b.onpointerdown = () => {
+    zoom_lock = !zoom_lock;
+    if (zoom_lock) {
+        zoom_lock_b.innerHTML = icon(lock_svg);
+    } else {
+        zoom_lock_b.innerHTML = icon(unlock_svg);
+    }
+};
+zoom_list.append(zoom_lock_b);
 for (let i = 25; i <= 200; i += 25) {
     let op = createEl("div");
     op.innerText = `${i}%`;
@@ -1227,6 +1242,8 @@ function render_map() {
 elFromId("画布").onwheel = (e) => {
     if (e.ctrlKey) {
         e.preventDefault();
+
+        if (zoom_lock) return;
         let ozoom = zoom,
             dzoom = -e.deltaY / (800 / zoom);
         zoom += dzoom;
