@@ -3552,6 +3552,9 @@ function add_style_item() {
     };
     key.onblur = value.onblur = () => {
         style_list.classList.add("style_com_list_hide");
+        if (key.innerText == "") {
+            p.remove();
+        }
     };
     function set_list(el: HTMLElement) {
         let r = el_offset(el, style_list.parentElement);
