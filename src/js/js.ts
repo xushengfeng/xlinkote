@@ -3528,11 +3528,11 @@ function add_style_item() {
     key.oninput = key.onfocus = () => {
         set_list(key);
         style_list.innerHTML = "";
-        search(Object.keys(cssp), (t) => {
+        search(Object.keys(cssp), key.innerText, (t) => {
             key.innerText = t;
             style_to_el();
         });
-        search(css_t, (t) => {
+        search(css_t, key.innerText, (t) => {
             key.innerText = t.split(":")[0].trim();
             value.innerText = t.split(":")[1].trim();
             style_to_el();
@@ -3543,7 +3543,7 @@ function add_style_item() {
         set_list(value);
         style_list.innerHTML = "";
         if (cssp[key.innerText.trim()]) {
-            search(cssp[key.innerText.trim()].values, (t) => {
+            search(cssp[key.innerText.trim()].values, value.innerText, (t) => {
                 value.innerText = t;
                 style_to_el();
             });
@@ -3562,14 +3562,14 @@ function add_style_item() {
         style_list.style.left = r.x + "px";
         style_list.classList.remove("style_com_list_hide");
     }
-    function search(list: string[], fn?: (text: string) => void) {
+    function search(list: string[], text: string, fn?: (text: string) => void) {
         const fuse = new Fuse(list, {
             includeMatches: true,
             findAllMatches: true,
             useExtendedSearch: true,
             includeScore: true,
         });
-        let fr = fuse.search(key.innerText);
+        let fr = fuse.search(text);
         let result: { l: readonly Fuse.FuseResultMatch[] }[] = [];
         for (let i of fr) {
             result.push({
