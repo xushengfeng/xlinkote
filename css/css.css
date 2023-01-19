@@ -1531,16 +1531,15 @@ x-ggb > :not(.ggb_bar) {
 
 x-audio {
     @apply flex items-center gap-1;
-    height: 2em !important;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     border-radius: 4px;
 }
 .audio_button {
-    @apply relative w-8 h-8 flex-shrink-0;
+    @apply relative w-6 h-6 flex-shrink-0;
 }
 .audio_button > .icon {
-    @apply w-8 h-8;
+    @apply w-6 h-6;
 }
 
 .audio_jd {
@@ -1561,10 +1560,10 @@ x-audio {
     width: 48px !important;
 }
 .audio_yl > :nth-child(2) {
-    @apply relative w-8 h-8 flex-shrink-0;
+    @apply relative w-6 h-6 flex-shrink-0;
 }
 .audio_yl > :nth-child(2) > .icon {
-    @apply w-8 h-8;
+    @apply w-6 h-6;
 }
 .audio_yl > :nth-child(1) {
     width: 0;
@@ -1579,7 +1578,7 @@ x-audio {
     background-color: var(--color6);
 }
 .asr {
-    @apply relative w-8 h-8;
+    @apply relative w-6 h-6;
 }
 
 x-calendar {
