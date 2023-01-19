@@ -546,6 +546,19 @@ body #main > #nav #ink_r {
 #xywh > input {
     width: 25%;
 }
+#el_style > :not(:last-child) > span {
+    min-width: 1em;
+    @apply inline-block align-bottom;
+}
+#el_style > :not(:last-child) > :nth-child(2) {
+    color: var(--main-color);
+}
+#el_style > :last-child {
+    @apply relative h-4;
+}
+#el_style > :last-child > .icon {
+    @apply w-4 h-4;
+}
 #style_com_list {
     @apply absolute bar max-h-36 overflow-auto;
 }

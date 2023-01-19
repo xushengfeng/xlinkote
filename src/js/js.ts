@@ -3615,6 +3615,15 @@ function set_style(style: string) {
         item.key.innerText = i.split(":")[0].trim();
         item.value.innerText = i.split(":")[1].trim();
     }
+
+    let add_style_item_el = createEl("div");
+    add_style_item_el.innerHTML = icon(add_svg);
+    el_style.append(add_style_item_el);
+    add_style_item_el.onclick = () => {
+        let item = add_style_item();
+        add_style_item_el.before(item.el);
+        item.key.focus();
+    };
 }
 
 function style_to_el() {
