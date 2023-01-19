@@ -548,7 +548,7 @@ body #main > #nav #ink_r {
 }
 #el_style > :not(:last-child) > span {
     min-width: 1em;
-    @apply inline-block align-bottom;
+    @apply inline-block align-bottom outline-none;
 }
 #el_style > :not(:last-child) > :nth-child(2) {
     color: var(--main-color);
@@ -560,7 +560,11 @@ body #main > #nav #ink_r {
     @apply w-4 h-4;
 }
 #style_com_list {
-    @apply absolute bar max-h-36 overflow-auto;
+    @apply absolute bar max-h-36 max-w-full overflow-auto px-1 rounded-sm;
+    box-shadow: var(--shadow1);
+}
+#style_com_list > div {
+    @apply whitespace-nowrap;
 }
 #style_com_list > div > span > span {
     @apply font-medium;
