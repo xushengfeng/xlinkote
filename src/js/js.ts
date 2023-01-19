@@ -3576,6 +3576,13 @@ function add_style_item() {
                 l: i.matches,
             });
         }
+        if (fr.length == 0) {
+            for (let i of list) {
+                result.push({
+                    l: [{ indices: [[0, -1]], value: i }],
+                });
+            }
+        }
         for (let i of result) {
             let div = createEl("div");
             let span = mt(i.l);
