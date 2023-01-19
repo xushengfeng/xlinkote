@@ -3515,8 +3515,8 @@ for (let i in css_properties.pv) {
         css_t.push(`${i}: ${j}`);
     }
 }
-console.log(cssp, css_t);
 
+style_list.classList.add("style_com_list_hide");
 function add_style_item() {
     let key = createEl("span");
     let value = createEl("span");
@@ -3527,22 +3527,79 @@ function add_style_item() {
     key.oninput = key.onfocus = () => {
         set_list(key);
         style_list.innerHTML = "";
-        style_list.innerText = css_t.join("\n");
+        search(Object.keys(cssp), (t) => {
+            key.innerText = t;
+            style_to_el();
+        });
+        search(css_t, (t) => {
+            key.innerText = t.split(":")[0].trim();
+            value.innerText = t.split(":")[1].trim();
+            style_to_el();
+        });
         style_to_el();
     };
     value.oninput = value.onfocus = () => {
         set_list(value);
         style_list.innerHTML = "";
-        style_list.innerText = cssp[key.innerText.trim()]?.values?.join("\n") || "";
+        if (cssp[key.innerText.trim()]) {
+            search(cssp[key.innerText.trim()].values, (t) => {
+                value.innerText = t;
+                style_to_el();
+            });
+        }
         style_to_el();
     };
     key.onblur = value.onblur = () => {
-        style_list.innerHTML = "";
+        style_list.classList.add("style_com_list_hide");
     };
     function set_list(el: HTMLElement) {
         let r = el_offset(el, style_list.parentElement);
         style_list.style.top = r.y + r.h + "px";
         style_list.style.left = r.x + "px";
+        style_list.classList.remove("style_com_list_hide");
+    }
+    function search(list: string[], fn?: (text: string) => void) {
+        const fuse = new Fuse(list, {
+            includeMatches: true,
+            findAllMatches: true,
+            useExtendedSearch: true,
+            includeScore: true,
+        });
+        let fr = fuse.search(key.innerText);
+        let result: { l: readonly Fuse.FuseResultMatch[] }[] = [];
+        for (let i of fr) {
+            result.push({
+                l: i.matches,
+            });
+        }
+        for (let i of result) {
+            let div = createEl("div");
+            let span = mt(i.l);
+            div.append(span);
+            style_list.append(div);
+            if (fn)
+                div.onpointerdown = () => {
+                    fn(span.innerText);
+                    style_list.classList.add("style_com_list_hide");
+                };
+        }
+    }
+    function mt(m: readonly Fuse.FuseResultMatch[]) {
+        let p = createEl("span");
+        for (let j of m) {
+            let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
+            for (let i = 0; i < indices.length; i++) {
+                const k = indices[i];
+                let h = createEl("span");
+                h.innerText = j.value.slice(k[0], k[1] + 1);
+                if (Number(i) == indices.length - 1) {
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
+                } else {
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
+                }
+            }
+        }
+        return p;
     }
     return { el: p, key, value };
 }

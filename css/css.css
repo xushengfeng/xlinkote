@@ -549,6 +549,12 @@ body #main > #nav #ink_r {
 #style_com_list {
     @apply absolute bar max-h-36 overflow-auto;
 }
+#style_com_list > div > span > span {
+    @apply font-medium;
+}
+.style_com_list_hide {
+    @apply opacity-0 pointer-events-none;
+}
 .层容器 > #层 {
     @apply overflow-auto;
 }
