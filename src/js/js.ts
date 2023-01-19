@@ -8526,6 +8526,7 @@ class link_arrow extends HTMLElement {
     }
     svg: SVGSVGElement;
     r: MutationObserver;
+    r2: ResizeObserver;
     _value: { start: { id: string; a: any }; end: { id: string; a: any } } = {
         start: { id: "", a: 0 },
         end: null,
@@ -8539,10 +8540,14 @@ class link_arrow extends HTMLElement {
         this.r = new MutationObserver((e) => {
             this.render(null);
         });
+        this.r2 = new ResizeObserver((e) => {
+            this.render(null);
+        });
     }
 
     disconnectedCallback() {
         this.r.disconnect();
+        this.r2.disconnect();
     }
 
     render(e: PointerEvent) {
@@ -8584,6 +8589,8 @@ class link_arrow extends HTMLElement {
         if (this._value.end) {
             this.r.observe(elFromId(this._value.start.id), { attributes: true, attributeFilter: ["style"] });
             this.r.observe(elFromId(this._value.end.id), { attributes: true, attributeFilter: ["style"] });
+            this.r2.observe(elFromId(this._value.start.id));
+            this.r2.observe(elFromId(this._value.end.id));
         }
     }
 
