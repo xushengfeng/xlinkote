@@ -116,7 +116,8 @@ const pen_type_el = elFromId("笔刷");
 
 const 图层_el = elFromId("层");
 
-var el_style = <HTMLTextAreaElement>elFromId("el_style");
+var el_style = elFromId("el_style");
+var style_list = elFromId("style_com_list");
 
 var xywh_x_el = <HTMLInputElement>elFromId("xywh_x");
 var xywh_y_el = <HTMLInputElement>elFromId("xywh_y");
@@ -1655,7 +1656,7 @@ var free_mouse = (e: MouseEvent) => {
                 }
             }
             if (xel.el == z.聚焦元素) {
-                el_style.value = xel.el.getAttribute("style").replaceAll("; ", ";\n");
+                set_style(xel.el.getAttribute("style"));
                 load_xywh();
             }
         }
@@ -3420,7 +3421,7 @@ class 图层 {
         selected_el = [];
         selected_el.push(el);
         reflash_rect();
-        el_style.value = el.getAttribute("style").replaceAll("; ", ";\n");
+        set_style(el.getAttribute("style"));
         load_xywh();
         load_value();
 
@@ -3473,9 +3474,6 @@ class 图层 {
 }
 
 var z = new 图层();
-el_style.oninput = () => {
-    z.聚焦元素.setAttribute("style", el_style.value.replaceAll("\n", ""));
-};
 
 xywh_x_el.oninput = () => {
     z.聚焦元素.style.left = xywh_x_el.value + "px";
@@ -3499,6 +3497,74 @@ function load_xywh() {
     xywh_y_el.value = String(fe.offsetTop);
     xywh_w_el.value = String(fe.offsetWidth);
     xywh_h_el.value = String(fe.offsetHeight);
+}
+
+import css_properties_file from "../../lib/css/CSSProperties.json?raw";
+const css_properties = JSON.parse(css_properties_file) as {
+    pv: { [key: string]: { values: string[]; type?: string } };
+    color: string[];
+};
+
+let cssp = css_properties.pv;
+let css_t: string[] = [];
+for (let i in css_properties.pv) {
+    if (css_properties.pv[i].type == "color") {
+        cssp[i].values = cssp[i].values.concat(css_properties.color);
+    }
+    for (let j of cssp[i].values) {
+        css_t.push(`${i}: ${j}`);
+    }
+}
+console.log(cssp, css_t);
+
+function add_style_item() {
+    let key = createEl("span");
+    let value = createEl("span");
+    key.contentEditable = "true";
+    value.contentEditable = "true";
+    let p = createEl("div");
+    p.append(key, ": ", value);
+    key.oninput = key.onfocus = () => {
+        set_list(key);
+        style_list.innerHTML = "";
+        style_list.innerText = css_t.join("\n");
+        style_to_el();
+    };
+    value.oninput = value.onfocus = () => {
+        set_list(value);
+        style_list.innerHTML = "";
+        style_list.innerText = cssp[key.innerText.trim()]?.values?.join("\n") || "";
+        style_to_el();
+    };
+    key.onblur = value.onblur = () => {
+        style_list.innerHTML = "";
+    };
+    function set_list(el: HTMLElement) {
+        let r = el_offset(el, style_list.parentElement);
+        style_list.style.top = r.y + r.h + "px";
+        style_list.style.left = r.x + "px";
+    }
+    return { el: p, key, value };
+}
+
+function set_style(style: string) {
+    el_style.innerHTML = "";
+    let l = style.split(";");
+    for (let i of l) {
+        if (!i) continue;
+        let item = add_style_item();
+        el_style.append(item.el);
+        item.key.innerText = i.split(":")[0].trim();
+        item.value.innerText = i.split(":")[1].trim();
+    }
+}
+
+function style_to_el() {
+    let t = "";
+    for (let i of el_style.children) {
+        t += i.textContent + ";";
+    }
+    z.聚焦元素.setAttribute("style", t);
 }
 
 // url

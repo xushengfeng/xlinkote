@@ -541,11 +541,13 @@ body #main > #nav #ink_r {
 }
 
 .侧栏 > #items > #层容器 > div:nth-child(2) {
-    top: var(--icon-p-b-size);
     background-color: var(--bg1);
 }
 #xywh > input {
     width: 25%;
+}
+#style_com_list {
+    @apply absolute bar max-h-36 overflow-auto;
 }
 .层容器 > #层 {
     @apply overflow-auto;
