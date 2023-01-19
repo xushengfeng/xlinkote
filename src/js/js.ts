@@ -3580,6 +3580,12 @@ function add_style_item() {
             let div = createEl("div");
             let span = mt(i.l);
             div.append(span);
+            if (css_properties.color.includes(span.innerText)) {
+                let el = createEl("span");
+                el.style.backgroundColor = span.innerText;
+                span.before(el);
+                el.classList.add("style_color");
+            }
             style_list.append(div);
             if (fn)
                 div.onpointerdown = () => {

@@ -565,6 +565,9 @@ body #main > #nav #ink_r {
 #style_com_list > div > span > span {
     @apply font-medium;
 }
+.style_color {
+    @apply inline-block w-4 h-4 rounded;
+}
 .style_com_list_hide {
     @apply opacity-0 pointer-events-none;
 }
