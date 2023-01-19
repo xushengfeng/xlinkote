@@ -3221,6 +3221,7 @@ class 图层 {
                         "x-record": "录音机",
                         "x-calendar": "日历",
                         "x-time": "计时器",
+                        "x-link-arrow": "箭头链接",
                     };
                     pel.querySelector("span").innerText += ` ${type[i.type.toLowerCase()]}`;
                     return;
