@@ -3650,6 +3650,7 @@ function style_to_el() {
         t += i.textContent + ";";
     }
     z.聚焦元素.setAttribute("style", t);
+    data_changed();
 }
 
 // url
