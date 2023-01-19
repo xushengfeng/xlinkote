@@ -1532,7 +1532,6 @@ x-ggb > :not(.ggb_bar) {
 x-audio {
     @apply flex items-center gap-1;
     height: 2em !important;
-    width: fit-content !important;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     border-radius: 4px;
@@ -1545,7 +1544,7 @@ x-audio {
 }
 
 .audio_jd {
-    @apply w-64 h-1 flex-shrink-0 rounded-full overflow-hidden;
+    @apply h-1 flex-shrink-0 rounded-full overflow-hidden flex-grow;
     transition: var(--transition);
     background-color: var(--bg-color3);
 }

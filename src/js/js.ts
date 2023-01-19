@@ -7938,12 +7938,6 @@ class audio extends HTMLElement {
                 yl2.innerHTML = icon(yl2_svg);
             }
         };
-        yl.onpointerenter = () => {
-            jd.style.width = "calc(256px - 48px)";
-        };
-        yl.onpointerleave = () => {
-            jd.style.width = "";
-        };
         yl.onwheel = (e) => {
             let p = this.audio.volume;
             if (e.deltaY < 0) {
