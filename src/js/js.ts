@@ -3530,11 +3530,13 @@ function add_style_item() {
         style_list.innerHTML = "";
         search(Object.keys(cssp), key.innerText, (t) => {
             key.innerText = t;
+            value.focus();
             style_to_el();
         });
         search(css_t, key.innerText, (t) => {
             key.innerText = t.split(":")[0].trim();
             value.innerText = t.split(":")[1].trim();
+            value.focus();
             style_to_el();
         });
         style_to_el();
