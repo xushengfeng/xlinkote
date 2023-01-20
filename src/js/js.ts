@@ -8723,9 +8723,6 @@ class link_arrow extends HTMLElement {
     connectedCallback() {
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.append(this.svg);
-        setTimeout(() => {
-            this.render(now_mouse_e as PointerEvent);
-        }, 1000);
         this.r = new MutationObserver((e) => {
             this.render(null);
         });
