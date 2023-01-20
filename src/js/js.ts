@@ -1333,15 +1333,30 @@ type selection_type = {
 var selections = [{ id: "", start: 0, end: 0 }] as selection_type[];
 
 // 自由元素移动
+/** 触发调节时的位置 */
 let free_old_point: p_point;
+/** 所作用的元素及其原始位置大小 */
 let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
+/** 应该对元素执行的操作，移动还是调节大小 */
 let free_o_a = NaN;
+/** 是否移动过，可用于判断点击还是拖动 */
 let free_move = false;
+/** 是否在拖动元素 */
 let free_drag = false;
+/** 拖拽释放提示元素 */
 let free_drag_tip: HTMLElement;
+/** 箭头链接id */
 let free_link: string;
+/** 双击判断样式 */
 let free_db_dtime = 300;
+/** 双击计时器 */
 let free_db_time;
+
+/**
+ * 是否按下shift
+ * @param e 鼠标事件
+ * @returns 是否按下shift
+ */
 function mu_sel_key(e: MouseEvent) {
     return e.shiftKey;
 }
