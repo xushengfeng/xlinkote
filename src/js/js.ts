@@ -6438,13 +6438,6 @@ class markdown extends HTMLElement {
             text.classList.remove("show_md");
             text.blur();
         }
-
-        if (v != "cr") data_changed();
-    }
-
-    get edit() {
-        var text = this.text;
-        return text.classList.contains("show_md");
     }
 
     set value(v) {
