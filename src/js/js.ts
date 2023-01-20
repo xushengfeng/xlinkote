@@ -3910,7 +3910,9 @@ type search_result = {
     type?: "str" | "regex";
     score: number;
 }[];
-function search(s: string, type: "str" | "regex") {
+function search(input: string, type: "str" | "regex") {
+    let x = search_cmd(input);
+    let s = x.str;
     let result = [] as search_result;
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
@@ -3938,7 +3940,7 @@ function search(s: string, type: "str" | "regex") {
                         l: i.matches,
                         n: i.refIndex,
                         type: "str",
-                        score: search_score(el.parentElement.id, 1 - i.score),
+                        score: search_score(el.parentElement.id, 1 - i.score, x.t, x.v, x.s, x.opsit),
                     });
                 }
                 break;
@@ -3956,12 +3958,20 @@ function search(s: string, type: "str" | "regex") {
                 }
                 if (l.length != 0) {
                     is_search = true;
-                    result.push({ id: el.parentElement.id, l, score: search_score(el.parentElement.id, 1) });
+                    result.push({
+                        id: el.parentElement.id,
+                        l,
+                        score: search_score(el.parentElement.id, 1, x.t, x.v, x.s, x.opsit),
+                    });
                 }
                 break;
         }
         if (!is_search) {
-            result.push({ id: el.parentElement.id, score: search_score(el.parentElement.id, 0), text: text });
+            result.push({
+                id: el.parentElement.id,
+                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                text: text,
+            });
         }
     });
 
@@ -3979,15 +3989,47 @@ function search(s: string, type: "str" | "regex") {
     return result;
 }
 
+function search_cmd(str: string) {
+    let op = false,
+        s = 2,
+        v = 1,
+        t = 1;
+    let l = str.split("  ");
+    if (l[1]) {
+        let ll = l[1].trim().split(/\s+/);
+        if (ll[0] == "-") {
+            op = true;
+            ll.splice(0, 1);
+        }
+        if (ll[0]) {
+            s = Number(ll[0]);
+        }
+        if (ll[1]) {
+            v = Number(ll[1]);
+        }
+        if (ll[2]) {
+            t = Number(ll[2]);
+        }
+    }
+    return { str: l[0], s, v, t, opsit: op };
+}
+
 /** 计算 时间 值 搜索匹配度 距离 */
-function search_score(id: string, search_s: number, time_n?: number, value_n?: number, search_n?: number) {
+function search_score(
+    id: string,
+    search_s: number,
+    time_n?: number,
+    value_n?: number,
+    search_n?: number,
+    op?: boolean
+) {
     const now_t = new Date().getTime();
     const vt = 集.链接[0][id];
     let t = (now_t - vt.time) / 1000 / 60 / 60 / 24 / 7;
     t = 1 / (t + 1);
     let v = vt.value;
     let s = search_s;
-    return Math.sqrt(((time_n || 1) * t) ** 2 + ((value_n || 1) * v) ** 2 + ((search_n || 2) * s) ** 2);
+    return (op ? -1 : 1) * Math.sqrt(((time_n || 1) * t) ** 2 + ((value_n || 1) * v) ** 2 + ((search_n || 2) * s) ** 2);
 }
 
 let select_index = 0;
