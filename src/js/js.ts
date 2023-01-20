@@ -1495,12 +1495,15 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
     if (free_drag || free_old_point) z.reflash();
+    console.log(free_o_rects[0].el);
+
     if (
         !free_drag &&
         !free_move &&
         free_old_point &&
         free_o_a != -1 &&
-        !free_o_rects[0].el.querySelector("x-link-arrow")
+        !free_o_rects[0].el.querySelector("x-link-arrow") &&
+        is_smallest_el(free_o_rects[0].el)
     ) {
         if (!free_link) {
             let elid = free_o_rects[0].el.id;
@@ -1529,7 +1532,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
     }
     if (free_link) {
         let el = e.target as HTMLElement;
-        if (!(typeof el?.className == "string" && el.className.includes("xxhandle"))) {
+        if (
+            !(
+                typeof el?.className == "string" &&
+                el.className.includes("xxhandle") &&
+                is_smallest_el(elFromId(el.parentElement.getAttribute("data-id")) as x)
+            )
+        ) {
             z.remove(elFromId(free_link) as x);
         }
         free_link = "";
@@ -8752,7 +8761,8 @@ class link_arrow extends HTMLElement {
             if (
                 el.parentElement.getAttribute("data-id") != xel.id &&
                 typeof el?.className == "string" &&
-                el.className.includes("xxhandle")
+                el.className.includes("xxhandle") &&
+                is_smallest_el(elFromId(el.parentElement.getAttribute("data-id")) as x)
             )
                 end_a = Number(el.className.replace("xxhandle", "")) || end_a;
         }
