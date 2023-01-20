@@ -2280,6 +2280,7 @@ function render_data(inputdata: 画布type) {
                 values[pid] = i.value;
             }
             let s = i.子元素 ? w(i.子元素, i.id) : "";
+            if (i.type == "X-X" && !i.id) i.id = uuid_id();
             text += `<${i.type} id='${i.id}' ${style} ${_class}>${s}</${i.type}>`;
             link(i.id).add();
         }
