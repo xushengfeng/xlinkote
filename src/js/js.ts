@@ -568,7 +568,7 @@ set_模式("设计");
 /** 移除所有选择 */
 function blur_all() {
     selected_el = [];
-    render_select_rects();
+    select_con.innerHTML = "";
 }
 
 // markdown
