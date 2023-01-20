@@ -1740,7 +1740,6 @@ function create_x_x(x: number, y: number) {
     var md = createEl("x-md");
     xel.append(md);
     (<markdown>md).edit = true;
-    set_模式("浏览");
 }
 
 /** 中转站刷新 */
