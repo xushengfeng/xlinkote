@@ -1510,8 +1510,6 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         data_changed();
     }
     if (free_drag || free_old_point) z.reflash();
-    console.log(free_o_rects[0].el);
-
     if (
         !free_drag &&
         !free_move &&
