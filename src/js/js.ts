@@ -3263,7 +3263,7 @@ class 图层 {
                         if (el.checked) {
                             let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
                             selected_el.push(x);
-                            reflash_rect();
+                            render_select_rects();
                         }
                     });
                 };
@@ -3430,7 +3430,7 @@ class 图层 {
 
         selected_el = [];
         selected_el.push(el);
-        reflash_rect();
+        render_select_rects();
         set_style(el.getAttribute("style"));
         load_xywh();
         load_value();
