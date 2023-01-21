@@ -474,20 +474,6 @@ function put_toast(t: string, time?: number) {
     }, time * 1000);
 }
 
-let bc_show = false;
-bc_sw_el.onclick = () => {
-    bc_show = !bc_show;
-    let h = 0;
-    if (bc_show) {
-        bc_sw_el.innerHTML = icon(ul_show_svg);
-        h = (<HTMLElement>breadcrumbs_el.querySelector(".bci > div:nth-child(2)")).offsetHeight;
-    } else {
-        bc_sw_el.innerHTML = icon(ul_hide2_svg);
-        h = bc_sw_el.offsetHeight;
-    }
-    breadcrumbs_el.style.height = h + "px";
-};
-
 // 模式切换
 
 var 模式: "浏览" | "设计" | "绘制";
@@ -4452,12 +4438,11 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
 
 /** 添加到面包屑栏 */
 function add_bci(el: x | xlink) {
-    if (el.id == now_data_id) return;
+    if (breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)) return;
     if (breadcrumbs_el.offsetHeight == 0) breadcrumbs_el.style.height = "16px";
     let li = createEl("div");
     let main = createEl("div");
-    let children = createEl("div");
-    li.append(main, children);
+    li.append(main);
     li.classList.add("bci");
     main.innerText = `#${el.id}`;
     li.setAttribute("data-id", el.id);
@@ -4475,8 +4460,7 @@ function add_bci(el: x | xlink) {
     breadcrumbs_el.onpointerleave = () => {
         view_el.classList.add("viewer_hide");
     };
-    breadcrumbs_el.querySelector(`div[data-id="${now_data_id}"] > div:nth-child(2)`).append(li);
-    now_data_id = el.id;
+    breadcrumbs_el.append(li);
 }
 
 /** 链接处理 */

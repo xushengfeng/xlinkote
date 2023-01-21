@@ -997,7 +997,7 @@ body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
 }
 
 .breadcrumbs {
-    @apply absolute overflow-hidden flex bg-white dark:bg-black transition-all;
+    @apply absolute overflow-auto flex bg-white dark:bg-black transition-all gap-2;
     top: var(--icon-p-b-size);
     left: var(--icon-p-b-size);
     width: calc(100vw - var(--icon-p-b-size));
@@ -1005,14 +1005,7 @@ body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
 }
 
 .bci {
-    @apply flex items-end gap-2 flex-grow text-xs;
-}
-
-#bc_sw {
-    @apply relative w-4 h-4 cursor-pointer;
-}
-#bc_sw > .icon {
-    @apply w-4 h-4;
+    @apply text-xs;
 }
 
 body > #搜索 {
