@@ -4355,8 +4355,8 @@ function set_viewer_size(portrait: boolean) {
 
 /** 定位预览栏 */
 function set_viewer_posi(x: number, y: number) {
-    view_el.style.left = Math.min(x, window.innerWidth - view_width) + "px";
-    view_el.style.top = Math.min(y, window.innerHeight - view_height) + "px";
+    view_el.style.left = Math.min(x, window.visualViewport.width - view_width) + "px";
+    view_el.style.top = Math.min(y, window.visualViewport.height - view_height) + "px";
 }
 
 /** 跳转到元素位置 */
