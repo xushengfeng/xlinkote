@@ -4867,7 +4867,7 @@ function match_nearest_x(x: x) {
     let l: { el: x; x: number; y: number; r: number }[] = [];
     let r = el_offset2(x, O);
     let center = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
-    画布.querySelectorAll("x-x").forEach((el: x) => {
+    O.querySelectorAll("x-x").forEach((el: x) => {
         if (is_smallest_el(el)) {
             let r = el_offset2(el, O);
             let center2 = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
