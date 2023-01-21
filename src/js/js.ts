@@ -3449,6 +3449,8 @@ class 图层 {
         load_xywh();
         load_value();
 
+        add_bci(el);
+
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
             if (d) {
