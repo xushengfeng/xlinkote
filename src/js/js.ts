@@ -4178,13 +4178,13 @@ function show_search_l(l: search_result, exid?: string) {
         div.onpointerdown = (e) => {
             click_search_item(id);
         };
-        div.onpointerenter = (e) => {
+        div.onmouseenter = (e) => {
             let el = elFromId(id);
             move_to_x_link(el as x & xlink);
             select_index = Number(div.getAttribute("data-i"));
             select_search(select_index);
         };
-        div.onpointermove = (e) => {
+        div.onmousemove = (e) => {
             window.requestAnimationFrame(() => {
                 set_viewer_posi(e.clientX, e.clientY);
             });
