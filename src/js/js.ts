@@ -3414,6 +3414,7 @@ class 图层 {
         el.remove();
         delete 集.values[el.id];
         get_data();
+        breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
         this.reflash();
     }
 
