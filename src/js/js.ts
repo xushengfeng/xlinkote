@@ -4464,6 +4464,12 @@ function add_bci(el: x | xlink) {
     breadcrumbs_el.append(li);
 }
 
+breadcrumbs_el.onwheel = (e) => {
+    e.preventDefault();
+    let i = e.deltaX + e.deltaY + e.deltaZ >= 0 ? 1 : -1;
+    breadcrumbs_el.scrollLeft += i * Math.sqrt(e.deltaX ** 2 + e.deltaY ** 2 + e.deltaZ ** 2);
+};
+
 /** 链接处理 */
 function link(key0: string) {
     let t = new Date().getTime();
