@@ -1801,8 +1801,8 @@ x-link {
     body > #搜索 {
         position: absolute;
         top: 16px;
-        left: calc(50% - 30vw);
-        width: 60vw;
+        left: 16px;
+        width: calc(100vw - 16px * 2);
     }
     body > #搜索 > #搜索结果 {
         max-height: 40vh;

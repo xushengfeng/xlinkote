@@ -4336,6 +4336,23 @@ function show_link_value_bar(el: x | xlink) {
 var view_width = 400,
     view_height = 400;
 
+var portrait = window.matchMedia("screen and (max-width: 420px)");
+portrait.matches;
+set_viewer_size(portrait.matches);
+portrait.addEventListener("change", (event) => {
+    set_viewer_size(event.matches);
+});
+
+function set_viewer_size(portrait: boolean) {
+    if (portrait) {
+        view_width = 300;
+        view_height = 300;
+    } else {
+        view_width = 400;
+        view_height = 400;
+    }
+}
+
 /** 定位预览栏 */
 function set_viewer_posi(x: number, y: number) {
     view_el.style.left = Math.min(x, window.innerWidth - view_width) + "px";
