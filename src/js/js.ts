@@ -4321,6 +4321,7 @@ function is_smallest_el(el: x | xlink) {
 /** 展示链接栏 */
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
+    if (search_pel.classList.contains("搜索展示")) return;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
     link_value_bar.style.top = el_offset(el, 画布).y - link_value_bar.offsetHeight + 4 + "px";
     link_value_bar.elid = el.id;
