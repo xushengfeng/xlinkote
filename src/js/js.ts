@@ -2864,7 +2864,6 @@ function data_changed() {
     clearTimeout(save_timeout);
     save_timeout = window.setTimeout(() => {
         if (saved) {
-            document.title = `● ` + get_title();
             saved = false;
         }
         const data = get_data();
