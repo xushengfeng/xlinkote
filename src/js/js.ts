@@ -4511,7 +4511,10 @@ function link(key0: string) {
                 if (key0 == key1) return;
                 link(key0).add();
                 link(key1).add();
-                link(key0).value(key1);
+                if (集.链接[key0][key1]?.value === undefined || 集.链接[key1][key0]?.value === undefined) {
+                    // 只存储在边的一个方向上，以时间换空间
+                    集.链接[key0][key1] = { value: 1, time: t };
+                }
             } else {
                 if (!集.链接[key0]) {
                     集.链接[key0] = {};
@@ -4575,8 +4578,7 @@ function link(key0: string) {
                     集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + (dv || 0.1)));
                     集.链接[key1][key0].time = t;
                 } else {
-                    // 只存储在边的一个方向上，以时间换空间
-                    集.链接[key0][key1] = { value: 1, time: t };
+                    link(key0).add(key1);
                 }
             }
         },
