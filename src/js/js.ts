@@ -4395,7 +4395,6 @@ function move_to_x_link(el: x | xlink) {
         top: center_point.y - dy,
         bottom: center_point.y + dy,
     };
-    console.log(out_rect);
 
     let els: { el: x; x: number; y: number }[] = [];
     pel.querySelectorAll(":scope > x-x").forEach((el: x) => {
