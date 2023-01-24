@@ -77,7 +77,7 @@
        d="M 80,160 160,80"
        id="path684" />
     <path
-       style="fill:none;stroke:#4d4d4d;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
        d="m 120,60 20,-20 c 20,-20 50,-10 60,0 10,10 20,40 0,60 l -20,20"
        id="path1240"
        sodipodi:nodetypes="csssc" />
