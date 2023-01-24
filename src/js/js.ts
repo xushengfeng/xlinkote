@@ -1,5 +1,3 @@
-import "../../css/css.css";
-
 import x_y_svg from "../../assets/icons/x_y.svg";
 import y_svg from "../../assets/icons/y.svg";
 import x_svg from "../../assets/icons/x.svg";
