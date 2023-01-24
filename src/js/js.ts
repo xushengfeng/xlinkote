@@ -4530,8 +4530,8 @@ function link(key0: string) {
                 delete 集.链接[key1][key0];
             } else {
                 delete 集.链接[0][key0];
-                for (let i in 集.链接[key0]) {
-                    delete 集.链接[i][key0];
+                for (let i in link(key0).get()) {
+                    link(key0).rm(i);
                 }
                 delete 集.链接[key0];
             }
