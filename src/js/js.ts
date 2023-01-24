@@ -4583,10 +4583,10 @@ function link(key0: string) {
         value: (key1: string, dv: number) => {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
-                if (集.链接[key0][key1]?.value !== undefined) {
+                if (集.链接[key0]?.[key1]?.value !== undefined) {
                     集.链接[key0][key1].value = clip(集.链接[key0][key1].value + dv, 0, 1);
                     集.链接[key0][key1].time = t;
-                } else if (集.链接[key1][key0]?.value !== undefined) {
+                } else if (集.链接[key1]?.[key0]?.value !== undefined) {
                     集.链接[key1][key0].value = clip(集.链接[key1][key0].value + dv, 0, 1);
                     集.链接[key1][key0].time = t;
                 } else {
