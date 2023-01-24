@@ -4568,14 +4568,14 @@ function link(key0: string) {
                 return xl;
             }
         },
-        value: (key1?: string, dv?: number) => {
+        value: (key1: string, dv: number) => {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
                 if (集.链接[key0][key1]?.value !== undefined) {
-                    集.链接[key0][key1].value = Math.min(1, Math.max(0, 集.链接[key0][key1].value + (dv || 0.1)));
+                    集.链接[key0][key1].value = Math.min(1, Math.max(0, 集.链接[key0][key1].value + dv));
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0]?.value !== undefined) {
-                    集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + (dv || 0.1)));
+                    集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + dv));
                     集.链接[key1][key0].time = t;
                 } else {
                     link(key0).add(key1);
