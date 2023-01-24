@@ -3449,7 +3449,7 @@ class 图层 {
 
         add_bci(el);
 
-        link(el.id).value("0", 1 / 10 ** link_value_precision, true);
+        link(el.id).value("0", 1 / 10 ** link_value_precision);
 
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
@@ -4565,22 +4565,13 @@ function link(key0: string) {
                 return xl;
             }
         },
-        value: (key1?: string, dv?: number, force?: boolean) => {
-            let dt = 5 * 60 * 1000; // 5分钟内增值无效
+        value: (key1?: string, dv?: number) => {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
                 if (集.链接[key0][key1]?.value !== undefined) {
-                    if (!force) {
-                        let nt = new Date().getTime();
-                        if (nt - 集.链接[key0][key1].time < dt) return;
-                    }
                     集.链接[key0][key1].value = Math.min(1, Math.max(0, 集.链接[key0][key1].value + (dv || 0.1)));
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0]?.value !== undefined) {
-                    if (!force) {
-                        let nt = new Date().getTime();
-                        if (nt - 集.链接[key1][key0].time < dt) return;
-                    }
                     集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + (dv || 0.1)));
                     集.链接[key1][key0].time = t;
                 } else {
@@ -7760,14 +7751,14 @@ class link_value extends HTMLElement {
         add_el.src = add_svg;
         down_el.src = minus_svg;
         add_el.onclick = () => {
-            link("0").value(this._id, 0.1, true);
+            link("0").value(this._id, 0.1);
             this.v.innerHTML = "";
             this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
             add_bci(get_link_el_by_id(this._id));
         };
         down_el.onclick = () => {
-            link("0").value(this._id, -0.1, true);
+            link("0").value(this._id, -0.1);
             this.v.innerHTML = "";
             this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
@@ -7809,12 +7800,12 @@ class link_value extends HTMLElement {
                 add_el.innerHTML = icon(add_svg);
                 down_el.innerHTML = icon(minus_svg);
                 add_el.onclick = () => {
-                    link(this._id).value(i, 0.1, true);
+                    link(this._id).value(i, 0.1);
                     n.innerHTML = "";
                     n.append(v_text(i));
                 };
                 down_el.onclick = () => {
-                    link(this._id).value(i, -0.1, true);
+                    link(this._id).value(i, -0.1);
                     n.innerHTML = "";
                     n.append(v_text(i));
                 };
