@@ -213,6 +213,17 @@ function xconfirm(msg: string) {
     });
 }
 
+/**
+ * 裁切值使之限定在一个范围
+ * @param value 值
+ * @param min 最小值
+ * @param max 最大值
+ * @returns 裁切后的值
+ */
+function clip(value: number, min: number, max: number) {
+    return Math.max(min, Math.min(max, value));
+}
+
 // 获取设置
 type setting = typeof default_setting;
 var store: setting = JSON.parse(localStorage.getItem("config"));
@@ -4369,8 +4380,8 @@ function set_viewer_size(portrait: boolean) {
 
 /** 定位预览栏 */
 function set_viewer_posi(x: number, y: number) {
-    view_el.style.left = Math.max(0, Math.min(x, window.visualViewport.width - view_width)) + "px";
-    view_el.style.top = Math.max(0, Math.min(y, window.visualViewport.height - view_height)) + "px";
+    view_el.style.left = clip(x, 0, window.visualViewport.width - view_width) + "px";
+    view_el.style.top = clip(y, 0, window.visualViewport.height - view_height) + "px";
 }
 
 /** 跳转到元素位置 */
@@ -4572,10 +4583,10 @@ function link(key0: string) {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
                 if (集.链接[key0][key1]?.value !== undefined) {
-                    集.链接[key0][key1].value = Math.min(1, Math.max(0, 集.链接[key0][key1].value + dv));
+                    集.链接[key0][key1].value = clip(集.链接[key0][key1].value + dv, 0, 1);
                     集.链接[key0][key1].time = t;
                 } else if (集.链接[key1][key0]?.value !== undefined) {
-                    集.链接[key1][key0].value = Math.min(1, Math.max(0, 集.链接[key1][key0].value + dv));
+                    集.链接[key1][key0].value = clip(集.链接[key1][key0].value + dv, 0, 1);
                     集.链接[key1][key0].time = t;
                 } else {
                     link(key0).add(key1);
@@ -6647,7 +6658,7 @@ class progress2 extends HTMLElement {
             let r = this.getBoundingClientRect();
             let pw = e.clientX - r.x;
             let p = pw / r.width;
-            p = Math.max(Math.min(1, p), 0);
+            p = clip(p, 0, 1);
 
             this.jd.style.width = p * 100 + "%";
             this._value = p;
@@ -8021,7 +8032,7 @@ class audio extends HTMLElement {
             } else {
                 p -= 0.1;
             }
-            p = Math.max(Math.min(1, p), 0);
+            p = clip(p, 0, 1);
             this.audio.volume = p;
         };
         yl.append(yl3, yl2);
