@@ -3449,6 +3449,8 @@ class 图层 {
 
         add_bci(el);
 
+        link(el.id).value("0", 1 / 10 ** link_value_precision, true);
+
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
             if (d) {
