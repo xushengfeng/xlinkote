@@ -5725,6 +5725,7 @@ class x extends HTMLElement {
                     return;
                 }
             }
+            if (!mu_sel_key(e) && selected_el.length <= 1) z.focus(this);
             if (模式 != "设计") return;
             e.preventDefault();
             free_old_point = e2p(e);
@@ -5732,10 +5733,6 @@ class x extends HTMLElement {
 
             if (mu_sel_key(e)) {
                 selected_el.push(this);
-            } else {
-                if (selected_el.length <= 1) {
-                    z.focus(this);
-                }
             }
 
             free_o_rects = [];
