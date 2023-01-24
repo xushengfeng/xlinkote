@@ -4065,7 +4065,7 @@ search_el.oninput = search_el.click = () => {
         view_el.classList.add("viewer_hide");
         return;
     }
-    select_index = 0;
+    select_index = Math.min(select_index, l.length - 1); // 搜索记录上次定位
     let el = select_search(select_index);
     move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
     let r = el.getBoundingClientRect();
