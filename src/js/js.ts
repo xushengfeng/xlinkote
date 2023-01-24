@@ -3449,7 +3449,7 @@ class 图层 {
 
         add_bci(el);
 
-        link(el.id).value("0", 1 / 10 ** link_value_precision);
+        link(el.id).value("0", link_value_min_d());
 
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
@@ -4633,14 +4633,19 @@ function link(key0: string) {
                 // 半天为一个单位
                 let t = (t1 - t0) / 1000 / 60 / 60 / 12;
                 let new_x = t + old_x;
-                let new_v = Math.max(x2v(new_x), 1 / 10 ** link_value_precision / 2); // 下限为精度四舍五入后保留1，如2->0.005
+                let new_v = Math.max(x2v(new_x), link_value_min_d() / 2); // 下限为精度四舍五入后保留1，如2->0.005
                 return new_v;
             }
         },
     };
 }
 
+/** 链接展示精度位数 */
 let link_value_precision = 2;
+/** 链接展示精度 */
+function link_value_min_d() {
+    return 1 / 10 ** link_value_precision;
+}
 
 /**
  * 返回裁切精度的数值元素，悬浮提示具体
