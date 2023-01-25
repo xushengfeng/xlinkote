@@ -6302,6 +6302,7 @@ class markdown extends HTMLElement {
                                 last_el = x;
                             }
                         }
+                        get_data();
                         z.reflash();
                     } else if (this._value.type != "text") {
                         e.preventDefault();
