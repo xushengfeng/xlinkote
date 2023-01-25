@@ -5309,7 +5309,7 @@ function tikz_code(content: string) {
             }
         }
         if (!tikzSource.includes("\\begin{document}")) {
-            let packi = 0;
+            let packi = -1;
             for (let i in lines) {
                 if (lines[i].includes(`\\usepackage{`)) packi = Number(i);
             }
