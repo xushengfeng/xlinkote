@@ -3247,26 +3247,8 @@ class 图层 {
 
                 if (i.id && get_x_by_id(i.id)) get_x_by_id(i.id).style.zIndex = String(Number(n) + 1);
                 if (i.type != "X-X") {
-                    const type = {
-                        "x-md": "md",
-                        "x-draw": "墨迹",
-                        "x-file": "文件",
-                        "x-record": "录音机",
-                        "x-calendar": "日历",
-                        "x-time": "计时器",
-                        "x-link-arrow": "箭头链接",
-                    };
-                    pel.querySelector("span").innerText += ` ${type[i.type.toLowerCase()]}`;
                     return;
                 } else {
-                    if (!pel.querySelector("img")) {
-                        let x = createEl("img");
-                        x.src = ul_show_svg;
-                        pel.firstChild?.before(x);
-                        x.onclick = () => {
-                            pel.classList.toggle("层ul_hide");
-                        };
-                    }
                     if (i.id && get_x_by_id(i.id) && is_flex(get_x_by_id(i.id)) == "flex")
                         get_x_by_id(i.id).style.setProperty("--z", String(i.子元素.length));
                 }
@@ -3325,6 +3307,25 @@ class 图层 {
 
                 if (i?.子元素?.length > 0) {
                     w(i.子元素, li);
+                    if (i.子元素[0].type != "X-X") {
+                        const type = {
+                            "x-md": "md",
+                            "x-draw": "墨迹",
+                            "x-file": "文件",
+                            "x-record": "录音机",
+                            "x-calendar": "日历",
+                            "x-time": "计时器",
+                            "x-link-arrow": "箭头链接",
+                        };
+                        s.innerText += ` ${type[i.子元素[0].type.toLowerCase()]}`;
+                    } else {
+                        let x = createEl("img");
+                        x.src = ul_show_svg;
+                        s?.before(x);
+                        x.onclick = () => {
+                            li.classList.toggle("层ul_hide");
+                        };
+                    }
                 }
                 if (ulf.firstElementChild) {
                     ulf.firstElementChild.before(li);
