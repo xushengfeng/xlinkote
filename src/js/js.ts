@@ -3450,6 +3450,7 @@ class 图层 {
         delete 集.values[el.id];
         图层_el.querySelector(`li[data-id="${el.id}"]`)?.remove();
         breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
+        render_select_rects();
         data_changed();
     }
 
