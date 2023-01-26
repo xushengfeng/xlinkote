@@ -3228,6 +3228,75 @@ function get_link_el_by_id(id: string) {
 class 图层 {
     聚焦元素 = <x>null;
 
+    create_li(i: data[0]) {
+        let li = createEl("li");
+        let c = createEl("input");
+        c.type = "checkbox";
+        let s = createEl("span");
+        s.innerText = i.id;
+        li.setAttribute("data-id", i.id);
+        li.append(c);
+        li.append(s);
+        c.onclick = () => {
+            li.querySelectorAll("input").forEach((el) => {
+                el.checked = c.checked;
+            });
+            selected_el = [];
+            图层_el.querySelectorAll("input").forEach((el) => {
+                if (el.checked) {
+                    let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
+                    selected_el.push(x);
+                    render_select_rects();
+                }
+            });
+        };
+        s.onclick = () => {
+            jump_to_x_link(get_x_by_id(i.id));
+            图层_el.querySelectorAll("input").forEach((el) => {
+                if (el.checked) {
+                    this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
+                }
+            });
+        };
+        li.onpointerenter = (e) => {
+            move_to_x_link(get_x_by_id(i.id));
+        };
+        s.onpointerdown = (e) => {
+            jump_to_x_link(get_x_by_id(i.id));
+        };
+        li.onpointermove = (e) => {
+            window.requestAnimationFrame(() => {
+                set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
+            });
+        };
+        if (this.聚焦元素.id == i.id && selected_el.length == 1) {
+            this.focus(get_x_by_id(i.id));
+            c.checked = true;
+        }
+        if (i?.子元素?.length > 0) {
+            if (i.子元素[0].type != "X-X") {
+                const type = {
+                    "x-md": "md",
+                    "x-draw": "墨迹",
+                    "x-file": "文件",
+                    "x-record": "录音机",
+                    "x-calendar": "日历",
+                    "x-time": "计时器",
+                    "x-link-arrow": "箭头链接",
+                };
+                s.innerText += ` ${type[i.子元素[0].type.toLowerCase()]}`;
+            } else {
+                let x = createEl("img");
+                x.src = ul_show_svg;
+                s?.before(x);
+                x.onclick = () => {
+                    li.classList.toggle("层ul_hide");
+                };
+            }
+        }
+        return li;
+    }
+
     /**
      * 从数据渲染图层侧栏
      * @param nosave 不触发data change
@@ -3252,50 +3321,6 @@ class 图层 {
                     if (i.id && get_x_by_id(i.id) && is_flex(get_x_by_id(i.id)) == "flex")
                         get_x_by_id(i.id).style.setProperty("--z", String(i.子元素.length));
                 }
-                let li = createEl("li");
-                let c = createEl("input");
-                c.type = "checkbox";
-                let s = createEl("span");
-                s.innerText = i.id;
-                li.setAttribute("data-id", i.id);
-                li.append(c);
-                li.append(s);
-                c.onclick = () => {
-                    li.querySelectorAll("input").forEach((el) => {
-                        el.checked = c.checked;
-                    });
-                    selected_el = [];
-                    图层_el.querySelectorAll("input").forEach((el) => {
-                        if (el.checked) {
-                            let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
-                            selected_el.push(x);
-                            render_select_rects();
-                        }
-                    });
-                };
-                s.onclick = () => {
-                    jump_to_x_link(get_x_by_id(i.id));
-                    图层_el.querySelectorAll("input").forEach((el) => {
-                        if (el.checked) {
-                            this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
-                        }
-                    });
-                };
-                li.onpointerenter = (e) => {
-                    move_to_x_link(get_x_by_id(i.id));
-                };
-                s.onpointerdown = (e) => {
-                    jump_to_x_link(get_x_by_id(i.id));
-                };
-                li.onpointermove = (e) => {
-                    window.requestAnimationFrame(() => {
-                        set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
-                    });
-                };
-                if (this.聚焦元素.id == i.id && selected_el.length == 1) {
-                    this.focus(get_x_by_id(i.id));
-                    c.checked = true;
-                }
                 图层_el.querySelectorAll("input").forEach((el) => {
                     let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
                     if (selected_el.includes(x)) {
@@ -3305,27 +3330,10 @@ class 图层 {
                     }
                 });
 
+                const li = this.create_li(i);
+
                 if (i?.子元素?.length > 0) {
                     w(i.子元素, li);
-                    if (i.子元素[0].type != "X-X") {
-                        const type = {
-                            "x-md": "md",
-                            "x-draw": "墨迹",
-                            "x-file": "文件",
-                            "x-record": "录音机",
-                            "x-calendar": "日历",
-                            "x-time": "计时器",
-                            "x-link-arrow": "箭头链接",
-                        };
-                        s.innerText += ` ${type[i.子元素[0].type.toLowerCase()]}`;
-                    } else {
-                        let x = createEl("img");
-                        x.src = ul_show_svg;
-                        s?.before(x);
-                        x.onclick = () => {
-                            li.classList.toggle("层ul_hide");
-                        };
-                    }
                 }
                 if (ulf.firstElementChild) {
                     ulf.firstElementChild.before(li);
