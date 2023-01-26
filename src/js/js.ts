@@ -3710,7 +3710,8 @@ function set_style(el: x) {
 function style_to_el() {
     let t = "";
     for (let i of el_style.children) {
-        t += i.textContent + ";";
+        if (i.querySelector("input"))
+            t += `${i.querySelectorAll("input")[0].value}:${i.querySelectorAll("input")[1].value};`;
     }
     elFromId(el_style.getAttribute("data-id")).setAttribute("style", t);
     data_changed();
