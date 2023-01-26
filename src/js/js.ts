@@ -4710,6 +4710,17 @@ function els_to_rels(els: x[]) {
     return xels;
 }
 
+/** 获取主元素值 */
+function get_x_out_value(el: x) {
+    return {
+        id: el.id,
+        style: el.getAttribute("style") || "",
+        class: el.className,
+        子元素: el.value,
+        type: el.tagName,
+    };
+}
+
 function copy_x(x: x, pel?: x) {
     let new_x = createEl("x-x");
     z.push(new_x, pel);
