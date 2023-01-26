@@ -3434,6 +3434,9 @@ class 图层 {
 
     remove(el: x) {
         link(el.id).rm();
+        el.querySelectorAll("x-link").forEach((el) => {
+            link(el.id).rm();
+        });
         el.remove();
         delete 集.values[el.id];
         get_data();
