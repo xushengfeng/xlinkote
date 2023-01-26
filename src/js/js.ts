@@ -3431,8 +3431,8 @@ class 图层 {
         ppel.append(el);
         let li = this.create_li(get_x_out_value(el));
         let pli = 图层_el.querySelector(`li[data-id="${ppel.id}"]`);
-        if (pli.querySelector("ul")) {
-            pli.querySelector("ul").insertAdjacentElement("afterbegin", li);
+        if (pli.querySelector(":scope > ul")) {
+            pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
         } else {
             get_data();
             this.reflash();
