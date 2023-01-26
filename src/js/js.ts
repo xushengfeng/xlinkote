@@ -1306,14 +1306,14 @@ let middle_p = { x: 0, y: 0 };
         middle_p.y = el_offset(O).y;
     }
 });
-画布.addEventListener("pointermove", (e) => {
+document.addEventListener("pointermove", (e) => {
     if (middle_b) {
         let dx = e.clientX - middle_b.clientX,
             dy = e.clientY - middle_b.clientY;
         set_O_p(middle_p.x + dx, middle_p.y + dy);
     }
 });
-画布.addEventListener("pointerup", (e) => {
+document.addEventListener("pointerup", (e) => {
     if (middle_b) {
         data_changed();
     }
