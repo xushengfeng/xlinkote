@@ -5995,8 +5995,6 @@ class markdown extends HTMLElement {
                         var md = createEl("x-md");
                         xel.append(md);
                         md.edit = true;
-
-                        z.reflash();
                     }
                 } else {
                     if (e.shiftKey || this._value.type == "text") {
@@ -6048,6 +6046,7 @@ class markdown extends HTMLElement {
                         md.value = JSON.stringify({ type: this._value.type, text: t1 });
                         md.text.setSelectionRange(0, 0);
 
+                        get_data();
                         z.reflash();
                     }
                 }
