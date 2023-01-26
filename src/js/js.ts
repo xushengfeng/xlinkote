@@ -940,17 +940,19 @@ function render_select_rects() {
     let xels: x[] = [];
     if (now_mouse_e) {
         let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
-        if (els[0].id == "x-x_bar") {
-            els = document.elementsFromPoint(
-                els[0].parentElement.getBoundingClientRect().x,
-                els[0].parentElement.getBoundingClientRect().y
-            );
-        }
-        if (els[1].id == "x-x_bar") {
-            els = document.elementsFromPoint(
-                els[1].parentElement.getBoundingClientRect().x,
-                els[1].parentElement.getBoundingClientRect().y
-            );
+        if (els.length) {
+            if (els[0].id == "x-x_bar") {
+                els = document.elementsFromPoint(
+                    els[0].parentElement.getBoundingClientRect().x,
+                    els[0].parentElement.getBoundingClientRect().y
+                );
+            }
+            if (els[1].id == "x-x_bar") {
+                els = document.elementsFromPoint(
+                    els[1].parentElement.getBoundingClientRect().x,
+                    els[1].parentElement.getBoundingClientRect().y
+                );
+            }
         }
         for (let i of els) {
             if (i.tagName == "X-X") {
