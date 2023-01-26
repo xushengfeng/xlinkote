@@ -1679,7 +1679,7 @@ var free_mouse = (e: MouseEvent) => {
                 }
             }
             if (xel.el == z.聚焦元素) {
-                set_style(xel.el.getAttribute("style"));
+                set_style(xel.el);
                 load_xywh();
             }
         }
@@ -3469,7 +3469,7 @@ class 图层 {
         selected_el = [];
         selected_el.push(el);
         render_select_rects();
-        set_style(el.getAttribute("style"));
+        set_style(el);
         load_xywh();
         load_value();
 
@@ -3682,7 +3682,9 @@ function change_input_w(el: HTMLInputElement) {
     el.style.width = `${el.value.length}ch`;
 }
 
-function set_style(style: string) {
+function set_style(el: x) {
+    let style = el.getAttribute("style");
+    el_style.setAttribute("data-id", el.id);
     el_style.innerHTML = "";
     let l = style.split(";");
     for (let i of l) {
@@ -3710,7 +3712,7 @@ function style_to_el() {
     for (let i of el_style.children) {
         t += i.textContent + ";";
     }
-    z.聚焦元素.setAttribute("style", t);
+    elFromId(el_style.getAttribute("data-id")).setAttribute("style", t);
     data_changed();
 }
 
