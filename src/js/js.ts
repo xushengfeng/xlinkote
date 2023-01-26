@@ -3570,34 +3570,38 @@ for (let i in css_properties.pv) {
 
 style_list.classList.add("style_com_list_hide");
 function add_style_item() {
-    let key = createEl("span");
-    let value = createEl("span");
-    key.contentEditable = "true";
-    value.contentEditable = "true";
+    let key = createEl("input");
+    let value = createEl("input");
     let p = createEl("div");
     p.append(key, ": ", value);
     key.oninput = key.onfocus = () => {
+        change_input_w(key);
         set_list(key);
         style_list.innerHTML = "";
-        search(Object.keys(cssp), key.innerText, (t) => {
-            key.innerText = t;
+        search(Object.keys(cssp), key.value, (t) => {
+            key.value = t;
+            change_input_w(key);
             value.focus();
             style_to_el();
         });
-        search(css_t, key.innerText, (t) => {
-            key.innerText = t.split(":")[0].trim();
-            value.innerText = t.split(":")[1].trim();
+        search(css_t, key.value, (t) => {
+            key.value = t.split(":")[0].trim();
+            value.value = t.split(":")[1].trim();
+            change_input_w(key);
+            change_input_w(value);
             value.focus();
             style_to_el();
         });
         style_to_el();
     };
     value.oninput = value.onfocus = () => {
+        change_input_w(value);
         set_list(value);
         style_list.innerHTML = "";
-        if (cssp[key.innerText.trim()]) {
-            search(cssp[key.innerText.trim()].values, value.innerText, (t) => {
-                value.innerText = t;
+        if (cssp[key.value.trim()]) {
+            search(cssp[key.value.trim()].values, value.value, (t) => {
+                value.value = t;
+                change_input_w(value);
                 style_to_el();
             });
         }
@@ -3605,7 +3609,7 @@ function add_style_item() {
     };
     key.onblur = value.onblur = () => {
         style_list.classList.add("style_com_list_hide");
-        if (key.innerText == "") {
+        if (key.value == "") {
             p.remove();
         }
     };
@@ -3674,6 +3678,10 @@ function add_style_item() {
     return { el: p, key, value };
 }
 
+function change_input_w(el: HTMLInputElement) {
+    el.style.width = `${el.value.length}ch`;
+}
+
 function set_style(style: string) {
     el_style.innerHTML = "";
     let l = style.split(";");
@@ -3681,8 +3689,10 @@ function set_style(style: string) {
         if (!i) continue;
         let item = add_style_item();
         el_style.append(item.el);
-        item.key.innerText = i.split(":")[0].trim();
-        item.value.innerText = i.split(":")[1].trim();
+        item.key.value = i.split(":")[0].trim();
+        item.value.value = i.split(":")[1].trim();
+        change_input_w(item.key);
+        change_input_w(item.value);
     }
 
     let add_style_item_el = createEl("div");

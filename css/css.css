@@ -546,7 +546,10 @@ body #main > #nav #ink_r {
 #xywh > input {
     width: 25%;
 }
-#el_style > :not(:last-child) > span {
+#el_style > :not(:last-child) {
+    @apply font-mono;
+}
+#el_style > :not(:last-child) > input {
     min-width: 1em;
     @apply inline-block align-bottom outline-none;
 }
