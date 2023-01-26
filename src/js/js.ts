@@ -1492,13 +1492,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 }
             }
             if (had) continue;
-            集.中转站.push({
-                id: i.id,
-                style: i.getAttribute("style"),
-                type: i.tagName,
-                子元素: i.value,
-                class: i.className,
-            });
+            集.中转站.push(get_x_out_value(i));
             i.remove();
         }
         free_o_rects = [];
@@ -4774,13 +4768,7 @@ function to_flex(els: x[], d: "x" | "y") {
         el.style.left = "";
         el.style.top = "";
         el.style.position = "relative";
-        data.push({
-            id: el.id,
-            style: el.getAttribute("style"),
-            class: el.className,
-            type: el.tagName,
-            子元素: el.value,
-        });
+        data.push(get_x_out_value(el));
         el.remove();
     }
     xel.value = data;
@@ -4842,13 +4830,7 @@ function to_none_layout(els: x[]) {
     let data = [] as data;
     let xels = els_to_rels(els);
     for (let el of xels) {
-        data.push({
-            id: el.id,
-            style: el.getAttribute("style"),
-            class: el.className,
-            type: el.tagName,
-            子元素: el.value,
-        });
+        data.push(get_x_out_value(el));
         z.remove(el);
     }
     x.value = data;
