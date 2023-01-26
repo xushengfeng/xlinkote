@@ -3429,9 +3429,15 @@ class 图层 {
             el.style.zIndex = String(ppel.childElementCount + 1);
         }
         ppel.append(el);
-        get_data();
+        let li = this.create_li(get_x_out_value(el));
+        let pli = 图层_el.querySelector(`li[data-id="${ppel.id}"]`);
+        if (pli.querySelector("ul")) {
+            pli.querySelector("ul").insertAdjacentElement("afterbegin", li);
+        } else {
+            get_data();
+            this.reflash();
+        }
         this.focus(el);
-        this.reflash();
         link(el.id).add();
     }
 
