@@ -6600,7 +6600,6 @@ class graph extends HTMLElement {
         super();
     }
 
-    _value = "";
     text: HTMLTextAreaElement;
     gid: string;
 
@@ -6612,8 +6611,9 @@ class graph extends HTMLElement {
         this.text = document.createElement("textarea");
         const text_class = "hide_jxg_text";
         this.text.classList.add(text_class);
-        this.text.value = this.getAttribute("value") || this.innerText;
-        this.setAttribute("value", this.text.value);
+        this.text.value =
+            this.getAttribute("value") ||
+            `let brd=JXG.JSXGraph.initBoard(gid,{axis:true,showCopyRight:false,boundingbox:[-4,4,4,-4]});`;
         this.innerHTML = "";
         this.append(b);
         this.append(s);
@@ -6628,10 +6628,6 @@ class graph extends HTMLElement {
         b.onclick = () => {
             this.text.classList.toggle(text_class);
             this.text.focus();
-        };
-        this.text.oninput = () => {
-            this._value = this.text.value;
-            this.setAttribute("value", this.text.value);
         };
         this.text.onchange = () => {
             this.run(this.text.value);
@@ -6650,12 +6646,12 @@ class graph extends HTMLElement {
     }
 
     set value(v) {
-        this._value = this.text.value = v;
+        this.text.value = v;
         this.run(v);
     }
 
     get value() {
-        return this._value;
+        return this.text.value;
     }
 }
 
