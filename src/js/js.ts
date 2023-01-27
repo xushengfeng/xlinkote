@@ -6636,6 +6636,13 @@ class graph extends HTMLElement {
 
     run(code: string) {
         eval(code.replace("gid", this.gid));
+        const svg = elFromId(this.gid).querySelector("svg");
+        const ob = new MutationObserver(() => {
+            svg.setAttribute("width", String(el_offset2(this).w));
+            svg.setAttribute("height", String(el_offset2(this).h));
+            ob.disconnect();
+        });
+        ob.observe(svg, { attributes: true, attributeFilter: ["width"] });
     }
 
     set value(v) {
