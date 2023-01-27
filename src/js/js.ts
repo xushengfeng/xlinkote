@@ -2264,8 +2264,8 @@ async function set_data(l: 集type) {
 function reload_side() {
     if (O.children[O.children.length - 1]) {
         z.focus(O.children[O.children.length - 1] as x);
-        z.reflash(true);
     }
+    z.reflash(true);
     l_math();
     tmp_s_reflash();
     assets_reflash();
@@ -3266,7 +3266,7 @@ class 图层 {
                 set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
             });
         };
-        if (this.聚焦元素.id == i.id && selected_el.length == 1) {
+        if (this.聚焦元素?.id == i.id && selected_el.length == 1) {
             this.focus(get_x_by_id(i.id));
             c.checked = true;
         }
