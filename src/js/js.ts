@@ -3401,6 +3401,7 @@ class 图层 {
                 if (画布s.children.length == 1) return;
                 let x = await xconfirm(`确定删除画布 ${i.name}`);
                 if (!x) return;
+                z.remove(elFromId(i.id).querySelector(":scope > x-x") as x);
                 elFromId(i.id).remove();
                 if (i.id == 当前画布.id) {
                     let id = 画布s.children[0].id;
