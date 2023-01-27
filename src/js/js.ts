@@ -3448,6 +3448,7 @@ class 图层 {
         link(el.id).rm();
         el.querySelectorAll("x-x, x-link").forEach((el) => {
             link(el.id).rm();
+            breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
         });
         el.remove();
         delete 集.values[el.id];
