@@ -15,6 +15,7 @@ specifiers:
   html2canvas: ^1.4.1
   iconify-icon: ^1.0.2
   json5: ^2.2.2
+  jsxgraph: ^1.5.0
   markdown-it: ^13.0.1
   markdown-it-emoji: ^2.0.2
   markdown-it-task-lists: ^2.1.1
@@ -40,6 +41,7 @@ dependencies:
   html2canvas: 1.4.1
   iconify-icon: 1.0.2
   json5: 2.2.2
+  jsxgraph: 1.5.0
   markdown-it: 13.0.1
   markdown-it-emoji: 2.0.2
   markdown-it-task-lists: 2.1.1
@@ -1974,6 +1976,11 @@ packages:
     resolution: {integrity: sha512-46Tk9JiOL2z7ytNQWFLpj99RZkVgeHf87yGQKsIkaPz1qSH9UczKH1rO7K3wgRselo0tYMUNfecYpm/p1vC7tQ==}
     engines: {node: '>=6'}
     hasBin: true
+    dev: false
+
+  /jsxgraph/1.5.0:
+    resolution: {integrity: sha512-mXsW1LG9AEZpiYDM+nScs5G5ZKw6xrQIrVLszRXeXFX+XYbS1Abx9oMmk7WMDbCXerYFzNo5/vZ9MRZpFeABpQ==}
+    engines: {node: '>=0.6.0'}
     dev: false
 
   /keyv/3.0.0:

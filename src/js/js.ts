@@ -5353,6 +5353,15 @@ function tikz_code(content: string) {
     s.innerHTML = tidyTikzSource(content);
     return s.outerHTML;
 }
+function jxg_code(c: string) {
+    return `<x-graph>${c}</x-graph>`;
+}
+md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+    if (tokens[idx].info == "jxg") {
+        return jxg_code(tokens[idx].content);
+    }
+    return f(tokens, idx, options, env, self);
+};
 
 import { optimize } from "svgo";
 /** 修复svg被遮挡 */
@@ -6547,6 +6556,9 @@ class markdown extends HTMLElement {
                     case "tikz":
                         this.h.innerHTML = tikz_code(text);
                         break;
+                    case "jxg":
+                        this.h.innerHTML = jxg_code(text);
+                        break;
                     default:
                         this.h.innerText = text;
                         break;
@@ -6576,6 +6588,67 @@ class markdown extends HTMLElement {
 }
 
 window.customElements.define("x-md", markdown);
+
+// 几何图形
+import JXG from "jsxgraph";
+class graph extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value = "";
+    text: HTMLTextAreaElement;
+    gid: string;
+
+    connectedCallback() {
+        const b = document.createElement("div");
+        b.id = "t_md";
+        const s = document.createElement("div");
+        s.id = this.gid = `g${new Date().getTime()}`;
+        this.text = document.createElement("textarea");
+        const text_class = "hide_jxg_text";
+        this.text.classList.add(text_class);
+        this.text.value = this.getAttribute("value") || this.innerText;
+        this.setAttribute("value", this.text.value);
+        this.innerHTML = "";
+        this.append(b);
+        this.append(s);
+        this.append(this.text);
+
+        if (JXG) {
+            if (this.text.value) {
+                this.run(this.text.value);
+            }
+        }
+
+        b.onclick = () => {
+            this.text.classList.toggle(text_class);
+            this.text.focus();
+        };
+        this.text.oninput = () => {
+            this._value = this.text.value;
+            this.setAttribute("value", this.text.value);
+        };
+        this.text.onchange = () => {
+            this.run(this.text.value);
+        };
+    }
+
+    run(code: string) {
+        eval(code.replace("gid", this.gid));
+    }
+
+    set value(v) {
+        this._value = this.text.value = v;
+        this.run(v);
+    }
+
+    get value() {
+        return this._value;
+    }
+}
+
+window.customElements.define("x-graph", graph);
 
 import mathSymbols from "../../lib/tex/x.js";
 class symbols extends HTMLElement {
