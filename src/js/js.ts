@@ -4520,10 +4520,10 @@ function add_bci(el: x | xlink) {
     main.innerText = `#${el.id}`;
     li.setAttribute("data-id", el.id);
     main.onpointerenter = (e) => {
-        move_to_x_link(el);
+        move_to_x_link(elFromId(el.id) as x);
     };
     main.onpointerdown = () => {
-        jump_to_x_link(el);
+        jump_to_x_link(elFromId(el.id) as x);
     };
     main.onpointermove = (e) => {
         window.requestAnimationFrame(() => {
