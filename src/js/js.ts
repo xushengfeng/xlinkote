@@ -6602,6 +6602,7 @@ class graph extends HTMLElement {
 
     text: HTMLTextAreaElement;
     gid: string;
+    resize_ob: ResizeObserver;
 
     connectedCallback() {
         const b = document.createElement("div");
@@ -6632,6 +6633,18 @@ class graph extends HTMLElement {
         this.text.onchange = () => {
             this.run(this.text.value);
         };
+        this.resize_ob = new ResizeObserver(() => {
+            this.reflasth();
+        });
+        this.resize_ob.observe(this.parentElement);
+    }
+
+    disconnectedCallback() {
+        this.resize_ob.disconnect();
+    }
+
+    reflasth() {
+        this.run(this.text.value);
     }
 
     run(code: string) {
