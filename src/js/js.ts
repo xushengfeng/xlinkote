@@ -1081,6 +1081,10 @@ function zoom_o(z: number) {
             h = window.innerHeight;
         if (r.x < w && r.y < h && r.x + r.width > 0 && r.y + r.height > 0) el.set_m();
     });
+
+    document.querySelectorAll("x-graph").forEach((el: graph) => {
+        el.run(el.text.value);
+    });
 }
 
 zoom_el.oninput = () => {
