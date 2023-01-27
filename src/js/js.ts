@@ -6639,7 +6639,7 @@ class graph extends HTMLElement {
     }
 
     run(code: string) {
-        eval(code.replace("gid", this.gid));
+        eval(`{let gid = '${this.gid}';${code}}`);
         const svg = elFromId(this.gid).querySelector("svg");
         const ob = new MutationObserver(() => {
             svg.setAttribute("width", String(el_offset2(this).w));
