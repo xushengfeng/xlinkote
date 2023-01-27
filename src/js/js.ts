@@ -3446,7 +3446,7 @@ class 图层 {
 
     remove(el: x) {
         link(el.id).rm();
-        el.querySelectorAll("x-link").forEach((el) => {
+        el.querySelectorAll("x-x, x-link").forEach((el) => {
             link(el.id).rm();
         });
         el.remove();
