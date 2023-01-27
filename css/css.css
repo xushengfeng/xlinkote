@@ -1141,7 +1141,11 @@ x-sinppet {
     overflow: auto;
 }
 x-sinppet > div {
-    @apply flex flex-wrap;
+    @apply flex flex-wrap gap-1;
+    filter: var(--icon-color);
+}
+x-sinppet > div > img:hover {
+    background-color: var(--bg-color1);
 }
 
 .add_tag {
@@ -1725,11 +1729,8 @@ x-link {
     #导航 > div > .icon {
         @apply w-6 h-6 !important;
     }
-    x-sinppet > div {
-        zoom: 1.5;
-    }
-    x-sinppet > div > span {
-        margin: 0 4px;
+    x-sinppet > div > img {
+        padding: 8px;
     }
 }
 
