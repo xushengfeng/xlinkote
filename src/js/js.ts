@@ -6607,6 +6607,8 @@ class graph extends HTMLElement {
     connectedCallback() {
         const b = document.createElement("div");
         b.id = "t_md";
+        const edit = createEl("div");
+        const editor = createEl("div");
         const s = document.createElement("div");
         s.id = this.gid = `g${new Date().getTime()}`;
         this.text = document.createElement("textarea");
@@ -6617,6 +6619,7 @@ class graph extends HTMLElement {
             `let brd=JXG.JSXGraph.initBoard(gid,{axis:true,showCopyRight:false,boundingbox:[-4,4,4,-4]});`;
         this.innerHTML = "";
         this.append(b);
+        b.append(edit, editor);
         this.append(s);
         this.append(this.text);
 
@@ -6626,9 +6629,15 @@ class graph extends HTMLElement {
             }
         }
 
-        b.onclick = () => {
+        edit.onclick = () => {
             this.text.classList.toggle(text_class);
             this.text.focus();
+        };
+        editor.onclick = () => {
+            let url = new URL("https://jxg-editor.netlify.app");
+            url.searchParams.set("code", this.text.value);
+            window.open(url.toString());
+            this.text.classList.add(text_class);
         };
         this.text.onchange = () => {
             this.run(this.text.value);
