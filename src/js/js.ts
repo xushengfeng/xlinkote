@@ -6623,6 +6623,12 @@ class graph extends HTMLElement {
         this.append(s);
         this.append(this.text);
 
+        let x = this.parentElement as x;
+        if (!x.style.width && !x.style.height) {
+            x.style.width = "100px";
+            x.style.height = "100px";
+        }
+
         if (JXG) {
             if (this.text.value) {
                 this.run(this.text.value);
