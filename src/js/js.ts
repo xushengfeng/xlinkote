@@ -227,7 +227,7 @@ function clip(value: number, min: number, max: number) {
 
 // 获取设置
 type setting = typeof default_setting;
-var store: setting = JSON.parse(localStorage.getItem("config"));
+var store: setting = JSON5.parse(localStorage.getItem("config"));
 const default_setting = {
     webdav: { 网址: "", 用户名: "", 密码: "", 自动上传: "0", 加密密钥: "" },
     ink: {
@@ -281,7 +281,7 @@ if ("serviceWorker" in navigator) {
 }
 
 import pack from "../../package.json?raw";
-const packagejson = JSON.parse(pack);
+const packagejson = JSON5.parse(pack);
 
 // 工具栏
 
@@ -2449,7 +2449,7 @@ function xln_out(obj: 集type) {
 }
 
 function xln_in(t: string) {
-    let obj = JSON.parse(t);
+    let obj = JSON5.parse(t);
     return obj;
 }
 
@@ -2690,7 +2690,7 @@ function db_download() {
 
 /** 上传数据库 */
 function db_load(t: string) {
-    let o = JSON.parse(t);
+    let o = JSON5.parse(t);
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     for (let obj of o) {
         let r = customerObjectStore.put(obj);
@@ -2748,7 +2748,7 @@ function get_undo_s(i: number): { s: selection_type[]; data: 集type } {
 }
 
 function clone(obj: object) {
-    return JSON.parse(JSON.stringify(obj));
+    return JSON5.parse(JSON.stringify(obj));
 }
 
 function push_undo() {
@@ -2927,7 +2927,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
 /** 摘录 */
 document.addEventListener("message", (msg: any) => {
     alert(msg.data);
-    const data = JSON.parse(msg.data);
+    const data = JSON5.parse(msg.data);
     if (data.m == "add") {
         if (集.meta.file_name != "摘录") {
             // 是否存在摘录文件
@@ -3513,7 +3513,7 @@ function load_xywh() {
 }
 
 import css_properties_file from "../../lib/css/CSSProperties.json?raw";
-const css_properties = JSON.parse(css_properties_file) as {
+const css_properties = JSON5.parse(css_properties_file) as {
     pv: { [key: string]: { values: string[]; type?: string } };
     color: string[];
 };
@@ -3771,7 +3771,7 @@ async function get_xln_value(path: string) {
     })) as string;
     let o: any;
     try {
-        o = JSON.parse(<string>str);
+        o = JSON5.parse(<string>str);
     } catch (e) {
         if (store.webdav.加密密钥) {
             let b = (await client.getFileContents(path, {
@@ -3786,7 +3786,7 @@ async function get_xln_value(path: string) {
             const firstEntry = (await zipReader.getEntries())[0];
             str = await firstEntry.getData(zipWriter, { password: store.webdav.加密密钥 });
             await zipReader.close();
-            o = JSON.parse(<string>str);
+            o = JSON5.parse(<string>str);
         }
     }
     now_dav_data = str;
@@ -3902,7 +3902,7 @@ function arter_save_setting() {
 }
 
 function show_setting() {
-    let setting = JSON.parse(localStorage.getItem("config"));
+    let setting = JSON5.parse(localStorage.getItem("config"));
     for (let f in setting) {
         let fel = document.querySelector(`form[name="${f}"]`);
         for (let k in setting[f]) {
@@ -3941,7 +3941,7 @@ function search(input: string, type: "str" | "regex") {
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
         if (el.tagName == "X-MD") {
-            text = JSON.parse((el as markdown).value).text;
+            text = JSON5.parse((el as markdown).value).text;
         } else if (el.tagName == "X-PDF") {
             text = (el as pdf_viewer).text.innerText;
         } else {
@@ -4710,7 +4710,7 @@ function copy_x(x: x, pel?: x) {
 function copy_value(id: string, new_id: string) {
     let v = 集.values[id];
     if (v) {
-        集.values[new_id] = JSON.parse(JSON.stringify(v));
+        集.values[new_id] = JSON5.parse(JSON.stringify(v));
     }
 }
 
@@ -5807,7 +5807,7 @@ class x extends HTMLElement {
         };
 
         if (this.getAttribute("value")) {
-            this.set_v(JSON.parse(this.getAttribute("value")));
+            this.set_v(JSON5.parse(this.getAttribute("value")));
         }
 
         this.onpointerover = (e) => {
@@ -5922,7 +5922,7 @@ class markdown extends HTMLElement {
 
         if (this.getAttribute("value")) {
             let v = this.getAttribute("value");
-            this._value = JSON.parse(v);
+            this._value = JSON5.parse(v);
             let t = this._value.text;
             this.text.value = t;
             this.render();
@@ -6471,7 +6471,7 @@ class markdown extends HTMLElement {
     }
 
     set value(v) {
-        this._value = JSON.parse(v);
+        this._value = JSON5.parse(v);
         this.type = this._value.type;
         let t = this._value.text;
         this.text.value = t;
@@ -6789,7 +6789,7 @@ class file extends HTMLElement {
         this.div = createEl("div");
         this.append(this.div);
         if (this.getAttribute("value")) {
-            this._value = JSON.parse(this.getAttribute("value"));
+            this._value = JSON5.parse(this.getAttribute("value"));
             this.set_m();
         }
     }
@@ -6856,7 +6856,7 @@ class file extends HTMLElement {
         return JSON.stringify(this._value);
     }
     set value(s) {
-        this._value = JSON.parse(s);
+        this._value = JSON5.parse(s);
         this.set_m();
     }
 }
@@ -6932,7 +6932,7 @@ class pdf_viewer extends HTMLElement {
         this.text = createEl("div");
         this.append(this.text);
         if (this.getAttribute("value")) {
-            this._value = JSON.parse(this.getAttribute("value"));
+            this._value = JSON5.parse(this.getAttribute("value"));
             this.set_m();
         }
 
@@ -7039,7 +7039,7 @@ class pdf_viewer extends HTMLElement {
         return JSON.stringify(this._value);
     }
     set value(s) {
-        this._value = JSON.parse(s);
+        this._value = JSON5.parse(s);
         this.set_m();
     }
 }
@@ -7483,7 +7483,7 @@ class draw extends HTMLElement {
     }
 
     set_v(v: string) {
-        let x = JSON.parse(v);
+        let x = JSON5.parse(v);
         this.width = x.w;
         this.height = x.h;
         this.main_svg.setAttribute("width", String(this.width));
@@ -7935,7 +7935,7 @@ class link_value extends HTMLElement {
                 let w = (v: data) => {
                     for (let i of v) {
                         if (i.type == "X-MD") {
-                            return JSON.parse(i.value).text;
+                            return JSON5.parse(i.value).text;
                         } else {
                             if (i.子元素) return w(i.子元素);
                             else return "";
@@ -8819,7 +8819,7 @@ class time extends HTMLElement {
     }
 
     async set_m() {
-        this._value2 = JSON.parse(this._value);
+        this._value2 = JSON5.parse(this._value);
         this.count_down.checked = this._value2.countdown;
         if (this._value2.pro) this.process.value = this._value2.pro;
         if (this._value2.end) {
@@ -8932,7 +8932,7 @@ class link_arrow extends HTMLElement {
     }
 
     set value(s) {
-        this._value = JSON.parse(s);
+        this._value = JSON5.parse(s);
         this.ob();
     }
 }
