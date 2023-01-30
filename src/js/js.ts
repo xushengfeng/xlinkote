@@ -5168,7 +5168,6 @@ function load_value() {
             }
             try {
                 let v = JSON5.parse(t.value);
-                el.innerHTML = "";
                 el.value = v;
             } catch (error) {}
         };
@@ -5852,6 +5851,11 @@ class x extends HTMLElement {
     }
 
     set_v(data: data) {
+        for (let x of this.children) {
+            if (x.tagName != "DIV") {
+                x.remove();
+            }
+        }
         for (let d of data) {
             if (d.type == "X-X") {
                 let el = createEl(d.type) as x;
