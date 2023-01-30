@@ -2039,14 +2039,36 @@ function rename_el() {
 }
 
 /**
+ * 判断版本>=
+ * @param v 版本
+ * @param v2 版本
+ * @returns if v>=v2
+ */
+function version_is_big(v: string, v2: string) {
+    let vl = v.split(".").map((n) => Number(n));
+    let vl2 = v2.split(".").map((n) => Number(n));
+    return Boolean(vl[0] >= vl2[0] && vl[1] >= vl2[1] && vl[2] >= vl2[2]);
+}
+
+/**
+ * 判断版本是否处于区间
+ * @param v 版本
+ * @param min 最小
+ * @param max 最大
+ */
+function version_in(v: string, min: string, max: string) {
+    return Boolean(version_is_big(v, min) && version_is_big(max, v));
+}
+
+/**
  * 转换旧版本集到新版本
  * @param obj 输入集
  * @returns 输出集
  */
 function version_tr(obj): 集type {
     let v = obj.meta.version || "";
-    switch (v) {
-        case "":
+    switch (true) {
+        case v == "":
             if (!obj.链接) obj["链接"] = { 0: {} };
             if (!obj.链接["0"]) obj.链接[0] = {};
             if (!obj.assets) obj["asstes"] = {};
@@ -2060,7 +2082,7 @@ function version_tr(obj): 集type {
                 obj.链接[i] = o;
             }
             obj.meta["version"] = "0.4.2";
-        case "0.4.2":
+        case version_in(v, "0.4.2", "0.4.2"):
             for (let i of obj.数据) {
                 for (let j of i.data) {
                     let type = "";
@@ -2085,13 +2107,7 @@ function version_tr(obj): 集type {
                 }
             }
             obj.meta.version = "0.5.0";
-        case "0.5.0":
-        case "0.6.0":
-        case "0.6.1":
-        case "0.6.2":
-        case "0.6.3":
-        case "0.6.4":
-        case "0.6.5":
+        case version_in(v, "0.5.0", "0.6.5"):
             for (let i of obj.数据) {
                 i["id"] = uuid_id();
                 if (obj.meta.focus_page == i.name) {
@@ -2099,34 +2115,10 @@ function version_tr(obj): 集type {
                 }
             }
             obj.meta.version = "0.6.6";
-        case "0.6.6":
-        case "0.6.7":
-        case "0.6.8":
-        case "0.7.0":
-        case "0.7.1":
-        case "0.8.0":
-        case "0.8.1":
-        case "0.8.2":
-        case "0.8.3":
-        case "0.8.4":
-        case "0.8.5":
-        case "0.8.6":
-        case "0.8.7":
-        case "0.8.8":
-        case "0.9.0":
-        case "0.9.1":
-        case "0.9.2":
-        case "0.9.3":
-        case "0.9.4":
-        case "0.9.5":
-        case "0.10.0":
-        case "0.10.1":
-        case "0.10.2":
-        case "0.10.3":
+        case version_in(v, "0.6.6", "0.10.3"):
             obj["extra"] = { style: "" };
             obj.meta.version = "0.10.4";
-        case "0.10.4":
-        case "0.10.5":
+        case version_in(v, "0.10.4", "0.10.5"):
             for (let i of obj.数据) {
                 w(i.data);
             }
@@ -2143,36 +2135,14 @@ function version_tr(obj): 集type {
                 }
             }
             obj.meta.version = "0.11.0";
-        case "0.11.0":
-        case "0.11.1":
+        case version_in(v, "0.11.0", "0.11.1"):
             obj["values"] = {};
             obj.meta.version = "0.11.2";
-        case "0.11.2":
-        case "0.11.3":
-        case "0.11.4":
-        case "0.11.5":
-        case "0.12.0":
-        case "0.12.1":
-        case "0.12.2":
-        case "0.12.3":
-        case "0.12.4":
-        case "0.12.5":
-        case "0.12.6":
-        case "0.13.0":
+        case version_in(v, "0.11.2", "0.13.0"):
             obj.meta["create_time"] = new Date().getTime();
             obj.meta["change_time"] = new Date().getTime();
-            obj.meta.version = "0.13.0";
-        case "0.13.1":
-        case "0.14.0":
-        case "0.14.1":
-        case "0.14.2":
-        case "0.14.3":
-        case "0.15.0":
-        case "0.16.0":
-        case "0.16.1":
-        case "0.16.2":
-        case "0.17.0":
-        case "0.17.1":
+            obj.meta.version = "0.13.1";
+        case version_in(v, "0.13.1", "0.17.1"):
             {
                 for (let i of obj.数据) {
                     w(i.data);
@@ -2185,20 +2155,12 @@ function version_tr(obj): 集type {
                 }
             }
             obj.meta.version = "0.17.2";
-        case "0.17.2":
-        case "0.17.3":
+        case version_in(v, "0.17.2", "0.17.3"):
             delete obj.链接[""];
             delete obj.链接["0"][""];
             delete obj.链接["0"]["0"];
             obj.meta.version = "0.17.4";
-        case "0.17.4":
-        case "0.17.5":
-        case "0.18.0":
-        case "0.19.0":
-        case "0.19.1":
-        case "0.19.2":
-        case "0.19.3":
-        case "0.19.4":
+        case version_in(v, "0.17.4", "0.19.4"):
             const one_k = Math.E;
             for (let i in obj.链接) {
                 for (let j in obj.链接[i]) {
@@ -2211,19 +2173,7 @@ function version_tr(obj): 集type {
                 }
             }
             obj.meta.version = "0.20.0";
-        case "0.20.0":
-        case "0.20.1":
-        case "0.20.2":
-        case "0.20.3":
-        case "0.21.0":
-        case "0.21.1":
-        case "0.21.2":
-        case "0.21.3":
-        case "0.21.4":
-        case "0.21.5":
-        case "0.21.6":
-        case "0.21.7":
-        case "0.21.8":
+        case version_in(v, "0.20.0", "0.21.8"):
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
