@@ -6572,9 +6572,7 @@ class graph extends HTMLElement {
         this.text = document.createElement("textarea");
         const text_class = "hide_jxg_text";
         this.text.classList.add(text_class);
-        this.text.value =
-            this.getAttribute("value") ||
-            `let brd=JXG.JSXGraph.initBoard(gid,{axis:true,showCopyRight:false,boundingbox:[-4,4,4,-4]});`;
+        this.text.value = this.getAttribute("value") || "";
         this.innerHTML = "";
         this.append(b);
         b.append(edit, editor);
