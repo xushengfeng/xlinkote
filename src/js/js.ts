@@ -1536,7 +1536,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 z.push(x);
                 let arrow = createEl("x-link-arrow");
                 x.append(arrow);
-                arrow._value.start = { id: elid, a: free_o_a };
+                arrow._value.start.id = elid;
+                arrow._value.start.a = free_o_a;
                 x.style.stroke = "var(--color6)";
                 x.style.strokeWidth = "1";
                 x.classList.add("link_arrow_p");
@@ -1544,7 +1545,8 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             }, free_db_dtime);
         } else {
             let arrow = elFromId(free_link).querySelector("x-link-arrow") as link_arrow;
-            arrow._value.end = { id: free_o_rects[0].el.id, a: free_o_a };
+            arrow._value.end.id = free_o_rects[0].el.id;
+            arrow._value.end.a = free_o_a;
             render_link_arrow(free_link, e);
             arrow.ob();
             link(arrow._value.start.id).add(free_o_rects[0].el.id);
@@ -8858,7 +8860,7 @@ class link_arrow extends HTMLElement {
     r2: ResizeObserver;
     _value: { start: { id: string; a: any; marker?: string }; end: { id: string; a: any; marker?: string } } = {
         start: { id: "", a: 0 },
-        end: null,
+        end: { id: "", a: null, marker: "point" },
     };
     connectedCallback() {
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -8879,7 +8881,7 @@ class link_arrow extends HTMLElement {
     render(e: PointerEvent) {
         let xel = this.parentElement as x;
         let start_p = get_link_arrow_p(this._value.start.id, this._value.start.a);
-        let end_p = this._value.end ? get_link_arrow_p(this._value.end.id, this._value.end.a) : e2p(e);
+        let end_p = this._value.end.id ? get_link_arrow_p(this._value.end.id, this._value.end.a) : e2p(e);
         let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
         let t = `translate(${-el_offset2(xel).x},${-el_offset2(xel).y})`;
         p.setAttribute("transform", t);
@@ -8919,7 +8921,7 @@ class link_arrow extends HTMLElement {
     }
 
     ob() {
-        if (this._value.end) {
+        if (this._value.end.id) {
             this.r.observe(elFromId(this._value.start.id), { attributes: true, attributeFilter: ["style"] });
             this.r.observe(elFromId(this._value.end.id), { attributes: true, attributeFilter: ["style"] });
             this.r2.observe(elFromId(this._value.start.id));
