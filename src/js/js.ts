@@ -6619,6 +6619,7 @@ class graph extends HTMLElement {
     }
 
     run(code: string) {
+        if (this.s.innerHTML) JXG.JSXGraph.freeBoard(JXG.getBoardByContainerId(this.s.id));
         this.s.id = `g${uuid_id()}`;
         eval(`{let gid = '${this.s.id}';${code}}`);
         const svg = this.s.querySelector("svg");
@@ -6641,6 +6642,8 @@ class graph extends HTMLElement {
 }
 
 window.customElements.define("x-graph", graph);
+
+ignore_el.push("x-graph");
 
 import mathSymbols from "../../lib/tex/x.js";
 class symbols extends HTMLElement {
@@ -8409,9 +8412,9 @@ class ggb extends HTMLElement {
             ggbBase64: "",
             // showToolBar: true,
         };
-        import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
-            this.applet = new window["GGBApplet"](this.p, "5.0");
-        });
+        // import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
+        //     this.applet = new window["GGBApplet"](this.p, "5.0");
+        // });
         let bar = createEl("div");
         bar.classList.add("ggb_bar");
         let save = createEl("div");
