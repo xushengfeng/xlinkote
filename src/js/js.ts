@@ -1084,7 +1084,7 @@ function zoom_o(z: number) {
     });
 
     document.querySelectorAll("x-graph").forEach((el: graph) => {
-        el.run(el.text.value);
+        el.reflasth();
     });
 }
 
@@ -6559,7 +6559,7 @@ class graph extends HTMLElement {
     }
 
     text: HTMLTextAreaElement;
-    gid: string;
+    s: HTMLElement;
     resize_ob: ResizeObserver;
 
     connectedCallback() {
@@ -6567,8 +6567,8 @@ class graph extends HTMLElement {
         b.id = "t_md";
         const edit = createEl("div");
         const editor = createEl("div");
-        const s = document.createElement("div");
-        s.id = this.gid = `g${uuid_id()}`;
+        this.s = document.createElement("div");
+        this.s.id = `g${uuid_id()}`;
         this.text = document.createElement("textarea");
         const text_class = "hide_jxg_text";
         this.text.classList.add(text_class);
@@ -6576,7 +6576,7 @@ class graph extends HTMLElement {
         this.innerHTML = "";
         this.append(b);
         b.append(edit, editor);
-        this.append(s);
+        this.append(this.s);
         this.append(this.text);
 
         let x = this.parentElement as x;
@@ -6605,7 +6605,7 @@ class graph extends HTMLElement {
             this.run(this.text.value);
         };
         this.resize_ob = new ResizeObserver(() => {
-            this.reflasth();
+            this.run(this.text.value);
         });
         this.resize_ob.observe(this.parentElement);
     }
@@ -6615,12 +6615,13 @@ class graph extends HTMLElement {
     }
 
     reflasth() {
-        this.run(this.text.value);
+        JXG.getBoardByContainerId(this.s.id).updateCSSTransforms();
     }
 
     run(code: string) {
-        eval(`{let gid = '${this.gid}';${code}}`);
-        const svg = elFromId(this.gid).querySelector("svg");
+        this.s.id = `g${uuid_id()}`;
+        eval(`{let gid = '${this.s.id}';${code}}`);
+        const svg = this.s.querySelector("svg");
         const ob = new MutationObserver(() => {
             svg.setAttribute("width", String(el_offset2(this).w));
             svg.setAttribute("height", String(el_offset2(this).h));
