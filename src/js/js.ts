@@ -6568,7 +6568,7 @@ class graph extends HTMLElement {
         const edit = createEl("div");
         const editor = createEl("div");
         const s = document.createElement("div");
-        s.id = this.gid = `g${new Date().getTime()}`;
+        s.id = this.gid = `g${uuid_id()}`;
         this.text = document.createElement("textarea");
         const text_class = "hide_jxg_text";
         this.text.classList.add(text_class);
