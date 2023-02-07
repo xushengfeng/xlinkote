@@ -6553,6 +6553,7 @@ window.customElements.define("x-md", markdown);
 
 // 几何图形
 import JXG from "jsxgraph";
+JXG.Options.text.useMathJax = true;
 class graph extends HTMLElement {
     constructor() {
         super();
