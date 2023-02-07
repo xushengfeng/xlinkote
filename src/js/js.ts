@@ -6615,7 +6615,7 @@ class graph extends HTMLElement {
     }
 
     reflasth() {
-        JXG.getBoardByContainerId(this.s.id).updateCSSTransforms();
+        if (JXG && this.s.id) JXG.getBoardByContainerId(this.s.id)?.updateCSSTransforms();
     }
 
     run(code: string) {
@@ -6623,6 +6623,7 @@ class graph extends HTMLElement {
         this.s.id = `g${uuid_id()}`;
         eval(`{let gid = '${this.s.id}';${code}}`);
         const svg = this.s.querySelector("svg");
+        if (!svg) return;
         const ob = new MutationObserver(() => {
             svg.setAttribute("width", String(el_offset2(this).w));
             svg.setAttribute("height", String(el_offset2(this).h));
