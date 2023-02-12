@@ -1814,12 +1814,6 @@ document.onkeydown = (e) => {
                 归位.click();
             }
             break;
-        case "/":
-            if (e.ctrlKey) {
-                e.preventDefault();
-                elFromId("toggle_md").click();
-            }
-            break;
         case "0":
             if (e.ctrlKey) {
                 let ozoom = zoom,
@@ -4241,48 +4235,36 @@ function cmd(str: string) {
 }
 
 cmd_el.oninput = () => {
-    const el = get_x_by_id(cmd_el.getAttribute("data-id"));
-    const md = el.querySelector("x-md") as markdown;
-    if (cmd_el.value == "/") {
-        md.text.setRangeText("/");
-        md.text.selectionStart = md.text.selectionEnd = md.text.selectionStart + 1;
-        md.text.dispatchEvent(new Event("input"));
-        data_changed();
-        md.edit = true;
-        cmd_el.value = "";
-        cmd_pel.classList.add("cmd_hide");
-    } else {
-        cmd_r.innerHTML = "";
-        let arg = cmd_el.value;
-        let args = arg.split(/\s+/);
-        const fuse = new Fuse(md_type_l, {
-            includeMatches: true,
-            findAllMatches: true,
-            useExtendedSearch: true,
-        });
-        let fr = fuse.search(args[0]);
-        for (let i of fr) {
-            for (let j of i.matches) {
-                let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
-                let line = createEl("div");
-                let p = createEl("span");
-                for (let i = 0; i < indices.length; i++) {
-                    const k = indices[i];
-                    let h = createEl("span");
-                    h.innerText = j.value.slice(k[0], k[1] + 1);
-                    if (Number(i) == indices.length - 1) {
-                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
-                    } else {
-                        p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
-                    }
+    cmd_r.innerHTML = "";
+    let arg = cmd_el.value;
+    let args = arg.split(/\s+/);
+    const fuse = new Fuse(md_type_l, {
+        includeMatches: true,
+        findAllMatches: true,
+        useExtendedSearch: true,
+    });
+    let fr = fuse.search(args[0]);
+    for (let i of fr) {
+        for (let j of i.matches) {
+            let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
+            let line = createEl("div");
+            let p = createEl("span");
+            for (let i = 0; i < indices.length; i++) {
+                const k = indices[i];
+                let h = createEl("span");
+                h.innerText = j.value.slice(k[0], k[1] + 1);
+                if (Number(i) == indices.length - 1) {
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h, j.value.slice(k[1] + 1));
+                } else {
+                    p.append(j.value.slice(indices[i - 1]?.[1] + 1 || 0, k[0]), h);
                 }
-                line.append(p);
-                cmd_r.append(line);
-                line.onpointerdown = () => {
-                    cmd_el.value = j.value;
-                    run_cmd();
-                };
             }
+            line.append(p);
+            cmd_r.append(line);
+            line.onpointerdown = () => {
+                cmd_el.value = j.value;
+                run_cmd();
+            };
         }
     }
 };
@@ -6103,7 +6085,7 @@ class markdown extends HTMLElement {
                     z.reflash();
                 }
             }
-            if (e.key == "/") {
+            if (e.key == "/" && e.ctrlKey) {
                 e.preventDefault();
                 let s = this.getBoundingClientRect();
                 console.log(document.getSelection().getRangeAt(0), s);
