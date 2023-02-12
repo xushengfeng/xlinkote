@@ -4061,7 +4061,6 @@ function search_score(
 let select_index = 0;
 search_el.oninput = search_el.click = () => {
     let l = search(search_el.value, "str");
-    console.log(l);
     show_search_l(l);
     if (l.length == 0) {
         view_el.classList.add("viewer_hide");
@@ -7953,7 +7952,6 @@ class link_value extends HTMLElement {
                 v = el.innerText;
             }
             let l = search(v, "str");
-            console.log(l);
             show_search_l(l, this._id);
 
             search_el.value = v;
