@@ -1063,22 +1063,6 @@ body > #搜索 > #搜索结果 > div > div > span > span {
     backdrop-filter: var(--blur);
 }
 
-body > #cmd {
-    position: absolute;
-    transition: opacity var(--transition);
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    box-shadow: var(--shadow1);
-    border-radius: 4px;
-    z-index: 5;
-}
-.cmd_hide {
-    opacity: 0;
-    pointer-events: none;
-}
-body > #cmd > #命令输出 > div > span > span {
-    font-weight: bold;
-}
 body > #viewer {
     position: absolute;
     overflow: hidden;

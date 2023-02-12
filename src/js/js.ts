@@ -132,11 +132,6 @@ var search_el = elFromId("search") as HTMLInputElement;
 var search_r = elFromId("搜索结果");
 var search_pel = elFromId("搜索");
 
-var cmd_el = elFromId("命令框") as HTMLInputElement;
-var cmd_r = elFromId("命令输出");
-var cmd_pel = cmd_el.parentElement;
-cmd_pel.classList.add("cmd_hide");
-
 const view_el = elFromId("viewer");
 
 const ink_el = elFromId("ink") as HTMLCanvasElement;
@@ -4067,6 +4062,9 @@ search_el.oninput = search_el.click = () => {
         let r = el.getBoundingClientRect();
         set_viewer_posi(r.x + r.width, r.y);
     }
+    if (arg.name == "type") {
+        show_md_type_l(arg.args);
+    }
 };
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
@@ -4105,9 +4103,12 @@ search_el.onkeyup = (e) => {
     if (e.key == "ArrowUp" || e.key == "ArrowDown") {
         e.preventDefault();
         let el = select_search(select_index);
-        move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
-        let r = el.getBoundingClientRect();
-        set_viewer_posi(r.x + r.width, r.y);
+        let arg = cmd(search_el.value);
+        if (arg.name == "s") {
+            move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+            let r = el.getBoundingClientRect();
+            set_viewer_posi(r.x + r.width, r.y);
+        }
     }
 };
 
@@ -4129,17 +4130,27 @@ function select_search(i: number) {
 }
 
 function click_search_item(iid: string) {
-    let el = elFromId(iid);
-    if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el as x & xlink);
-    else view_el.classList.add("viewer_hide");
-    show_search_l([]);
-    let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
-    console.log(id);
-    link(id).add(iid);
+    let arg = cmd(search_el.value);
+    if (arg.name == "s") {
+        let el = elFromId(iid);
+        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el as x & xlink);
+        else view_el.classList.add("viewer_hide");
+        show_search_l([]);
+        let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
+        console.log(id);
+        link(id).add(iid);
+    }
+    if (arg.name == "type") {
+        run_cmd();
+    }
 }
 
 search_r.onpointerleave = () => {
     view_el.classList.add("viewer_hide");
+};
+
+search_el.onchange = () => {
+    run_cmd();
 };
 
 /** 展示搜索结果 */
@@ -4241,16 +4252,14 @@ function cmd(str: string) {
     return { name: l[0], args: l.slice(1) };
 }
 
-cmd_el.oninput = () => {
-    cmd_r.innerHTML = "";
-    let arg = cmd_el.value;
-    let args = arg.split(/\s+/);
+function show_md_type_l(arg: string[]) {
     const fuse = new Fuse(md_type_l, {
         includeMatches: true,
         findAllMatches: true,
         useExtendedSearch: true,
     });
-    let fr = fuse.search(args[0]);
+    let fr = fuse.search(arg[0]);
+    search_r.innerHTML = "";
     for (let i of fr) {
         for (let j of i.matches) {
             let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
@@ -4267,23 +4276,14 @@ cmd_el.oninput = () => {
                 }
             }
             line.append(p);
-            cmd_r.append(line);
+            search_r.append(line);
             line.onpointerdown = () => {
-                cmd_el.value = j.value;
+                search_el.value = "type " + j.value;
                 run_cmd();
             };
         }
     }
-};
-
-cmd_el.onchange = () => {
-    run_cmd();
-};
-cmd_el.onblur = () => {
-    cmd_el.value = "";
-    cmd_pel.classList.add("cmd_hide");
-    cmd_r.innerHTML = "";
-};
+}
 
 const md_type_l: md_type[] = [
     "h1",
@@ -4301,18 +4301,18 @@ const md_type_l: md_type[] = [
     "iframe",
 ];
 function run_cmd() {
-    let arg = cmd(cmd_el.value);
+    let arg = cmd(search_el.value);
     if (arg.name == "type") {
-        const el = get_x_by_id(cmd_el.getAttribute("data-id"));
+        const el = get_x_by_id(search_el.getAttribute("data-fid"));
         const md = el.querySelector("x-md") as markdown;
         let mtype = arg.args[0];
         if (md_type_l.includes(mtype as md_type)) {
             md.type = mtype as md_type;
             data_changed();
-            cmd_pel.classList.add("cmd_hide");
+            search_pel.classList.remove("搜索展示");
             md.edit = true;
         }
-        cmd_el.value = "";
+        search_el.value = "";
     }
 }
 
@@ -6097,13 +6097,13 @@ class markdown extends HTMLElement {
                 let s = this.getBoundingClientRect();
                 console.log(document.getSelection().getRangeAt(0), s);
 
-                cmd_pel.style.left = s.left + "px";
-                cmd_pel.style.top = s.top + "px";
-                cmd_pel.classList.remove("cmd_hide");
-                cmd_el.setAttribute("data-id", this.parentElement.id);
-                cmd_el.value = "type ";
+                search_pel.style.left = s.left + "px";
+                search_pel.style.top = s.top + "px";
+                search_pel.classList.add("搜索展示");
+                search_el.setAttribute("data-fid", this.parentElement.id);
+                search_el.value = "type ";
                 setTimeout(() => {
-                    cmd_el.focus();
+                    search_el.focus();
                 }, 10);
             }
             if (e.key == " ") {
