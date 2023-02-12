@@ -3930,7 +3930,7 @@ type search_result = {
     type?: "str" | "regex";
     score: number;
 }[];
-function search(input: string, type: "str" | "regex") {
+function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
     let s = x.str;
     let result = [] as search_result;
@@ -4009,14 +4009,13 @@ function search(input: string, type: "str" | "regex") {
     return result;
 }
 
-function search_cmd(str: string) {
+function search_cmd(str: string[]) {
     let op = false,
         s = 2,
         v = 1,
         t = 1;
-    let l = str.split("  ");
-    if (l[1]) {
-        let ll = l[1].trim().split(/\s+/);
+    if (str[1]) {
+        let ll = str.slice(1);
         if (ll[0] == "-") {
             op = true;
             ll.splice(0, 1);
@@ -4031,7 +4030,7 @@ function search_cmd(str: string) {
             t = Number(ll[2]);
         }
     }
-    return { str: l[0], s, v, t, opsit: op };
+    return { str: str[0] || "", s, v, t, opsit: op };
 }
 
 /** 计算 时间 值 搜索匹配度 距离 */
@@ -4054,17 +4053,20 @@ function search_score(
 
 let select_index = 0;
 search_el.oninput = search_el.click = () => {
-    let l = search(search_el.value, "str");
-    show_search_l(l);
-    if (l.length == 0) {
-        view_el.classList.add("viewer_hide");
-        return;
+    let arg = cmd(search_el.value);
+    if (arg.name == "s") {
+        let l = search(arg.args, "str");
+        show_search_l(l);
+        if (l.length == 0) {
+            view_el.classList.add("viewer_hide");
+            return;
+        }
+        select_index = Math.min(select_index, l.length - 1); // 搜索记录上次定位
+        let el = select_search(select_index);
+        move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+        let r = el.getBoundingClientRect();
+        set_viewer_posi(r.x + r.width, r.y);
     }
-    select_index = Math.min(select_index, l.length - 1); // 搜索记录上次定位
-    let el = select_search(select_index);
-    move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
-    let r = el.getBoundingClientRect();
-    set_viewer_posi(r.x + r.width, r.y);
 };
 search_el.onblur = () => {
     search_pel.classList.remove("搜索展示");
@@ -4223,7 +4225,12 @@ function show_g_search() {
     search_pel.style.width = "";
     search_el.focus();
     search_pel.setAttribute("data-fid", "0");
-    let l = search(search_el.value, "str");
+    let arg = cmd(search_el.value);
+    if (arg.name != "s") {
+        arg.args = [""];
+        search_el.value = "s ";
+    }
+    let l = search(arg.args, "str");
     show_search_l(l);
 }
 
@@ -7941,10 +7948,10 @@ class link_value extends HTMLElement {
             } else {
                 v = el.innerText;
             }
-            let l = search(v, "str");
+            let l = search([v], "str");
             show_search_l(l, this._id);
 
-            search_el.value = v;
+            search_el.value = "s " + v;
             search_el.focus();
             search_el.selectionStart = 0;
             search_el.selectionEnd = search_el.value.length;
