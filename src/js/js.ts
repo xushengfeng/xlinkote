@@ -4206,6 +4206,7 @@ function show_search_l(l: search_result, exid?: string) {
         };
     }
 
+    link("0").衰减();
     for (let div of els) {
         if (search_r.firstChild) {
             search_r.firstChild.before(div);
@@ -4586,7 +4587,6 @@ function link(key0: string) {
         },
         /** 获取值 */
         get_v: (is_small?: boolean) => {
-            link("0").衰减();
             if (is_small || is_smallest_el(get_link_el_by_id(key0))) {
                 if (集.链接[0][key0]) {
                     let l = link(key0).get();
@@ -7973,6 +7973,7 @@ class link_value extends HTMLElement {
 
     set elid(id: string) {
         this._id = id;
+        link("0").衰减();
         let v = link(id).get_v();
         if (v) {
             this.v.innerHTML = "";
