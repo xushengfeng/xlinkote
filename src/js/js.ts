@@ -4235,6 +4235,11 @@ function show_g_search() {
 
 let now_focus_id = "0";
 
+function cmd(str: string) {
+    let l = str.split(/\s/);
+    return { name: l[0], args: l.slice(1) };
+}
+
 cmd_el.oninput = () => {
     const el = get_x_by_id(cmd_el.getAttribute("data-id"));
     const md = el.querySelector("x-md") as markdown;
@@ -4307,17 +4312,19 @@ const md_type_l: md_type[] = [
     "iframe",
 ];
 function run_cmd() {
-    const el = get_x_by_id(cmd_el.getAttribute("data-id"));
-    const md = el.querySelector("x-md") as markdown;
-    let arg = cmd_el.value;
-    let args = arg.split(/\s+/);
-    if (md_type_l.includes(args[0] as md_type)) {
-        md.type = args[0] as md_type;
-        data_changed();
-        cmd_pel.classList.add("cmd_hide");
-        md.edit = true;
+    let arg = cmd(cmd_el.value);
+    if (arg.name == "type") {
+        const el = get_x_by_id(cmd_el.getAttribute("data-id"));
+        const md = el.querySelector("x-md") as markdown;
+        let mtype = arg.args[0];
+        if (md_type_l.includes(mtype as md_type)) {
+            md.type = mtype as md_type;
+            data_changed();
+            cmd_pel.classList.add("cmd_hide");
+            md.edit = true;
+        }
+        cmd_el.value = "";
     }
-    cmd_el.value = "";
 }
 
 /** 判断是否是最小元素 */
@@ -6105,6 +6112,7 @@ class markdown extends HTMLElement {
                 cmd_pel.style.top = s.top + "px";
                 cmd_pel.classList.remove("cmd_hide");
                 cmd_el.setAttribute("data-id", this.parentElement.id);
+                cmd_el.value = "type ";
                 setTimeout(() => {
                     cmd_el.focus();
                 }, 10);
