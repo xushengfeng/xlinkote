@@ -4150,6 +4150,7 @@ function click_search_item(iid: string) {
         console.log(id);
         link(id).add(iid);
         search_el.blur();
+        link_value_bar.elid = link_value_bar.elid;
     }
     if (arg.name == "type") {
         search_el.value = `type ${iid}`;
