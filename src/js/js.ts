@@ -4236,8 +4236,8 @@ function show_search_l(l: search_result, exid?: string) {
 /** 创建项 */
 function create_r_item() {
     let div = createEl("div");
-    const id = div.getAttribute("data-id");
     div.onpointerdown = (e) => {
+        const id = div.getAttribute("data-id");
         click_search_item(id);
     };
     div.onmouseenter = (e) => {
