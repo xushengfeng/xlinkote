@@ -4164,7 +4164,7 @@ function show_search_l(l: search_result, exid?: string) {
     let ids = {};
     for (let i of l) {
         if (!ids[i.id]) {
-            let div = createEl("div");
+            let div = create_r_item();
             div.setAttribute("data-id", i.id);
             els.push(div);
             ids[i.id] = els.length - 1;
@@ -4196,15 +4196,10 @@ function show_search_l(l: search_result, exid?: string) {
     }
 
     function add_div_event(div: HTMLElement, id: string) {
-        div.onpointerdown = (e) => {
-            click_search_item(id);
-        };
-        div.onmouseenter = (e) => {
+        div.addEventListener("mouseenter", () => {
             let el = elFromId(id);
             move_to_x_link(el as x & xlink);
-            select_index = Number(div.getAttribute("data-i"));
-            select_search(select_index);
-        };
+        });
         div.onmousemove = (e) => {
             window.requestAnimationFrame(() => {
                 set_viewer_posi(e.clientX, e.clientY);
@@ -4223,6 +4218,25 @@ function show_search_l(l: search_result, exid?: string) {
         value.append(link_value_text(link(div.getAttribute("data-id")).get_v()));
         div.append(value);
     }
+    r_i_r();
+}
+
+/** 创建项 */
+function create_r_item() {
+    let div = createEl("div");
+    const id = div.getAttribute("data-id");
+    div.onpointerdown = (e) => {
+        click_search_item(id);
+    };
+    div.onmouseenter = (e) => {
+        select_index = Number(div.getAttribute("data-i"));
+        select_search(select_index);
+    };
+    return div;
+}
+
+/** 为项添加序列信息 */
+function r_i_r() {
     [...search_r.children].forEach((div, i) => {
         div.setAttribute("data-i", String(i));
     });
