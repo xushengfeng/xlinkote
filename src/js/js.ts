@@ -2166,6 +2166,13 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.20.0";
         case version_in(v, "0.20.0", "0.21.8"):
+            for (let i in obj.链接) {
+                for (let j in obj.链接[i]) {
+                    obj.链接[i][j]["s"] = default_down_s;
+                }
+            }
+            obj.meta.version = "0.22.0";
+        case version_in(v, "0.22.0", "0.22.0"):
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
