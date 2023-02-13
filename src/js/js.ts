@@ -1909,7 +1909,7 @@ type 集type = {
         slide?: ys_type;
     };
     数据: 画布type[];
-    链接: { [key: string]: { [key: string]: { value?: number; time?: number } } };
+    链接: { [key: string]: { [key: string]: { value?: number; time?: number; s: number } } };
     assets: { [key: string]: { url: string; base64: string; sha: string } };
     中转站: data;
     values: { [key: string]: { [key: string]: any } };
@@ -4520,6 +4520,8 @@ breadcrumbs_el.onwheel = (e) => {
     breadcrumbs_el.scrollLeft += i * Math.sqrt(e.deltaX ** 2 + e.deltaY ** 2 + e.deltaZ ** 2);
 };
 
+const default_down_s = 4;
+
 /** 链接处理 */
 function link(key0: string) {
     let t = new Date().getTime();
@@ -4533,14 +4535,14 @@ function link(key0: string) {
                 link(key1).add();
                 if (集.链接[key0][key1]?.value === undefined || 集.链接[key1][key0]?.value === undefined) {
                     // 只存储在边的一个方向上，以时间换空间
-                    集.链接[key0][key1] = { value: 1, time: t };
+                    集.链接[key0][key1] = { value: 1, time: t, s: default_down_s };
                 }
             } else {
                 if (!集.链接[key0]) {
                     集.链接[key0] = {};
                 }
                 if (!集.链接[0][key0]) {
-                    集.链接[0][key0] = { value: 1, time: t };
+                    集.链接[0][key0] = { value: 1, time: t, s: default_down_s };
                 }
             }
         },
@@ -4633,13 +4635,12 @@ function link(key0: string) {
             for (let i in 集.链接) {
                 for (let j in 集.链接[i]) {
                     let target = 集.链接[i][j];
-                    集.链接[i][j].value = down(target.value, target.time, t);
+                    集.链接[i][j].value = down(target.value, target.time, t, target.s || default_down_s);
                     集.链接[i][j].time = t;
                 }
             }
-            function down(value: number, t0: number, t1: number) {
+            function down(value: number, t0: number, t1: number, xv_s: number) {
                 const xv_c = 0.9;
-                const xv_s = 8;
                 // 计算衰减值
                 function x2v(x: number) {
                     return Math.exp((x * Math.log(xv_c)) / xv_s);
