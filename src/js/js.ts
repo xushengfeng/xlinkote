@@ -4056,7 +4056,7 @@ search_el.oninput = search_el.click = () => {
             view_el.classList.add("viewer_hide");
             return;
         }
-        select_index = Math.min(select_index, l.length - 1); // 搜索记录上次定位
+        select_index = clip(select_index, 0, l.length - 1); // 搜索记录上次定位
         let el = select_search(select_index);
         move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
         let r = el.getBoundingClientRect();
@@ -4081,7 +4081,7 @@ search_el.onkeyup = (e) => {
             view_el.classList.add("viewer_hide");
             break;
         case "ArrowUp":
-            if (select_index == 0) {
+            if (select_index == -1) {
                 select_index = search_r.childElementCount - 1;
             } else {
                 select_index--;
@@ -4089,7 +4089,7 @@ search_el.onkeyup = (e) => {
             break;
         case "ArrowDown":
             if (select_index == search_r.childElementCount - 1) {
-                select_index = 0;
+                select_index = -1;
             } else {
                 select_index++;
             }
@@ -4105,10 +4105,12 @@ search_el.onkeyup = (e) => {
         e.preventDefault();
         let el = select_search(select_index);
         let arg = cmd(search_el.value);
-        if (arg.name == "s") {
-            move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
-            let r = el.getBoundingClientRect();
-            set_viewer_posi(r.x + r.width, r.y);
+        if (el) {
+            if (arg.name == "s") {
+                move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+                let r = el.getBoundingClientRect();
+                set_viewer_posi(r.x + r.width, r.y);
+            }
         }
     }
 };
@@ -4118,6 +4120,7 @@ function select_search(i: number) {
         el.classList.remove("search_item_select");
     });
     let el = <HTMLElement>search_r.children[i];
+    if (!el) return;
     el.classList.add("search_item_select");
     let ri = search_r.children[i].getBoundingClientRect();
     let r = search_r.getBoundingClientRect();
