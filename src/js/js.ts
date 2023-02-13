@@ -4303,6 +4303,7 @@ function show_md_type_l(arg: string[]) {
             };
         }
     }
+    select_index = -1;
     r_i_r();
 }
 
