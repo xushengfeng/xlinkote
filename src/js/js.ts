@@ -4095,6 +4095,7 @@ search_el.onkeyup = (e) => {
             }
             break;
         case "Enter":
+            if (select_index != -1) e.preventDefault();
             let id = (<HTMLElement>search_r.querySelector(".search_item_select")).getAttribute("data-id");
             click_search_item(id);
             search_el.blur();
@@ -4141,6 +4142,7 @@ function click_search_item(iid: string) {
         link(id).add(iid);
     }
     if (arg.name == "type") {
+        search_el.value = `type ${iid}`;
         run_cmd();
     }
 }
@@ -4277,7 +4279,7 @@ function show_md_type_l(arg: string[]) {
     for (let i of fr) {
         for (let j of i.matches) {
             let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
-            let line = createEl("div");
+            let line = create_r_item();
             let p = createEl("span");
             for (let i = 0; i < indices.length; i++) {
                 const k = indices[i];
@@ -4290,6 +4292,7 @@ function show_md_type_l(arg: string[]) {
                 }
             }
             line.append(p);
+            line.setAttribute("data-id", j.value);
             search_r.append(line);
             line.onpointerdown = () => {
                 search_el.value = "type " + j.value;
@@ -4297,6 +4300,7 @@ function show_md_type_l(arg: string[]) {
             };
         }
     }
+    r_i_r();
 }
 
 const md_type_l: md_type[] = [
