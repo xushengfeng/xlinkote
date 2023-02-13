@@ -4105,7 +4105,6 @@ search_el.onkeyup = (e) => {
             if (select_index != -1) e.preventDefault();
             let id = (<HTMLElement>search_r.querySelector(".search_item_select")).getAttribute("data-id");
             click_search_item(id);
-            search_el.blur();
             break;
     }
     if (e.key == "ArrowUp" || e.key == "ArrowDown") {
@@ -4150,6 +4149,7 @@ function click_search_item(iid: string) {
         let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
         console.log(id);
         link(id).add(iid);
+        search_el.blur();
     }
     if (arg.name == "type") {
         search_el.value = `type ${iid}`;
