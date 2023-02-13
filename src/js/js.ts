@@ -7983,7 +7983,7 @@ class link_value extends HTMLElement {
 
             search_el.value = "s " + v;
             search_el.focus();
-            search_el.selectionStart = 0;
+            search_el.selectionStart = 2;
             search_el.selectionEnd = search_el.value.length;
 
             let x = el_offset(this, document.body).x,
