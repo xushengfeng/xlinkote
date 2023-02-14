@@ -4610,6 +4610,7 @@ function link(key0: string) {
                             maxn = list[i].value;
                         }
                     }
+                    if (!next) return;
                     let ln = chain_n - list[next].value;
                     if (ln > 0) {
                         walk(link(next).get(), ln);
