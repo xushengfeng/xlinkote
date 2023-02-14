@@ -4585,13 +4585,21 @@ function link(key0: string) {
             } else {
                 let xl: typeof l = {};
                 let walk = (list: typeof l, chain_n: number) => {
+                    let next = null;
+                    let maxn = 0;
                     for (let i in list) {
-                        let ln = chain_n - list[i].value;
-                        if (ln > 0) {
-                            walk(link(i).get(), ln);
-                        } else {
-                            xl[i] = list[i];
+                        if (i == "0") continue;
+                        if (xl[i]) continue;
+                        if (list[i].value > maxn) {
+                            next = i;
+                            maxn = list[i].value;
                         }
+                    }
+                    let ln = chain_n - list[next].value;
+                    if (ln > 0) {
+                        walk(link(next).get(), ln);
+                    } else {
+                        xl[next] = list[next];
                     }
                 };
                 walk(l, chain);
