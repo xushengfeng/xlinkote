@@ -3988,6 +3988,15 @@ function search(input: string[], type: "str" | "regex") {
                 }
                 break;
         }
+        // 链式搜索
+        let c = link(el.parentElement.id).get(1);
+        for (let i in c) {
+            result.push({
+                id: i,
+                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+            });
+        }
+
         if (!is_search) {
             result.push({
                 id: el.parentElement.id,
@@ -4008,7 +4017,12 @@ function search(input: string[], type: "str" | "regex") {
         }
         return l;
     }
-    return result;
+    let has_id = {};
+    let rr = [];
+    for (let i of result) {
+        if (!has_id[i.id]) rr.push(i);
+    }
+    return rr;
 }
 
 function search_cmd(str: string[]) {
