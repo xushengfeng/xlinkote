@@ -4289,7 +4289,7 @@ function show_g_search() {
 let now_focus_id = "0";
 
 function cmd(str: string) {
-    let l = str.split(/\s/);
+    let l = str.split(/\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/);
     return { name: l[0], args: l.slice(1) };
 }
 
