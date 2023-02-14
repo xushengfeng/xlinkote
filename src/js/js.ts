@@ -4280,7 +4280,8 @@ function show_g_search() {
     let arg = cmd(search_el.value);
     if (arg.name != "s") {
         arg.args = [""];
-        search_el.value = "s ";
+        search_el.value = "s ''";
+        search_el.setSelectionRange(3, 3);
     }
     let l = search(arg.args, "str");
     show_search_l(l);
@@ -8004,10 +8005,10 @@ class link_value extends HTMLElement {
             let l = search([v], "str");
             show_search_l(l, this._id);
 
-            search_el.value = "s " + v;
+            search_el.value = `s '${v}'`;
             search_el.focus();
-            search_el.selectionStart = 2;
-            search_el.selectionEnd = search_el.value.length;
+            search_el.selectionStart = 3;
+            search_el.selectionEnd = search_el.value.length - 1;
 
             let x = el_offset(this, document.body).x,
                 y = el_offset(this, document.body).y - search_pel.getBoundingClientRect().height;
