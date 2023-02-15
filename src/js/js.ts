@@ -3936,6 +3936,10 @@ function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
     let s = x.str;
     let result = [] as search_result;
+    let sr: search_result = [];
+    let chainr: search_result = [];
+    let other: search_result = [];
+    let has_id = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
         if (el.tagName == "X-MD") {
@@ -3945,7 +3949,6 @@ function search(input: string[], type: "str" | "regex") {
         } else {
             text = el.innerText;
         }
-        let is_search = false;
         switch (type) {
             case "str":
                 const fuse = new Fuse(text.split("\n"), {
@@ -3956,8 +3959,7 @@ function search(input: string[], type: "str" | "regex") {
                 });
                 let fr = fuse.search(s);
                 for (let i of fr) {
-                    is_search = true;
-                    result.push({
+                    sr.push({
                         id: el.parentElement.id,
                         l: i.matches,
                         n: i.refIndex,
@@ -3979,8 +3981,7 @@ function search(input: string[], type: "str" | "regex") {
                     l.push({ value: i, indices: s_i(i, text).map((v) => [v, v + i.length]) });
                 }
                 if (l.length != 0) {
-                    is_search = true;
-                    result.push({
+                    sr.push({
                         id: el.parentElement.id,
                         l,
                         score: search_score(el.parentElement.id, 1, x.t, x.v, x.s, x.opsit),
@@ -3991,19 +3992,17 @@ function search(input: string[], type: "str" | "regex") {
         // 链式搜索
         let c = link(el.parentElement.id).get(1);
         for (let i in c) {
-            result.push({
+            chainr.push({
                 id: i,
                 score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
             });
         }
 
-        if (!is_search) {
-            result.push({
-                id: el.parentElement.id,
-                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
-                text: text,
-            });
-        }
+        other.push({
+            id: el.parentElement.id,
+            score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+            text: text,
+        });
     });
 
     function s_i(t: string, st: string) {
@@ -4017,12 +4016,23 @@ function search(input: string[], type: "str" | "regex") {
         }
         return l;
     }
-    let has_id = {};
-    let rr = [];
-    for (let i of result) {
-        if (!has_id[i.id]) rr.push(i);
+    for (let i of sr) {
+        has_id[i.id] = true;
+        result.push(i);
     }
-    return rr;
+    for (let i of chainr) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    for (let i of other) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    return result;
 }
 
 function search_cmd(str: string[]) {
