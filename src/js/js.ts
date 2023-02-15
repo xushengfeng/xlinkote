@@ -4301,7 +4301,7 @@ let now_focus_id = "0";
 
 function cmd(str: string) {
     let l = str.split(/\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/);
-    return { name: l[0], args: l.slice(1) };
+    return { name: l[0], args: l.slice(1).map((t) => t.replace(/^['"]/, "").replace(/['"]$/g, "")) };
 }
 
 function show_md_type_l(arg: string[]) {
