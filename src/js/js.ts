@@ -8999,6 +8999,18 @@ class link_arrow extends HTMLElement {
         xel.style.height = r.h + "px";
         let t2 = `translate(${-r.x},${-r.y})`;
         p.setAttribute("transform", t2);
+
+        p.ondblclick = () => {
+            let x = createEl("x-x");
+            x.id = uuid_id();
+            z.push(x);
+            if (!this._value["center"]) this._value["center"] = { id: "" };
+            this._value.center.id = x.id;
+            let md = createEl("x-md");
+            x.append(md);
+            md.edit = true;
+            this.render(null);
+        };
     }
 
     ob() {
