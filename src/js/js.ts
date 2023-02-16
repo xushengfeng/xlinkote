@@ -8923,8 +8923,13 @@ class link_arrow extends HTMLElement {
     svg: SVGSVGElement;
     r: MutationObserver;
     r2: ResizeObserver;
-    _value: { start: { id: string; a: any; marker?: string }; end: { id: string; a: any; marker?: string } } = {
+    _value: {
+        start: { id: string; a: any; marker?: string };
+        center: { id: string };
+        end: { id: string; a: any; marker?: string };
+    } = {
         start: { id: "", a: 0 },
+        center: { id: "" },
         end: { id: "", a: null, marker: "point" },
     };
     connectedCallback() {
@@ -8973,6 +8978,17 @@ class link_arrow extends HTMLElement {
         }
         if (this._value?.end?.marker) {
             p.setAttribute("marker-end", `url(${arrow_markers_svg}#flowchart-${this._value?.end?.marker}End)`);
+        }
+        let cx = (start_p.x + 3 * start_ctrl.x + 3 * end_ctrl.x + end_p.x) / 8,
+            cy = (start_p.y + 3 * start_ctrl.y + 3 * end_ctrl.y + end_p.y) / 8;
+        if (this._value?.center?.id) {
+            let el = elFromId(this._value?.center?.id);
+            if (el) {
+                let x = cx - el.offsetWidth / 2;
+                let y = cy - el.offsetHeight / 2;
+                el.style.left = x + "px";
+                el.style.top = y + "px";
+            }
         }
         this.svg.innerHTML = "";
         this.svg.append(p);
