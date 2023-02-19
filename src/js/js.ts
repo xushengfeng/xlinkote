@@ -3235,7 +3235,7 @@ class 图层 {
                     "x-link-arrow": "箭头链接",
                     "x-graph": "几何",
                 };
-                s.innerText += ` ${type[i.子元素[0].type.toLowerCase()]}`;
+                s.innerText += ` ${type[i.子元素[0].type.toLowerCase()] || i.子元素[0].type}`;
             } else {
                 let x = createEl("img");
                 x.src = ul_show_svg;
