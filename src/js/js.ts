@@ -470,6 +470,10 @@ elFromId("拆分为多行").onclick = () => {
     to_more_line(selected_el);
 };
 
+elFromId("层handle").onclick = () => {
+    style_list.parentElement.classList.toggle("层hide");
+};
+
 function put_toast(t: string, time?: number) {
     if (!time) time = 1;
     toast.innerText = t;

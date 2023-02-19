@@ -1797,6 +1797,13 @@ x-link {
     .selected_item_hide {
         background-color: var(--bg-color1);
     }
+    #层handle {
+        @apply w-full h-3;
+        background-color: var(--bg-color3);
+    }
+    .层hide {
+        @apply hidden;
+    }
 
     x-color {
         top: auto;
