@@ -3214,9 +3214,6 @@ class 图层 {
         li.onpointerenter = (e) => {
             move_to_x_link(get_x_by_id(i.id));
         };
-        s.onpointerdown = (e) => {
-            jump_to_x_link(get_x_by_id(i.id));
-        };
         li.onpointermove = (e) => {
             window.requestAnimationFrame(() => {
                 set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
