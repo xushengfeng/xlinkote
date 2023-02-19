@@ -794,6 +794,7 @@ var o_touch_t = NaN;
         setTimeout(() => {
             O.style.transition = ``;
             render_select_rects();
+            data_changed();
         }, t);
         set_O_p(x, y);
     }
@@ -808,6 +809,7 @@ var o_touch_t = NaN;
         select_id = "";
     } else if (e.targetTouches.length == 2) {
         touch_zoom(e);
+        data_changed();
     }
 
     o_touch_e = e;
