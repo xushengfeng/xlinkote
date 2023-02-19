@@ -3233,6 +3233,7 @@ class 图层 {
                     "x-calendar": "日历",
                     "x-time": "计时器",
                     "x-link-arrow": "箭头链接",
+                    "x-graph": "几何",
                 };
                 s.innerText += ` ${type[i.子元素[0].type.toLowerCase()]}`;
             } else {
