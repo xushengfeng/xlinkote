@@ -4004,6 +4004,7 @@ function search(input: string[], type: "str" | "regex") {
                 chainr.push({
                     id: i,
                     score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
+                    text: elFromId(i).innerText,
                 });
             }
         }
