@@ -6137,8 +6137,9 @@ class markdown extends HTMLElement {
                         text.selectionStart = s + i[0].length;
                         text.selectionEnd = s + i[0].length + t.length;
                         if (e.key == "[" && text.value.charAt(text.selectionStart - 2) == "[") {
-                            text.setRangeText(`${t}#${uuid_id()}`);
-                            if (t) text.selectionEnd -= 8;
+                            let id = uuid_id();
+                            text.setRangeText(`${t}#${id}`);
+                            if (t) text.selectionEnd -= id.length + 1;
                         }
                         text.dispatchEvent(new Event("input"));
                     }
