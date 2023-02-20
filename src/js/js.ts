@@ -6484,7 +6484,7 @@ class markdown extends HTMLElement {
                                 if (i.type == "emoji") {
                                     list.push({ text: `:${i.markup}`, type: "mu" });
                                     // 删去一个冒号以匹配
-                                } else if (i.markup.includes("#")) {
+                                } else if (i.markup.match(/^#+$/)) {
                                     list.push({ text: i.markup + " ", type: "mu" });
                                 } else {
                                     list.push({ text: i.markup, type: "mu" });
