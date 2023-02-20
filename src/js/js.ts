@@ -4108,7 +4108,7 @@ function search_score(
     t = 1 / (t + 1);
     let v = vt.value;
     let s = search_s;
-    return (op ? -1 : 1) * Math.sqrt(((time_n || 1) * t) ** 2 + ((value_n || 1) * v) ** 2 + ((search_n || 2) * s) ** 2);
+    return (op ? -1 : 1) * Math.sqrt(((time_n ?? 1) * t) ** 2 + ((value_n ?? 1) * v) ** 2 + ((search_n ?? 2) * s) ** 2);
 }
 
 let select_index = 0;
@@ -7845,7 +7845,7 @@ class xcolor extends HTMLElement {
         this.els.c0.style.background = this.msk(`linear-gradient(${x.hexa()},${x.hexa()})`);
         this.els.pb.style.backgroundColor = `${x.hexa()}`;
         this.els.arange.style.background = this.msk(`linear-gradient(to right, ${x.hex()} 0%, #0000 100%)`);
-        this.els.par.style.left = (1 - (hsv?.[3] || 1)) * this.els.arange.offsetWidth + "px";
+        this.els.par.style.left = (1 - (hsv?.[3] ?? 1)) * this.els.arange.offsetWidth + "px";
 
         this.els.ci.value = x.hexa();
     }
