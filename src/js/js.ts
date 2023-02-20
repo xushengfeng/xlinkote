@@ -4022,11 +4022,12 @@ function search(input: string[], type: "str" | "regex") {
             });
         }
 
-        other.push({
-            id: el.parentElement.id,
-            score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
-            text: text,
-        });
+        if (!s)
+            other.push({
+                id: el.parentElement.id,
+                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                text: text,
+            });
     });
 
     function s_i(t: string, st: string) {
