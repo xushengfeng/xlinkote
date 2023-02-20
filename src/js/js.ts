@@ -4256,6 +4256,8 @@ function show_search_l(l: search_result, exid?: string) {
                     }
                 }
             }
+        } else if (i.text) {
+            p.append(i.text);
         } else {
             p.append(`#${i.id}`);
         }
