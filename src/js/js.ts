@@ -3942,10 +3942,12 @@ function search(input: string[], type: "str" | "regex") {
     let result = [] as search_result;
     let sr: search_result = [];
     let chainr: search_result = [];
+    let flex: search_result = [];
     let other: search_result = [];
     let has_id = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
+        let searched = false;
         if (el.tagName == "X-MD") {
             text = JSON5.parse((el as markdown).value).text;
         } else if (el.tagName == "X-PDF") {
@@ -3970,6 +3972,7 @@ function search(input: string[], type: "str" | "regex") {
                         type: "str",
                         score: search_score(el.parentElement.id, 1 - i.score, x.t, x.v, x.s, x.opsit),
                     });
+                    searched = true;
                 }
                 break;
             case "regex":
@@ -3990,6 +3993,7 @@ function search(input: string[], type: "str" | "regex") {
                         l,
                         score: search_score(el.parentElement.id, 1, x.t, x.v, x.s, x.opsit),
                     });
+                    searched = true;
                 }
                 break;
         }
@@ -3999,6 +4003,20 @@ function search(input: string[], type: "str" | "regex") {
             chainr.push({
                 id: i,
                 score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+            });
+        }
+
+        if (searched && is_flex(el.parentElement.parentElement) == "flex") {
+            el.parentElement.parentElement.querySelectorAll("x-x").forEach((xel: x) => {
+                if (is_smallest_el(xel)) {
+                    if (xel.id != el.parentElement.id) {
+                        flex.push({
+                            id: xel.id,
+                            score: search_score(xel.id, 0, x.t, x.v, x.s, x.opsit),
+                            text: xel.innerText,
+                        });
+                    }
+                }
             });
         }
 
@@ -4020,11 +4038,19 @@ function search(input: string[], type: "str" | "regex") {
         }
         return l;
     }
+    console.log(sr, flex);
+
     for (let i of sr) {
         has_id[i.id] = true;
         result.push(i);
     }
     for (let i of chainr) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    for (let i of flex) {
         if (!has_id[i.id]) {
             result.push(i);
             has_id[i.id] = true;
