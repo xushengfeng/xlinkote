@@ -4002,7 +4002,7 @@ function search(input: string[], type: "str" | "regex") {
         for (let i in c) {
             chainr.push({
                 id: i,
-                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
             });
         }
 
