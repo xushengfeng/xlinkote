@@ -3998,12 +3998,14 @@ function search(input: string[], type: "str" | "regex") {
                 break;
         }
         // 链式搜索
-        let c = link(el.parentElement.id).get(1);
-        for (let i in c) {
-            chainr.push({
-                id: i,
-                score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
-            });
+        if (searched) {
+            let c = link(el.parentElement.id).get(1);
+            for (let i in c) {
+                chainr.push({
+                    id: i,
+                    score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
+                });
+            }
         }
 
         if (searched && is_flex(el.parentElement.parentElement) == "flex") {
