@@ -2197,6 +2197,9 @@ async function set_data(l: 集type) {
     for (let i in l) {
         if (集[i]) 集[i] = l[i];
     }
+
+    document.title = get_title();
+
     画布s.innerHTML = "";
 
     await set_dependencies(集.meta.dependencies || []);
@@ -2214,7 +2217,6 @@ async function set_data(l: 集type) {
         }
     }
     location.hash = `#${集.meta.UUID}`;
-    document.title = get_title();
 
     set_css(l.extra.style || "./md.css");
     if (l.extra?.slide) ys_init(l.extra.slide);
