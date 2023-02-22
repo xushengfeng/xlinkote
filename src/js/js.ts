@@ -5376,6 +5376,7 @@ md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     return f(tokens, idx, options, env, self);
 };
 function tikz_code(content: string) {
+    if (!content) return "";
     if (!import_latex) {
         let script = createEl("script");
         import("../../lib/tikzjax.js?raw").then((v) => {
