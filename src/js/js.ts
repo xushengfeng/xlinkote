@@ -3810,8 +3810,7 @@ async function put_xln_value() {
         集.meta.url = path;
         data_changed();
     }
-    let t = JSON.stringify(get_data());
-    let b = await 压缩(t);
+    let b = await 压缩(get_data());
     let reader = new FileReader();
     reader.onload = async function () {
         console.log(this.result);
@@ -3859,7 +3858,8 @@ function auto_put_xln() {
 
 import * as zip from "@zip.js/zip.js";
 
-async function 压缩(t: string) {
+async function 压缩(data: 集type) {
+    let t = JSON.stringify(data);
     const zipFileWriter = new zip.BlobWriter("application/zip");
     const textReader = new zip.TextReader(t);
     const zipWriter = new zip.ZipWriter(zipFileWriter, { password: store.webdav.加密密钥 });
