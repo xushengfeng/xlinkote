@@ -3812,24 +3812,19 @@ async function put_xln_value() {
         data_changed();
     }
     let t = JSON.stringify(get_data());
-    if (store.webdav.加密密钥) {
-        let b = await 压缩(t);
-        let reader = new FileReader();
-        reader.onload = async function () {
-            console.log(this.result);
-            show_upload_pro();
-            let v = await client.putFileContents(path, this.result, {
-                onUploadProgress: (e) => {
-                    show_upload_pro(e.loaded, e.total);
-                },
-            });
-            show_upload_v(v);
-        };
-        reader.readAsArrayBuffer(b);
-    } else {
-        let v = await client.putFileContents(path, t);
+    let b = await 压缩(t);
+    let reader = new FileReader();
+    reader.onload = async function () {
+        console.log(this.result);
+        show_upload_pro();
+        let v = await client.putFileContents(path, this.result, {
+            onUploadProgress: (e) => {
+                show_upload_pro(e.loaded, e.total);
+            },
+        });
         show_upload_v(v);
-    }
+    };
+    reader.readAsArrayBuffer(b);
 }
 function show_upload_v(v: boolean) {
     if (v) {
