@@ -2919,6 +2919,9 @@ function add_file(type: string, text: string, data: string, x: number, y: number
         if (type == "text/html") {
             let turndownService = new TurndownService({ headingStyle: "atx" });
             md.value = JSON.stringify({ type: "text", text: turndownService.turndown(text) });
+        } else if (type == "text/xln") {
+            let data = JSON5.parse(text) as data;
+            xel.value = data;
         } else {
             md.value = JSON.stringify({ type: "p", text });
         }
