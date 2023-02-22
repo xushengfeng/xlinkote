@@ -3770,31 +3770,30 @@ var now_dav_data = "";
 /** 获取云文件数据 */
 async function get_xln_value(path: string) {
     show_upload_pro();
-    let str = (await client.getFileContents(path, {
-        format: "text",
-        onDownloadProgress: (e) => {
-            show_upload_pro(e.loaded, e.total);
-        },
-    })) as string;
+    let str = "";
     let o: any;
     try {
+        let b = (await client.getFileContents(path, {
+            onDownloadProgress: (e) => {
+                show_upload_pro(e.loaded, e.total);
+            },
+        })) as ArrayBuffer;
+        let blob = new Blob([b]);
+        const zipFileReader = new zip.BlobReader(blob);
+        const zipWriter = new zip.TextWriter();
+        const zipReader = new zip.ZipReader(zipFileReader);
+        const firstEntry = (await zipReader.getEntries())[0];
+        str = await firstEntry.getData(zipWriter, { password: store.webdav.加密密钥 });
+        await zipReader.close();
         o = JSON5.parse(<string>str);
     } catch (e) {
-        if (store.webdav.加密密钥) {
-            let b = (await client.getFileContents(path, {
-                onDownloadProgress: (e) => {
-                    show_upload_pro(e.loaded, e.total);
-                },
-            })) as ArrayBuffer;
-            let blob = new Blob([b]);
-            const zipFileReader = new zip.BlobReader(blob);
-            const zipWriter = new zip.TextWriter();
-            const zipReader = new zip.ZipReader(zipFileReader);
-            const firstEntry = (await zipReader.getEntries())[0];
-            str = await firstEntry.getData(zipWriter, { password: store.webdav.加密密钥 });
-            await zipReader.close();
-            o = JSON5.parse(<string>str);
-        }
+        let str = (await client.getFileContents(path, {
+            format: "text",
+            onDownloadProgress: (e) => {
+                show_upload_pro(e.loaded, e.total);
+            },
+        })) as string;
+        o = JSON5.parse(<string>str);
     }
     now_dav_data = str;
     return o as 集type;
