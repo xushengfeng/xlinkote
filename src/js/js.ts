@@ -3771,7 +3771,7 @@ var now_dav_data = "";
 async function get_xln_value(path: string) {
     show_upload_pro();
     let str = "";
-    let o: any;
+    let o: 集type;
     try {
         let b = (await client.getFileContents(path, {
             onDownloadProgress: (e) => {
@@ -3779,13 +3779,37 @@ async function get_xln_value(path: string) {
             },
         })) as ArrayBuffer;
         let blob = new Blob([b]);
-        const zipFileReader = new zip.BlobReader(blob);
-        const zipWriter = new zip.TextWriter();
-        const zipReader = new zip.ZipReader(zipFileReader);
-        const firstEntry = (await zipReader.getEntries())[0];
-        str = await firstEntry.getData(zipWriter, { password: store.webdav.加密密钥 });
-        await zipReader.close();
-        o = JSON5.parse(<string>str);
+        let fs = new zip.fs.FS();
+        await fs.importBlob(blob);
+        let assets: { [key: string]: Blob } = {};
+        for (let i of fs.children) {
+            if (i.name == "assets") {
+                for (let a of i.children) {
+                    const zipWriter = new zip.BlobWriter();
+                    assets[a.name] = await a.data.getData(zipWriter, { password: store.webdav.加密密钥 });
+                }
+            } else if (i.name.includes(".xln")) {
+                const zipWriter = new zip.TextWriter();
+                str = await i.data.getData(zipWriter, { password: store.webdav.加密密钥 });
+                o = JSON5.parse(<string>str);
+            }
+        }
+
+        if (o.assets && Object.keys(assets).length)
+            for (let i in o.assets) {
+                const fileReader = new FileReader();
+                let x = () => {
+                    return new Promise((rj) => {
+                        fileReader.onload = (e) => {
+                            let t = o.assets[i].base64.replace(/base64,.*/, "");
+                            o.assets[i].base64 = t + (e.target.result as string).match(/base64,.*/)[0];
+                            rj(0);
+                        };
+                        fileReader.readAsDataURL(assets[i]);
+                    });
+                };
+                await x();
+            }
     } catch (e) {
         let str = (await client.getFileContents(path, {
             format: "text",
@@ -3859,14 +3883,17 @@ function auto_put_xln() {
 import * as zip from "@zip.js/zip.js";
 
 async function 压缩(data: 集type) {
-    let t = JSON.stringify(data);
-    const zipFileWriter = new zip.BlobWriter("application/zip");
-    const textReader = new zip.TextReader(t);
-    const zipWriter = new zip.ZipWriter(zipFileWriter, { password: store.webdav.加密密钥 });
-    await zipWriter.add(get_file_name() + ".xln", textReader);
-    await zipWriter.close();
-    const zipFileBlob = await zipFileWriter.getData();
-    return zipFileBlob;
+    let fs = new zip.fs.FS();
+    let assets_dir = fs.addDirectory("assets");
+    for (let i in data.assets) {
+        assets_dir.addData64URI(i, data.assets[i].base64);
+        let b64 = data.assets[i].base64;
+        b64 = b64.replace(/base64,.*/, "");
+        data.assets[i].base64 = b64;
+    }
+    let t = JSON.stringify(data, null, 2);
+    fs.addText("text.xln", t);
+    return fs.exportBlob({ password: store.webdav.加密密钥 });
 }
 
 function open_in_win(uuid: string) {
