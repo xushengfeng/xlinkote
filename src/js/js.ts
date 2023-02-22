@@ -3885,6 +3885,7 @@ import * as zip from "@zip.js/zip.js";
 async function 压缩(data: 集type) {
     let fs = new zip.fs.FS();
     let assets_dir = fs.addDirectory("assets");
+    data = clone(data);
     for (let i in data.assets) {
         assets_dir.addData64URI(i, data.assets[i].base64);
         let b64 = data.assets[i].base64;
