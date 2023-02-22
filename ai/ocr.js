@@ -151,7 +151,8 @@ function 检测后处理(data, w, h, src_canvas) {
     var myImageData = new ImageData(w, h);
     for (let i in data) {
         let n = i * 4;
-        myImageData.data[n] = myImageData.data[n + 1] = myImageData.data[n + 2] = data[i] * 255;
+        const v = data[i] > 0.3 ? 255 : 0;
+        myImageData.data[n] = myImageData.data[n + 1] = myImageData.data[n + 2] = v;
         myImageData.data[n + 3] = 255;
     }
     canvas.width = w;
@@ -163,7 +164,6 @@ function 检测后处理(data, w, h, src_canvas) {
     let src = cv.imread(canvas);
 
     cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
-    cv.threshold(src, src, 120, 200, cv.THRESH_BINARY);
     let contours = new cv.MatVector();
     let hierarchy = new cv.Mat();
 
@@ -174,18 +174,19 @@ function 检测后处理(data, w, h, src_canvas) {
         let bbox = cv.boundingRect(cnt);
         // TODO minAreaRect
 
+        let dx = 8,
+            dy = 8;
+
         let box = [
-            [bbox.x, bbox.y],
-            [bbox.x + bbox.width, bbox.y],
-            [bbox.x + bbox.width, bbox.y + bbox.height],
-            [bbox.x, bbox.y + bbox.height],
+            [bbox.x - dx, bbox.y - dy],
+            [bbox.x + bbox.width + dx * 2, bbox.y - dy],
+            [bbox.x + bbox.width + dx * 2, bbox.y + bbox.height + dy * 2],
+            [bbox.x - dx, bbox.y + bbox.height + dy * 2],
         ];
 
         let min_size = 3;
         if (Math.min(bbox.width, bbox.height) >= min_size) {
             let c = document.createElement("canvas");
-            let dx = bbox.width * 0.1,
-                dy = bbox.height * 1.2;
             c.width = bbox.width + dx * 2;
             c.height = bbox.height + dy * 2;
 
