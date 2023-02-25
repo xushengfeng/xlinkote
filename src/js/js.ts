@@ -4164,6 +4164,11 @@ search_el.onblur = () => {
 
     view_el.classList.add("viewer_hide");
 };
+search_el.onkeydown = (e) => {
+    if (e.key == "ArrowUp" || e.key == "ArrowDown") {
+        e.preventDefault();
+    }
+};
 search_el.onkeyup = (e) => {
     switch (e.key) {
         case "Escape":
