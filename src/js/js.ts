@@ -471,6 +471,9 @@ elFromId("转为一行").onclick = () => {
 elFromId("拆分为多行").onclick = () => {
     to_more_line(selected_el);
 };
+elFromId("拆分组合").onclick = () => {
+    out_group(selected_el);
+};
 
 elFromId("层handle").onclick = () => {
     style_list.parentElement.classList.toggle("层hide");
@@ -5061,6 +5064,31 @@ function fixed_el() {
         }
     }
     requestAnimationFrame(fixed_el);
+}
+
+/** 拆分组合 */
+function out_group(els: x[]) {
+    for (let x of els) {
+        if (!is_smallest_el(x)) {
+            let p: { [id: string]: { x: number; y: number; el: x } } = {};
+            x.querySelectorAll(":scope > x-x").forEach((el: x) => {
+                let x = el_offset2(el, O).x;
+                let y = el_offset2(el, O).y;
+                p[el.id] = { x, y, el };
+            });
+            for (let i in p) {
+                let nx = copy_x(p[i].el);
+                nx.style.left = p[i].x + "px";
+                nx.style.top = p[i].y + "px";
+                nx.style.position = "absolute";
+                nx.style.zIndex = String(O.childElementCount + 1);
+                p[i].el.remove();
+            }
+            z.remove(x);
+        }
+    }
+    get_data();
+    z.reflash();
 }
 
 /** 获取从近到远元素列表 */
