@@ -2206,8 +2206,6 @@ function version_tr(obj): 集type {
                 if (!obj.assets[i].source) {
                     obj.assets[i]["source"] = base64_blob(obj.assets[i].base64);
                     obj.assets[i]["type"] = obj.assets[i]["source"].type.split("/");
-                    delete obj.assets[i].base64;
-                    delete obj.assets[i].sha;
                 }
                 if (!obj.assets[i].type) {
                     let type = [];
@@ -2217,6 +2215,8 @@ function version_tr(obj): 集type {
                     });
                     obj.assets[i]["type"] = type;
                 }
+                delete obj.assets[i]?.base64;
+                delete obj.assets[i]?.sha;
             }
             return obj;
         default:
