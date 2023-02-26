@@ -1926,7 +1926,6 @@ type 集type = {
     链接: { [key: string]: { [key: string]: { value?: number; time?: number; s: number } } };
     assets: {
         [key: string]: {
-            url: string;
             source: Blob | File;
             type: [string, string];
         };
@@ -2217,6 +2216,7 @@ function version_tr(obj): 集type {
                 }
                 delete obj.assets[i]?.base64;
                 delete obj.assets[i]?.sha;
+                delete obj.assets[i]?.url;
             }
             return obj;
         default:
@@ -2967,7 +2967,7 @@ function add_file(type: string, text: string, data: File, x: number, y: number) 
             md.value = JSON.stringify({ type: "p", text });
         }
     } else {
-        let id = put_assets("", null, data);
+        let id = put_assets(null, data);
         let file = createEl("x-file");
         xel.append(file);
         file.value = JSON.stringify({ r: true, id });
@@ -3013,11 +3013,10 @@ document.addEventListener("message", (msg: any) => {
 import CryptoJS from "crypto-js";
 
 /** 添加资源到assets */
-function put_assets(url: string, blob: Blob, file: File) {
+function put_assets(blob: Blob, file: File) {
     let id = uuid_id();
     集.assets[id] = {
         type: (blob?.type || file?.type || "/").split("/") as [string, string],
-        url,
         source: blob || file,
     };
     assets_reflash();
@@ -8231,7 +8230,7 @@ class record extends HTMLElement {
                         let blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
                         // let a = new FileReader();
                         // a.onload = () => {
-                        let id = put_assets("", blob, null);
+                        let id = put_assets(blob, null);
                         let file = createEl("x-file");
                         this.parentElement.append(file);
                         file.value = JSON.stringify({ r: true, id });
