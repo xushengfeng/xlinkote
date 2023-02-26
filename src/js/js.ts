@@ -2247,9 +2247,9 @@ async function set_data(l: 集type) {
             O = ps[p.id];
             O.style.display = "block";
             zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
-            reload_side();
         }
     }
+    reload_side();
     location.hash = `#${集.meta.UUID}`;
 
     set_css(l.extra.style || "./md.css");
@@ -2307,6 +2307,7 @@ function render_data(inputdata: 画布type) {
                 if (i.子元素) v(i.子元素, i.id);
             }
         } catch (error) {
+            console.error(error);
             console.log(pid);
         }
     }
