@@ -77,6 +77,7 @@ var 侧栏 = elFromId("侧栏");
 const 侧栏_tabs = document.querySelector("#侧栏 > #tabs");
 const 侧栏_items = document.querySelector("#侧栏 > #items");
 const toast = elFromId("toast");
+const tips = elFromId("tips");
 
 var nav = elFromId("nav");
 
@@ -474,6 +475,12 @@ elFromId("拆分为多行").onclick = () => {
 elFromId("层handle").onclick = () => {
     style_list.parentElement.classList.toggle("层hide");
 };
+
+function add_tips(el: HTMLElement) {
+    tips.append(el);
+    el.id = uuid();
+    return el.id;
+}
 
 function put_toast(t: string, time?: number) {
     if (!time) time = 1;
@@ -9128,6 +9135,7 @@ class link_arrow extends HTMLElement {
 window.customElements.define("x-link-arrow", link_arrow);
 
 let will_link = "";
+let tips_id = "";
 class add_link extends HTMLElement {
     constructor() {
         super();
@@ -9138,17 +9146,14 @@ class add_link extends HTMLElement {
         this.onclick = () => {
             if (will_link) {
                 link(will_link).add(this.lid);
-                document.querySelectorAll("x-link-add").forEach((el: add_link) => {
-                    el.classList.remove("x-link-will-add");
-                });
+                elFromId(tips_id).remove();
                 will_link = "";
+                tips_id = "";
             } else {
                 will_link = this.lid;
-                document.querySelectorAll("x-link-add").forEach((el: add_link) => {
-                    if (el.value != will_link) {
-                        el.classList.add("x-link-will-add");
-                    }
-                });
+                let div = createEl("div");
+                div.innerText = `已选择#${will_link}，请再选择一个链接以连接`;
+                tips_id = add_tips(div);
             }
         };
     }
