@@ -6982,6 +6982,9 @@ class file extends HTMLElement {
                 video.controls = true;
                 this.div.append(video);
                 video.src = URL.createObjectURL(f.source);
+                video.onload = () => {
+                    URL.revokeObjectURL(video.src);
+                };
             }
             if (type[1] == "pdf") {
                 let pdf = createEl("x-pdf");
@@ -8324,6 +8327,9 @@ class audio extends HTMLElement {
     set value(v) {
         this._value = v;
         this.audio.src = v;
+        this.audio.onload = () => {
+            URL.revokeObjectURL(v);
+        };
     }
     get value() {
         return this._value;
@@ -8335,15 +8341,8 @@ window.customElements.define("x-audio", audio);
 ignore_el.push("x-audio");
 
 function audio_to_text(el: HTMLAudioElement, id: string) {
-    let arr = el.src.split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = window.atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    let blob = new Blob([u8arr], { type: mime });
+    // @ts-ignore
+    let blob = 集.assets[elFromId(id).parentElement.parentElement._value.id].source;
 
     const form = new FormData();
     form.append("file", blob, "x.flac");
@@ -8464,6 +8463,9 @@ class img extends HTMLElement {
     }
     set value(s: string) {
         this.img.src = s;
+        this.img.onload = () => {
+            URL.revokeObjectURL(s);
+        };
     }
 }
 
