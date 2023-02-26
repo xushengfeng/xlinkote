@@ -2243,6 +2243,11 @@ async function set_data(l: 集type) {
 
     await set_dependencies(集.meta.dependencies || []);
 
+    for (let i in 集.assets) {
+        const s = 集.assets[i];
+        if (!s.source.type) 集.assets[i].source = new Blob([s.source], { type: s.type.join("/") });
+    }
+
     let ps = {};
     for (const p of 集.数据) {
         ps[p.id] = render_data(p);
@@ -3021,7 +3026,7 @@ function put_assets(url: string, blob: Blob, file: File) {
 
 function get_assets(id: string) {
     let x = 集.assets[id];
-    return URL.createObjectURL(new Blob([x.source], { type: x.type.join("/") }));
+    return URL.createObjectURL(x.source);
 }
 
 /** 刷新资源栏 */
