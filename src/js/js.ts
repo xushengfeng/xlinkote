@@ -2218,6 +2218,8 @@ function version_tr(obj): 集type {
                 delete obj.assets[i]?.sha;
                 delete obj.assets[i]?.url;
             }
+            obj.meta.version = "0.24.0";
+        case version_in(v, "0.24.0", "0.24.0"):
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
