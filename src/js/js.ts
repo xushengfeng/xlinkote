@@ -2209,6 +2209,9 @@ function version_tr(obj): 集type {
                     delete obj.assets[i].base64;
                     delete obj.assets[i].sha;
                 }
+                if (!obj.assets[i].type) {
+                    obj.assets[i]["type"] = obj.assets[i]["source"].type.split("/");
+                }
             }
             return obj;
         default:
