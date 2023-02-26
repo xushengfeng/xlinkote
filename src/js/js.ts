@@ -54,6 +54,7 @@ interface x_tag_map {
     "time-b": time_s;
     "x-time": time;
     "x-link-arrow": link_arrow;
+    "x-link-add": add_link;
 }
 function createEl<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
 function createEl<K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K): HTMLElementDeprecatedTagNameMap[K];
@@ -3199,6 +3200,11 @@ class 图层 {
         li.setAttribute("data-id", i.id);
         li.append(c);
         li.append(s);
+        if (is_smallest_el(elFromId(i.id) as x)) {
+            let add_link = createEl("x-link-add");
+            li.append(add_link);
+            add_link.value = i.id;
+        }
         c.onclick = () => {
             li.querySelectorAll("input").forEach((el) => {
                 el.checked = c.checked;
@@ -4597,6 +4603,11 @@ function add_bci(el: x | xlink) {
     li.append(main);
     li.classList.add("bci");
     main.innerText = `#${el.id}`;
+    if (is_smallest_el(el)) {
+        let add = createEl("x-link-add");
+        main.append(add);
+        add.value = el.id;
+    }
     li.setAttribute("data-id", el.id);
     main.onpointerenter = (e) => {
         move_to_x_link(elFromId(el.id) as x);
@@ -9115,3 +9126,40 @@ class link_arrow extends HTMLElement {
 }
 
 window.customElements.define("x-link-arrow", link_arrow);
+
+let will_link = "";
+class add_link extends HTMLElement {
+    constructor() {
+        super();
+    }
+    lid = "";
+
+    connectedCallback() {
+        this.onclick = () => {
+            if (will_link) {
+                link(will_link).add(this.lid);
+                document.querySelectorAll("x-link-add").forEach((el: add_link) => {
+                    el.classList.remove("x-link-will-add");
+                });
+                will_link = "";
+            } else {
+                will_link = this.lid;
+                document.querySelectorAll("x-link-add").forEach((el: add_link) => {
+                    if (el.value != will_link) {
+                        el.classList.add("x-link-will-add");
+                    }
+                });
+            }
+        };
+    }
+
+    get value() {
+        return this.lid;
+    }
+
+    set value(s) {
+        this.lid = s;
+    }
+}
+
+window.customElements.define("x-link-add", add_link);

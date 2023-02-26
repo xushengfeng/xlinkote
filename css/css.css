@@ -618,7 +618,7 @@ body #main > #nav #ink_r {
     @apply inline-block h-6;
 }
 .层容器 > #层 > ul > li li > span {
-    width: calc(100% - 16px - 4px - 0.4rem);
+    width: calc(100% - 16px - 4px - 0.4rem - 1rem);
 }
 .层容器 > #层 li > input[type="checkbox"] {
     @apply checkbox;
@@ -997,6 +997,15 @@ body > #main > #画布 > x-link-value > div:nth-child(2) > div > div:not(:first-
 body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
     width: 16px;
     height: 16px;
+}
+
+x-link-add {
+    @apply inline-block w-2 h-2 rounded;
+    background-color: var(--bg-color1);
+}
+
+.x-link-will-add {
+    @apply bg-green-400;
 }
 
 .breadcrumbs {
