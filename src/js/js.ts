@@ -2210,7 +2210,12 @@ function version_tr(obj): 集type {
                     delete obj.assets[i].sha;
                 }
                 if (!obj.assets[i].type) {
-                    obj.assets[i]["type"] = obj.assets[i]["source"].type.split("/");
+                    let type = [];
+                    (obj.assets[i].base64 as string).replace(/data:(.*)\/(.*);/, (a, b, c) => {
+                        type.push(b, c);
+                        return "";
+                    });
+                    obj.assets[i]["type"] = type;
                 }
             }
             return obj;
