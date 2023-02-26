@@ -4135,18 +4135,29 @@ function search(input: string[], type: "str" | "regex") {
             has_id[i.id] = true;
         }
     }
+    if (x.random) {
+        for (let x of result) {
+            x.score = Math.random();
+        }
+    }
     return result;
 }
 
 function search_cmd(str: string[]) {
     let op = false,
+        random = false,
         s = 2,
         v = 1,
         t = 1;
     if (str[1]) {
         let ll = str.slice(1);
-        if (ll[0] == "-") {
-            op = true;
+        if (ll[0] == "-" || ll[0] == "r") {
+            if (ll[0] == "-") {
+                op = true;
+            }
+            if (ll[0] == "r") {
+                random = true;
+            }
             ll.splice(0, 1);
         }
         if (ll[0]) {
@@ -4159,7 +4170,7 @@ function search_cmd(str: string[]) {
             t = Number(ll[2]);
         }
     }
-    return { str: str[0] || "", s, v, t, opsit: op };
+    return { str: str[0] || "", s, v, t, opsit: op, random };
 }
 
 /** 计算 时间 值 搜索匹配度 距离 */
