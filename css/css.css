@@ -1004,10 +1004,6 @@ x-link-add {
     background-color: var(--bg-color1);
 }
 
-.x-link-will-add {
-    @apply bg-green-400;
-}
-
 .breadcrumbs {
     @apply absolute overflow-auto flex bg-white dark:bg-black transition-all gap-2;
     top: var(--icon-p-b-size);
