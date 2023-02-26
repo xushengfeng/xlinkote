@@ -722,7 +722,8 @@ body #main > #nav #ink_r {
     top: 4px;
     @apply flex gap-1;
 }
-.侧栏 > #items > #资源 > div > div > :nth-child(1) {
+.侧栏 > #items > #资源 > div > div > :nth-child(1),
+.侧栏 > #items > #资源 > div > div > :nth-child(2) {
     @apply w-auto text-xs;
 }
 .侧栏 > #items > #资源 > div > div > div {

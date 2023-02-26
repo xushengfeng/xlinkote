@@ -3021,6 +3021,8 @@ function assets_reflash() {
         file.value = JSON.stringify({ r: true, id: i });
 
         let bar = createEl("div");
+        let size_el = createEl("div");
+        size_el.innerText = bytes_to_size(集.assets[i].source.size);
         let r = createEl("div");
         r.innerHTML = icon(remove_svg);
         let id_el = createEl("div");
@@ -3036,6 +3038,20 @@ function assets_reflash() {
                 r.classList.add("not_click");
             }
         });
+
+        function bytes_to_size(sizes: number) {
+            let mYsize = sizes;
+            if (mYsize == 0) return 0 + "B";
+            if (mYsize > 1024 ** 3) {
+                return (mYsize / 1024 / 1024 / 1024).toFixed(2) + "GB";
+            } else if (mYsize > 1024 ** 2) {
+                return (mYsize / 1024 / 1024).toFixed(2) + "MB";
+            } else if (mYsize > 1024) {
+                return (mYsize / 1024).toFixed(2) + "KB";
+            } else {
+                return mYsize.toFixed(2) + "B";
+            }
+        }
 
         let add = createEl("div");
         add.onclick = (e) => {
@@ -3097,7 +3113,7 @@ function assets_reflash() {
         }
         async.style.display = "none";
 
-        bar.append(id_el, add, download, async, r);
+        bar.append(id_el, size_el, add, download, async, r);
     }
 }
 
