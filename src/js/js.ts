@@ -2051,9 +2051,18 @@ function rename_el() {
  * @returns if v>=v2
  */
 function version_is_big(v: string, v2: string) {
-    let vl = v.split(".").map((n) => Number(n));
-    let vl2 = v2.split(".").map((n) => Number(n));
-    return Boolean(vl[0] >= vl2[0] && vl[1] >= vl2[1] && vl[2] >= vl2[2]);
+    let vl = v.split(".");
+    let vl2 = v2.split(".");
+    let maxl = 0;
+    for (let i of vl) {
+        if (i.length > maxl) maxl = i.length;
+    }
+    for (let i of vl2) {
+        if (i.length > maxl) maxl = i.length;
+    }
+    vl.map((s) => s.padStart(maxl, "0"));
+    vl2.map((s) => s.padStart(maxl, "0"));
+    return Number(vl.join("")) >= Number(vl2.join(""));
 }
 
 /**
