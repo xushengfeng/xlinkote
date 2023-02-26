@@ -3019,6 +3019,11 @@ function put_assets(url: string, blob: Blob, file: File) {
     return id;
 }
 
+function get_assets(id: string) {
+    let x = 集.assets[id];
+    return URL.createObjectURL(new Blob([x.source], { type: x.type.join("/") }));
+}
+
 /** 刷新资源栏 */
 function assets_reflash() {
     assets_el.innerHTML = "";
@@ -3092,7 +3097,7 @@ function assets_reflash() {
                 let a = createEl("a");
                 let name = get_file_name();
                 a.download = `${name}资源文件${i}`;
-                a.href = URL.createObjectURL(集.assets[i].source);
+                a.href = get_assets(i);
                 a.click();
                 URL.revokeObjectURL(a.href);
             }
@@ -5513,7 +5518,7 @@ function tikz_svg(e: Event) {
 
 md.renderer.rules.image = function (tokens, idx, options, env, self) {
     let value = tokens[idx].attrGet("src");
-    let b = URL.createObjectURL(集.assets?.[value]?.source);
+    let b = get_assets(value);
     if (b) tokens[idx].attrSet("src", b);
     return defaultRender(tokens, idx, options, env, self);
 };
@@ -6995,18 +7000,18 @@ class file extends HTMLElement {
             if (type[0] == "image") {
                 let img = createEl("x-img");
                 this.div.append(img);
-                img.value = URL.createObjectURL(f.source);
+                img.value = get_assets(this._value.id);
             }
             if (type[0] == "audio") {
                 let audio = createEl("x-audio");
                 this.div.append(audio);
-                audio.value = URL.createObjectURL(f.source);
+                audio.value = get_assets(this._value.id);
             }
             if (type[0] == "video") {
                 let video = createEl("video");
                 video.controls = true;
                 this.div.append(video);
-                video.src = URL.createObjectURL(f.source);
+                video.src = get_assets(this._value.id);
                 video.onload = () => {
                     URL.revokeObjectURL(video.src);
                 };
@@ -7084,7 +7089,7 @@ class pdf_viewer extends HTMLElement {
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
         if (!f) return;
-        var loadingTask = pdfjsLib.getDocument(URL.createObjectURL(f.source));
+        var loadingTask = pdfjsLib.getDocument(get_assets(this._value.id));
         pdf_cache[this._value.id] = await loadingTask.promise;
         return pdf_cache[this._value.id];
     };
@@ -8449,8 +8454,7 @@ class three extends HTMLElement {
     }
 
     async set_m() {
-        const url = 集.assets[this._value];
-        this.loader.load(URL.createObjectURL(url.source), (gltf) => {
+        this.loader.load(get_assets(this._value), (gltf) => {
             this.scene.add(gltf.scene);
             this.renderer.render(this.scene, this.camera);
         });
