@@ -8228,15 +8228,11 @@ class record extends HTMLElement {
                     mediaRecorder.onstop = () => {
                         console.log("录制结束");
                         let blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
-                        // let a = new FileReader();
-                        // a.onload = () => {
                         let id = put_assets(blob, null);
                         let file = createEl("x-file");
                         this.parentElement.append(file);
                         file.value = JSON.stringify({ r: true, id });
                         this.remove();
-                        // };
-                        // a.readAsDataURL(blob);
                         stream.getAudioTracks()[0].stop();
                     };
                 });
