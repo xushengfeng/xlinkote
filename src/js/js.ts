@@ -1924,7 +1924,13 @@ type 集type = {
     };
     数据: 画布type[];
     链接: { [key: string]: { [key: string]: { value?: number; time?: number; s: number } } };
-    assets: { [key: string]: { url: string; base64: string; sha: string } };
+    assets: {
+        [key: string]: {
+            url: string;
+            source: Blob | File;
+            type: [string, string];
+        };
+    };
     中转站: data;
     values: { [key: string]: { [key: string]: any } };
 };
@@ -2196,6 +2202,14 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.22.0";
         case version_in(v, "0.22.0", "0.23.0"):
+            for (let i in obj.assets) {
+                if (!obj.assets[i].source) {
+                    obj.assets[i]["source"] = base64_blob(obj.assets[i].base64);
+                    obj.assets[i]["type"] = obj.assets[i]["source"].type.split("/");
+                    delete obj.assets[i].base64;
+                    delete obj.assets[i].sha;
+                }
+            }
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
@@ -2898,11 +2912,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
                     add_file(f.type, reader.result as string, null, x, y);
                 };
             } else {
-                let reader = new FileReader();
-                reader.readAsDataURL(f);
-                reader.onload = () => {
-                    add_file(f.type, null, reader.result as string, x, y);
-                };
+                add_file(f.type, null, f, x, y);
             }
         }
     } else {
@@ -2924,7 +2934,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
 // 添加文件或文字
 import TurndownService from "turndown";
 /** 添加文件或文字到画布 */
-function add_file(type: string, text: string, data: string, x: number, y: number) {
+function add_file(type: string, text: string, data: File, x: number, y: number) {
     let types = type.split("/");
     let xel = createEl("x-x");
     xel.style.left = x / zoom + "px";
@@ -2943,7 +2953,7 @@ function add_file(type: string, text: string, data: string, x: number, y: number
             md.value = JSON.stringify({ type: "p", text });
         }
     } else {
-        let id = put_assets("", data);
+        let id = put_assets("", null, data);
         let file = createEl("x-file");
         xel.append(file);
         file.value = JSON.stringify({ r: true, id });
@@ -2989,16 +2999,13 @@ document.addEventListener("message", (msg: any) => {
 import CryptoJS from "crypto-js";
 
 /** 添加资源到assets */
-function put_assets(url: string, base64: string) {
+function put_assets(url: string, blob: Blob, file: File) {
     let id = uuid_id();
-    let sha = "";
-    if (base64) {
-        sha = CryptoJS.SHA256(base64).toString();
-        for (let id in 集.assets) {
-            if (集.assets[id].sha == sha) return id;
-        }
-    }
-    集.assets[id] = { url, base64, sha };
+    集.assets[id] = {
+        type: (blob?.type || file?.type || "/").split("/") as [string, string],
+        url,
+        source: blob || file,
+    };
     assets_reflash();
     return id;
 }
@@ -3051,17 +3058,7 @@ function assets_reflash() {
                     suggestedName: `${get_file_name()}资源文件${i}`,
                 });
                 const writable = await fileHandle.createWritable();
-
-                let arr = 集.assets[i].base64.split(","),
-                    mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = window.atob(arr[1]),
-                    n = bstr.length,
-                    u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-                let blob = new Blob([u8arr], { type: mime });
-                await writable.write(blob);
+                await writable.write(集.assets[i].source);
                 await writable.close();
                 async.style.display = "";
                 async_init = true;
@@ -3070,9 +3067,9 @@ function assets_reflash() {
                 let a = createEl("a");
                 let name = get_file_name();
                 a.download = `${name}资源文件${i}`;
-                a.href = 集.assets[i].base64;
+                a.href = URL.createObjectURL(集.assets[i].source);
                 a.click();
-                URL.revokeObjectURL(集.assets[i].base64);
+                URL.revokeObjectURL(a.href);
             }
         };
         download.innerHTML = icon(down_svg);
@@ -3091,15 +3088,9 @@ function assets_reflash() {
         async.innerHTML = icon(binding_svg);
         async function async_file() {
             let r: File = await fileHandle.getFile();
-            let a = new FileReader();
-            a.onload = () => {
-                let t = a.result as string;
-                if (t != 集.assets[i].base64) {
-                    集.assets[i].base64 = t;
-                    集.assets[i].sha = CryptoJS.SHA256(a.result as string).toString();
-                }
-            };
-            a.readAsDataURL(r);
+            if (r.size != 集.assets[i].source.size) {
+                集.assets[i].source = r;
+            }
             if (async_init) {
                 setTimeout(async_file, 1000);
             }
@@ -3819,16 +3810,8 @@ async function get_xln_value(path: string) {
 
         if (o.assets && Object.keys(assets).length)
             for (let i in o.assets) {
-                const fileReader = new FileReader();
                 let x = () => {
-                    return new Promise((rj) => {
-                        fileReader.onload = (e) => {
-                            let t = o.assets[i].base64.replace(/base64,.*/, "");
-                            o.assets[i].base64 = t + (e.target.result as string).match(/base64,.*/)[0];
-                            rj(0);
-                        };
-                        fileReader.readAsDataURL(assets[i]);
-                    });
+                    o.assets[i].source = assets[i];
                 };
                 await x();
             }
@@ -3907,12 +3890,10 @@ import * as zip from "@zip.js/zip.js";
 async function 压缩(data: 集type) {
     let fs = new zip.fs.FS();
     let assets_dir = fs.addDirectory("assets");
-    data = clone(data);
-    for (let i in data.assets) {
-        assets_dir.addData64URI(i, data.assets[i].base64);
-        let b64 = data.assets[i].base64;
-        b64 = b64.replace(/base64,.*/, "");
-        data.assets[i].base64 = b64;
+    let data1 = structuredClone(data);
+    for (let i in data1.assets) {
+        assets_dir.addBlob(i, data1.assets[i].source);
+        data1.assets[i].source = null;
     }
     let t = JSON.stringify(data, null, 2);
     fs.addText("text.xln", t);
@@ -5507,7 +5488,7 @@ function tikz_svg(e: Event) {
 
 md.renderer.rules.image = function (tokens, idx, options, env, self) {
     let value = tokens[idx].attrGet("src");
-    let b = 集.assets?.[value]?.base64;
+    let b = URL.createObjectURL(集.assets?.[value]?.source);
     if (b) tokens[idx].attrSet("src", b);
     return defaultRender(tokens, idx, options, env, self);
 };
@@ -6973,7 +6954,7 @@ class file extends HTMLElement {
     set_m() {
         let f = 集.assets[this._value.id];
         if (!f) return;
-        let type = f.base64.match(/data:(.*?);/)[1].split("/");
+        let type = f.type;
         if (
             type[0] != "image" &&
             type[0] != "audio" &&
@@ -6989,18 +6970,18 @@ class file extends HTMLElement {
             if (type[0] == "image") {
                 let img = createEl("x-img");
                 this.div.append(img);
-                img.value = f.base64;
+                img.value = URL.createObjectURL(f.source);
             }
             if (type[0] == "audio") {
                 let audio = createEl("x-audio");
                 this.div.append(audio);
-                audio.value = f.base64;
+                audio.value = URL.createObjectURL(f.source);
             }
             if (type[0] == "video") {
                 let video = createEl("video");
                 video.controls = true;
                 this.div.append(video);
-                video.src = f.base64;
+                video.src = URL.createObjectURL(f.source);
             }
             if (type[1] == "pdf") {
                 let pdf = createEl("x-pdf");
@@ -7039,6 +7020,19 @@ class file extends HTMLElement {
 
 window.customElements.define("x-file", file);
 
+function base64_blob(base64: string) {
+    let arr = base64.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = window.atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    let blob = new Blob([u8arr], { type: mime });
+    return blob;
+}
+
 import * as pdfjsLib from "pdfjs-dist";
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.1.81/build/pdf.worker.min.js";
 
@@ -7062,7 +7056,7 @@ class pdf_viewer extends HTMLElement {
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
         if (!f) return;
-        var loadingTask = pdfjsLib.getDocument(f.base64);
+        var loadingTask = pdfjsLib.getDocument(URL.createObjectURL(f.source));
         pdf_cache[this._value.id] = await loadingTask.promise;
         return pdf_cache[this._value.id];
     };
@@ -8197,15 +8191,15 @@ class record extends HTMLElement {
                     mediaRecorder.onstop = () => {
                         console.log("录制结束");
                         let blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
-                        let a = new FileReader();
-                        a.onload = () => {
-                            let id = put_assets("", a.result as string);
-                            let file = createEl("x-file");
-                            this.parentElement.append(file);
-                            file.value = JSON.stringify({ r: true, id });
-                            this.remove();
-                        };
-                        a.readAsDataURL(blob);
+                        // let a = new FileReader();
+                        // a.onload = () => {
+                        let id = put_assets("", blob, null);
+                        let file = createEl("x-file");
+                        this.parentElement.append(file);
+                        file.value = JSON.stringify({ r: true, id });
+                        this.remove();
+                        // };
+                        // a.readAsDataURL(blob);
                         stream.getAudioTracks()[0].stop();
                     };
                 });
@@ -8432,7 +8426,7 @@ class three extends HTMLElement {
 
     async set_m() {
         const url = 集.assets[this._value];
-        this.loader.load(url.base64, (gltf) => {
+        this.loader.load(URL.createObjectURL(url.source), (gltf) => {
             this.scene.add(gltf.scene);
             this.renderer.render(this.scene, this.camera);
         });
@@ -8596,10 +8590,8 @@ class ggb extends HTMLElement {
         bar.onclick = () => {
             window[this.p.id]["getBase64"]((v) => {
                 console.log(v);
-                let obase = 集.assets[this._value].base64;
-                集.assets[this._value].base64 = obase.match(/(data:.*?;base64,)/)[1] + v;
-                let sha = CryptoJS.SHA256(集.assets[this._value].base64).toString();
-                集.assets[this._value].sha = sha;
+                let bl = base64_blob(v);
+                集.assets[this._value].source = bl;
                 data_changed();
             });
         };
@@ -8618,7 +8610,11 @@ class ggb extends HTMLElement {
     async set_m() {
         const url = 集.assets[this._value];
         this.p.id = this.getid();
-        this.p.ggbBase64 = url.base64;
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+            this.p.ggbBase64 = e.target.result;
+        };
+        fileReader.readAsDataURL(url.source);
         import_script("https://www.geogebra.org/apps/deployggb.js").then(() => {
             this.applet.inject(this.div);
         });
