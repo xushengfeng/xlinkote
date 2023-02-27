@@ -2733,11 +2733,23 @@ function set_db_file(uuid: string) {
 function db_download() {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
-    r.onsuccess = () => {
-        let t = JSON.stringify(r.result);
+    r.onsuccess = async () => {
+        let fs = new zip.fs.FS();
+        let assets_dir = fs.addDirectory("assets");
+        let data1 = structuredClone(r.result);
+        for (let x of data1) {
+            for (let i in x.assets) {
+                if (x.assets[i].source) {
+                    assets_dir.addBlob(i, x.assets[i].source);
+                    x.assets[i].source = null;
+                }
+            }
+        }
+        let t = JSON.stringify(data1, null, 2);
+        fs.addText("xlinkote.json", t);
         let a = createEl("a");
-        let blob = new Blob([t]);
-        a.download = `xlinkote_db.json`;
+        let blob = await fs.exportBlob();
+        a.download = `xlinkote_db.zip`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
@@ -2745,10 +2757,32 @@ function db_download() {
 }
 
 /** 上传数据库 */
-function db_load(t: string) {
-    let o = JSON5.parse(t);
+async function db_load(file: File) {
+    let fs = new zip.fs.FS();
+    await fs.importBlob(file);
+    let assets: { [key: string]: Blob } = {};
+    let data;
+    for (let i of fs.children) {
+        if (i.name == "assets") {
+            for (let a of i.children) {
+                const zipWriter = new zip.BlobWriter();
+                assets[a.name] = await a.data.getData(zipWriter);
+            }
+        } else {
+            const zipWriter = new zip.TextWriter();
+            let str = await i.data.getData(zipWriter);
+            data = JSON5.parse(<string>str);
+        }
+    }
+
+    for (let o of data) {
+        if (o.assets && Object.keys(assets).length)
+            for (let i in o.assets) {
+                if (assets[i]) o.assets[i].source = assets[i];
+            }
+    }
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
-    for (let obj of o) {
+    for (let obj of data) {
         let r = customerObjectStore.put(obj);
         r.onerror = (event) => {
             console.error(new Error((<any>event.target).error));
@@ -2759,11 +2793,7 @@ function db_load(t: string) {
 
 elFromId("db_load").onchange = () => {
     let file = (<HTMLInputElement>elFromId("db_load")).files[0];
-    let reader = new FileReader();
-    reader.onload = () => {
-        db_load(<string>reader.result);
-    };
-    reader.readAsText(file);
+    db_load(file);
 };
 
 // 撤销
