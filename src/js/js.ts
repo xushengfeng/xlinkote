@@ -3086,9 +3086,17 @@ function assets_reflash() {
             div.remove();
         };
 
+        let goto = createEl("div");
+        goto.classList.add("assets_goto");
+
         画布s.querySelectorAll("x-file").forEach((el: file) => {
             if (el._value.id == i) {
                 r.classList.add("not_click");
+                let go = createEl("div");
+                go.onclick = () => {
+                    jump_to_x_link(el.parentElement as x);
+                };
+                goto.append(go);
             }
         });
 
@@ -3166,7 +3174,7 @@ function assets_reflash() {
         }
         async.style.display = "none";
 
-        bar.append(id_el, size_el, add, download, async, r);
+        bar.append(id_el, size_el, goto, add, download, async, r);
     }
 }
 
