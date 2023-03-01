@@ -4681,7 +4681,11 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
 
 /** 添加到面包屑栏 */
 function add_bci(el: x | xlink) {
-    if (breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)) return;
+    let qel = breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`) as HTMLElement;
+    if (qel) {
+        breadcrumbs_el.scrollLeft = qel.offsetLeft + qel.offsetWidth - breadcrumbs_el.offsetWidth;
+        return;
+    }
     if (breadcrumbs_el.offsetHeight == 0) breadcrumbs_el.style.height = "16px";
     let li = createEl("div");
     let main = createEl("div");
@@ -4709,6 +4713,7 @@ function add_bci(el: x | xlink) {
         view_el.classList.add("viewer_hide");
     };
     breadcrumbs_el.append(li);
+    breadcrumbs_el.scrollLeft = li.offsetLeft + li.offsetWidth - breadcrumbs_el.offsetWidth;
 }
 
 breadcrumbs_el.onwheel = (e) => {
