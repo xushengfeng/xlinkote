@@ -1025,7 +1025,7 @@ x-link-add {
 }
 
 .bci {
-    @apply text-xs;
+    @apply text-xs whitespace-pre;
 }
 
 body > #搜索 {
