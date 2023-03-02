@@ -282,6 +282,10 @@ const packagejson = JSON5.parse(pack);
 
 // 工具栏
 
+elFromId("重新加载").onclick = () => {
+    location.reload();
+};
+
 if (window.showOpenFilePicker) {
     elFromId("绑定文件").onclick = file_load;
 } else {
