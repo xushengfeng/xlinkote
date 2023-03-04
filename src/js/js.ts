@@ -292,7 +292,7 @@ if (window.showOpenFilePicker) {
     elFromId("绑定文件").style.display = "none";
 }
 elFromId("导出文件").onclick = () => {
-    download_file(xln_out(get_data()));
+    download_file();
 };
 
 elFromId("从云加载").onclick = async () => {
@@ -2864,29 +2864,14 @@ function push_undo() {
 }
 
 /** 下载文件 */
-async function download_file(text: string) {
-    if (window.showSaveFilePicker) {
-        fileHandle = await window.showSaveFilePicker({
-            suggestedName: get_file_name(),
-            types: [
-                {
-                    description: "xlinkote 文件",
-                    accept: { "text/*": [".xln"] },
-                },
-            ],
-        });
-        const writable = await fileHandle.createWritable();
-        await writable.write(text);
-        await writable.close();
-    } else {
-        let a = createEl("a");
-        let blob = new Blob([text]);
-        let name = get_file_name();
-        a.download = `${name}.xln`;
-        a.href = URL.createObjectURL(blob);
-        a.click();
-        URL.revokeObjectURL(String(blob));
-    }
+async function download_file() {
+    let a = createEl("a");
+    let name = get_file_name();
+    a.download = `${name}.xln`;
+    let b = await 压缩(get_data());
+    a.href = URL.createObjectURL(b);
+    a.click();
+    URL.revokeObjectURL(String(b));
 }
 
 var save_timeout = NaN,
