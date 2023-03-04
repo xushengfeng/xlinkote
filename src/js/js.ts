@@ -72,6 +72,8 @@ function is_input_el(el: HTMLElement) {
 }
 
 // el
+const upload_file = elFromId("upload") as HTMLInputElement;
+
 var 设置_el = elFromId("设置");
 var 侧栏 = elFromId("侧栏");
 const 侧栏_tabs = document.querySelector("#侧栏 > #tabs");
@@ -286,11 +288,12 @@ elFromId("重新加载").onclick = () => {
     location.reload();
 };
 
-if (window.showOpenFilePicker) {
-    elFromId("绑定文件").onclick = file_load;
-} else {
-    elFromId("绑定文件").style.display = "none";
-}
+elFromId("绑定文件").onclick = () => {
+    upload_file.click();
+};
+
+upload_file.onchange = file_load;
+
 elFromId("导出文件").onclick = () => {
     download_file();
 };
@@ -2517,33 +2520,39 @@ function xln_in(t: string) {
 var fileHandle;
 
 async function file_load() {
-    let file: File;
-    if (window.showOpenFilePicker) {
-        [fileHandle] = await window.showOpenFilePicker({
-            types: [
-                {
-                    description: "xlinkote 文件",
-                    accept: {
-                        "text/*": [".xln"],
-                    },
-                },
-            ],
-            excludeAcceptAllOption: true,
-        });
-        if (fileHandle.kind != "file") return;
-        fileHandle.requestPermission({ mode: "readwrite" });
-        file = await fileHandle.getFile();
-    }
-    集.meta.file_name = file.name.replace(/\.xln$/, "");
-    document.title = get_title();
+    let file = upload_file.files[0];
 
     let reader = new FileReader();
-    reader.onload = () => {
-        let o = xln_in(<string>reader.result) as any;
-        set_data(o);
-        data_changed();
-    };
+    reader.onload = () => {};
     reader.readAsText(file);
+
+    let fs = new zip.fs.FS();
+    let o, str;
+    await fs.importBlob(file);
+    let assets: { [key: string]: Blob } = {};
+    for (let i of fs.children) {
+        if (i.name == "assets") {
+            for (let a of i.children) {
+                const zipWriter = new zip.BlobWriter();
+                assets[a.name] = await a.data.getData(zipWriter, { password: store.webdav.加密密钥 });
+            }
+        } else if (i.name.includes(".xln")) {
+            const zipWriter = new zip.TextWriter();
+            str = await i.data.getData(zipWriter, { password: store.webdav.加密密钥 });
+            o = JSON5.parse(<string>str);
+        }
+    }
+
+    if (o.assets && Object.keys(assets).length)
+        for (let i in o.assets) {
+            let x = () => {
+                o.assets[i].source = assets[i];
+            };
+            await x();
+        }
+
+    set_data(o);
+    db_can_save = false;
 }
 
 var saved = true;
