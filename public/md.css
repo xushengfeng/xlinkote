@@ -97,6 +97,7 @@ x-x #h x-link {
 
 .flex-column > x-x {
     position: relative !important;
+    max-width: 100%;
 }
 
 .flex-row {
@@ -107,6 +108,7 @@ x-x #h x-link {
 
 .flex-row > x-x {
     position: relative !important;
+    max-height: 100%;
 }
 
 x-x .list {
