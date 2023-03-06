@@ -3469,12 +3469,6 @@ class 图层 {
         document.documentElement.style.setProperty("--zest-index", String(当前画布.data.length));
 
         if (!nosave) data_changed();
-
-        if (O.querySelectorAll("x-x").length > 128) {
-            O.style.willChange = "left, top, transform";
-        } else {
-            O.style.willChange = "";
-        }
     }
 
     push(el: x, pel?: x) {
