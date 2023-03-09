@@ -556,10 +556,19 @@ body #main > #nav #ink_r {
 #el_style > :not(:last-child) > :nth-child(2) {
     color: var(--main-color);
 }
-#el_style > :last-child {
+#el_style > :last-child:not(textarea) {
     @apply relative h-4;
 }
 #el_style > :last-child > .icon {
+    @apply w-4 h-4;
+}
+#el_style > textarea {
+    @apply w-full h-40;
+}
+#switch_global_style {
+    @apply relative h-4;
+}
+#switch_global_style > .icon {
     @apply w-4 h-4;
 }
 #style_com_list {

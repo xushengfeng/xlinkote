@@ -120,6 +120,7 @@ const pen_type_el = elFromId("笔刷");
 const 图层_el = elFromId("层");
 
 var el_style = elFromId("el_style");
+var switch_global_style = elFromId("switch_global_style");
 var style_list = elFromId("style_com_list");
 
 var xywh_x_el = <HTMLInputElement>elFromId("xywh_x");
@@ -3766,6 +3767,21 @@ function style_to_el() {
     elFromId(el_style.getAttribute("data-id")).setAttribute("style", t);
     data_changed();
 }
+
+switch_global_style.onclick = () => {
+    if (el_style.querySelector("textarea")) {
+        set_style(elFromId(el_style.getAttribute("data-id")) as x);
+    } else {
+        el_style.innerHTML = "";
+        let text = createEl("textarea");
+        el_style.append(text);
+        text.value = 集.extra.style;
+        text.onchange = () => {
+            集.extra.style = text.value;
+            data_changed();
+        };
+    }
+};
 
 // url
 if (location.search) {
