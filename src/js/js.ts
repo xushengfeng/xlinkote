@@ -980,6 +980,7 @@ function render_select_rects() {
                 xels.push(i as x);
                 let select_bar = add_r(i as x);
                 select_bar.classList.add("x-x_hover");
+                break;
             }
         }
     }
