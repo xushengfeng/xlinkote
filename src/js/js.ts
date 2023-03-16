@@ -2964,8 +2964,9 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
             }
         }
     } else {
-        let html = data.getData("text/html");
-        add_file("text/html", html, null, x, y);
+        let type = data.types[data.types.length - 1];
+        let text = data.getData(type);
+        add_file(type, text, null, x, y);
     }
 }
 
