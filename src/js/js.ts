@@ -1189,10 +1189,9 @@ mini_map_el.onpointermove = (e) => {
         set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
     }
 };
-mini_map_el.onpointerup = (e) => {
-    e.stopPropagation();
+window.addEventListener("pointerup", (e) => {
     mini_down = false;
-};
+});
 ignore_el.push("#mini_map");
 
 /**元素相对位置（屏幕坐标） */
