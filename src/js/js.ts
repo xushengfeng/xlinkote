@@ -5643,7 +5643,7 @@ function get_svg(c: string) {
     } else {
         if (math_loaded) {
             html = window.MathJax.tex2svg(c).outerHTML;
-            mathjax_cache[c] = [window.MathJax.tex2svg(c).outerHTML, 1];
+            mathjax_cache[c] = [html, 1];
         } else {
             html = `<mjx-container>${c}</mjx-container>`;
         }
