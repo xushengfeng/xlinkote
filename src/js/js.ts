@@ -239,9 +239,6 @@ const default_setting = {
         延时: "0.6",
     },
     sort: { type: "change_time", reverse: false } as sort_type,
-    asr: {
-        url: "",
-    },
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -4028,9 +4025,10 @@ function show_setting() {
     let setting = JSON5.parse(localStorage.getItem("config"));
     for (let f in setting) {
         let fel = document.querySelector(`form[name="${f}"]`);
-        for (let k in setting[f]) {
-            fel[k].value = setting[f][k];
-        }
+        if (fel)
+            for (let k in setting[f]) {
+                fel[k].value = setting[f][k];
+            }
     }
 }
 show_setting();
