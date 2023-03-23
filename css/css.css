@@ -1271,12 +1271,12 @@ x-md {
     position: relative;
     display: block;
 }
-x-md > textarea {
+
+body > #main > #画布 > textarea {
     position: absolute;
     display: none;
     top: 0;
     left: 0;
-    width: 100%;
     resize: both;
     border-radius: 4px;
     box-shadow: var(--shadow1);
@@ -1293,12 +1293,12 @@ x-md > textarea {
     opacity: 0;
     transition: var(--transition);
 }
-x-md > #h {
+x-md {
     min-width: 0.5rem;
     min-height: 0.5rem;
     outline: none;
 }
-x-md > #h *:hover > .handle {
+x-md *:hover > .handle {
     opacity: 1;
 }
 p {
@@ -1310,7 +1310,7 @@ mjx-container svg {
 }
 
 .show_md {
-    display: inline-block;
+    display: inline-block !important;
 }
 
 .contains-task-list {

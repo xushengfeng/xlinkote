@@ -6190,408 +6190,411 @@ class markdown extends HTMLElement {
     h: HTMLElement;
 
     connectedCallback() {
-        var s = createEl("div");
-        s.id = "h";
-        this.h = s;
-        var text = createEl("textarea");
+        var s = this;
+        this.h = this;
+        var text = md_text;
         this.text = text;
-        this.append(s);
-        this.append(text);
 
         if (this.getAttribute("value")) {
             let v = this.getAttribute("value");
             this._value = JSON5.parse(v);
-            let t = this._value.text;
-            this.text.value = t;
             this.render();
         }
 
-        text.oninput = () => {
-            this._value.text = text.value;
-            data_changed();
-            setTimeout(() => {
-                this.render();
-            }, 0);
-        };
-        text.onfocus = () => {
-            selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
-        };
-        text.onkeydown = (e) => {
-            if (模式 != "浏览") e.preventDefault();
-            if (e.key == "Enter") {
-                e.preventDefault();
-                if (this._value.type != "text" && this._value.type != "code")
-                    set_O_p(null, O.offsetTop - this.offsetHeight * zoom);
+        let add_event = (text: HTMLTextAreaElement) => {
+            text.oninput = () => {
+                this._value.text = text.value;
                 data_changed();
-                if (this._value.type == "text") {
-                    let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
-                    let last_line = text.value.slice(last_line_start, text.selectionStart);
-                    let l_task = last_line.match(/^ *[-+*] +\[[x\s]\] +/i);
-                    if (l_task) {
-                        text.setRangeText("\n" + l_task[0]);
-                        text.selectionStart = text.selectionEnd += l_task[0].length + 1;
-                        text.dispatchEvent(new Event("input"));
-                        return;
-                    } else {
-                        let l_l = last_line.match(/^ *[-+*] +/);
-                        if (l_l) {
-                            text.setRangeText("\n" + l_l[0]);
-                            text.selectionStart = text.selectionEnd += l_l[0].length + 1;
+                setTimeout(() => {
+                    this.render();
+                }, 0);
+            };
+            text.onfocus = () => {
+                selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
+            };
+            text.onkeydown = (e) => {
+                if (模式 != "浏览") e.preventDefault();
+                if (e.key == "Enter") {
+                    e.preventDefault();
+                    if (this._value.type != "text" && this._value.type != "code")
+                        set_O_p(null, O.offsetTop - this.offsetHeight * zoom);
+                    data_changed();
+                    if (this._value.type == "text") {
+                        let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
+                        let last_line = text.value.slice(last_line_start, text.selectionStart);
+                        let l_task = last_line.match(/^ *[-+*] +\[[x\s]\] +/i);
+                        if (l_task) {
+                            text.setRangeText("\n" + l_task[0]);
+                            text.selectionStart = text.selectionEnd += l_task[0].length + 1;
+                            text.dispatchEvent(new Event("input"));
+                            return;
+                        } else {
+                            let l_l = last_line.match(/^ *[-+*] +/);
+                            if (l_l) {
+                                text.setRangeText("\n" + l_l[0]);
+                                text.selectionStart = text.selectionEnd += l_l[0].length + 1;
+                                text.dispatchEvent(new Event("input"));
+                                return;
+                            }
+                        }
+                        let l_n = last_line.match(/^ *\d+\. +/);
+                        if (l_n) {
+                            let t = "\n" + l_n[0].replace(/\d+/, (n) => String(Number(n) + 1));
+                            text.setRangeText(t);
+                            text.selectionStart = text.selectionEnd += t.length;
                             text.dispatchEvent(new Event("input"));
                             return;
                         }
                     }
-                    let l_n = last_line.match(/^ *\d+\. +/);
-                    if (l_n) {
-                        let t = "\n" + l_n[0].replace(/\d+/, (n) => String(Number(n) + 1));
-                        text.setRangeText(t);
-                        text.selectionStart = text.selectionEnd += t.length;
-                        text.dispatchEvent(new Event("input"));
-                        return;
-                    }
-                }
 
-                if (e.ctrlKey) {
-                    if (e.shiftKey) {
-                        let rel = find_root_layout(this.parentElement);
-                        let xel = createEl("x-x");
-                        xel.style.left = rel.offsetLeft + "px";
-                        xel.style.top = rel.offsetTop + rel.offsetHeight + 16 + "px";
-                        z.push(xel);
-                        var md = createEl("x-md");
-                        xel.append(md);
-                        md.edit = true;
-                    }
-                } else {
-                    if (e.shiftKey || this._value.type == "text") {
-                        text.setRangeText("\n");
-                        text.selectionStart = text.selectionEnd = text.selectionStart + 1;
+                    if (e.ctrlKey) {
+                        if (e.shiftKey) {
+                            let rel = find_root_layout(this.parentElement);
+                            let xel = createEl("x-x");
+                            xel.style.left = rel.offsetLeft + "px";
+                            xel.style.top = rel.offsetTop + rel.offsetHeight + 16 + "px";
+                            z.push(xel);
+                            var md = createEl("x-md");
+                            xel.append(md);
+                            md.edit = true;
+                        }
                     } else {
-                        let t = text.value;
-                        let t0 = t.slice(0, text.selectionStart),
-                            t1 = t.slice(text.selectionEnd, t.length);
-                        this._value.text = t0;
-                        this.value = JSON.stringify(this._value);
-
-                        let p = this.parentElement as x;
-                        let pxel = null as x;
-                        if (
-                            p.parentElement.classList.contains("flex-column") ||
-                            p.parentElement.classList.contains("flex-row")
-                        ) {
-                            pxel = p.parentElement as x;
+                        if (e.shiftKey || this._value.type == "text") {
+                            text.setRangeText("\n");
+                            text.selectionStart = text.selectionEnd = text.selectionStart + 1;
                         } else {
-                            // 不存在上级堆叠元素，需要新建并把此元素套进去
-                            pxel = createEl("x-x");
-                            pxel.id = uuid_id();
-                            link(pxel.id).add();
-                            pxel.style.left = p.offsetLeft + "px";
-                            pxel.style.top = p.offsetTop + "px";
-                            pxel.classList.add("flex-column");
-                            z.push(pxel);
-                            let x = createEl("x-x");
-                            x.id = p.id;
-                            x.setAttribute("style", p.getAttribute("style"));
-                            pxel.append(x);
-                            x.style.left = "";
-                            x.style.top = "";
-                            x.style.position = "relative";
-                            x.value = p.value;
-                            p.remove();
-                            p = x;
-                        }
+                            let t = text.value;
+                            let t0 = t.slice(0, text.selectionStart),
+                                t1 = t.slice(text.selectionEnd, t.length);
+                            this._value.text = t0;
+                            this.value = JSON.stringify(this._value);
 
-                        let xel = createEl("x-x");
-                        let md = createEl("x-md");
-                        xel.append(md);
-                        xel.id = uuid_id();
-                        link(xel.id).add();
-                        xel.style.position = "relative";
-                        p.after(xel);
-                        md.edit = true;
-                        md.value = JSON.stringify({ type: this._value.type, text: t1 });
-                        md.text.setSelectionRange(0, 0);
-
-                        get_data();
-                        z.reflash();
-                    }
-                }
-            } else {
-                let l_l = [
-                    ["(", ")"],
-                    ["[", "]"],
-                    ["{", "}"],
-                    ["<", ">"],
-                    ["'", "'"],
-                    ['"', '"'],
-                    ["$", "$"],
-                    ["*", "*"],
-                    ["~", "~"],
-                ];
-                for (let i of l_l) {
-                    if (e.key == i[0] && (i[0] == i[1] || e.key != i[1])) {
-                        e.preventDefault();
-                        let t = text.value.slice(text.selectionStart, text.selectionEnd);
-                        let s = text.selectionStart;
-                        text.setRangeText(i[0] + t + i[1]);
-                        text.selectionStart = s + i[0].length;
-                        text.selectionEnd = s + i[0].length + t.length;
-                        if (e.key == "[" && text.value.charAt(text.selectionStart - 2) == "[") {
-                            let id = uuid_id();
-                            text.setRangeText(`${t}#${id}`);
-                            if (t) text.selectionEnd -= id.length + 1;
-                        }
-                        text.dispatchEvent(new Event("input"));
-                    }
-                }
-            }
-            if (e.key == "Tab") {
-                e.preventDefault();
-                if (e.ctrlKey || this.text.selectionStart != 0) {
-                    let s = text.selectionStart;
-                    text.setRangeText("\t");
-                    text.selectionStart = s + 1;
-                    text.selectionEnd = s + 1;
-                    text.dispatchEvent(new Event("input"));
-                } else {
-                    let p = this.parentElement as x;
-                    let x = createEl("x-x"),
-                        md = createEl("x-md");
-                    x.id = p.id;
-                    x.setAttribute("style", p.getAttribute("style"));
-                    p.classList.add("flex-column");
-                    p.classList.add("list");
-                    this.remove();
-                    p.append(x);
-                    x.append(md);
-                    md.value = this.value;
-                    p.id = uuid_id();
-                    link(p.id).add();
-                    md.edit = true;
-                    md.text.setSelectionRange(0, 0);
-
-                    z.reflash();
-                }
-            }
-            if (e.key == "/" && e.ctrlKey) {
-                e.preventDefault();
-                let s = this.getBoundingClientRect();
-                console.log(document.getSelection().getRangeAt(0), s);
-
-                search_pel.style.left = s.left + "px";
-                search_pel.style.top = s.top + "px";
-                search_pel.classList.add("搜索展示");
-                search_el.setAttribute("data-fid", this.parentElement.id);
-                search_el.value = "type ";
-                setTimeout(() => {
-                    search_el.focus();
-                }, 10);
-            }
-            if (e.key == " ") {
-                if (this._value.type == "code" || this._value.type == "text") return;
-                let mark = text.value.slice(0, text.selectionStart);
-                console.log(mark);
-                let t = text.value.slice(text.selectionStart, text.value.length);
-                let type: md_type;
-                let m2: { [key: string]: md_type } = {
-                    "#": "h1",
-                    "##": "h2",
-                    "###": "h3",
-                    "####": "h4",
-                    "#####": "h5",
-                    "######": "h6",
-                    "[]": "todo",
-                    $$: "math",
-                    "```": "code",
-                };
-                for (let m in m2) {
-                    if (m == mark) {
-                        e.preventDefault();
-                        type = m2[m];
-                        break;
-                    }
-                }
-                if (!type) return;
-                text.value = t;
-                text.selectionStart = text.selectionEnd = 0;
-                this._value = { type, text: t };
-                this.type = type;
-                this.render();
-            }
-            if (e.key == "Backspace") {
-                if (this._value.type != "text") {
-                    if (text.selectionStart == 0 && text.selectionEnd == 0) {
-                        this.type = "p";
-                    }
-                }
-            }
-            if (e.key == "ArrowUp") {
-                if (this._value.type != "text" && this._value.type != "code") {
-                    if (
-                        is_flex(this.parentElement.parentElement) == "flex" &&
-                        this.parentElement.previousElementSibling &&
-                        this.parentElement.previousElementSibling.querySelector("x-md")
-                    ) {
-                        e.preventDefault();
-                        let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
-                        md.text.setSelectionRange(text.selectionStart, text.selectionStart);
-                        md.edit = true;
-                    } else {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                } else {
-                    if (text.selectionStart == 0) {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                }
-            }
-            if (e.key == "ArrowDown") {
-                if (this._value.type != "text" && this._value.type != "code") {
-                    if (
-                        is_flex(this.parentElement.parentElement) == "flex" &&
-                        this.parentElement.nextElementSibling &&
-                        this.parentElement.nextElementSibling.querySelector("x-md")
-                    ) {
-                        e.preventDefault();
-                        let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
-                        md.text.setSelectionRange(text.selectionStart, text.selectionStart);
-                        md.edit = true;
-                    } else {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                } else {
-                    if (text.selectionEnd == text.value.length) {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                }
-            }
-            if (e.key == "ArrowLeft") {
-                if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionStart == 0) {
-                    if (
-                        this.parentElement.previousElementSibling &&
-                        this.parentElement.previousElementSibling.querySelector("x-md")
-                    ) {
-                        e.preventDefault();
-                        let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
-                        md.edit = true;
-                        md.text.setSelectionRange(md.text.value.length, md.text.value.length);
-                    } else {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                }
-            }
-            if (e.key == "ArrowRight") {
-                if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionEnd == text.value.length) {
-                    if (
-                        this.parentElement.nextElementSibling &&
-                        this.parentElement.nextElementSibling.querySelector("x-md")
-                    ) {
-                        e.preventDefault();
-                        let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
-                        md.edit = true;
-                        md.text.setSelectionRange(0, 0);
-                    } else {
-                        z.focus(this.parentElement as x);
-                        set_模式("设计");
-                    }
-                }
-            }
-        };
-        text.onclick = text.onkeyup = () => {
-            if (模式 != "浏览") return;
-            let x = el_offset2(this.h).x,
-                y = el_offset2(this.h).y + s.offsetHeight;
-            text.style.left = x + "px";
-            text.style.top = y + "px";
-
-            selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
-        };
-        text.onblur = () => {
-            if (模式 == "浏览") this.edit = false;
-        };
-        text.onpaste = (e) => {
-            if (e.clipboardData.files.length) {
-                e.preventDefault();
-                put_datatransfer(e.clipboardData, el_offset(this, O).x, el_offset(this, O).y);
-                if (!text.value) {
-                    link(this.parentElement.id).rm();
-                    this.parentElement.remove();
-                }
-            } else {
-                let t = e.clipboardData.getData("text/plain").trim();
-                if (this._value.type == "code") {
-                    if (!this._value.text && e.clipboardData.getData("text/html")) {
-                        this.init_v("code");
-                        集.values[this.parentElement.id].code["html"] = e.clipboardData.getData("text/html");
-                    } else {
-                        集.values[this.parentElement.id].code["html"] = "";
-                    }
-                    this.reload();
-                    data_changed();
-                } else {
-                    if (this._value.type != "text" && (t.includes("\n") || t.includes("\r"))) {
-                        e.preventDefault();
-                        let el = this.parentElement as x;
-                        let pel = el.parentElement;
-                        let md: markdown;
-                        if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
-                            let nel = createEl("x-x");
-                            nel.id = el.id;
-                            el.id = uuid_id();
-                            link(el.id).add();
-                            this.remove();
-                            el.append(nel);
-                            md = createEl("x-md");
-                            nel.append(md);
-                            md.value = this.value;
-                            md.text.setSelectionRange(text.selectionStart, text.selectionEnd);
-                            pel = el;
-                            el = nel;
-                            pel.classList.add("flex-column");
-                        } else {
-                            md = this;
-                        }
-                        const l = t.split(/[\n\r]+/);
-                        let last_el = el;
-                        for (let i in l) {
-                            const tt = l[i];
-                            if (!tt) continue;
-                            if (i == "0") {
-                                md._value.text = tt;
-                                md.text.setRangeText(tt);
-                                md.reload();
+                            let p = this.parentElement as x;
+                            let pxel = null as x;
+                            if (
+                                p.parentElement.classList.contains("flex-column") ||
+                                p.parentElement.classList.contains("flex-row")
+                            ) {
+                                pxel = p.parentElement as x;
                             } else {
+                                // 不存在上级堆叠元素，需要新建并把此元素套进去
+                                pxel = createEl("x-x");
+                                pxel.id = uuid_id();
+                                link(pxel.id).add();
+                                pxel.style.left = p.offsetLeft + "px";
+                                pxel.style.top = p.offsetTop + "px";
+                                pxel.classList.add("flex-column");
+                                z.push(pxel);
                                 let x = createEl("x-x");
-                                let md = createEl("x-md");
-                                last_el.after(x);
-                                x.append(md);
-                                x.id = uuid_id();
-                                link(x.id).add();
-                                md.value = JSON.stringify({ type: "p", text: tt });
-                                last_el = x;
+                                x.id = p.id;
+                                x.setAttribute("style", p.getAttribute("style"));
+                                pxel.append(x);
+                                x.style.left = "";
+                                x.style.top = "";
+                                x.style.position = "relative";
+                                x.value = p.value;
+                                p.remove();
+                                p = x;
                             }
+
+                            let xel = createEl("x-x");
+                            let md = createEl("x-md");
+                            xel.append(md);
+                            xel.id = uuid_id();
+                            link(xel.id).add();
+                            xel.style.position = "relative";
+                            p.after(xel);
+                            md.edit = true;
+                            md.value = JSON.stringify({ type: this._value.type, text: t1 });
+                            md.text.setSelectionRange(0, 0);
+
+                            get_data();
+                            z.reflash();
                         }
-                        get_data();
-                        z.reflash();
-                    } else if (this._value.type != "text") {
-                        e.preventDefault();
-                        let t = e.clipboardData.getData("text/plain").replace("\n", "");
-                        text.setRangeText(t);
-                        let s = text.selectionStart;
-                        if (s == text.selectionEnd) {
-                            text.setSelectionRange(s + t.length, s + t.length);
+                    }
+                } else {
+                    let l_l = [
+                        ["(", ")"],
+                        ["[", "]"],
+                        ["{", "}"],
+                        ["<", ">"],
+                        ["'", "'"],
+                        ['"', '"'],
+                        ["$", "$"],
+                        ["*", "*"],
+                        ["~", "~"],
+                    ];
+                    for (let i of l_l) {
+                        if (e.key == i[0] && (i[0] == i[1] || e.key != i[1])) {
+                            e.preventDefault();
+                            let t = text.value.slice(text.selectionStart, text.selectionEnd);
+                            let s = text.selectionStart;
+                            text.setRangeText(i[0] + t + i[1]);
+                            text.selectionStart = s + i[0].length;
+                            text.selectionEnd = s + i[0].length + t.length;
+                            if (e.key == "[" && text.value.charAt(text.selectionStart - 2) == "[") {
+                                let id = uuid_id();
+                                text.setRangeText(`${t}#${id}`);
+                                if (t) text.selectionEnd -= id.length + 1;
+                            }
+                            text.dispatchEvent(new Event("input"));
                         }
-                        this._value.text = text.value;
-                        this.reload();
                     }
                 }
-            }
+                if (e.key == "Tab") {
+                    e.preventDefault();
+                    if (e.ctrlKey || this.text.selectionStart != 0) {
+                        let s = text.selectionStart;
+                        text.setRangeText("\t");
+                        text.selectionStart = s + 1;
+                        text.selectionEnd = s + 1;
+                        text.dispatchEvent(new Event("input"));
+                    } else {
+                        let p = this.parentElement as x;
+                        let x = createEl("x-x"),
+                            md = createEl("x-md");
+                        x.id = p.id;
+                        x.setAttribute("style", p.getAttribute("style"));
+                        p.classList.add("flex-column");
+                        p.classList.add("list");
+                        this.remove();
+                        p.append(x);
+                        x.append(md);
+                        md.value = this.value;
+                        p.id = uuid_id();
+                        link(p.id).add();
+                        md.edit = true;
+                        md.text.setSelectionRange(0, 0);
+
+                        z.reflash();
+                    }
+                }
+                if (e.key == "/" && e.ctrlKey) {
+                    e.preventDefault();
+                    let s = this.getBoundingClientRect();
+                    console.log(document.getSelection().getRangeAt(0), s);
+
+                    search_pel.style.left = s.left + "px";
+                    search_pel.style.top = s.top + "px";
+                    search_pel.classList.add("搜索展示");
+                    search_el.setAttribute("data-fid", this.parentElement.id);
+                    search_el.value = "type ";
+                    setTimeout(() => {
+                        search_el.focus();
+                    }, 10);
+                }
+                if (e.key == " ") {
+                    if (this._value.type == "code" || this._value.type == "text") return;
+                    let mark = text.value.slice(0, text.selectionStart);
+                    console.log(mark);
+                    let t = text.value.slice(text.selectionStart, text.value.length);
+                    let type: md_type;
+                    let m2: { [key: string]: md_type } = {
+                        "#": "h1",
+                        "##": "h2",
+                        "###": "h3",
+                        "####": "h4",
+                        "#####": "h5",
+                        "######": "h6",
+                        "[]": "todo",
+                        $$: "math",
+                        "```": "code",
+                    };
+                    for (let m in m2) {
+                        if (m == mark) {
+                            e.preventDefault();
+                            type = m2[m];
+                            break;
+                        }
+                    }
+                    if (!type) return;
+                    text.value = t;
+                    text.selectionStart = text.selectionEnd = 0;
+                    this._value = { type, text: t };
+                    this.type = type;
+                    this.render();
+                }
+                if (e.key == "Backspace") {
+                    if (this._value.type != "text") {
+                        if (text.selectionStart == 0 && text.selectionEnd == 0) {
+                            this.type = "p";
+                        }
+                    }
+                }
+                if (e.key == "ArrowUp") {
+                    if (this._value.type != "text" && this._value.type != "code") {
+                        if (
+                            is_flex(this.parentElement.parentElement) == "flex" &&
+                            this.parentElement.previousElementSibling &&
+                            this.parentElement.previousElementSibling.querySelector("x-md")
+                        ) {
+                            e.preventDefault();
+                            let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
+                            md.text.setSelectionRange(text.selectionStart, text.selectionStart);
+                            md.edit = true;
+                        } else {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    } else {
+                        if (text.selectionStart == 0) {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    }
+                }
+                if (e.key == "ArrowDown") {
+                    if (this._value.type != "text" && this._value.type != "code") {
+                        if (
+                            is_flex(this.parentElement.parentElement) == "flex" &&
+                            this.parentElement.nextElementSibling &&
+                            this.parentElement.nextElementSibling.querySelector("x-md")
+                        ) {
+                            e.preventDefault();
+                            let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
+                            md.text.setSelectionRange(text.selectionStart, text.selectionStart);
+                            md.edit = true;
+                        } else {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    } else {
+                        if (text.selectionEnd == text.value.length) {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    }
+                }
+                if (e.key == "ArrowLeft") {
+                    if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionStart == 0) {
+                        if (
+                            this.parentElement.previousElementSibling &&
+                            this.parentElement.previousElementSibling.querySelector("x-md")
+                        ) {
+                            e.preventDefault();
+                            let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
+                            md.edit = true;
+                            md.text.setSelectionRange(md.text.value.length, md.text.value.length);
+                        } else {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    }
+                }
+                if (e.key == "ArrowRight") {
+                    if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionEnd == text.value.length) {
+                        if (
+                            this.parentElement.nextElementSibling &&
+                            this.parentElement.nextElementSibling.querySelector("x-md")
+                        ) {
+                            e.preventDefault();
+                            let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
+                            md.edit = true;
+                            md.text.setSelectionRange(0, 0);
+                        } else {
+                            z.focus(this.parentElement as x);
+                            set_模式("设计");
+                        }
+                    }
+                }
+            };
+            text.onclick = text.onkeyup = () => {
+                if (模式 != "浏览") return;
+                let x = el_offset(this.h, 画布).x,
+                    y = el_offset(this.h, 画布).y + el_offset(this).h;
+                text.style.left = x + "px";
+                text.style.top = y + "px";
+
+                selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
+            };
+            text.onblur = () => {
+                if (模式 == "浏览") this.edit = false;
+            };
+            text.onpaste = (e) => {
+                if (e.clipboardData.files.length) {
+                    e.preventDefault();
+                    put_datatransfer(e.clipboardData, el_offset(this, O).x, el_offset(this, O).y);
+                    if (!text.value) {
+                        link(this.parentElement.id).rm();
+                        this.parentElement.remove();
+                    }
+                } else {
+                    let t = e.clipboardData.getData("text/plain").trim();
+                    if (this._value.type == "code") {
+                        if (!this._value.text && e.clipboardData.getData("text/html")) {
+                            this.init_v("code");
+                            集.values[this.parentElement.id].code["html"] = e.clipboardData.getData("text/html");
+                        } else {
+                            集.values[this.parentElement.id].code["html"] = "";
+                        }
+                        this.reload();
+                        data_changed();
+                    } else {
+                        if (this._value.type != "text" && (t.includes("\n") || t.includes("\r"))) {
+                            e.preventDefault();
+                            let el = this.parentElement as x;
+                            let pel = el.parentElement;
+                            let md: markdown;
+                            if (!(pel.classList.contains("flex-column") || pel.classList.contains("flex-row"))) {
+                                let nel = createEl("x-x");
+                                nel.id = el.id;
+                                el.id = uuid_id();
+                                link(el.id).add();
+                                this.remove();
+                                el.append(nel);
+                                md = createEl("x-md");
+                                nel.append(md);
+                                md.value = this.value;
+                                md.text.setSelectionRange(text.selectionStart, text.selectionEnd);
+                                pel = el;
+                                el = nel;
+                                pel.classList.add("flex-column");
+                            } else {
+                                md = this;
+                            }
+                            const l = t.split(/[\n\r]+/);
+                            let last_el = el;
+                            for (let i in l) {
+                                const tt = l[i];
+                                if (!tt) continue;
+                                if (i == "0") {
+                                    md._value.text = tt;
+                                    md.text.setRangeText(tt);
+                                    md.reload();
+                                } else {
+                                    let x = createEl("x-x");
+                                    let md = createEl("x-md");
+                                    last_el.after(x);
+                                    x.append(md);
+                                    x.id = uuid_id();
+                                    link(x.id).add();
+                                    md.value = JSON.stringify({ type: "p", text: tt });
+                                    last_el = x;
+                                }
+                            }
+                            get_data();
+                            z.reflash();
+                        } else if (this._value.type != "text") {
+                            e.preventDefault();
+                            let t = e.clipboardData.getData("text/plain").replace("\n", "");
+                            text.setRangeText(t);
+                            let s = text.selectionStart;
+                            if (s == text.selectionEnd) {
+                                text.setSelectionRange(s + t.length, s + t.length);
+                            }
+                            this._value.text = text.value;
+                            this.reload();
+                        }
+                    }
+                }
+            };
         };
+
+        s.onpointerdown = () => {
+            if (text) add_event(md_text);
+            text.value = this._value.text;
+        };
+
         // 点击元素定位到源文本行
         s.onclick = (e) => {
             let el = <HTMLElement>e.target;
@@ -6624,8 +6627,8 @@ class markdown extends HTMLElement {
                     }
                 }
             }
-            text.style.left = el_offset2(this.h).x + "px";
-            text.style.top = el_offset2(this.h).y + s.offsetHeight + "px";
+            text.style.left = el_offset(this.h, 画布).x + "px";
+            text.style.top = el_offset(this.h, 画布).y + el_offset(this).h + "px";
         };
         s.spellcheck = false;
         s.onpointerup = (e) => {
@@ -6738,11 +6741,13 @@ class markdown extends HTMLElement {
         var text = this.text;
         if (v) {
             text.classList.add("show_md");
+            this.text = md_text;
             if (v != "cr") text.focus();
             set_模式("浏览");
         } else {
             text.classList.remove("show_md");
             text.blur();
+            text = null;
         }
     }
 
@@ -6764,7 +6769,7 @@ class markdown extends HTMLElement {
 
     render() {
         let type = this._value.type;
-        let text = this.text.value;
+        let text = this._value.text;
         if (type == "text") {
             this.index = md.parse(text, {});
             this.h.innerHTML = md.render(text);
@@ -6824,6 +6829,9 @@ class markdown extends HTMLElement {
 }
 
 window.customElements.define("x-md", markdown);
+
+const md_text = createEl("textarea");
+画布.append(md_text);
 
 // 几何图形
 import JXG from "jsxgraph";
