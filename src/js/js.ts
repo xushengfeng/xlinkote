@@ -6604,8 +6604,7 @@ class markdown extends HTMLElement {
         };
 
         s.onpointerdown = () => {
-            if (text) this.add_event();
-            text.value = this._value.text;
+            this.edit = true;
         };
 
         // 点击元素定位到源文本行
@@ -6752,13 +6751,18 @@ class markdown extends HTMLElement {
     set edit(v: boolean | "cr") {
         var text = this.text;
         if (v) {
+            if (md_text.getAttribute("data-id") != this.parentElement.id) {
+                md_text.setAttribute("data-id", this.parentElement.id);
+                this.text = md_text;
+                this.set_text_po();
+                this.add_event();
+                text.value = this._value.text;
+            }
             text.classList.add("show_md");
-            this.text = md_text;
-            this.set_text_po();
-            this.add_event();
             if (v != "cr") text.focus();
             set_模式("浏览");
         } else {
+            md_text.setAttribute("data-id", "");
             text.classList.remove("show_md");
             text.blur();
             text = null;
