@@ -6505,10 +6505,7 @@ class markdown extends HTMLElement {
             };
             text.onclick = text.onkeyup = () => {
                 if (模式 != "浏览") return;
-                let x = el_offset(this.h, 画布).x,
-                    y = el_offset(this.h, 画布).y + el_offset(this).h;
-                text.style.left = x + "px";
-                text.style.top = y + "px";
+                set_text_po();
 
                 selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
             };
@@ -6595,6 +6592,13 @@ class markdown extends HTMLElement {
             };
         };
 
+        let set_text_po = () => {
+            let x = el_offset(this.h, 画布).x,
+                y = el_offset(this.h, 画布).y + el_offset(this).h;
+            text.style.left = x + "px";
+            text.style.top = y + "px";
+        };
+
         s.onpointerdown = () => {
             if (text) add_event(md_text);
             text.value = this._value.text;
@@ -6632,8 +6636,7 @@ class markdown extends HTMLElement {
                     }
                 }
             }
-            text.style.left = el_offset(this.h, 画布).x + "px";
-            text.style.top = el_offset(this.h, 画布).y + el_offset(this).h + "px";
+            set_text_po();
         };
         s.spellcheck = false;
         s.onpointerup = (e) => {
