@@ -6267,9 +6267,9 @@ class markdown extends HTMLElement {
                         text.setRangeText("\n");
                         text.selectionStart = text.selectionEnd = text.selectionStart + 1;
                     } else {
-                        let t = this.text.value;
-                        let t0 = t.slice(0, this.text.selectionStart),
-                            t1 = t.slice(this.text.selectionEnd, t.length);
+                        let t = text.value;
+                        let t0 = t.slice(0, text.selectionStart),
+                            t1 = t.slice(text.selectionEnd, t.length);
                         this._value.text = t0;
                         this.value = JSON.stringify(this._value);
 
@@ -6355,7 +6355,6 @@ class markdown extends HTMLElement {
                     text.dispatchEvent(new Event("input"));
                 } else {
                     let p = this.parentElement as x;
-                    let t = this.text.value;
                     let x = createEl("x-x"),
                         md = createEl("x-md");
                     x.id = p.id;
@@ -6390,9 +6389,9 @@ class markdown extends HTMLElement {
             }
             if (e.key == " ") {
                 if (this._value.type == "code" || this._value.type == "text") return;
-                let mark = this.text.value.slice(0, text.selectionStart);
+                let mark = text.value.slice(0, text.selectionStart);
                 console.log(mark);
-                let t = this.text.value.slice(text.selectionStart, this.text.value.length);
+                let t = text.value.slice(text.selectionStart, text.value.length);
                 let type: md_type;
                 let m2: { [key: string]: md_type } = {
                     "#": "h1",
@@ -6413,7 +6412,7 @@ class markdown extends HTMLElement {
                     }
                 }
                 if (!type) return;
-                this.text.value = t;
+                text.value = t;
                 text.selectionStart = text.selectionEnd = 0;
                 this._value = { type, text: t };
                 this.type = type;
@@ -6435,14 +6434,14 @@ class markdown extends HTMLElement {
                     ) {
                         e.preventDefault();
                         let md = this.parentElement.previousElementSibling.querySelector("x-md") as markdown;
-                        md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
+                        md.text.setSelectionRange(text.selectionStart, text.selectionStart);
                         md.edit = true;
                     } else {
                         z.focus(this.parentElement as x);
                         set_模式("设计");
                     }
                 } else {
-                    if (this.text.selectionStart == 0) {
+                    if (text.selectionStart == 0) {
                         z.focus(this.parentElement as x);
                         set_模式("设计");
                     }
@@ -6457,21 +6456,21 @@ class markdown extends HTMLElement {
                     ) {
                         e.preventDefault();
                         let md = this.parentElement.nextElementSibling.querySelector("x-md") as markdown;
-                        md.text.setSelectionRange(this.text.selectionStart, this.text.selectionStart);
+                        md.text.setSelectionRange(text.selectionStart, text.selectionStart);
                         md.edit = true;
                     } else {
                         z.focus(this.parentElement as x);
                         set_模式("设计");
                     }
                 } else {
-                    if (this.text.selectionEnd == this.text.value.length) {
+                    if (text.selectionEnd == text.value.length) {
                         z.focus(this.parentElement as x);
                         set_模式("设计");
                     }
                 }
             }
             if (e.key == "ArrowLeft") {
-                if (is_flex(this.parentElement.parentElement) == "flex" && this.text.selectionStart == 0) {
+                if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionStart == 0) {
                     if (
                         this.parentElement.previousElementSibling &&
                         this.parentElement.previousElementSibling.querySelector("x-md")
@@ -6487,10 +6486,7 @@ class markdown extends HTMLElement {
                 }
             }
             if (e.key == "ArrowRight") {
-                if (
-                    is_flex(this.parentElement.parentElement) == "flex" &&
-                    this.text.selectionEnd == this.text.value.length
-                ) {
+                if (is_flex(this.parentElement.parentElement) == "flex" && text.selectionEnd == text.value.length) {
                     if (
                         this.parentElement.nextElementSibling &&
                         this.parentElement.nextElementSibling.querySelector("x-md")
@@ -6553,7 +6549,7 @@ class markdown extends HTMLElement {
                             md = createEl("x-md");
                             nel.append(md);
                             md.value = this.value;
-                            md.text.setSelectionRange(this.text.selectionStart, this.text.selectionEnd);
+                            md.text.setSelectionRange(text.selectionStart, text.selectionEnd);
                             pel = el;
                             el = nel;
                             pel.classList.add("flex-column");
@@ -6585,12 +6581,12 @@ class markdown extends HTMLElement {
                     } else if (this._value.type != "text") {
                         e.preventDefault();
                         let t = e.clipboardData.getData("text/plain").replace("\n", "");
-                        this.text.setRangeText(t);
-                        let s = this.text.selectionStart;
-                        if (s == this.text.selectionEnd) {
-                            this.text.setSelectionRange(s + t.length, s + t.length);
+                        text.setRangeText(t);
+                        let s = text.selectionStart;
+                        if (s == text.selectionEnd) {
+                            text.setSelectionRange(s + t.length, s + t.length);
                         }
-                        this._value.text = this.text.value;
+                        this._value.text = text.value;
                         this.reload();
                     }
                 }
@@ -6730,7 +6726,7 @@ class markdown extends HTMLElement {
                 [start_p, end_p] = [end_p, start_p];
             }
             console.log(start_p, end_p);
-            this.text.setSelectionRange(start_p, end_p);
+            text.setSelectionRange(start_p, end_p);
             setTimeout(() => {
                 this.edit = true;
             }, 10);
