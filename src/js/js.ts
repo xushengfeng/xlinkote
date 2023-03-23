@@ -8482,39 +8482,49 @@ window.customElements.define("x-audio", audio);
 
 ignore_el.push("x-audio");
 
-function audio_to_text(el: HTMLAudioElement, id: string) {
+import { pipeline } from "@xenova/transformers";
+
+async function audio_to_text(el: HTMLAudioElement, id: string) {
     // @ts-ignore
     let blob = 集.assets[elFromId(id).parentElement.parentElement._value.id].source;
 
-    const form = new FormData();
-    form.append("file", blob, "x.flac");
-    fetch(store.asr.url, {
-        method: "POST",
-        body: form,
-    })
-        .then((r) => r.json())
-        .then(async (j) => {
-            console.log(j);
-            let pel = createEl("x-x");
-            pel.style.left = el_offset2(el.parentElement, O).x + "px";
-            pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
-            z.push(pel);
-            if (j.language == "zh" && navigator.language == "zh-CN") {
-                let t = (await import("../../lib/hant2hans")).default;
-                for (let i of j.segments) {
-                    i.text = t(i.text);
-                }
-            }
-            for (let i of j.segments) {
-                let x = createEl("x-x");
-                z.push(x, pel);
-                let md = createEl("x-md");
-                x.append(md);
-                let mdtext = `[${i.start}](#${id}:${i.start})${i.text}`;
-                md.value = JSON.stringify({ type: "p", text: mdtext });
-            }
-            pel.classList.add("flex-column");
+    const sampling_rate = 16000;
+    const audioCTX = new AudioContext({ sampleRate: sampling_rate });
+
+    const response = await blob.arrayBuffer();
+    const decoded = await audioCTX.decodeAudioData(response);
+    let audio = decoded.getChannelData(0);
+
+    async function speech_to_text() {
+        let ppipeline = await pipeline("automatic-speech-recognition", "openai/whisper-tiny");
+
+        return await ppipeline(audio, {
+            chunk_length_s: 30,
+            stride_length_s: 5,
+            return_timestamps: true,
+
+            max_new_tokens: 50,
+            num_beams: 1,
+            temperature: 1,
+            top_k: 0,
+            do_sample: false,
         });
+    }
+    let text = await speech_to_text();
+    console.log(text);
+    let pel = createEl("x-x");
+    pel.style.left = el_offset2(el.parentElement, O).x + "px";
+    pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
+    z.push(pel);
+    for (let i of text.chunks) {
+        let x = createEl("x-x");
+        z.push(x, pel);
+        let md = createEl("x-md");
+        x.append(md);
+        let mdtext = `[${i.timestamp[0]}](#${id}:${i.timestamp[0]})${i.text}`;
+        md.value = JSON.stringify({ type: "p", text: mdtext });
+    }
+    pel.classList.add("flex-column");
 }
 
 import * as THREE from "three";
