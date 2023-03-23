@@ -6194,6 +6194,9 @@ class markdown extends HTMLElement {
 
     h: HTMLElement;
 
+    add_event: () => void;
+    set_text_po: () => void;
+
     connectedCallback() {
         var s = this;
         this.h = this;
@@ -6206,7 +6209,8 @@ class markdown extends HTMLElement {
             this.render();
         }
 
-        let add_event = (text: HTMLTextAreaElement) => {
+        this.add_event = () => {
+            let text = md_text;
             text.oninput = () => {
                 this._value.text = text.value;
                 data_changed();
@@ -6505,7 +6509,7 @@ class markdown extends HTMLElement {
             };
             text.onclick = text.onkeyup = () => {
                 if (模式 != "浏览") return;
-                set_text_po();
+                this.set_text_po();
 
                 selections[0] = { id: this.parentElement.id, start: text.selectionStart, end: text.selectionEnd };
             };
@@ -6592,7 +6596,7 @@ class markdown extends HTMLElement {
             };
         };
 
-        let set_text_po = () => {
+        this.set_text_po = () => {
             let x = el_offset(this.h, 画布).x,
                 y = el_offset(this.h, 画布).y + el_offset(this).h;
             text.style.left = x + "px";
@@ -6600,7 +6604,7 @@ class markdown extends HTMLElement {
         };
 
         s.onpointerdown = () => {
-            if (text) add_event(md_text);
+            if (text) this.add_event();
             text.value = this._value.text;
         };
 
@@ -6636,7 +6640,7 @@ class markdown extends HTMLElement {
                     }
                 }
             }
-            set_text_po();
+            this.set_text_po();
         };
         s.spellcheck = false;
         s.onpointerup = (e) => {
@@ -6750,6 +6754,8 @@ class markdown extends HTMLElement {
         if (v) {
             text.classList.add("show_md");
             this.text = md_text;
+            this.set_text_po();
+            this.add_event();
             if (v != "cr") text.focus();
             set_模式("浏览");
         } else {
