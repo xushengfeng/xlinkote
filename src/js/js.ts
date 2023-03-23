@@ -92,6 +92,9 @@ const select_con = elFromId("选择");
 const link_value_bar = createEl("x-link-value");
 画布.append(link_value_bar);
 
+const md_text = createEl("textarea");
+画布.append(md_text);
+
 const breadcrumbs_el = elFromId("breadcrumbs");
 const bc_sw_el = elFromId("bc_sw");
 
@@ -668,12 +671,14 @@ function set_O_p(x: number | null, y: number | null) {
         let dx = x - el_offset(O).x;
         link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.left = el_offset(search_pel).x + dx + "px";
+        md_text.style.left = el_offset(md_text).x + dx + "px";
         O.style.left = x + "px";
     }
     if (y) {
         let dy = y - el_offset(O).y;
         link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
+        md_text.style.top = el_offset(md_text).y + dy + "px";
         O.style.top = y + "px";
     }
     render_map();
@@ -6829,9 +6834,6 @@ class markdown extends HTMLElement {
 }
 
 window.customElements.define("x-md", markdown);
-
-const md_text = createEl("textarea");
-画布.append(md_text);
 
 // 几何图形
 import JXG from "jsxgraph";
