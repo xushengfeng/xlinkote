@@ -8514,6 +8514,12 @@ async function audio_to_text(el: HTMLAudioElement, id: string) {
     pel.style.left = el_offset2(el.parentElement, O).x + "px";
     pel.style.top = el_offset2(el.parentElement, O).y + el_offset2(el.parentElement, O).h + "px";
     z.push(pel);
+    if (navigator.language == "zh-CN") {
+        let t = (await import("../../lib/hant2hans")).default;
+        for (let i of text.chunks) {
+            i.text = t(i.text);
+        }
+    }
     for (let i of text.chunks) {
         let x = createEl("x-x");
         z.push(x, pel);
