@@ -8516,9 +8516,8 @@ window.customElements.define("x-audio", audio);
 
 ignore_el.push("x-audio");
 
-import { pipeline } from "@xenova/transformers";
-
 async function audio_to_text(el: HTMLAudioElement, id: string) {
+    await import_script("https://www.unpkg.com/@xenova/transformers/dist/transformers.min.js");
     // @ts-ignore
     let blob = 集.assets[elFromId(id).parentElement.parentElement._value.id].source;
 
@@ -8530,6 +8529,7 @@ async function audio_to_text(el: HTMLAudioElement, id: string) {
     let audio = decoded.getChannelData(0);
 
     async function speech_to_text() {
+        // @ts-ignore
         let ppipeline = await pipeline("automatic-speech-recognition", "openai/whisper-tiny");
 
         return await ppipeline(audio, {
