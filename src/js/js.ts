@@ -239,6 +239,7 @@ const default_setting = {
         延时: "0.6",
     },
     sort: { type: "change_time", reverse: false } as sort_type,
+    ai: { key: "" },
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -5473,6 +5474,41 @@ function load_value() {
         };
     }
 }
+
+let ai_messages: { role: "system" | "user" | "assistant"; content: string }[] = [];
+
+function ai(text: string) {
+    let x = ai_messages[ai_messages.length - 1];
+    if (!x || (x.role != "user" && x.content != text)) ai_messages.push({ role: "user", content: text });
+    window["ai"]["messages"] = ai_messages;
+    fetch(`https://api.openai.com/v1/chat/completions`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${store.ai.key}`, "content-type": "application/json" },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            temperature: 0,
+            max_tokens: 1000,
+            top_p: 1,
+            frequency_penalty: 1,
+            presence_penalty: 1,
+            messages: ai_messages,
+        }),
+    })
+        .then((v) => v.json())
+        .then((t) => {
+            let answer = t.choices[0].message.content;
+            console.log(answer);
+            ai_messages.push({ role: "assistant", content: answer });
+            window["ai"]["messages"] = ai_messages;
+        });
+}
+
+function new_ai(text?: string) {
+    ai_messages = [];
+    if (text) ai_messages.push({ role: "system", content: text });
+}
+
+window["ai"] = { ask: ai, new: new_ai, messages: ai_messages };
 
 // MD
 import markdownit from "markdown-it";
