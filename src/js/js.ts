@@ -7289,11 +7289,6 @@ class pdf_viewer extends HTMLElement {
             this._value = JSON5.parse(this.getAttribute("value"));
             this.set_m();
         }
-
-        const ob = new ResizeObserver((entries) => {
-            this.set_m();
-        });
-        ob.observe(this.parentElement);
     }
 
     async set_m() {
