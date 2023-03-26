@@ -7235,6 +7235,8 @@ class pdf_viewer extends HTMLElement {
     text: HTMLElement;
     old_id = "";
     tasks: { [key: string]: pdfjsLib.RenderTask } = {};
+    now_page_i = 0;
+    now_page = null;
 
     load_pdf = async () => {
         let f = 集.assets[this._value.id];
@@ -7299,7 +7301,7 @@ class pdf_viewer extends HTMLElement {
         let pdf = pdf_cache[this._value.id] || (await this.load_pdf());
         this.canvas.style.zIndex = "1";
         this.canvas1.style.zIndex = "2";
-        pdf.getPage(this._value.page).then(async (page) => {
+        let set_page = async (page: pdfjsLib.PDFPageProxy) => {
             let scale = 1.5;
             let viewport = page.getViewport({ scale: scale });
 
@@ -7381,7 +7383,17 @@ class pdf_viewer extends HTMLElement {
                     }
                 }, 100);
             });
-        });
+        };
+        if (this._value.page == this.now_page_i && this.now_page) {
+            set_page(this.now_page);
+        } else {
+            pdf.getPage(this._value.page).then((page) => {
+                this.now_page = page;
+                this.now_page_i = this._value.page;
+                set_page(page);
+            });
+        }
+
         let page_i = this.pages.querySelector("#page_i") as HTMLElement;
         this.pages.querySelector("input").value = String(this._value.page);
         page_i.innerHTML = `${pdf.numPages}`;
