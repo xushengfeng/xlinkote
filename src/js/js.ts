@@ -9,7 +9,6 @@ import close_svg from "../../assets/icons/close.svg";
 import file_svg from "../../assets/icons/file.svg";
 import handle_svg from "../../assets/icons/handle.svg";
 import ul_show_svg from "../../assets/icons/ul_show.svg";
-import ul_hide2_svg from "../../assets/icons/ul_hide2.svg";
 import add_svg from "../../assets/icons/add.svg";
 import minus_svg from "../../assets/icons/minus.svg";
 import remove_svg from "../../assets/icons/remove.svg";
@@ -96,7 +95,6 @@ const md_text = createEl("textarea");
 画布.append(md_text);
 
 const breadcrumbs_el = elFromId("breadcrumbs");
-const bc_sw_el = elFromId("bc_sw");
 
 const 临时中转站 = elFromId("临时");
 
@@ -428,7 +426,7 @@ elFromId("handle").onpointerdown = (e) => {
         if (handle_e1) handle_a = e.clientY - handle_e1.clientY;
         handle_e1 = e;
     };
-    let u = (e: MouseEvent) => {
+    let u = () => {
         侧栏.style.transform = ``;
         侧栏.style.transition = "";
         handle_e = null;
@@ -652,7 +650,6 @@ type p_point = { x: number; y: number };
 var o_e: MouseEvent;
 var o_ab_p: p_point;
 var o_rect;
-var o_vb_sb = { x0: 0, y0: 0, x1: 0, y1: 0 };
 var move: boolean = false;
 var select_id = "";
 var fxsd_el = elFromId("方向锁定");
@@ -708,7 +705,6 @@ document.onmousedown = (e) => {
 };
 
 document.onmousemove = (e) => {
-    let el = e.target as HTMLElement;
     mouse(e);
     if (o_e) move = true;
 };
@@ -778,12 +774,6 @@ var o_touch_t = NaN;
         O.style.transition = "";
         o_touch_e = o_touch_zoom_e = e;
         o_rect = { x: el_offset(O).x, y: el_offset(O).y };
-        o_vb_sb = {
-            x0: el_offset(link_value_bar).x,
-            y0: el_offset(link_value_bar).y,
-            x1: el_offset(search_pel).x,
-            y1: el_offset(search_pel).y,
-        };
         o_zoom = zoom;
         if (e.targetTouches.length == 1) {
         } else if (e.targetTouches.length == 2) {
@@ -1066,7 +1056,7 @@ function render_select_rects() {
         }
     }
 }
-document.addEventListener("dblclick", (e) => {
+document.addEventListener("dblclick", () => {
     if (模式 == "设计") {
         console.log(free_o_a, z.聚焦元素);
         let el = z.聚焦元素;
@@ -1192,7 +1182,7 @@ mini_map_el.onpointermove = (e) => {
         set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
     }
 };
-window.addEventListener("pointerup", (e) => {
+window.addEventListener("pointerup", () => {
     mini_down = false;
 });
 ignore_el.push("#mini_map");
@@ -1343,7 +1333,7 @@ document.addEventListener("pointermove", (e) => {
         set_O_p(middle_p.x + dx, middle_p.y + dy);
     }
 });
-document.addEventListener("pointerup", (e) => {
+document.addEventListener("pointerup", () => {
     if (middle_b) {
         data_changed();
     }
@@ -3048,8 +3038,6 @@ document.addEventListener("message", (msg: any) => {
     }
 });
 
-import CryptoJS from "crypto-js";
-
 /** 添加资源到assets */
 function put_assets(blob: Blob, file: File) {
     let has: boolean | string = false;
@@ -3209,7 +3197,7 @@ function new_draw() {
     z.push(xel, O.lastElementChild as x);
 }
 var focus_draw_el = null as draw;
-画布.onpointerdown = (e) => {
+画布.onpointerdown = () => {
     if (模式 == "绘制") {
         penc_el.classList.remove("color_show");
         pen_el.classList.remove("pen_show");
@@ -3326,7 +3314,7 @@ class 图层 {
                 }
             });
         };
-        li.onpointerenter = (e) => {
+        li.onpointerenter = () => {
             move_to_x_link(get_x_by_id(i.id));
         };
         li.onpointermove = (e) => {
@@ -4446,11 +4434,11 @@ function show_search_l(l: search_result, exid?: string) {
 /** 创建项 */
 function create_r_item() {
     let div = createEl("div");
-    div.onpointerdown = (e) => {
+    div.onpointerdown = () => {
         const id = div.getAttribute("data-id");
         click_search_item(id);
     };
-    div.onmouseenter = (e) => {
+    div.onmouseenter = () => {
         select_index = Number(div.getAttribute("data-i"));
         select_search(select_index);
     };
@@ -4724,7 +4712,7 @@ function add_bci(el: x | xlink) {
         add.value = el.id;
     }
     li.setAttribute("data-id", el.id);
-    main.onpointerenter = (e) => {
+    main.onpointerenter = () => {
         move_to_x_link(elFromId(el.id) as x);
     };
     main.onpointerdown = () => {
@@ -5212,11 +5200,6 @@ function get_nearest_x(x: x, a: "left" | "right" | "up" | "down") {
         }
     }
     return x;
-}
-
-function init_value(id: string, type: string) {
-    if (!集.values[id]) 集.values[id] = {};
-    if (!集.values[id][type]) 集.values[id][type] = {};
 }
 
 window["xln"] = {};
@@ -5750,7 +5733,7 @@ setInterval(() => {
 }, 100000);
 
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
-md.renderer.rules.mathjax_inline = (tokens, idx, options, env, self) => {
+md.renderer.rules.mathjax_inline = (tokens, idx) => {
     return get_svg(tokens[idx].content).replace(`display="true"`, "");
 };
 md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
@@ -5805,7 +5788,7 @@ md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
 });
 
 md.renderer.rules["mathjax_block"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
-md.renderer.rules.mathjax_block = (tokens, idx, options, env, self) => {
+md.renderer.rules.mathjax_block = (tokens, idx) => {
     return get_svg(`\\displaylines{${tokens[idx].content} }`);
 };
 
@@ -8730,7 +8713,7 @@ var imported_index: { [key: string]: { loaded: boolean; el: HTMLScriptElement } 
 
 async function import_script(url: string) {
     if (imported_index[url])
-        return new Promise((re, rj) => {
+        return new Promise((re) => {
             if (imported_index[url].loaded) {
                 re(true);
             } else
@@ -8743,7 +8726,7 @@ async function import_script(url: string) {
     console.log(url);
     document.body.append(script);
     imported_index[url] = { loaded: false, el: script };
-    return new Promise((re, rj) => {
+    return new Promise((re) => {
         script.addEventListener("load", () => {
             imported_index[url].loaded = true;
             re(true);
@@ -9252,10 +9235,10 @@ class link_arrow extends HTMLElement {
     connectedCallback() {
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.append(this.svg);
-        this.r = new MutationObserver((e) => {
+        this.r = new MutationObserver(() => {
             this.render(null);
         });
-        this.r2 = new ResizeObserver((e) => {
+        this.r2 = new ResizeObserver(() => {
             this.render(null);
         });
     }
