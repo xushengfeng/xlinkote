@@ -729,7 +729,7 @@ body #main > #nav #ink_r {
     position: absolute;
     right: 4px;
     top: 4px;
-    @apply flex gap-1;
+    @apply flex gap-1 z-50;
 }
 .侧栏 > #items > #资源 > div > div > :nth-child(1),
 .侧栏 > #items > #资源 > div > div > :nth-child(2) {
