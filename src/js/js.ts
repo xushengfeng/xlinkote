@@ -3052,13 +3052,26 @@ import CryptoJS from "crypto-js";
 
 /** 添加资源到assets */
 function put_assets(blob: Blob, file: File) {
-    let id = uuid_id();
-    集.assets[id] = {
-        type: (blob?.type || file?.type || "/").split("/") as [string, string],
-        source: blob || file,
-    };
-    assets_reflash();
-    return id;
+    let has: boolean | string = false;
+
+    for (let i in 集.assets) {
+        if (file && file.size == 集.assets[i].source.size && file.name == 集.assets[i].source.name) {
+            has = i;
+            break;
+        }
+    }
+
+    if (!has) {
+        let id = uuid_id();
+        集.assets[id] = {
+            type: (blob?.type || file?.type || "/").split("/") as [string, string],
+            source: blob || file,
+        };
+        assets_reflash();
+        return id;
+    } else {
+        return has;
+    }
 }
 
 function get_assets(id: string) {
