@@ -5664,21 +5664,24 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
 
 import "iconify-icon";
 
+import pako from "pako";
+
 var will_load_math = false;
-var mathjax_cache = {};
+var mathjax_cache = JSON.parse(
+    pako.inflate(JSON.parse(localStorage.getItem("mathjax") || "[]"), { to: "string" }) || "{}"
+);
 var math_loaded = false;
 function get_svg(c: string) {
     let html: string,
         ca = mathjax_cache?.[c];
     if (ca) {
-        html = ca[0];
-        mathjax_cache[c][1] = 2;
+        html = ca;
     } else {
         if (math_loaded) {
             html = window.MathJax.tex2svg(c).outerHTML;
-            mathjax_cache[c] = [html, 1];
+            mathjax_cache[c] = html;
         } else {
-            html = `<mjx-container>${c}</mjx-container>`;
+            html = `<mjx-container loaded="false">${c}</mjx-container>`;
         }
     }
     if (!math_loaded && !will_load_math) {
@@ -5714,21 +5717,18 @@ function get_svg(c: string) {
 }
 function l_math() {
     画布.querySelectorAll("x-md").forEach((pel) => {
-        if (pel.querySelector("mjx-container")) {
+        if (pel.querySelector("mjx-container[loaded=false]")) {
             (<markdown>pel).reload();
         }
     });
 }
 setInterval(() => {
-    for (let i in mathjax_cache) {
-        if (mathjax_cache[i][1] == 1) {
-            delete mathjax_cache[i];
-        }
+    try {
+        localStorage.setItem("mathjax", "[" + pako.deflate(JSON.stringify(mathjax_cache)) + "]");
+    } catch (error) {
+        localStorage.setItem("mathjax", "[]");
     }
 }, 10000);
-setInterval(() => {
-    mathjax_cache = {};
-}, 100000);
 
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_inline = (tokens, idx) => {

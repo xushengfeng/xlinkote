@@ -23,6 +23,7 @@ specifiers:
   mathjax: ^3.2.2
   mermaid: ^9.2.2
   ndollar-js: ^0.6.1
+  pako: ^2.1.0
   pdfjs-dist: ^3.1.81
   postcss: ^8.4.21
   svgo: ^3.0.2
@@ -50,6 +51,7 @@ dependencies:
   mathjax: 3.2.2
   mermaid: 9.2.2
   ndollar-js: 0.6.1
+  pako: 2.1.0
   pdfjs-dist: 3.1.81
   svgo: 3.0.2
   three: 0.150.1
@@ -2903,6 +2905,10 @@ packages:
 
   /pako/1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+    dev: false
+
+  /pako/2.1.0:
+    resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
     dev: false
 
   /parse-bmfont-ascii/1.0.6:
