@@ -1417,6 +1417,8 @@ x-pdf > div:nth-child(1) {
     gap: 4px;
     position: absolute;
     z-index: 3;
+}
+#画布 x-pdf > div:nth-child(1) {
     transform: scale(calc(1 / var(--zoom)));
     transform-origin: left top;
 }
