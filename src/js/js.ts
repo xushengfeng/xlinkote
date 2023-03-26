@@ -1397,34 +1397,32 @@ document.addEventListener("pointermove", (e: PointerEvent) => {
             for (let el of els) {
                 if (el.tagName == "X-X") {
                     let rect = el.getBoundingClientRect();
-                    for (let x of selected_el) {
-                        if (
-                            el.parentElement.classList.contains("flex-column") ||
-                            el.parentElement.classList.contains("flex-row")
-                        ) {
-                            free_drag_tip.style.opacity = "1";
-                            if (el.parentElement.classList.contains("flex-column")) {
-                                if (e.clientY - rect.y < rect.height / 2) {
-                                    free_drag_tip.style.top = rect.top + "px";
-                                } else {
-                                    free_drag_tip.style.top = rect.bottom + "px";
-                                }
-                                free_drag_tip.style.left = rect.left + "px";
-                                free_drag_tip.style.width = rect.width + "px";
-                                free_drag_tip.style.height = "1px";
-                            }
-                            if (el.parentElement.classList.contains("flex-row")) {
-                                if (e.clientX - rect.x < rect.width / 2) {
-                                    free_drag_tip.style.left = rect.left + "px";
-                                } else {
-                                    free_drag_tip.style.left = rect.right + "px";
-                                }
+                    if (
+                        el.parentElement.classList.contains("flex-column") ||
+                        el.parentElement.classList.contains("flex-row")
+                    ) {
+                        free_drag_tip.style.opacity = "1";
+                        if (el.parentElement.classList.contains("flex-column")) {
+                            if (e.clientY - rect.y < rect.height / 2) {
                                 free_drag_tip.style.top = rect.top + "px";
-                                free_drag_tip.style.width = "1px";
-                                free_drag_tip.style.height = rect.height + "px";
+                            } else {
+                                free_drag_tip.style.top = rect.bottom + "px";
                             }
-                            return;
+                            free_drag_tip.style.left = rect.left + "px";
+                            free_drag_tip.style.width = rect.width + "px";
+                            free_drag_tip.style.height = "1px";
                         }
+                        if (el.parentElement.classList.contains("flex-row")) {
+                            if (e.clientX - rect.x < rect.width / 2) {
+                                free_drag_tip.style.left = rect.left + "px";
+                            } else {
+                                free_drag_tip.style.left = rect.right + "px";
+                            }
+                            free_drag_tip.style.top = rect.top + "px";
+                            free_drag_tip.style.width = "1px";
+                            free_drag_tip.style.height = rect.height + "px";
+                        }
+                        return;
                     }
                 }
             }
