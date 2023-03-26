@@ -7168,9 +7168,8 @@ class file extends HTMLElement {
             }
             if (type[1] == "pdf") {
                 let pdf = createEl("x-pdf");
-                this.parentElement.append(pdf);
+                this.div.append(pdf);
                 pdf.value = JSON.stringify({ id: this._value.id, page: 1 });
-                this.remove();
             }
             if (type[1] == "gltf-binary") {
                 let td = createEl("x-three");
