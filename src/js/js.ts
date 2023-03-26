@@ -7109,7 +7109,7 @@ class file extends HTMLElement {
         super();
     }
 
-    _value: { r: boolean; id: string };
+    _value: { r: boolean; id: string; other?: any };
     div: HTMLDivElement;
 
     connectedCallback() {
@@ -7163,7 +7163,7 @@ class file extends HTMLElement {
             if (type[1] == "pdf") {
                 let pdf = createEl("x-pdf");
                 this.div.append(pdf);
-                pdf.value = JSON.stringify({ id: this._value.id, page: 1 });
+                pdf.value = this._value.other || JSON.stringify({ id: this._value.id, page: 1 });
             }
             if (type[1] == "gltf-binary") {
                 let td = createEl("x-three");
@@ -7186,6 +7186,8 @@ class file extends HTMLElement {
     }
 
     get value() {
+        if ((this.div.querySelector(":scope > *") as any).value)
+            this._value["other"] = (this.div.querySelector(":scope > *") as any).value;
         return JSON.stringify(this._value);
     }
     set value(s) {
