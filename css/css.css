@@ -1019,6 +1019,24 @@ body > #main > #画布 > x-link-value > div:nth-child(2) > div > div > .icon {
     width: 16px;
     height: 16px;
 }
+body > #main > #画布 > #菜单 {
+    @apply absolute bar rounded;
+    box-shadow: var(--shadow1);
+    transition: opacity var(--transition);
+}
+body > #main > #画布 > #菜单 > div {
+    @apply flex items-center gap-1 text-sm px-1;
+    transition: var(--transition);
+}
+body > #main > #画布 > #菜单 > div:hover {
+    background-color: var(--bg-color5);
+}
+body > #main > #画布 > #菜单 > div > .icon {
+    @apply w-4 h-4 static;
+}
+.menu_hide {
+    @apply opacity-0 pointer-events-none;
+}
 
 x-link-add {
     @apply inline-block w-2 h-2 rounded;

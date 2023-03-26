@@ -147,6 +147,9 @@ let ink_points: [number[], number[]][] = [];
 const ys_list = elFromId("ys_list");
 const ys_add = elFromId("ys_add");
 
+const menu_el = elFromId("菜单");
+const menu_new = elFromId("菜单_新建");
+
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
 }
@@ -5503,6 +5506,27 @@ function new_ai(text?: string) {
 }
 
 window["ai"] = { ask: ai, new: new_ai, messages: ai_messages };
+
+menu_el.onclick = () => {
+    menu_el.classList.add("menu_hide");
+};
+画布.oncontextmenu = (e) => {
+    if (e.target == 画布) {
+        e.preventDefault();
+        let p = e2p(e);
+        menu_el.style.left = e.offsetX + "px";
+        menu_el.style.top = e.offsetY + "px";
+        menu_el.classList.remove("menu_hide");
+        menu_new.onclick = () => {
+            create_x_x(p.x, p.y);
+        };
+    }
+};
+画布.addEventListener("pointerdown", (e) => {
+    if (!menu_el.contains(e.target as HTMLElement)) {
+        menu_el.classList.add("menu_hide");
+    }
+});
 
 // MD
 import markdownit from "markdown-it";
