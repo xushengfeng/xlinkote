@@ -1090,14 +1090,14 @@ function zoom_o(z: number) {
     zoom_el.style.width = zoom_el.value.length + "ch";
     document.documentElement.style.setProperty("--zoom", String(z));
 
-    document.querySelectorAll("x-pdf").forEach((el: pdf_viewer) => {
+    画布.querySelectorAll("x-pdf").forEach((el: pdf_viewer) => {
         let r = el.getBoundingClientRect();
         let w = window.innerWidth,
             h = window.innerHeight;
         if (r.x < w && r.y < h && r.x + r.width > 0 && r.y + r.height > 0) el.set_m();
     });
 
-    document.querySelectorAll("x-graph").forEach((el: graph) => {
+    画布.querySelectorAll("x-graph").forEach((el: graph) => {
         el.reflasth();
     });
 }
