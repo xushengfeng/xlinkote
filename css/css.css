@@ -1472,6 +1472,7 @@ x-pdf > div:nth-child(4) > span {
     position: absolute;
     white-space: nowrap;
     color: transparent;
+    transform-origin: 0% 0%;
 }
 x-pdf > div:nth-child(4) > span::selection {
     color: transparent;
