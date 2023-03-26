@@ -5721,14 +5721,18 @@ function l_math() {
             (<markdown>pel).reload();
         }
     });
+    setTimeout(() => {
+        if (Object.keys(mathjax_cache).length) {
+            try {
+                localStorage.setItem("mathjax", "[" + pako.deflate(JSON.stringify(mathjax_cache)) + "]");
+            } catch (error) {
+                localStorage.setItem("mathjax", "[]");
+            }
+        } else {
+            mathjax_cache = {};
+        }
+    }, 10000);
 }
-setInterval(() => {
-    try {
-        localStorage.setItem("mathjax", "[" + pako.deflate(JSON.stringify(mathjax_cache)) + "]");
-    } catch (error) {
-        localStorage.setItem("mathjax", "[]");
-    }
-}, 10000);
 
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_inline = (tokens, idx) => {
