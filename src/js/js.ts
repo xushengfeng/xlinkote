@@ -7333,44 +7333,7 @@ class pdf_viewer extends HTMLElement {
             })`;
             this.text.innerHTML = "";
             let text = await page.getTextContent();
-            pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text }).promise.then(() => {
-                setTimeout(() => {
-                    if (this.old_id != this._value.id) {
-                        this.old_id = this._value.id;
-                        let div = this.pages.querySelector("#pages");
-                        for (let i = 1; i <= pdf.numPages; i++) {
-                            let page = createEl("div");
-                            div.append(page);
-                            page.onclick = () => {
-                                this._value.page = i;
-                                this.set_m();
-                            };
-                            let p = createEl("span");
-                            p.innerText = `${i}`;
-                            page.append(p);
-                        }
-                        for (let i = 1; i <= pdf.numPages; i++) {
-                            pdf.getPage(i).then(async (page) => {
-                                let viewport = page.getViewport({ scale: 0.1 });
-
-                                let canvas = createEl("canvas");
-                                let context = canvas.getContext("2d");
-
-                                this.pages.querySelectorAll("#pages > div")[i - 1].append(canvas);
-
-                                canvas.width = Math.floor(viewport.width);
-                                canvas.height = Math.floor(viewport.height);
-                                let renderContext = {
-                                    canvasContext: context,
-                                    transform: null,
-                                    viewport: viewport,
-                                };
-                                page.render(renderContext);
-                            });
-                        }
-                    }
-                }, 100);
-            });
+            pdfjsLib.renderTextLayer({ container: this.text, viewport, textContent: text });
         };
         if (this._value.page == this.now_page_i && this.now_page) {
             set_page(this.now_page);
