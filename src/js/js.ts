@@ -2271,6 +2271,8 @@ async function set_data(l: 集type) {
 
     set_css(l.extra.style || "./md.css");
     if (l.extra?.slide) ys_init(l.extra.slide);
+
+    check_webdav_file();
 }
 
 /** 侧栏刷新 */
@@ -3916,6 +3918,8 @@ async function get_xln_value(path: string) {
         o = JSON5.parse(<string>str);
     }
     now_dav_data = str;
+
+    set_webdav_file_time(path, ((await client.stat(path)) as FileStat).lastmod);
     return o as 集type;
 }
 
@@ -3975,6 +3979,37 @@ function get_webdav_file_time(path: string) {
     file_time = JSON5.parse(localStorage.getItem("webdav_file_time") || "{}");
     return file_time[path];
 }
+async function check_webdav_file() {
+    const path = 集.meta.url;
+    if (path) {
+        let p = get_webdav_file_time(path);
+        let n = ((await client.stat(path)) as FileStat).lastmod;
+        if (new Date(n).getTime() > new Date(p).getTime()) {
+            toast.classList.add("toast_show");
+            let download = createEl("div");
+            download.innerHTML = icon(down_svg);
+            download.onclick = () => {
+                get_xln_value(path);
+            };
+            let cancel = createEl("div");
+            cancel.innerHTML = icon(close_svg);
+            cancel.onclick = () => {
+                toast.classList.remove("toast_show");
+            };
+            setTimeout(() => {
+                toast.classList.remove("toast_show");
+            }, 5 * 1000);
+
+            toast.append("云端有新上传的版本", download, cancel);
+        }
+    }
+}
+
+document.onvisibilitychange = (e) => {
+    if (!document.hidden) {
+        check_webdav_file();
+    }
+};
 
 /** 自动上传到云 */
 function auto_put_xln() {

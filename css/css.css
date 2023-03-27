@@ -1157,6 +1157,7 @@ body > #toast {
     box-shadow: var(--shadow1);
     transition: var(--transition);
     z-index: 6;
+    @apply flex items-center gap-1;
 }
 
 .toast_show {
@@ -1177,6 +1178,18 @@ body > #toast progress::-webkit-progress-bar {
 }
 body > #toast progress[value]::-webkit-progress-value {
     background-color: var(--color6);
+}
+body > #toast > div {
+    @apply relative w-5 h-5 rounded-sm;
+    transition: var(--transition);
+}
+body > #toast > div:hover {
+    background-color: var(--bg-color5);
+}
+body > #toast > div > .icon {
+    @apply w-4 h-4;
+    left: 2px;
+    top: 2px;
 }
 
 x-sinppet {
