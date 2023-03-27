@@ -3959,11 +3959,11 @@ function show_upload_v(v: boolean) {
 }
 function show_upload_pro(l?: number, t?: number) {
     let p = createEl("progress");
-    if (l) p.value = l / t;
+    if (l && t) p.value = l / t;
     toast.classList.add("toast_show");
     toast.innerHTML = "";
     toast.append(p);
-    if (l == t) {
+    if (l >= t) {
         toast.classList.remove("toast_show");
     }
 }
