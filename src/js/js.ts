@@ -3803,7 +3803,7 @@ if (location.search) {
 }
 
 // 云
-import { createClient } from "webdav";
+import { createClient, FileStat } from "webdav";
 var client = createClient(store.webdav.网址, {
     username: store.webdav.用户名,
     password: store.webdav.密码,
@@ -3941,6 +3941,8 @@ async function put_xln_value() {
             },
         });
         show_upload_v(v);
+        const stat = (await client.stat(path)) as FileStat;
+        set_webdav_file_time(path, stat.lastmod);
     };
     reader.readAsArrayBuffer(b);
 }
@@ -3963,6 +3965,16 @@ function show_upload_pro(l?: number, t?: number) {
 }
 
 var auto_put_xln_t = NaN;
+
+let file_time = {};
+function set_webdav_file_time(path: string, time: string) {
+    file_time[path] = time;
+    localStorage.setItem("webdav_file_time", JSON.stringify(file_time));
+}
+function get_webdav_file_time(path: string) {
+    file_time = JSON5.parse(localStorage.getItem("webdav_file_time") || "{}");
+    return file_time[path];
+}
 
 /** 自动上传到云 */
 function auto_put_xln() {
