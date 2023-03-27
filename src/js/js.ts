@@ -5522,28 +5522,31 @@ function load_value() {
 let ai_messages: { role: "system" | "user" | "assistant"; content: string }[] = [];
 
 function ai(text: string) {
-    let x = ai_messages[ai_messages.length - 1];
-    if (!x || (x.role != "user" && x.content != text)) ai_messages.push({ role: "user", content: text });
-    window["ai"]["messages"] = ai_messages;
-    fetch(`https://api.openai.com/v1/chat/completions`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${store.ai.key}`, "content-type": "application/json" },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            temperature: 0,
-            top_p: 1,
-            frequency_penalty: 1,
-            presence_penalty: 1,
-            messages: ai_messages,
-        }),
-    })
-        .then((v) => v.json())
-        .then((t) => {
-            let answer = t.choices[0].message.content;
-            console.log(answer);
-            ai_messages.push({ role: "assistant", content: answer });
-            window["ai"]["messages"] = ai_messages;
-        });
+    return new Promise((re: (text: string) => void) => {
+        let x = ai_messages[ai_messages.length - 1];
+        if (!x || (x.role != "user" && x.content != text)) ai_messages.push({ role: "user", content: text });
+        window["ai"]["messages"] = ai_messages;
+        fetch(`https://api.openai.com/v1/chat/completions`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${store.ai.key}`, "content-type": "application/json" },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                temperature: 0,
+                top_p: 1,
+                frequency_penalty: 1,
+                presence_penalty: 1,
+                messages: ai_messages,
+            }),
+        })
+            .then((v) => v.json())
+            .then((t) => {
+                let answer = t.choices[0].message.content;
+                console.log(answer);
+                ai_messages.push({ role: "assistant", content: answer });
+                window["ai"]["messages"] = ai_messages;
+                re(answer);
+            });
+    });
 }
 
 function new_ai(text?: string) {
