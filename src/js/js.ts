@@ -8330,9 +8330,17 @@ class link_value extends HTMLElement {
             vl.append(el);
             let n = createEl("div");
             n.append(v_text(i));
+            el.onpointermove = (e) => {
+                window.requestAnimationFrame(() => {
+                    set_viewer_posi(e.clientX, e.clientY);
+                });
+            };
             el.onpointerover = (e) => {
                 set_viewer_posi(e.clientX, e.clientY);
                 move_to_x_link(get_x_by_id(i));
+            };
+            el.onpointerout = () => {
+                view_el.classList.add("viewer_hide");
             };
             n.onpointerup = () => {
                 jump_to_x_link(get_x_by_id(i));
