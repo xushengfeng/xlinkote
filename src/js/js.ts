@@ -4614,7 +4614,6 @@ function show_link_value_bar(el: x | xlink) {
         search_el.blur();
         search_pel.classList.remove("搜索展示");
         now_focus_id = el.id;
-        link_value_bar.querySelector(":scope > div:nth-child(2)").innerHTML = "";
     }
 
     // 不是最小元素不显示控件，只显示计算后的值
@@ -8248,6 +8247,7 @@ class link_value extends HTMLElement {
 
     v: HTMLElement;
     _id: string;
+    vl: HTMLElement;
 
     connectedCallback() {
         const add_el = createEl("img");
@@ -8274,55 +8274,9 @@ class link_value extends HTMLElement {
             add_bci(get_link_el_by_id(this._id));
         };
 
-        const vl = createEl("div");
-        this.append(vl);
-        let v_text = (i: string) => {
-            let span = link_value_text(link(this._id).get()[i].value);
-            span.innerText = `#${i} ` + span.innerText;
-            return span;
-        };
+        this.vl = createEl("div");
+        this.append(this.vl);
         this.v.onclick = () => {
-            // 展示链接
-            vl.innerHTML = "";
-            for (let i in link(this._id).get()) {
-                if (i == "0") continue;
-                let el = createEl("div");
-                vl.append(el);
-                let n = createEl("div");
-                n.append(v_text(i));
-                el.onpointerover = (e) => {
-                    set_viewer_posi(e.clientX, e.clientY);
-                    move_to_x_link(get_x_by_id(i));
-                };
-                n.onpointerup = () => {
-                    jump_to_x_link(get_x_by_id(i));
-                };
-                let rm = createEl("div");
-                rm.innerHTML = icon(close_svg);
-                rm.onclick = () => {
-                    link(this._id).rm(i);
-                    el.remove();
-                };
-                const add_el = createEl("div");
-                const down_el = createEl("div");
-
-                add_el.innerHTML = icon(add_svg);
-                down_el.innerHTML = icon(minus_svg);
-                add_el.onclick = () => {
-                    link(this._id).value(i, 0.1);
-                    n.innerHTML = "";
-                    n.append(v_text(i));
-                };
-                down_el.onclick = () => {
-                    link(this._id).value(i, -0.1);
-                    n.innerHTML = "";
-                    n.append(v_text(i));
-                };
-                el.append(n, add_el, rm, down_el);
-            }
-
-            this.style.top = el_offset(this).y - vl.offsetHeight + "px";
-
             // 搜索
             let v = "";
             let el = get_x_by_id(this._id);
@@ -8359,6 +8313,57 @@ class link_value extends HTMLElement {
         };
     }
 
+    show_links() {
+        let v_text = (i: string) => {
+            let span = link_value_text(link(this._id).get()[i].value);
+            span.innerText = `#${i} ` + span.innerText;
+            return span;
+        };
+        // 展示链接
+        const vl = this.vl;
+        vl.innerHTML = "";
+        console.log(link(this._id).get());
+
+        for (let i in link(this._id).get()) {
+            if (i == "0") continue;
+            let el = createEl("div");
+            vl.append(el);
+            let n = createEl("div");
+            n.append(v_text(i));
+            el.onpointerover = (e) => {
+                set_viewer_posi(e.clientX, e.clientY);
+                move_to_x_link(get_x_by_id(i));
+            };
+            n.onpointerup = () => {
+                jump_to_x_link(get_x_by_id(i));
+            };
+            let rm = createEl("div");
+            rm.innerHTML = icon(close_svg);
+            rm.onclick = () => {
+                link(this._id).rm(i);
+                el.remove();
+            };
+            const add_el = createEl("div");
+            const down_el = createEl("div");
+
+            add_el.innerHTML = icon(add_svg);
+            down_el.innerHTML = icon(minus_svg);
+            add_el.onclick = () => {
+                link(this._id).value(i, 0.1);
+                n.innerHTML = "";
+                n.append(v_text(i));
+            };
+            down_el.onclick = () => {
+                link(this._id).value(i, -0.1);
+                n.innerHTML = "";
+                n.append(v_text(i));
+            };
+            el.append(n, add_el, rm, down_el);
+        }
+
+        this.style.top = el_offset(this).y - vl.offsetHeight + "px";
+    }
+
     set elid(id: string) {
         this._id = id;
         link("0").衰减();
@@ -8369,6 +8374,7 @@ class link_value extends HTMLElement {
         } else {
             this.v.innerText = "/";
         }
+        this.show_links();
     }
     get elid() {
         return this._id;
