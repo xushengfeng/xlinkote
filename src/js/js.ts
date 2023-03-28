@@ -6709,7 +6709,7 @@ class markdown extends HTMLElement {
         };
 
         s.onpointerdown = () => {
-            this.edit = true;
+            if (模式 == "浏览") this.edit = true;
         };
 
         // 点击元素定位到源文本行
