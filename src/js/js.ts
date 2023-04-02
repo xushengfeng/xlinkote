@@ -6418,7 +6418,12 @@ class markdown extends HTMLElement {
                             xel.style.position = "relative";
                             p.after(xel);
                             md.edit = true;
-                            md.value = JSON.stringify({ type: this._value.type, text: t1 });
+                            let type: md_type = (["h1", "h2", "h3", "h4", "h5", "h6"] as md_type[]).includes(
+                                this._value.type
+                            )
+                                ? "p"
+                                : this._value.type;
+                            md.value = JSON.stringify({ type: type, text: t1 });
                             md.text.setSelectionRange(0, 0);
 
                             get_data();
