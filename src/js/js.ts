@@ -4399,8 +4399,8 @@ function select_search(i: number) {
 function click_search_item(iid: string) {
     let arg = cmd(search_el.value);
     if (arg.name == "s") {
-        let el = elFromId(iid);
-        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el as x & xlink);
+        let el = elFromId(iid) as x & xlink;
+        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el);
         else view_el.classList.add("viewer_hide");
         show_search_l([]);
         let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
@@ -4408,6 +4408,7 @@ function click_search_item(iid: string) {
         link(id).add(iid);
         search_el.blur();
         link_value_bar.elid = link_value_bar.elid;
+        add_bci(el);
     }
     if (arg.name == "type") {
         search_el.value = `type ${iid}`;
