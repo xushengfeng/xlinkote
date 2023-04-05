@@ -4607,9 +4607,9 @@ function is_smallest_el(el: x | xlink) {
 function show_link_value_bar(el: x | xlink) {
     if (模式 != "浏览") return;
     if (search_pel.classList.contains("搜索展示")) return;
+    link_value_bar.elid = el.id;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
     link_value_bar.style.top = el_offset(el, 画布).y - link_value_bar.offsetHeight + 4 + "px";
-    link_value_bar.elid = el.id;
     if (!search_pel.getAttribute("data-fid") && el.id != now_focus_id) {
         search_el.blur();
         search_pel.classList.remove("搜索展示");
@@ -8373,8 +8373,6 @@ class link_value extends HTMLElement {
             };
             el.append(n, add_el, rm, down_el);
         }
-
-        this.style.top = el_offset(this).y - vl.offsetHeight + "px";
     }
 
     set elid(id: string) {
