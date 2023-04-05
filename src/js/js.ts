@@ -4112,6 +4112,7 @@ function search(input: string[], type: "str" | "regex") {
     let sr: search_result = [];
     let chainr: search_result = [];
     let flex: search_result = [];
+    let bci: search_result = [];
     let other: search_result = [];
     let has_id = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
@@ -4192,12 +4193,19 @@ function search(input: string[], type: "str" | "regex") {
             });
         }
 
-        if (!s)
+        if (!s) {
             other.push({
                 id: el.parentElement.id,
                 score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
                 text: text,
             });
+
+            bci.push({
+                id: el.parentElement.id,
+                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                text: text,
+            });
+        }
     });
 
     function s_i(t: string, st: string) {
@@ -4230,6 +4238,12 @@ function search(input: string[], type: "str" | "regex") {
         }
     }
     for (let i of other) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    for (let i of bci) {
         if (!has_id[i.id]) {
             result.push(i);
             has_id[i.id] = true;
@@ -4740,6 +4754,8 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
     if (!nrc) add_bci(el);
 }
 
+const bci_ids = [];
+
 /** 添加到面包屑栏 */
 function add_bci(el: x | xlink) {
     let qel = breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`) as HTMLElement;
@@ -4775,6 +4791,8 @@ function add_bci(el: x | xlink) {
     };
     breadcrumbs_el.append(li);
     breadcrumbs_el.scrollLeft = li.offsetLeft + li.offsetWidth - breadcrumbs_el.offsetWidth;
+
+    bci_ids.push(el.id);
 }
 
 breadcrumbs_el.onwheel = (e) => {
