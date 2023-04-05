@@ -4105,8 +4105,10 @@ type search_result = {
     type?: "str" | "regex";
     score: number;
 }[];
+let search_x: ReturnType<typeof search_cmd> = null;
 function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
+    search_x = x;
     let s = x.str;
     let result = [] as search_result;
     let sr: search_result = [];
@@ -4515,6 +4517,14 @@ function r_i_r() {
     });
 }
 
+function search_text(text: string) {
+    let t = `s '${text}'`;
+    if (search_x) t += ` ${search_x.s || ""} ${search_x.v || ""} ${search_x.t || ""}`;
+    if (search_x.opsit) t += " -";
+    if (search_x.random) t += " r";
+    return t;
+}
+
 /** 全局搜索栏 */
 function show_g_search() {
     search_pel.classList.add("搜索展示");
@@ -4526,7 +4536,7 @@ function show_g_search() {
     let arg = cmd(search_el.value);
     if (arg.name != "s") {
         arg.args = [""];
-        search_el.value = "s ''";
+        search_el.value = search_text("");
         search_el.setSelectionRange(3, 3);
     }
     let l = search(arg.args, "str");
@@ -8322,7 +8332,7 @@ class link_value extends HTMLElement {
             let l = search([v], "str");
             show_search_l(l, this._id);
 
-            search_el.value = `s '${v}'`;
+            search_el.value = search_text(v);
             search_el.focus();
             search_el.selectionStart = 3;
             search_el.selectionEnd = search_el.value.length - 1;
