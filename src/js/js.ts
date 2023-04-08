@@ -2960,7 +2960,7 @@ function put_datatransfer(data: DataTransfer, x: number, y: number) {
             }
         }
     } else {
-        let type = data.types[data.types.length - 1];
+        let type = data.types[data.types.length - 1] || "text/plain";
         let text = data.getData(type);
         add_file(type, text, null, x, y);
     }
@@ -2992,10 +2992,23 @@ function add_file(type: string, text: string, data: File, x: number, y: number) 
             let turndownService = new TurndownService({ headingStyle: "atx" });
             md.value = JSON.stringify({ type: "text", text: turndownService.turndown(text) });
         } else if (type == "text/xln") {
-            let data = JSON5.parse(text) as data;
-            xel.value = data;
+            let data = JSON5.parse(text) as { data: data[0]; links: [string, string][] };
+            xel.setAttribute("class", data.data.class);
+            xel.value = data.data.子元素;
+            for (let i of data.links) {
+                link(i[0]).add(i[1]);
+            }
         } else {
-            md.value = JSON.stringify({ type: "p", text });
+            try {
+                let data = JSON5.parse(text) as { data: data[0]; links: [string, string][] };
+                xel.setAttribute("class", data.data.class);
+                xel.value = data.data.子元素;
+                for (let i of data.links) {
+                    link(i[0]).add(i[1]);
+                }
+            } catch (error) {
+                md.value = JSON.stringify({ type: "p", text });
+            }
         }
     } else {
         let id = put_assets(null, data);
