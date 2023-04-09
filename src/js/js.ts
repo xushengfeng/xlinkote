@@ -4532,9 +4532,11 @@ function r_i_r() {
 
 function search_text(text: string) {
     let t = `s '${text}'`;
-    if (search_x) t += ` ${search_x.s || ""} ${search_x.v || ""} ${search_x.t || ""}`;
-    if (search_x.opsit) t += " -";
-    if (search_x.random) t += " r";
+    if (search_x) {
+        t += ` ${search_x.s || ""} ${search_x.v || ""} ${search_x.t || ""}`;
+        if (search_x.opsit) t += " -";
+        if (search_x.random) t += " r";
+    }
     return t;
 }
 
