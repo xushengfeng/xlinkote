@@ -8348,7 +8348,7 @@ class link_value extends HTMLElement {
             search_el.value = search_text(v);
             search_el.focus();
             search_el.selectionStart = 3;
-            search_el.selectionEnd = search_el.value.length - 1;
+            search_el.selectionEnd = 3 + v.length;
 
             let x = el_offset(this, document.body).x,
                 y = el_offset(this, document.body).y - search_pel.getBoundingClientRect().height;
