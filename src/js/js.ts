@@ -4131,16 +4131,19 @@ function search(input: string[], type: "str" | "regex") {
     let other: search_result = [];
     let has_id = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
-        if (!集.链接[0][el.parentElement.id]) return;
         let text = "";
+        let id = "";
         let searched = false;
         if (el.tagName == "X-MD") {
             text = JSON5.parse((el as markdown).value).text;
+            id = el.parentElement.id;
         } else if (el.tagName == "X-PDF") {
             text = (el as pdf_viewer).text.innerText;
+            id = el.parentElement.parentElement.parentElement.id;
         } else {
             text = el.innerText;
         }
+        if (!集.链接[0][id]) return;
         switch (type) {
             case "str":
                 const fuse = new Fuse(text.split("\n"), {
@@ -4152,11 +4155,11 @@ function search(input: string[], type: "str" | "regex") {
                 let fr = fuse.search(s);
                 for (let i of fr) {
                     sr.push({
-                        id: el.parentElement.id,
+                        id: id,
                         l: i.matches,
                         n: i.refIndex,
                         type: "str",
-                        score: search_score(el.parentElement.id, 1 - i.score, x.t, x.v, x.s, x.opsit),
+                        score: search_score(id, 1 - i.score, x.t, x.v, x.s, x.opsit),
                     });
                     searched = true;
                 }
@@ -4175,9 +4178,9 @@ function search(input: string[], type: "str" | "regex") {
                 }
                 if (l.length != 0) {
                     sr.push({
-                        id: el.parentElement.id,
+                        id: id,
                         l,
-                        score: search_score(el.parentElement.id, 1, x.t, x.v, x.s, x.opsit),
+                        score: search_score(id, 1, x.t, x.v, x.s, x.opsit),
                     });
                     searched = true;
                 }
@@ -4185,7 +4188,7 @@ function search(input: string[], type: "str" | "regex") {
         }
         // 链式搜索
         if (searched) {
-            let c = link(el.parentElement.id).get(1);
+            let c = link(id).get(1);
             for (let i in c) {
                 chainr.push({
                     id: i,
@@ -4198,7 +4201,7 @@ function search(input: string[], type: "str" | "regex") {
         if (searched && is_flex(el.parentElement.parentElement) == "flex") {
             el.parentElement.parentElement.querySelectorAll("x-x").forEach((xel: x) => {
                 if (is_smallest_el(xel)) {
-                    if (xel.id != el.parentElement.id) {
+                    if (xel.id != id) {
                         flex.push({
                             id: xel.id,
                             score: search_score(xel.id, 0, x.t, x.v, x.s, x.opsit),
@@ -4211,14 +4214,14 @@ function search(input: string[], type: "str" | "regex") {
 
         if (!s) {
             other.push({
-                id: el.parentElement.id,
-                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                id: id,
+                score: search_score(id, 0, x.t, x.v, x.s, x.opsit),
                 text: text,
             });
 
             bci.push({
-                id: el.parentElement.id,
-                score: search_score(el.parentElement.id, 0, x.t, x.v, x.s, x.opsit),
+                id: id,
+                score: search_score(id, 0, x.t, x.v, x.s, x.opsit),
                 text: text,
             });
         }
