@@ -4131,6 +4131,7 @@ function search(input: string[], type: "str" | "regex") {
     let other: search_result = [];
     let has_id = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
+        if (!集.链接[0][el.parentElement.id]) return;
         let text = "";
         let searched = false;
         if (el.tagName == "X-MD") {
