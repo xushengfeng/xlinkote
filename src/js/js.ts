@@ -4319,7 +4319,7 @@ function search_score(
     const vt = 集.链接[0][id];
     let t = (now_t - vt.time) / 1000 / 60 / 60 / 24 / 7;
     t = 1 / (t + 1);
-    let v = vt.value;
+    let v = link(id).get_v();
     let s = search_s;
     return (
         (op ? -1 : 1) * (Math.sqrt(((time_n ?? 1) * t) ** 2) + ((value_n ?? 1) * v) ** 2 + ((search_n ?? 2) * s) ** 2)
