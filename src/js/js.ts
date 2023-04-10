@@ -4321,7 +4321,9 @@ function search_score(
     t = 1 / (t + 1);
     let v = vt.value;
     let s = search_s;
-    return (op ? -1 : 1) * Math.sqrt(((time_n ?? 1) * t) ** 2 + ((value_n ?? 1) * v) ** 2 + ((search_n ?? 2) * s) ** 2);
+    return (
+        (op ? -1 : 1) * (Math.sqrt(((time_n ?? 1) * t) ** 2) + ((value_n ?? 1) * v) ** 2 + ((search_n ?? 2) * s) ** 2)
+    );
 }
 
 let select_index = 0;
