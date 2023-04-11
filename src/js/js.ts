@@ -6588,6 +6588,11 @@ class markdown extends HTMLElement {
                             this.type = "p";
                         }
                     }
+                    if (this._value.type == "p") {
+                        if (text.selectionStart == 0 && text.selectionEnd == 0) {
+                            z.remove(this.parentElement as x);
+                        }
+                    }
                 }
                 if (e.key == "ArrowUp") {
                     if (this._value.type != "text" && this._value.type != "code") {
