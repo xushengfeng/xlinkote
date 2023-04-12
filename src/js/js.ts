@@ -954,6 +954,7 @@ function add_blank(op: p_point, p: p_point) {
 }
 
 function render_select_rects() {
+    if (模式 != "设计") return;
     let xels: x[] = [];
     if (now_mouse_e) {
         let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
