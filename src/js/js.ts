@@ -4127,6 +4127,7 @@ let search_x: ReturnType<typeof search_cmd> = null;
 let search_list: { [id: string]: string } = {};
 
 function get_search_list() {
+    search_list = {};
     画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
         let text = "";
         let id = "";
