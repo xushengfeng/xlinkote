@@ -4519,16 +4519,18 @@ function show_search_l(l: search_result, exid?: string) {
     }
 
     link("0").衰减();
+    let search_r_f = document.createDocumentFragment();
     for (let div of els) {
-        if (search_r.firstChild) {
-            search_r.firstChild.before(div);
+        if (search_r_f.firstChild) {
+            search_r_f.firstChild.before(div);
         } else {
-            search_r.append(div);
+            search_r_f.append(div);
         }
         let value = createEl("div");
         value.append(link_value_text(link(div.getAttribute("data-id")).get_v()));
         div.append(value);
     }
+    search_r.append(search_r_f);
     r_i_r();
 }
 
