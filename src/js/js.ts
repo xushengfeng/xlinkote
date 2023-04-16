@@ -2583,7 +2583,7 @@ var db_store_name = "files";
 var db: IDBDatabase;
 
 // 持久化存储
-await navigator.storage.persist();
+navigator.storage.persist();
 
 request.onsuccess = (event) => {
     db = (<any>event.target).result;
