@@ -4123,6 +4123,27 @@ type search_result = {
     score: number;
 }[];
 let search_x: ReturnType<typeof search_cmd> = null;
+
+let search_list: { [id: string]: string } = {};
+
+function get_search_list() {
+    画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
+        let text = "";
+        let id = "";
+        if (el.tagName == "X-MD") {
+            text = JSON5.parse((el as markdown).value).text;
+            id = el.parentElement.id;
+        } else if (el.tagName == "X-PDF") {
+            text = (el as pdf_viewer).text.innerText;
+            id = el.parentElement.parentElement.parentElement.id;
+        } else {
+            text = el.innerText;
+        }
+        if (!集.链接[0][id]) return;
+        search_list[id] = text;
+    });
+}
+
 function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
     search_x = x;
@@ -4134,20 +4155,10 @@ function search(input: string[], type: "str" | "regex") {
     let bci: search_result = [];
     let other: search_result = [];
     let has_id = {};
-    画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
-        let text = "";
-        let id = "";
+    for (let id in search_list) {
+        const text = search_list[id];
+
         let searched = false;
-        if (el.tagName == "X-MD") {
-            text = JSON5.parse((el as markdown).value).text;
-            id = el.parentElement.id;
-        } else if (el.tagName == "X-PDF") {
-            text = (el as pdf_viewer).text.innerText;
-            id = el.parentElement.parentElement.parentElement.id;
-        } else {
-            text = el.innerText;
-        }
-        if (!集.链接[0][id]) return;
         switch (type) {
             case "str":
                 const fuse = new Fuse(text.split("\n"), {
@@ -4202,18 +4213,20 @@ function search(input: string[], type: "str" | "regex") {
             }
         }
 
-        if (searched && is_flex(el.parentElement.parentElement) == "flex") {
-            el.parentElement.parentElement.querySelectorAll("x-x").forEach((xel: x) => {
-                if (is_smallest_el(xel)) {
-                    if (xel.id != id) {
-                        flex.push({
-                            id: xel.id,
-                            score: search_score(xel.id, 0, x.t, x.v, x.s, x.opsit),
-                            text: xel.innerText,
-                        });
+        if (searched) {
+            const pel = elFromId(id).parentElement;
+            if (is_flex(pel) == "flex")
+                pel.querySelectorAll("x-x").forEach((xel: x) => {
+                    if (is_smallest_el(xel)) {
+                        if (xel.id != id) {
+                            flex.push({
+                                id: xel.id,
+                                score: search_score(xel.id, 0, x.t, x.v, x.s, x.opsit),
+                                text: xel.innerText,
+                            });
+                        }
                     }
-                }
-            });
+                });
         }
 
         if (!s) {
@@ -4229,7 +4242,7 @@ function search(input: string[], type: "str" | "regex") {
                 text: text,
             });
         }
-    });
+    }
 
     function s_i(t: string, st: string) {
         let l = [];
@@ -4564,6 +4577,7 @@ function show_g_search() {
         search_el.value = search_text("");
         search_el.setSelectionRange(3, 3);
     }
+    get_search_list();
     let l = search(arg.args, "str");
     show_search_l(l);
 }
@@ -8359,6 +8373,7 @@ class link_value extends HTMLElement {
             } else {
                 v = el.innerText;
             }
+            get_search_list();
             let l = search([v], "str");
             show_search_l(l, this._id);
 
