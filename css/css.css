@@ -457,6 +457,9 @@ body #main > #nav #ink_r {
 .item_hide {
     width: 0 !important;
 }
+.selected_item2 {
+    color: var(--main-color);
+}
 
 .侧栏 > #items > div:nth-child(1) {
     height: 100%;

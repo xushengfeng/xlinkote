@@ -2663,7 +2663,7 @@ function db_get() {
             if (`#${f.meta.UUID}` == location.hash || `#${f.meta.file_name}` == decodeURIComponent(location.hash)) {
                 ihash = true;
                 set_data(f);
-                文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item");
+                文件_el.querySelector(`[data-uuid="${f.meta.UUID}"]`).classList.add("selected_item2");
                 db_can_save = true;
                 set_save_icon();
             }
