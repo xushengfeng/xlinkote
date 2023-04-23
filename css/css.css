@@ -1109,11 +1109,7 @@ body > #搜索 > #搜索结果 > div > div > span > span {
 }
 
 body > #viewer {
-    position: absolute;
-    overflow: hidden;
-    pointer-events: none;
-    transition: opacity var(--transition);
-    transform-origin: left top;
+    @apply absolute pointer-events-none;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     box-shadow: var(--shadow1);
@@ -1124,9 +1120,13 @@ body > #viewer {
 .viewer_hide {
     opacity: 0;
 }
-
-.viewer_target {
-    background-color: #0002;
+body > #viewer > #viewer_children {
+    @apply relative overflow-hidden origin-top-left;
+    transition: opacity var(--transition);
+}
+body > #viewer > #viewer_highlight {
+    @apply absolute;
+    border: 1px dashed var(--main-color);
 }
 body > #tips {
     position: fixed;

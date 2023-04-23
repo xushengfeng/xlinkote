@@ -139,6 +139,8 @@ var search_r = elFromId("搜索结果");
 var search_pel = elFromId("搜索");
 
 const view_el = elFromId("viewer");
+const view_children_el = elFromId("viewer_children");
+const view_highlight_el = elFromId("viewer_highlight");
 
 const ink_el = elFromId("ink") as HTMLCanvasElement;
 let ink_cxt = ink_el.getContext("2d");
@@ -4748,10 +4750,13 @@ function preview_x_link(el: x | xlink) {
     });
     pel.style.display = pel_display;
 
-    view_el.style.width = 2 * dx + "px";
-    view_el.style.height = 2 * dy + "px";
-    view_el.style.transform = `scale(${zoom})`;
-    view_el.innerHTML = "";
+    view_el.style.width = 2 * dx * zoom + "px";
+    view_el.style.height = 2 * dy * zoom + "px";
+
+    view_children_el.style.width = 2 * dx + "px";
+    view_children_el.style.height = 2 * dy + "px";
+    view_children_el.style.transform = `scale(${zoom})`;
+    view_children_el.innerHTML = "";
     view_el.classList.remove("viewer_hide");
     for (let x of els) {
         let xel = createEl("x-x");
@@ -4759,16 +4764,15 @@ function preview_x_link(el: x | xlink) {
         xel.style.left = x.x - out_rect.left + "px";
         xel.style.top = x.y - out_rect.top + "px";
         xel.className = x.el.className;
-        view_el.append(xel);
+        view_children_el.append(xel);
         xel.id = x.el.id;
         xel.value = x.el.value;
     }
-    view_el.querySelectorAll("x-x").forEach((xcel: x) => {
-        if (xcel.id == el.id) {
-            xcel.classList.add("viewer_target");
-            return;
-        }
-    });
+    let highlight = view_highlight_el;
+    highlight.style.left = (center_rect.x - out_rect.left) * zoom + "px";
+    highlight.style.top = (center_rect.y - out_rect.top) * zoom + "px";
+    highlight.style.width = center_rect.w * zoom + "px";
+    highlight.style.height = center_rect.h * zoom + "px";
 }
 
 var now_data_id = "0";
