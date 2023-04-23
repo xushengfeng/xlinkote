@@ -608,7 +608,7 @@ body #main > #nav #ink_r {
     display: none;
 }
 .层容器 > #层 > ul > li > span {
-    @apply flex;
+    @apply flex sticky top-0 bar z-10;
 }
 .层容器 > #层 > ul > li > span > span {
     @apply flex-grow;
