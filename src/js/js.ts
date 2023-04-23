@@ -6617,14 +6617,14 @@ class markdown extends HTMLElement {
                     this.render();
                 }
                 if (e.key == "Backspace") {
-                    if (this._value.type != "text") {
-                        if (text.selectionStart == 0 && text.selectionEnd == 0) {
-                            this.type = "p";
-                        }
-                    }
                     if (this._value.type == "p") {
                         if (text.selectionStart == 0 && text.selectionEnd == 0) {
                             z.remove(this.parentElement as x);
+                        }
+                    }
+                    if (this._value.type != "text") {
+                        if (text.selectionStart == 0 && text.selectionEnd == 0) {
+                            this.type = "p";
                         }
                     }
                 }
