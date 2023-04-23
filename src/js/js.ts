@@ -3436,6 +3436,9 @@ class 图层 {
             text.innerText = `${i.name}`;
             s.append(text);
             li.setAttribute("data-id", i.id);
+            if (i.id == 集.meta.focus_page) {
+                li.classList.add("画布focus");
+            }
             let ul_img = createEl("img");
             ul_img.src = ul_show_svg;
             ul_img.onclick = () => {
@@ -3450,12 +3453,14 @@ class 图层 {
                             O.style.display = "block";
                             set_zoom(O.style.transform);
                             this_li.classList.remove("层ul_hide");
+                            this_li.classList.add("画布focus");
                         } else {
                             this_li.classList.add("层ul_hide");
                         }
                     } else {
                         (el as HTMLElement).style.display = "none";
                         this_li.classList.add("层ul_hide");
+                        this_li.classList.remove("画布focus");
                     }
                 }
             };

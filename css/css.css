@@ -616,6 +616,9 @@ body #main > #nav #ink_r {
 .层容器 > #层 > ul > li > span:hover > .more {
     opacity: 1;
 }
+.画布focus > span > span {
+    color: var(--main-color);
+}
 .层容器 > #层 li {
     position: relative;
 }
