@@ -3335,7 +3335,7 @@ class 图层 {
             });
         };
         li.onpointerenter = () => {
-            move_to_x_link(get_x_by_id(i.id));
+            preview_x_link(get_x_by_id(i.id));
         };
         li.onpointermove = (e) => {
             window.requestAnimationFrame(() => {
@@ -4356,7 +4356,7 @@ search_el.oninput = search_el.click = () => {
         }
         select_index = clip(select_index, 0, l.length - 1); // 搜索记录上次定位
         let el = select_search(select_index);
-        move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+        preview_x_link(get_link_el_by_id(el.getAttribute("data-id")));
         let r = el.getBoundingClientRect();
         set_viewer_posi(r.x + r.width, r.y);
     }
@@ -4409,7 +4409,7 @@ search_el.onkeyup = (e) => {
         let arg = cmd(search_el.value);
         if (el) {
             if (arg.name == "s") {
-                move_to_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+                preview_x_link(get_link_el_by_id(el.getAttribute("data-id")));
                 let r = el.getBoundingClientRect();
                 set_viewer_posi(r.x + r.width, r.y);
             }
@@ -4510,7 +4510,7 @@ function show_search_l(l: search_result, exid?: string) {
     function add_div_event(div: HTMLElement, id: string) {
         div.addEventListener("mouseenter", () => {
             let el = elFromId(id);
-            move_to_x_link(el as x & xlink);
+            preview_x_link(el as x & xlink);
         });
         div.onmousemove = (e) => {
             window.requestAnimationFrame(() => {
@@ -4714,7 +4714,7 @@ function set_viewer_posi(x: number, y: number) {
 }
 
 /** 跳转到元素位置 */
-function move_to_x_link(el: x | xlink) {
+function preview_x_link(el: x | xlink) {
     let pel: HTMLElement;
     画布s.querySelectorAll(":scope > div").forEach((xel) => {
         if (xel.contains(el)) {
@@ -4829,7 +4829,7 @@ function add_bci(el: x | xlink) {
     }
     li.setAttribute("data-id", el.id);
     main.onpointerenter = () => {
-        move_to_x_link(elFromId(el.id) as x);
+        preview_x_link(elFromId(el.id) as x);
     };
     main.onpointerdown = () => {
         jump_to_x_link(elFromId(el.id) as x);
@@ -8419,7 +8419,7 @@ class link_value extends HTMLElement {
             };
             el.onpointerover = (e) => {
                 set_viewer_posi(e.clientX, e.clientY);
-                move_to_x_link(get_x_by_id(i));
+                preview_x_link(get_x_by_id(i));
             };
             el.onpointerout = () => {
                 view_el.classList.add("viewer_hide");
