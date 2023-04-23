@@ -4737,10 +4737,13 @@ function preview_x_link(el: x | xlink) {
     };
 
     let els: { el: x; x: number; y: number }[] = [];
-    pel.querySelectorAll(":scope > x-x").forEach((el: x) => {
-        let r = el_offset2(el);
-        if (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) {
-            els.push({ el: el, x: r.x, y: r.y });
+    pel.querySelectorAll(":scope > x-x").forEach((xel: x) => {
+        let r = el_offset2(xel);
+        if (
+            (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) ||
+            xel.contains(el) // 针对固定布局元素
+        ) {
+            els.push({ el: xel, x: r.x, y: r.y });
         }
     });
     pel.style.display = pel_display;
