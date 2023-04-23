@@ -2340,6 +2340,12 @@ function render_data(inputdata: 画布type) {
 
 /** 选择画布 */
 function select_p(id: string) {
+    for (let p of 集.数据) {
+        if (p.id == id) {
+            当前画布 = p;
+            集.meta.focus_page = p.id;
+        }
+    }
     for (let el of 画布s.children) {
         if (el.id == id) {
             O = el as HTMLElement;
@@ -2349,8 +2355,13 @@ function select_p(id: string) {
             (el as HTMLElement).style.display = "none";
         }
     }
-    z.focus(O.children[O.children.length - 1] as x);
-    z.reflash(true);
+    图层_el.querySelectorAll(":scope > ul > li").forEach((el: HTMLElement) => {
+        if (el.getAttribute("data-id") == id) {
+            el.classList.add("画布focus");
+        } else {
+            el.classList.remove("画布focus");
+        }
+    });
 }
 
 function set_zoom(zooms: string) {
@@ -3449,20 +3460,15 @@ class 图层 {
                     let this_li = root_ul.querySelector(`li[data-id="${el.id}"]`);
                     if (el.id == i.id) {
                         if (this_li.classList.contains("层ul_hide")) {
-                            O = el as HTMLElement;
-                            O.style.display = "block";
-                            set_zoom(O.style.transform);
                             this_li.classList.remove("层ul_hide");
-                            this_li.classList.add("画布focus");
                         } else {
                             this_li.classList.add("层ul_hide");
                         }
                     } else {
-                        (el as HTMLElement).style.display = "none";
                         this_li.classList.add("层ul_hide");
-                        this_li.classList.remove("画布focus");
                     }
                 }
+                select_p(i.id);
             };
             li.append(ul_img, s);
             w(i.data, li);
@@ -3494,6 +3500,7 @@ class 图层 {
                 if (i.id == 当前画布.id) {
                     let id = 画布s.children[0].id;
                     select_p(id);
+                    z.focus(O.children[O.children.length - 1] as x);
                 }
                 li.remove();
                 get_data();
@@ -4792,32 +4799,22 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
 
     for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
         if (画布el.contains(el)) {
-            O = 画布el as HTMLElement;
-            for (let p of 集.数据) {
-                if (p.id == O.id) {
-                    当前画布 = p;
-                    集.meta.focus_page = p.id;
-                    O.style.display = "block";
-                    let x = el_offset(el, O).x - 画布.offsetWidth / 2,
-                        y = el_offset(el, O).y - 画布.offsetHeight / 2;
-                    let ex = -x - (el.offsetWidth * zoom) / 2,
-                        ey = -y - (el.offsetHeight * zoom) / 2;
-                    let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
-                    O.style.transitionDuration = `${t / 1000}s`;
-                    O.ontransitioncancel = O.ontransitionend = () => {
-                        O.style.transitionDuration = "";
-                        render_select_rects();
-                    };
-                    zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
-                    set_O_p(ex, ey);
-                    if (el.tagName == "X-X") {
-                        z.focus(el as x);
-                    }
-                    z.reflash(true);
-                }
+            select_p(画布el.id);
+            let x = el_offset(el, O).x - 画布.offsetWidth / 2,
+                y = el_offset(el, O).y - 画布.offsetHeight / 2;
+            let ex = -x - (el.offsetWidth * zoom) / 2,
+                ey = -y - (el.offsetHeight * zoom) / 2;
+            let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
+            O.style.transitionDuration = `${t / 1000}s`;
+            O.ontransitioncancel = O.ontransitionend = () => {
+                O.style.transitionDuration = "";
+                render_select_rects();
+            };
+            set_O_p(ex, ey);
+            if (el.tagName == "X-X") {
+                z.focus(el as x);
             }
-        } else {
-            (画布el as HTMLElement).style.display = "none";
+            z.reflash(true);
         }
     }
     if (!nrc) add_bci(el);
