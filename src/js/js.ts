@@ -1060,8 +1060,26 @@ function render_x_bar() {
             }
         }
     }
-    for (let i of selected_el) {
-        add_r(i);
+    if (selected_el.length == 1)
+        for (let i of selected_el) {
+            xels.push(i);
+        }
+
+    for (let i of x_bar_con.children) {
+        let has = false;
+        for (let x of xels) {
+            if (i.getAttribute("data-id") == x.id) {
+                add_r(x);
+                has = true;
+            }
+        }
+        if (!has) {
+            setTimeout(() => {
+                if (!i.contains(document.elementFromPoint(now_mouse_e.clientX, now_mouse_e.clientY))) {
+                    i.remove();
+                }
+            }, 10);
+        }
     }
     function add_r(i: x) {
         let rect = i.getBoundingClientRect();
@@ -1073,28 +1091,6 @@ function render_x_bar() {
         x_bar_con.append(x_bar);
 
         return x_bar;
-    }
-    for (let i of x_bar_con.children) {
-        let has = false;
-        for (let x of xels) {
-            if (x.id == i.getAttribute("data-id")) {
-                has = true;
-                break;
-            }
-        }
-        for (let x of selected_el) {
-            if (x.id == i.getAttribute("data-id")) {
-                has = true;
-                break;
-            }
-        }
-        if (!has) {
-            setTimeout(() => {
-                if (!i.contains(document.elementFromPoint(now_mouse_e.clientX, now_mouse_e.clientY))) {
-                    i.remove();
-                }
-            }, 100);
-        }
     }
 }
 
