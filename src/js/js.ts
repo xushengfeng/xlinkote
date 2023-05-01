@@ -1782,6 +1782,8 @@ function tmp_s_reflash() {
         let xel = createEl("x-x");
         xel.id = x.id;
         t.append(xel);
+        let bar = new_x_bar(x.id);
+        t.append(bar);
         xel.setAttribute("style", x.style);
         xel.style.left = "0px";
         xel.style.top = "0px";
@@ -6359,7 +6361,7 @@ function new_x_bar(id: string) {
     if (!main_x) return;
 
     var bar = createEl("div");
-    bar.id = "x-x_bar";
+    bar.className = "x-x_bar";
     const m = createEl("div");
     m.innerHTML = icon(handle_svg);
     var f = createEl("div");

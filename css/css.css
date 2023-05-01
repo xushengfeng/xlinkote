@@ -694,36 +694,17 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #中转站 > #临时 > div > x-x {
     position: static !important;
 }
-.侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar {
-    display: flex;
-}
-.侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar > div {
-    width: 16px;
-    height: 16px;
-    position: relative;
-    cursor: pointer;
-    transition: var(--transition);
-    background-color: var(--bg-color1);
-    border-radius: 4px;
-    margin-right: 4px;
-}
-.侧栏 > #items > #中转站 > #临时 > div > .tmp_s_bar > div > .icon {
-    width: 16px;
-    height: 16px;
-}
 .侧栏 > #items > #中转站 > #临时 #x-x_bar {
-    transform: none;
+    display: none;
 }
-.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(3) {
+.侧栏 > #items > #中转站 > #临时 .x-x_bar {
+    opacity: 1;
+    pointer-events: all;
+}
+.侧栏 > #items > #中转站 > #临时 .x-x_bar > div:nth-child(3) {
     display: block;
 }
-.侧栏 > #items > #中转站 > #临时 #x-x_bar > div:nth-child(4) {
-    display: none;
-}
-.侧栏 > #items > #中转站 > #临时 .xxhandle {
-    display: none;
-}
-.侧栏 > #items > #中转站 > #临时 > div > x-x x-x > #x-x_bar {
+.侧栏 > #items > #中转站 > #临时 .x-x_bar > div:nth-child(4) {
     display: none;
 }
 .侧栏 > #items > #资源 {
@@ -1269,6 +1250,37 @@ x-x > #x-x_bar > div > .icon {
 x-x > #x-x_bar > div:nth-child(3) {
     display: none;
 }
+
+.x-x_bar {
+    display: flex;
+    position: absolute;
+    top: calc(-1 * var(--x-x-bar-w));
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+    cursor: pointer !important;
+    transform: scale(calc(1 / var(--zoom)));
+    transform-origin: left bottom;
+    gap: 4px;
+}
+.x-x_bar > div {
+    width: var(--x-x-bar-w);
+    height: var(--x-x-bar-w);
+    position: relative;
+    background-color: var(--bg-color2);
+    backdrop-filter: var(--blur);
+    border-radius: 4px;
+    box-shadow: var(--shadow1);
+}
+.x-x_bar > div > .icon {
+    width: var(--x-x-bar-w);
+    height: var(--x-x-bar-w);
+}
+.x-x_bar > div:nth-child(3) {
+    display: none;
+}
+
 x-x:focus-within {
     z-index: calc(var(--z) + 1) !important;
 }
