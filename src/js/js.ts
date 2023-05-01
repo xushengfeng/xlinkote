@@ -962,6 +962,14 @@ function render_select_rects() {
     let xels: x[] = [];
     if (now_mouse_e) {
         let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
+        if (els.length) {
+            if (els[0].className == "x-x_bar" || els[1].className == "x-x_bar") {
+                let x: Element;
+                if (els[0].className == "x-x_bar") x = elFromId(els[0].getAttribute("data-id"));
+                if (els[1].className == "x-x_bar") x = elFromId(els[1].getAttribute("data-id"));
+                els = document.elementsFromPoint(x.getBoundingClientRect().x, x.getBoundingClientRect().y);
+            }
+        }
         for (let i of els) {
             if (i.tagName == "X-X") {
                 xels.push(i as x);
@@ -1052,6 +1060,14 @@ function render_x_bar() {
     let xels: x[] = [];
     if (now_mouse_e) {
         let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
+        if (els.length) {
+            if (els[0].className == "x-x_bar" || els[1].className == "x-x_bar") {
+                let x: Element;
+                if (els[0].className == "x-x_bar") x = elFromId(els[0].getAttribute("data-id"));
+                if (els[1].className == "x-x_bar") x = elFromId(els[1].getAttribute("data-id"));
+                els = document.elementsFromPoint(x.getBoundingClientRect().x, x.getBoundingClientRect().y);
+            }
+        }
         for (let i of els) {
             if (i.tagName == "X-X") {
                 xels.push(i as x);
