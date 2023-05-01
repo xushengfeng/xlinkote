@@ -1792,11 +1792,11 @@ function get_link_arrow_p(id: string, a: free_a): p_point {
     if (a == 6 || a == 2 || a == 5) y = rect.y + rect.h;
     return { x, y };
 }
-function get_link_arrow_a(p: p_point, a: free_a): p_point {
+function get_link_arrow_a(p: p_point, a: free_a, long: number): p_point {
     let dx = 0,
         dy = 0;
-    const x = 60,
-        y = 60;
+    const x = long,
+        y = long;
     if (a == 7 || a == 3 || a == 6) dx = -x;
     if (a == 0 || a == 2) dx = 0;
     if (a == 4 || a == 1 || a == 5) dx = x;
@@ -9468,8 +9468,9 @@ class link_arrow extends HTMLElement {
             )
                 end_a = Number(el.className.replace("xxhandle", "")) || end_a;
         }
-        let start_ctrl = get_link_arrow_a(start_p, start_a),
-            end_ctrl = get_link_arrow_a(end_p, end_a);
+        let long = Math.min(Math.sqrt((start_p.x - end_p.x) ** 2 + (start_p.y - end_p.y) ** 2) / 3, 60);
+        let start_ctrl = get_link_arrow_a(start_p, start_a, long),
+            end_ctrl = get_link_arrow_a(end_p, end_a, long);
         let at = `M ${start_p.x} ${start_p.y} C ${start_ctrl.x} ${start_ctrl.y}, ${end_ctrl.x} ${end_ctrl.y}, ${end_p.x} ${end_p.y}`;
         p.setAttribute("d", at);
         if (this._value.start?.marker) {
