@@ -88,6 +88,8 @@ var O = elFromId("O");
 
 const select_con = elFromId("选择");
 
+const x_bar_con = elFromId("控制");
+
 const link_value_bar = createEl("x-link-value");
 画布.append(link_value_bar);
 
@@ -960,20 +962,6 @@ function render_select_rects() {
     let xels: x[] = [];
     if (now_mouse_e) {
         let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
-        if (els.length) {
-            if (els[0].id == "x-x_bar") {
-                els = document.elementsFromPoint(
-                    els[0].parentElement.getBoundingClientRect().x,
-                    els[0].parentElement.getBoundingClientRect().y
-                );
-            }
-            if (els[1].id == "x-x_bar") {
-                els = document.elementsFromPoint(
-                    els[1].parentElement.getBoundingClientRect().x,
-                    els[1].parentElement.getBoundingClientRect().y
-                );
-            }
-        }
         for (let i of els) {
             if (i.tagName == "X-X") {
                 xels.push(i as x);
@@ -986,12 +974,6 @@ function render_select_rects() {
     for (let i of selected_el) {
         let select_bar = add_r(i);
         select_bar.classList.add("x-x_selected");
-    }
-    document.querySelectorAll(".x-x_bar_show2").forEach((el) => {
-        el.classList.remove("x-x_bar_show2");
-    });
-    if (selected_el.length == 1) {
-        selected_el[0].querySelector(":scope > #x-x_bar").classList.add("x-x_bar_show2");
     }
     function add_r(i: x) {
         let rect = i.getBoundingClientRect();
@@ -1061,7 +1043,61 @@ function render_select_rects() {
             i.remove();
         }
     }
+
+    render_x_bar();
 }
+
+function render_x_bar() {
+    if (模式 != "设计") return;
+    let xels: x[] = [];
+    if (now_mouse_e) {
+        let els = document.elementsFromPoint(now_mouse_e.clientX, now_mouse_e.clientY);
+        for (let i of els) {
+            if (i.tagName == "X-X") {
+                xels.push(i as x);
+                add_r(i as x);
+                break;
+            }
+        }
+    }
+    for (let i of selected_el) {
+        add_r(i);
+    }
+    function add_r(i: x) {
+        let rect = i.getBoundingClientRect();
+        let x_bar = (x_bar_con.querySelector(`[data-id="${i.id}"]`) as HTMLElement) || new_x_bar(i.id);
+        x_bar.setAttribute("data-id", i.id);
+        x_bar.style.left = rect.x - x_bar_con.getBoundingClientRect().left + "px";
+        x_bar.style.top = rect.y - x_bar_con.getBoundingClientRect().top - 16 + "px";
+        if (x_bar_con.querySelector(`[data-id="${i.id}"]`)) return x_bar;
+        x_bar_con.append(x_bar);
+
+        return x_bar;
+    }
+    for (let i of x_bar_con.children) {
+        let has = false;
+        for (let x of xels) {
+            if (x.id == i.getAttribute("data-id")) {
+                has = true;
+                break;
+            }
+        }
+        for (let x of selected_el) {
+            if (x.id == i.getAttribute("data-id")) {
+                has = true;
+                break;
+            }
+        }
+        if (!has) {
+            setTimeout(() => {
+                if (!i.contains(document.elementFromPoint(now_mouse_e.clientX, now_mouse_e.clientY))) {
+                    i.remove();
+                }
+            }, 100);
+        }
+    }
+}
+
 document.addEventListener("dblclick", () => {
     if (模式 == "设计") {
         console.log(free_o_a, z.聚焦元素);
@@ -6135,76 +6171,13 @@ class x extends HTMLElement {
     }
 
     connectedCallback() {
-        var bar = createEl("div");
-        bar.id = "x-x_bar";
-        const m = createEl("div");
-        m.innerHTML = icon(handle_svg);
-        var f = createEl("div");
-        f.innerHTML = icon(ding_svg);
-        var d = createEl("div");
-        d.innerHTML = icon(close_svg);
-        let copy = createEl("div");
-        copy.innerHTML = icon(copy_svg);
-
-        bar.append(m);
-        bar.append(copy);
-        bar.append(f);
-        bar.append(d);
-        this.append(bar);
-
-        var bar_hide_t = NaN;
-        this.onmouseenter = () => {
-            if (模式 == "设计" || 临时中转站.contains(this)) {
-                clearTimeout(bar_hide_t);
-                bar.classList.add("x-x_bar_show");
-            }
-        };
         this.onmouseleave = () => {
             if (模式 == "设计" || 临时中转站.contains(this)) {
-                bar_hide_t = window.setTimeout(() => {
-                    bar.classList.remove("x-x_bar_show");
-                }, 200);
                 画布.style.cursor = "crosshair";
             }
         };
 
         this.onpointerdown = (e) => {
-            let el = e.target as HTMLDivElement;
-            if (bar.contains(el) && el != m) return;
-            if (el == m) {
-                e.preventDefault();
-                e.stopPropagation();
-                free_drag = true;
-                画布.classList.add("拖拽");
-                new_free_drag_tip();
-                if (this.parentElement != O) {
-                    let x = e.clientX - O.getBoundingClientRect().x,
-                        y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetY;
-
-                    let xel = copy_x(this);
-                    xel.style.left = el_offset2(this, O).x + "px";
-                    xel.style.top = el_offset2(this, O).y + "px";
-                    xel.style.position = "absolute";
-                    this.remove();
-                    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
-                    free_old_point = e2p(e);
-                    free_o_a = -1;
-
-                    set_模式("设计");
-
-                    for (let i of 集.中转站) {
-                        if (xel.id == i.id) {
-                            drag_block = true;
-                            if (!i.global) {
-                                集.中转站 = 集.中转站.filter((x) => x != i);
-                                tmp_s_reflash();
-                            }
-                            data_changed();
-                        }
-                    }
-                    return;
-                }
-            }
             if (!mu_sel_key(e) && selected_el.length <= 1) z.focus(this);
             if (模式 != "设计") return;
             e.preventDefault();
@@ -6219,64 +6192,6 @@ class x extends HTMLElement {
             for (const el of selected_el) {
                 free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
             }
-        };
-
-        f.onclick = () => {
-            f.classList.toggle("buttom_a");
-            if (f.classList.contains("buttom_a")) {
-                global_x.push({
-                    pid: 集.meta.UUID,
-                    data: { id: this.id, 子元素: this.value, class: this.className, type: "X-X", style: "" },
-                });
-            } else {
-                remove_global(this.id);
-            }
-        };
-
-        for (let x of global_x)
-            if (x.data.id == this.id)
-                if (x.data.global) {
-                    f.classList.add("buttom_a");
-                    break;
-                }
-
-        copy.onpointerdown = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            free_drag = true;
-            画布.classList.add("拖拽");
-            new_free_drag_tip();
-            let x = e.clientX - O.getBoundingClientRect().x - copy.offsetLeft - e.offsetX,
-                y = e.clientY - O.getBoundingClientRect().y + copy.offsetHeight - e.offsetY;
-            let xel = copy_x(this);
-            let nid = uuid_id();
-            copy_value(this.id, nid);
-            xel.id = nid;
-            xel.style.left = el_offset2(this, O).x + "px";
-            xel.style.top = el_offset2(this, O).y + "px";
-            xel.style.position = "absolute";
-            xel.querySelectorAll("x-x").forEach((el) => {
-                let nid = uuid_id();
-                copy_value(el.id, nid);
-                el.id = nid;
-                link(nid).add();
-            });
-            free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
-            free_old_point = e2p(e);
-            free_o_a = -1;
-        };
-
-        d.onclick = () => {
-            selected_el = selected_el.filter((el) => el != this);
-            z.remove(this);
-
-            if (this.querySelector("x-file")) assets_reflash();
-        };
-        d.onpointerenter = () => {
-            this.style.opacity = "0.5";
-        };
-        d.onpointerleave = () => {
-            this.style.opacity = "";
         };
 
         if (this.getAttribute("value")) {
@@ -6295,7 +6210,6 @@ class x extends HTMLElement {
         let map: { index: number; z: number }[] = [];
         const _is_flex = is_flex(this);
         els.forEach((el: HTMLElement, i) => {
-            if (el.id == "x-x_bar" || el.id == "x-x_handle") return;
             map.push({ index: i, z: Number(el.style.zIndex) || 1 });
         });
         if (!_is_flex) map = map.sort((a, b) => a.z - b.z);

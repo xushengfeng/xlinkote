@@ -694,9 +694,6 @@ body #main > #nav #ink_r {
 .侧栏 > #items > #中转站 > #临时 > div > x-x {
     position: static !important;
 }
-.侧栏 > #items > #中转站 > #临时 #x-x_bar {
-    display: none;
-}
 .侧栏 > #items > #中转站 > #临时 .x-x_bar {
     opacity: 1;
     pointer-events: all;
@@ -804,7 +801,7 @@ body > #main > #画布 > #画布们 > div {
     @apply absolute top-0 left-0 w-0 h-0;
     transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
 }
-body > #main > .浏览 #x-x_bar {
+body > #main > .浏览 .x-x_bar {
     @apply hidden;
 }
 
@@ -835,7 +832,7 @@ body > #main > #画布 > #选择 > div {
     display: var(--x-x-handle-d);
     pointer-events: none;
 }
-.xxhandle > div {
+.xxhandle > div:not(.x-x_bar) {
     pointer-events: all;
     position: absolute;
     width: var(--x-x-handle-w);
@@ -1221,47 +1218,13 @@ x-x > * {
     outline: none;
 }
 
-x-x > #x-x_bar {
-    display: flex;
-    position: absolute;
-    top: calc(-1 * var(--x-x-bar-w));
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--transition);
-    cursor: pointer !important;
-    transform: scale(calc(1 / var(--zoom)));
-    transform-origin: left bottom;
-    gap: 4px;
-}
-x-x > #x-x_bar > div {
-    width: var(--x-x-bar-w);
-    height: var(--x-x-bar-w);
-    position: relative;
-    background-color: var(--bg-color2);
-    backdrop-filter: var(--blur);
-    border-radius: 4px;
-    box-shadow: var(--shadow1);
-}
-x-x > #x-x_bar > div > .icon {
-    width: var(--x-x-bar-w);
-    height: var(--x-x-bar-w);
-}
-x-x > #x-x_bar > div:nth-child(3) {
-    display: none;
-}
-
 .x-x_bar {
     display: flex;
     position: absolute;
     top: calc(-1 * var(--x-x-bar-w));
     left: 0;
-    opacity: 0;
-    pointer-events: none;
     transition: opacity var(--transition);
     cursor: pointer !important;
-    transform: scale(calc(1 / var(--zoom)));
-    transform-origin: left bottom;
     gap: 4px;
 }
 .x-x_bar > div {
@@ -1313,9 +1276,6 @@ x-link-arrow > svg > path {
 }
 .link_arrow_p {
     @apply pointer-events-none;
-}
-.link_arrow_p > #x-x_bar > :not(div:nth-child(4)) {
-    @apply hidden;
 }
 x-md {
     position: relative;
