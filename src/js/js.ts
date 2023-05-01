@@ -6322,6 +6322,13 @@ function new_x_bar(id: string) {
                 }
             }
             return;
+        } else {
+            free_old_point = e2p(e);
+            free_o_a = -1;
+
+            selected_el.push(main_x);
+
+            free_o_rects = [{ el: main_x, x: main_x.offsetLeft, y: main_x.offsetTop }];
         }
     };
 
