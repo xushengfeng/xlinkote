@@ -1093,7 +1093,7 @@ body > #搜索 > #搜索结果 > div > div > span > span {
 }
 
 body > #viewer {
-    @apply absolute pointer-events-none;
+    @apply absolute pointer-events-none overflow-hidden;
     background-color: var(--bg-color2);
     backdrop-filter: var(--blur);
     box-shadow: var(--shadow1);
@@ -1105,7 +1105,7 @@ body > #viewer {
     opacity: 0;
 }
 body > #viewer > #viewer_children {
-    @apply relative overflow-hidden origin-top-left;
+    @apply relative origin-top-left;
     transition: opacity var(--transition);
 }
 body > #viewer > #viewer_highlight {
