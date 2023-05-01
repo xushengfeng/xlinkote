@@ -6353,6 +6353,123 @@ class x extends HTMLElement {
 
 window.customElements.define("x-x", x);
 
+/** 创建主元素控制栏 */
+function new_x_bar(id: string) {
+    const main_x = elFromId(id) as x;
+    if (!main_x) return;
+
+    var bar = createEl("div");
+    bar.id = "x-x_bar";
+    const m = createEl("div");
+    m.innerHTML = icon(handle_svg);
+    var f = createEl("div");
+    f.innerHTML = icon(ding_svg);
+    var d = createEl("div");
+    d.innerHTML = icon(close_svg);
+    let copy = createEl("div");
+    copy.innerHTML = icon(copy_svg);
+
+    bar.append(m);
+    bar.append(copy);
+    bar.append(f);
+    bar.append(d);
+
+    m.onpointerdown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        free_drag = true;
+        画布.classList.add("拖拽");
+        new_free_drag_tip();
+        if (main_x.parentElement != O) {
+            let x = e.clientX - O.getBoundingClientRect().x,
+                y = e.clientY - O.getBoundingClientRect().y + m.offsetHeight - e.offsetY;
+
+            let xel = copy_x(main_x);
+            xel.style.left = el_offset2(main_x, O).x + "px";
+            xel.style.top = el_offset2(main_x, O).y + "px";
+            xel.style.position = "absolute";
+            main_x.remove();
+            free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+            free_old_point = e2p(e);
+            free_o_a = -1;
+
+            set_模式("设计");
+
+            for (let i of 集.中转站) {
+                if (xel.id == i.id) {
+                    drag_block = true;
+                    if (!i.global) {
+                        集.中转站 = 集.中转站.filter((x) => x != i);
+                        tmp_s_reflash();
+                    }
+                    data_changed();
+                }
+            }
+            return;
+        }
+    };
+
+    f.onclick = () => {
+        f.classList.toggle("buttom_a");
+        if (f.classList.contains("buttom_a")) {
+            global_x.push({
+                pid: 集.meta.UUID,
+                data: { id: main_x.id, 子元素: main_x.value, class: main_x.className, type: "X-X", style: "" },
+            });
+        } else {
+            remove_global(main_x.id);
+        }
+    };
+
+    for (let x of global_x)
+        if (x.data.id == main_x.id)
+            if (x.data.global) {
+                f.classList.add("buttom_a");
+                break;
+            }
+
+    copy.onpointerdown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        free_drag = true;
+        画布.classList.add("拖拽");
+        new_free_drag_tip();
+        let x = e.clientX - O.getBoundingClientRect().x - copy.offsetLeft - e.offsetX,
+            y = e.clientY - O.getBoundingClientRect().y + copy.offsetHeight - e.offsetY;
+        let xel = copy_x(main_x);
+        let nid = uuid_id();
+        copy_value(main_x.id, nid);
+        xel.id = nid;
+        xel.style.left = el_offset2(main_x, O).x + "px";
+        xel.style.top = el_offset2(main_x, O).y + "px";
+        xel.style.position = "absolute";
+        xel.querySelectorAll("x-x").forEach((el) => {
+            let nid = uuid_id();
+            copy_value(el.id, nid);
+            el.id = nid;
+            link(nid).add();
+        });
+        free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+        free_old_point = e2p(e);
+        free_o_a = -1;
+    };
+
+    d.onclick = () => {
+        selected_el = selected_el.filter((el) => el != main_x);
+        z.remove(main_x);
+
+        if (main_x.querySelector("x-file")) assets_reflash();
+    };
+    d.onpointerenter = () => {
+        main_x.style.opacity = "0.5";
+    };
+    d.onpointerleave = () => {
+        main_x.style.opacity = "";
+    };
+
+    return bar;
+}
+
 type md_type =
     | "text"
     | "h1"
