@@ -697,9 +697,11 @@ fxsd_el.onclick = () => {
 /** 滚动或触摸在之上时，不改变画布，只作用于元素，使用query */
 var ignore_el = [];
 
+let free_select = false;
+
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
-        if (e.button == 0) {
+        if (e.button == 0 && !free_select) {
             if (模式 != "设计") return;
             o_e = e;
             o_ab_p = e2p(e);
@@ -756,6 +758,33 @@ var mouse = (e: MouseEvent) => {
                 if (!e.shiftKey) select_x_x(rect);
             }
         }
+    }
+};
+
+let select_points: [number, number][] = [];
+document.addEventListener("mousedown", (e) => {
+    if (e.target == document.querySelector("#画布")) {
+        if (e.button == 0 && free_select) {
+            if (模式 != "设计") return;
+            let p = e2p(e);
+            select_points.push([p.x, p.y]);
+        }
+    }
+});
+
+document.addEventListener("mousemove", (e) => {
+    mouse2(e);
+});
+document.addEventListener("mouseup", (e) => {
+    mouse2(e);
+    select_points = [];
+});
+
+var mouse2 = (e: MouseEvent) => {
+    if (select_points.length) {
+        let p = e2p(e);
+        select_points.push([p.x, p.y]);
+        select_x_x2(select_points);
     }
 };
 
@@ -908,6 +937,60 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
             render_select_rects();
         }
     }
+}
+function select_x_x2(points: [number, number][]) {
+    selected_el = [];
+
+    for (const el of O.querySelectorAll(":scope > x-x")) {
+        let r = el_offset2(el);
+
+        if (
+            ray_casting([r.x, r.y], points) &&
+            ray_casting([r.x, r.y + r.h], points) &&
+            ray_casting([r.x + r.w, r.y], points) &&
+            ray_casting([r.x + r.w, r.y + r.h], points)
+        ) {
+            selected_el.push(<x>el);
+            render_select_rects();
+        }
+    }
+}
+
+function ray_casting(p: [number, number], poly: [number, number][]) {
+    // px，py为p点的x和y坐标
+    let px = p[0],
+        py = p[1],
+        flag = false;
+    //这个for循环是为了遍历多边形的每一个线段
+    for (let i = 0, l = poly.length, j = l - 1; i < l; j = i, i++) {
+        let sx = poly[i][0], //线段起点x坐标
+            sy = poly[i][1], //线段起点y坐标
+            tx = poly[j][0], //线段终点x坐标
+            ty = poly[j][1]; //线段终点y坐标
+
+        // 点与多边形顶点重合
+        if ((sx === px && sy === py) || (tx === px && ty === py)) {
+            return true;
+        }
+
+        // 判断线段两端点是否在射线两侧
+        if ((sy < py && ty >= py) || (sy >= py && ty < py)) {
+            // 求射线和线段的交点x坐标，交点y坐标当然是py
+            let x = sx + ((py - sy) * (tx - sx)) / (ty - sy);
+
+            // 点在多边形的边上
+            if (x === px) {
+                return true;
+            }
+
+            // x大于px来保证射线是朝右的，往一个方向射，假如射线穿过多边形的边界，flag取反一下
+            if (x > px) {
+                flag = !flag;
+            }
+        }
+    }
+    // 射线穿过多边形边界的次数为奇数时点在多边形内
+    return flag ? true : false;
 }
 
 function add_blank(op: p_point, p: p_point) {
