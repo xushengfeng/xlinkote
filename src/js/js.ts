@@ -981,6 +981,8 @@ function e2p(e: MouseEvent) {
 
 var selected_el: x[] = [];
 
+window["get_selected_el"] = () => selected_el;
+
 /**选择元素 */
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     for (const el of O.querySelectorAll(":scope > x-x")) {
