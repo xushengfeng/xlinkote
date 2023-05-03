@@ -29,7 +29,7 @@ import copy_svg from "../../assets/icons/copy.svg";
 import save_svg from "../../assets/icons/save.svg";
 import lock_svg from "../../assets/icons/lock.svg";
 import unlock_svg from "../../assets/icons/unlock.svg";
-import arrow_markers_svg from "../../assets/icons/arrow_markers.svg";
+import arrow_markers_svg from "../../assets/icons/arrow_markers.svg?raw";
 
 interface x_tag_map {
     "x-x": x;
@@ -9493,10 +9493,10 @@ class link_arrow extends HTMLElement {
         let at = `M ${start_p.x} ${start_p.y} C ${start_ctrl.x} ${start_ctrl.y}, ${end_ctrl.x} ${end_ctrl.y}, ${end_p.x} ${end_p.y}`;
         p.setAttribute("d", at);
         if (this._value.start?.marker) {
-            p.setAttribute("marker-start", `url(${arrow_markers_svg}#flowchart-${this._value.start?.marker}Start)`);
+            p.setAttribute("marker-start", `url(#flowchart-${this._value.start?.marker}Start)`);
         }
         if (this._value?.end?.marker) {
-            p.setAttribute("marker-end", `url(${arrow_markers_svg}#flowchart-${this._value?.end?.marker}End)`);
+            p.setAttribute("marker-end", `url(#flowchart-${this._value?.end?.marker}End)`);
         }
         let cx = (start_p.x + 3 * start_ctrl.x + 3 * end_ctrl.x + end_p.x) / 8,
             cy = (start_p.y + 3 * start_ctrl.y + 3 * end_ctrl.y + end_p.y) / 8;
@@ -9509,7 +9509,7 @@ class link_arrow extends HTMLElement {
                 el.style.top = y + "px";
             }
         }
-        this.svg.innerHTML = "";
+        this.svg.innerHTML = arrow_markers_svg;
         this.svg.append(p);
         let r = el_offset2(p, O);
         xel.style.left = r.x + "px";

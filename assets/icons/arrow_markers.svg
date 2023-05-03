@@ -1,33 +1,31 @@
-<svg width="240" height="240" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-   <g>
-      <!-- 来源于mermaid -->
-      <marker id="flowchart-pointEnd" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="userSpaceOnUse"
-         markerWidth="12" markerHeight="12" orient="auto">
-         <path d="M 0 0 L 10 5 L 0 10 z" style="stroke-width: 1; stroke-dasharray: 1, 0;">
-         </path>
-      </marker>
-      <marker id="flowchart-pointStart" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="userSpaceOnUse"
-         markerWidth="12" markerHeight="12" orient="auto">
-         <path d="M 0 5 L 10 10 L 10 0 z" style="stroke-width: 1; stroke-dasharray: 1, 0;">
-         </path>
-      </marker>
-      <marker id="flowchart-circleEnd" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse"
-         markerWidth="11" markerHeight="11" orient="auto">
-         <circle cx="5" cy="5" r="5" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
-      </marker>
-      <marker id="flowchart-circleStart" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse"
-         markerWidth="11" markerHeight="11" orient="auto">
-         <circle cx="5" cy="5" r="5" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
-      </marker>
-      <marker id="flowchart-crossEnd" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse"
-         markerWidth="11" markerHeight="11" orient="auto">
-         <path d="M 1,1 l 9,9 M 10,1 l -9,9" style="stroke-width: 2; stroke-dasharray: 1, 0;">
-         </path>
-      </marker>
-      <marker id="flowchart-crossStart" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse"
-         markerWidth="11" markerHeight="11" orient="auto">
-         <path d="M 1,1 l 9,9 M 10,1 l -9,9" style="stroke-width: 2; stroke-dasharray: 1, 0;">
-         </path>
-      </marker>
-   </g>
-</svg>
+<g>
+   <!-- 来源于mermaid -->
+   <marker id="flowchart-pointEnd" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="userSpaceOnUse" markerWidth="12"
+      markerHeight="12" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" style="stroke-width: 1; stroke-dasharray: 1, 0;">
+      </path>
+   </marker>
+   <marker id="flowchart-pointStart" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="userSpaceOnUse" markerWidth="12"
+      markerHeight="12" orient="auto">
+      <path d="M 0 5 L 10 10 L 10 0 z" style="stroke-width: 1; stroke-dasharray: 1, 0;">
+      </path>
+   </marker>
+   <marker id="flowchart-circleEnd" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11"
+      markerHeight="11" orient="auto">
+      <circle cx="5" cy="5" r="5" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
+   </marker>
+   <marker id="flowchart-circleStart" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse"
+      markerWidth="11" markerHeight="11" orient="auto">
+      <circle cx="5" cy="5" r="5" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
+   </marker>
+   <marker id="flowchart-crossEnd" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse"
+      markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M 1,1 l 9,9 M 10,1 l -9,9" style="stroke-width: 2; stroke-dasharray: 1, 0;">
+      </path>
+   </marker>
+   <marker id="flowchart-crossStart" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse"
+      markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M 1,1 l 9,9 M 10,1 l -9,9" style="stroke-width: 2; stroke-dasharray: 1, 0;">
+      </path>
+   </marker>
+</g>
