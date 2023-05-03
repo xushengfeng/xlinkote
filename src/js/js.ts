@@ -87,6 +87,7 @@ const 画布s = elFromId("画布们");
 var O = elFromId("O");
 
 const select_con = elFromId("选择");
+const select_el = elFromId("选择框");
 
 const x_bar_con = elFromId("控制");
 
@@ -796,7 +797,7 @@ document.addEventListener("mousedown", (e) => {
             let p = e2p(e);
             select_points.push([p.x, p.y]);
             let can = createEl("canvas");
-            elFromId("选择框").append(can);
+            select_el.append(can);
             画布.style.userSelect = "none";
         }
     }
@@ -808,7 +809,7 @@ document.addEventListener("mousemove", (e) => {
 document.addEventListener("mouseup", (e) => {
     mouse2(e);
     select_points = [];
-    elFromId("选择框").querySelector("canvas").remove();
+    select_el.querySelector("canvas").remove();
     画布.style.userSelect = "auto";
 });
 
@@ -818,9 +819,9 @@ var mouse2 = (e: MouseEvent) => {
         select_points.push([p.x, p.y]);
         select_x_x2(select_points);
 
-        let c = elFromId("选择框").querySelector("canvas");
-        let px = el_offset2(O, elFromId("选择框")).x;
-        let py = el_offset2(O, elFromId("选择框")).y;
+        let c = select_el.querySelector("canvas");
+        let px = el_offset2(O, select_el).x;
+        let py = el_offset2(O, select_el).y;
         let z = 2;
         let zz = zoom * z;
         c.width = 画布.offsetWidth * z;
