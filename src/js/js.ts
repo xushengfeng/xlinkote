@@ -5030,14 +5030,15 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
     if (!nrc) add_bci(el);
 }
 
-const bci_ids = [];
+let bci_ids = [];
 
 /** 添加到面包屑栏 */
 function add_bci(el: x | xlink) {
     let qel = breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`) as HTMLElement;
     if (qel) {
-        breadcrumbs_el.scrollLeft = qel.offsetLeft + qel.offsetWidth - breadcrumbs_el.offsetWidth;
-        return;
+        // breadcrumbs_el.scrollLeft = qel.offsetLeft + qel.offsetWidth - breadcrumbs_el.offsetWidth;
+        // return;
+        qel.remove();
     }
     if (breadcrumbs_el.offsetHeight == 0) breadcrumbs_el.style.height = "16px";
     let li = createEl("div");
@@ -5068,6 +5069,7 @@ function add_bci(el: x | xlink) {
     breadcrumbs_el.append(li);
     breadcrumbs_el.scrollLeft = li.offsetLeft + li.offsetWidth - breadcrumbs_el.offsetWidth;
 
+    bci_ids = bci_ids.filter((x) => x != el.id);
     bci_ids.push(el.id);
 }
 
