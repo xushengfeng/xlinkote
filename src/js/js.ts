@@ -1250,15 +1250,16 @@ function el_offset(el: Element, pel?: Element) {
 }
 
 /**元素大小和相对位置（画布坐标） */
-function el_offset2(el: Element, pel?: Element) {
+function el_offset2(el: Element, pel?: Element, xz?: number) {
     if (!pel) pel = el.parentElement;
+    let z = xz || zoom;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
         oy = el.getBoundingClientRect().y - pel.getBoundingClientRect().y;
     return {
-        x: ox / zoom,
-        y: oy / zoom,
-        w: el.getBoundingClientRect().width / zoom,
-        h: el.getBoundingClientRect().height / zoom,
+        x: ox / z,
+        y: oy / z,
+        w: el.getBoundingClientRect().width / z,
+        h: el.getBoundingClientRect().height / z,
     };
 }
 
@@ -2412,6 +2413,23 @@ function select_p(id: string) {
             el.classList.remove("画布focus");
         }
     });
+}
+
+/** 转换zoom */
+function get_zoom(id: string) {
+    let el = elFromId(id);
+    let tran = el.style.transform;
+
+    if (!tran || isNaN(Number(tran.match(/scale\((.*)\)/)[1]))) {
+        for (let i of 集.数据) {
+            if (i.id == id) {
+                return i.p.zoom;
+            }
+        }
+        return 1;
+    } else {
+        return Number(tran.match(/scale\((.*)\)/)[1]);
+    }
 }
 
 function set_zoom(zooms: string) {
@@ -4792,7 +4810,8 @@ function preview_x_link(el: x | xlink) {
     });
     let pel_display = pel.style.display;
     pel.style.display = "block";
-    let center_rect = el_offset2(el, pel);
+    let pzoom = get_zoom(pel.id);
+    let center_rect = el_offset2(el, pel, pzoom);
 
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
     let dx = view_width / 2 / zoom,
@@ -4806,7 +4825,7 @@ function preview_x_link(el: x | xlink) {
 
     let els: { el: x; x: number; y: number }[] = [];
     pel.querySelectorAll(":scope > x-x").forEach((xel: x) => {
-        let r = el_offset2(xel);
+        let r = el_offset2(xel, pel, pzoom);
         if (
             (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) ||
             xel.contains(el) // 针对固定布局元素
