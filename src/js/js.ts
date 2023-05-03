@@ -112,6 +112,10 @@ const 文件_el = elFromId("文件");
 
 const assets_el = elFromId("资源");
 
+const select_type_el = elFromId("select_type");
+const select_rect_el = elFromId("select_rect");
+const select_free_el = elFromId("select_free");
+
 const pen_pel = elFromId("draw_bar");
 const color_yl = elFromId("color_yl");
 const penc_el = <xcolor>elFromId("penc").querySelector("x-color");
@@ -546,6 +550,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             if (link_value_bar) link_value_bar.style.display = "";
 
             ink_el.parentElement.style.display = "";
+            select_type_el.style.display = "none";
             pen_pel.style.display = "none";
             break;
         case "设计":
@@ -563,7 +568,10 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             ink_el.classList.add("ink_hide");
 
             ink_el.parentElement.style.display = "none";
+            select_type_el.style.display = "";
             pen_pel.style.display = "none";
+
+            set_select_free_type(false);
             break;
         case "绘制":
             document.querySelectorAll("x-md").forEach((el) => {
@@ -579,6 +587,7 @@ function set_模式(模式x: "浏览" | "设计" | "绘制") {
             ink_el.classList.add("ink_hide");
 
             ink_el.parentElement.style.display = "none";
+            select_type_el.style.display = "none";
             pen_pel.style.display = "";
             break;
     }
@@ -697,7 +706,25 @@ fxsd_el.onclick = () => {
 /** 滚动或触摸在之上时，不改变画布，只作用于元素，使用query */
 var ignore_el = [];
 
-let free_select = false;
+var free_select = false;
+
+function set_select_free_type(b: boolean) {
+    if (b) {
+        select_free_el.style.display = "";
+        select_rect_el.style.display = "none";
+    } else {
+        select_free_el.style.display = "none";
+        select_rect_el.style.display = "";
+    }
+    free_select = b;
+}
+
+select_rect_el.onclick = () => {
+    set_select_free_type(true);
+};
+select_free_el.onclick = () => {
+    set_select_free_type(false);
+};
 
 document.onmousedown = (e) => {
     if (e.target == document.querySelector("#画布")) {
