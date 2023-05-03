@@ -808,9 +808,11 @@ document.addEventListener("mousemove", (e) => {
 });
 document.addEventListener("mouseup", (e) => {
     mouse2(e);
-    select_points = [];
-    select_el.querySelector("canvas").remove();
-    画布.style.userSelect = "auto";
+    if (select_points.length) {
+        select_points = [];
+        select_el.innerHTML = "";
+        画布.style.userSelect = "auto";
+    }
 });
 
 var mouse2 = (e: MouseEvent) => {
