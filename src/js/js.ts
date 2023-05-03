@@ -795,6 +795,9 @@ document.addEventListener("mousedown", (e) => {
             if (模式 != "设计") return;
             let p = e2p(e);
             select_points.push([p.x, p.y]);
+            let can = createEl("canvas");
+            elFromId("选择框").append(can);
+            画布.style.userSelect = "none";
         }
     }
 });
@@ -805,6 +808,8 @@ document.addEventListener("mousemove", (e) => {
 document.addEventListener("mouseup", (e) => {
     mouse2(e);
     select_points = [];
+    elFromId("选择框").querySelector("canvas").remove();
+    画布.style.userSelect = "auto";
 });
 
 var mouse2 = (e: MouseEvent) => {
@@ -812,6 +817,27 @@ var mouse2 = (e: MouseEvent) => {
         let p = e2p(e);
         select_points.push([p.x, p.y]);
         select_x_x2(select_points);
+
+        let c = elFromId("选择框").querySelector("canvas");
+        let px = el_offset2(O, elFromId("选择框")).x;
+        let py = el_offset2(O, elFromId("选择框")).y;
+        let z = 2;
+        let zz = zoom * z;
+        c.width = 画布.offsetWidth * z;
+        c.height = 画布.offsetHeight * z;
+        let ctx = c.getContext("2d");
+        if (select_points.length > 0) {
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.moveTo((select_points[0][0] + px) * zz, (select_points[0][1] + py) * zz);
+            for (let i of select_points) {
+                ctx.lineTo((i[0] + px) * zz, (i[1] + py) * zz);
+                ctx.moveTo((i[0] + px) * zz, (i[1] + py) * zz);
+            }
+            ctx.lineTo((select_points[0][0] + px) * zz, (select_points[0][1] + py) * zz);
+            ctx.closePath();
+            ctx.stroke();
+        }
     }
 };
 
