@@ -2811,6 +2811,7 @@ navigator.storage.persist();
 request.onsuccess = (event) => {
     db = (<any>event.target).result;
     db_get();
+    check_backup();
 };
 request.onerror = (event) => {
     console.error(new Error((<any>event.target).error));
@@ -3033,7 +3034,6 @@ elFromId("db_load").onchange = () => {
     db_load(file);
 };
 
-check_backup();
 function check_backup() {
     let now = new Date();
     if (
