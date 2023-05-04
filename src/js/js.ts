@@ -250,7 +250,7 @@ const default_setting = {
     },
     sort: { type: "change_time", reverse: false } as sort_type,
     ai: { key: "" },
-    backup: { 频率: "0", last_time: 0 },
+    backup: { 频率: "0" },
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -3038,7 +3038,8 @@ function check_backup() {
     let now = new Date();
     if (
         Number(store.backup.频率) &&
-        ((now.getTime() - store.backup.last_time) / 1000) * 60 * 60 * 24 > Number(store.backup.频率)
+        ((now.getTime() - Number(localStorage.getItem("backup_last_time"))) / 1000) * 60 * 60 * 24 >
+            Number(store.backup.频率)
     ) {
         db_download(
             `xln_db_${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1).toString().padStart(2, "0")}${now
@@ -3046,7 +3047,7 @@ function check_backup() {
                 .toString()
                 .padStart(2, "0")}${now.getHours().toString().padStart(2, "0")}.zip`
         );
-        store.backup.last_time = now.getTime();
+        localStorage.setItem("backup_last_time", String(now.getTime()));
     }
     setTimeout(() => {
         check_backup();
