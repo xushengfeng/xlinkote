@@ -3044,7 +3044,7 @@ function check_backup() {
     let now = new Date();
     if (
         Number(store.backup.频率) &&
-        ((now.getTime() - Number(localStorage.getItem("backup_last_time"))) / 1000) * 60 * 60 * 24 >
+        (now.getTime() - Number(localStorage.getItem("backup_last_time"))) / 1000 / 60 / 60 / 24 >
             Number(store.backup.频率)
     ) {
         db_download(
