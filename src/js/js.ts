@@ -250,6 +250,7 @@ const default_setting = {
     },
     sort: { type: "change_time", reverse: false } as sort_type,
     ai: { key: "" },
+    backup: { 频率: "0", last_time: 0 },
 };
 if (!store) {
     localStorage.setItem("config", JSON.stringify(default_setting));
@@ -332,7 +333,7 @@ function set_save_icon() {
 elFromId("加载数据库").onclick = () => {
     elFromId("db_load").click();
 };
-elFromId("下载数据库").onclick = db_download;
+elFromId("下载数据库").onclick = () => db_download;
 
 elFromId("新建集").onclick = () => {
     window.open(location.origin);
@@ -2966,7 +2967,7 @@ function set_db_file(uuid: string) {
 }
 
 /** 下载数据库 */
-function db_download() {
+function db_download(name?: string) {
     let customerObjectStore = db.transaction(db_store_name, "readwrite").objectStore(db_store_name);
     let r = customerObjectStore.getAll();
     r.onsuccess = async () => {
@@ -2985,7 +2986,7 @@ function db_download() {
         fs.addText("xlinkote.json", t);
         let a = createEl("a");
         let blob = await fs.exportBlob();
-        a.download = `xlinkote_db.zip`;
+        a.download = name || `xlinkote_db.zip`;
         a.href = URL.createObjectURL(blob);
         a.click();
         URL.revokeObjectURL(String(blob));
@@ -3031,6 +3032,26 @@ elFromId("db_load").onchange = () => {
     let file = (<HTMLInputElement>elFromId("db_load")).files[0];
     db_load(file);
 };
+
+check_backup();
+function check_backup() {
+    let now = new Date();
+    if (
+        Number(store.backup.频率) &&
+        ((now.getTime() - store.backup.last_time) / 1000) * 60 * 60 * 24 > Number(store.backup.频率)
+    ) {
+        db_download(
+            `xln_db_${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1).toString().padStart(2, "0")}${now
+                .getDate()
+                .toString()
+                .padStart(2, "0")}${now.getHours().toString().padStart(2, "0")}.zip`
+        );
+        store.backup.last_time = now.getTime();
+    }
+    setTimeout(() => {
+        check_backup();
+    }, 1000 * 60 * 60);
+}
 
 // 撤销
 type undo_diff_data = { s: any; diff: diff.Diff<any, any>[] };
