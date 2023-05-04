@@ -1197,6 +1197,8 @@ function render_select_rects() {
     render_x_bar();
 }
 
+let last_hover_x = "";
+
 function render_x_bar() {
     if (模式 != "设计") return;
     let xels: x[] = [];
@@ -1207,13 +1209,17 @@ function render_x_bar() {
                 let x: Element;
                 if (els[0].className == "x-x_bar") x = elFromId(els[0].getAttribute("data-id"));
                 if (els[1].className == "x-x_bar") x = elFromId(els[1].getAttribute("data-id"));
-                els = document.elementsFromPoint(x.getBoundingClientRect().x, x.getBoundingClientRect().y);
+                if (x?.id && x.id == last_hover_x) {
+                    els = document.elementsFromPoint(x.getBoundingClientRect().x, x.getBoundingClientRect().y);
+                }
             }
         }
+        last_hover_x = "";
         for (let i of els) {
             if (i.tagName == "X-X") {
                 xels.push(i as x);
                 add_r(i as x);
+                last_hover_x = i.id;
                 break;
             }
         }
