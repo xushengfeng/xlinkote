@@ -7213,7 +7213,7 @@ class markdown extends HTMLElement {
         this._value = JSON5.parse(v);
         this.type = this._value.type;
         let t = this._value.text;
-        this.text.value = t;
+        if (this.text.getAttribute("data-id") == this.parentElement.id) this.text.value = t;
         this.render();
     }
 
