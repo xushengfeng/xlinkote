@@ -8616,6 +8616,7 @@ class link_value extends HTMLElement {
             // 搜索
             let v = "";
             let el = get_x_by_id(this._id);
+            add_bci(el);
             if (el.tagName == "X-X") {
                 let w = (v: data) => {
                     for (let i of v) {
