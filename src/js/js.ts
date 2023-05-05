@@ -5072,21 +5072,23 @@ function add_bci(el: x | xlink) {
     let li = createEl("div");
     let main = createEl("div");
     li.append(main);
+    let text = createEl("span");
     li.classList.add("bci");
-    main.innerText = `#${el.id}`;
+    text.innerText = `#${el.id}`;
+    main.append(text);
     if (is_smallest_el(el)) {
         let add = createEl("x-link-add");
         main.append(add);
         add.value = el.id;
     }
     li.setAttribute("data-id", el.id);
-    main.onpointerenter = () => {
+    text.onpointerenter = () => {
         preview_x_link(elFromId(el.id) as x);
     };
-    main.onpointerdown = () => {
+    text.onpointerdown = () => {
         jump_to_x_link(elFromId(el.id) as x);
     };
-    main.onpointermove = (e) => {
+    text.onpointermove = (e) => {
         window.requestAnimationFrame(() => {
             set_viewer_posi(e.clientX, e.clientY);
         });
