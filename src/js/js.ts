@@ -5221,29 +5221,28 @@ function link(key0: string) {
         },
         /** 获取值 */
         get_v: (is_small?: boolean) => {
-            if (is_small || !get_link_el_by_id(key0) || is_smallest_el(get_link_el_by_id(key0))) {
-                if (集.链接[0][key0]) {
-                    let l = link(key0).get();
+            const el = get_link_el_by_id(key0);
+            if (is_small || !el || is_smallest_el(el)) {
+                const link_value = 集.链接[0][key0]?.value;
+                if (link_value) {
+                    const l = link(key0).get();
                     let n = 0;
                     l["0"] = 集.链接[0][key0];
-                    for (let i in l) {
+                    for (const i in l) {
                         n += l[i].value;
                     }
                     return n;
                 }
             } else {
-                let nl = [];
-                get_link_el_by_id(key0)
-                    .querySelectorAll("x-x, x-link")
-                    .forEach((el) => {
-                        if (集.链接[0][el.id]) {
-                            let n = link(el.id).get_v(true);
-                            nl.push(n);
-                        }
-                    });
                 let n = 0;
-                for (let i of nl) n += i;
-                return n / nl.length;
+                let count = 0;
+                el.querySelectorAll("x-x, x-link").forEach((child) => {
+                    if (集.链接[0][child.id]) {
+                        n += link(child.id).get_v(true);
+                        count++;
+                    }
+                });
+                return count === 0 ? 0 : n / count;
             }
         },
         衰减: () => {
