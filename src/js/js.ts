@@ -4519,7 +4519,6 @@ function search(input: string[], type: "str" | "regex") {
         }
         return l;
     }
-    console.log(sr, flex);
 
     for (let i of sr) {
         has_id[i.id] = true;
