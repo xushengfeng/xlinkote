@@ -1397,6 +1397,14 @@ function el_offset(el: Element, pel?: Element) {
     return { x: ox, y: oy, w: el.getBoundingClientRect().width, h: el.getBoundingClientRect().height };
 }
 
+/**范围相对位置（屏幕坐标） */
+function range_offset(range: Range, pel?: Element) {
+    if (!pel) pel = range.commonAncestorContainer.parentElement;
+    let ox = range.getBoundingClientRect().x - pel.getBoundingClientRect().x,
+        oy = range.getBoundingClientRect().y - pel.getBoundingClientRect().y;
+    return { x: ox, y: oy, w: range.getBoundingClientRect().width, h: range.getBoundingClientRect().height };
+}
+
 /**元素大小和相对位置（画布坐标） */
 function el_offset2(el: Element, pel?: Element, xz?: number) {
     if (!pel) pel = el.parentElement;
@@ -4932,6 +4940,13 @@ function show_link_value_bar(el: x | xlink) {
     link_value_bar.elid = el.id;
     link_value_bar.style.left = el_offset(el, 画布).x + "px";
     link_value_bar.style.top = el_offset(el, 画布).y - link_value_bar.offsetHeight + 4 + "px";
+    if (el.tagName == "X-LINK") {
+        const range = document.createRange();
+        range.setStart(el.firstChild, 0);
+        range.setEnd(el.firstChild, 1);
+        link_value_bar.style.left = range_offset(range, 画布).x + "px";
+        link_value_bar.style.top = range_offset(range, 画布).y - link_value_bar.offsetHeight + 4 + "px";
+    }
     if (!search_pel.getAttribute("data-fid") && el.id != now_focus_id) {
         search_el.blur();
         search_pel.classList.remove("搜索展示");
