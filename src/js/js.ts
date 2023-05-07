@@ -4735,16 +4735,15 @@ function show_search_l(l: search_result, exid?: string) {
     });
     if (exid) l = l.filter((i) => i.id != exid);
     search_r.innerHTML = "";
-    let els: HTMLElement[] = [];
-    let ids = {};
+    const els = new Map<string, HTMLElement>();
+    let search_r_f = document.createDocumentFragment();
     for (let i of l) {
-        if (!ids[i.id]) {
-            let div = create_r_item();
+        let div = els.get(i.id);
+        if (!div) {
+            div = create_r_item();
             div.setAttribute("data-id", i.id);
-            els.push(div);
-            ids[i.id] = els.length - 1;
+            els.set(i.id, div);
         }
-        let div = els[ids[i.id]];
         let line = createEl("div");
         let p = createEl("span");
         if (i.l) {
@@ -4770,6 +4769,15 @@ function show_search_l(l: search_result, exid?: string) {
         div.append(line);
         div.setAttribute("data-id", i.id);
         add_div_event(div, i.id);
+
+        let value = createEl("div");
+        value.append(link_value_text(link(i.id).get_v()));
+        div.append(value);
+        if (search_r_f.firstChild) {
+            search_r_f.firstChild.before(div);
+        } else {
+            search_r_f.append(div);
+        }
     }
 
     function add_div_event(div: HTMLElement, id: string) {
@@ -4785,17 +4793,6 @@ function show_search_l(l: search_result, exid?: string) {
     }
 
     link("0").衰减();
-    let search_r_f = document.createDocumentFragment();
-    for (let div of els) {
-        if (search_r_f.firstChild) {
-            search_r_f.firstChild.before(div);
-        } else {
-            search_r_f.append(div);
-        }
-        let value = createEl("div");
-        value.append(link_value_text(link(div.getAttribute("data-id")).get_v()));
-        div.append(value);
-    }
     search_r.append(search_r_f);
     r_i_r();
 }
