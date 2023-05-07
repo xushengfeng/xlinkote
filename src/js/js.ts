@@ -4610,8 +4610,11 @@ let select_index = 0;
 search_el.oninput = search_el.click = () => {
     let arg = cmd(search_el.value);
     if (arg.name == "s") {
+        console.time();
         let l = search(arg.args, "str");
+        console.timeLog();
         show_search_l(l);
+        console.timeEnd();
         if (l.length == 0) {
             view_el.classList.add("viewer_hide");
             return;
@@ -5167,10 +5170,10 @@ function link(key0: string) {
          * @returns 指向链接
          */
         get: (chain?: number) => {
-            let l = { ...集.链接[key0] };
-            for (let i in 集.链接[0]) {
-                for (let x in 集.链接[i]) {
-                    if (x == key0) {
+            const l = { ...集.链接[key0] };
+            for (const i of Object.keys(集.链接[0])) {
+                for (const x of Object.keys(集.链接[i])) {
+                    if (x === key0) {
                         l[i] = 集.链接[i][x];
                     }
                 }
@@ -5178,28 +5181,28 @@ function link(key0: string) {
             if (!chain) {
                 return l;
             } else {
-                let xl: typeof l = {};
-                let walk = (list: typeof l, chain_n: number) => {
+                const walk = (list: typeof l, chain_n: number) => {
+                    const xl = {};
                     let next = null;
                     let maxn = 0;
-                    for (let i in list) {
-                        if (i == "0") continue;
+                    for (const i of Object.keys(list)) {
+                        if (i === "0") continue;
                         if (xl[i]) continue;
                         if (list[i].value > maxn) {
                             next = i;
                             maxn = list[i].value;
                         }
                     }
-                    if (!next) return;
-                    let ln = chain_n - list[next].value;
+                    if (!next) return xl;
+                    const ln = chain_n - list[next].value;
                     if (ln > 0) {
-                        walk(link(next).get(), ln);
+                        return walk(link(next).get(), ln);
                     } else {
                         xl[next] = list[next];
+                        return xl;
                     }
                 };
-                walk(l, chain);
-                return xl;
+                return walk(l, chain);
             }
         },
         value: (key1: string, dv: number) => {
