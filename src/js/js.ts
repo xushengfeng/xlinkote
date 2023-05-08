@@ -377,7 +377,7 @@ elFromId("新建元素").onclick = () => {
 };
 elFromId("删除元素").onclick = () => {
     for (let i of selected_el) {
-        z.remove(i);
+        z.remove(i.id);
     }
 };
 
@@ -1164,7 +1164,7 @@ function render_select_rects() {
                 free_old_point = e2p(e);
                 free_o_rects = [{ el: i, x: i.offsetLeft, y: i.offsetTop, w: i.offsetWidth, h: i.offsetHeight }];
                 if (selected_el.length <= 1) {
-                    z.focus(i);
+                    z.focus(i.id);
                 }
             }
             clearTimeout(free_db_time);
@@ -1261,7 +1261,7 @@ function render_x_bar() {
 document.addEventListener("dblclick", () => {
     if (模式 == "设计") {
         console.log(free_o_a, z.聚焦元素);
-        let el = z.聚焦元素;
+        let el = get_x_by_id(z.聚焦元素);
         let xl = [1, 3, 4, 5, 6, 7],
             yl = [0, 2, 4, 5, 6, 7];
         if (xl.includes(free_o_a)) el.style.width = "";
@@ -1733,7 +1733,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
     if (!free_move && free_old_point && !mu_sel_key(e)) {
         document.querySelectorAll("x-x").forEach((el: x) => {
             if (el.contains(e.target as x)) {
-                z.focus(el);
+                z.focus(el.id);
                 return;
             }
         });
@@ -1784,7 +1784,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 is_smallest_el(elFromId(el.parentElement.getAttribute("data-id")) as x)
             )
         ) {
-            z.remove(elFromId(free_link) as x);
+            z.remove(free_link);
         }
         free_link = "";
     }
@@ -1909,7 +1909,7 @@ var free_mouse = (e: MouseEvent) => {
                         break;
                 }
             }
-            if (xel.el == z.聚焦元素) {
+            if (xel.el.id == z.聚焦元素) {
                 set_style(xel.el);
                 load_xywh();
             }
@@ -2029,7 +2029,7 @@ document.onkeydown = (e) => {
             if (模式 != "设计") return;
             if (!is_input_el(target))
                 for (let el of selected_el) {
-                    z.remove(el);
+                    z.remove(el.id);
                 }
             selected_el = [];
             break;
@@ -2078,7 +2078,8 @@ document.onkeydown = (e) => {
                 if (!is_input_el(target)) {
                     set_模式("浏览");
                     e.preventDefault();
-                    if (z.聚焦元素.querySelector("x-md")) (z.聚焦元素.querySelector("x-md") as markdown).edit = true;
+                    if (get_x_by_id(z.聚焦元素).querySelector("x-md"))
+                        (get_x_by_id(z.聚焦元素).querySelector("x-md") as markdown).edit = true;
                 }
             }
             break;
@@ -2087,7 +2088,7 @@ document.onkeydown = (e) => {
                 if (!侧栏.contains(target)) set_模式("设计");
             }
             if (free_link) {
-                z.remove(elFromId(free_link) as x);
+                z.remove(free_link);
                 free_link = "";
             }
             break;
@@ -2488,7 +2489,7 @@ async function set_data(l: 集type) {
 /** 侧栏刷新 */
 function reload_side() {
     if (O.children[O.children.length - 1]) {
-        z.focus(O.children[O.children.length - 1] as x);
+        z.focus(O.children[O.children.length - 1].id);
     }
     z.reflash(true);
     l_math();
@@ -3376,7 +3377,7 @@ function assets_reflash() {
                 r.classList.add("not_click");
                 let go = createEl("div");
                 go.onclick = () => {
-                    jump_to_x_link(el.parentElement as x);
+                    jump_to_x_link(el.parentElement.id);
                 };
                 goto.append(go);
             }
@@ -3505,7 +3506,7 @@ color_yl.onclick = (e) => {
     if (e.target == color_yl) penc_el.classList.toggle("color_show");
 };
 penc_el.addEventListener("input", () => {
-    let el = z.聚焦元素?.querySelector("x-draw") as draw;
+    let el = get_x_by_id(z.聚焦元素)?.querySelector("x-draw") as draw;
     if (el && 模式 == "设计") {
         el.main_svg.querySelectorAll("*").forEach((el) => {
             if (el.getAttribute("fill")) {
@@ -3555,7 +3556,7 @@ function get_link_el_by_id(id: string) {
 }
 
 class 图层 {
-    聚焦元素 = <x>null;
+    聚焦元素 = <string>null;
 
     create_li(i: data[0]) {
         let li = createEl("li");
@@ -3585,10 +3586,10 @@ class 图层 {
             });
         };
         s.onclick = () => {
-            jump_to_x_link(get_x_by_id(i.id));
+            jump_to_x_link(i.id);
             图层_el.querySelectorAll("input").forEach((el) => {
                 if (el.checked) {
-                    this.focus(get_x_by_id(el.parentElement.getAttribute("data-id")));
+                    this.focus(el.parentElement.getAttribute("data-id"));
                 }
             });
         };
@@ -3600,8 +3601,8 @@ class 图层 {
                 set_viewer_posi(li.offsetWidth + li.getBoundingClientRect().left + 8, e.clientY);
             });
         };
-        if (this.聚焦元素?.id == i.id && selected_el.length == 1) {
-            this.focus(get_x_by_id(i.id));
+        if (this.聚焦元素 == i.id && selected_el.length == 1) {
+            this.focus(i.id);
             c.checked = true;
         }
         if (i?.子元素?.length > 0) {
@@ -3740,12 +3741,12 @@ class 图层 {
                 if (画布s.children.length == 1) return;
                 let x = await xconfirm(`确定删除画布 ${i.name}`);
                 if (!x) return;
-                z.remove(elFromId(i.id).querySelector(":scope > x-x") as x);
+                z.remove(elFromId(i.id).querySelector(":scope > x-x").id);
                 elFromId(i.id).remove();
                 if (i.id == 当前画布.id) {
                     let id = 画布s.children[0].id;
                     select_p(id);
-                    z.focus(O.children[O.children.length - 1] as x);
+                    z.focus(O.children[O.children.length - 1].id);
                 }
                 li.remove();
                 get_data();
@@ -3775,28 +3776,31 @@ class 图层 {
             get_data();
             this.reflash();
         }
-        this.focus(el);
+        this.focus(el.id);
         link(el.id).add();
     }
 
-    remove(el: x) {
-        link(el.id).rm();
-        el.querySelectorAll("x-x, x-link").forEach((el) => {
-            link(el.id).rm();
-            breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
-        });
-        el.remove();
-        delete 集.values[el.id];
-        图层_el.querySelector(`li[data-id="${el.id}"]`)?.remove();
-        breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
+    remove(id: string) {
+        link(id).rm();
+        get_x_by_id(id)
+            .querySelectorAll("x-x, x-link")
+            .forEach((el) => {
+                link(el.id).rm();
+                breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
+            });
+        get_x_by_id(id)?.remove();
+        delete 集.values[id];
+        图层_el.querySelector(`li[data-id="${id}"]`)?.remove();
+        breadcrumbs_el.querySelector(`div[data-id="${id}"]`)?.remove();
         render_select_rects();
         data_changed();
     }
 
-    focus(el: x) {
-        this.聚焦元素 = el;
+    focus(id: string) {
+        let el = get_x_by_id(id);
+        this.聚焦元素 = id;
         for (let l of 图层_el.querySelectorAll("input")) {
-            if (el.id == l.parentElement.getAttribute("data-id")) {
+            if (id == l.parentElement.getAttribute("data-id")) {
                 l.checked = true;
             } else {
                 l.checked = false;
@@ -3814,7 +3818,7 @@ class 图层 {
 
         add_bci(el);
 
-        link(el.id).value("0", link_value_min_d());
+        link(id).value("0", link_value_min_d());
 
         if (模式 == "设计") {
             let d = el.querySelector("x-draw") as draw;
@@ -3824,11 +3828,11 @@ class 图层 {
         }
     }
 
-    get(el: x) {
+    get(id: string) {
         let w = (data: data) => {
             for (let n in data) {
                 const i = data[n];
-                if (i.id == el.id) return { n: Number(n), data };
+                if (i.id == id) return { n: Number(n), data };
                 if (i?.子元素?.length > 0) {
                     w(i.子元素);
                 }
@@ -3842,23 +3846,23 @@ class 图层 {
         array.splice(t, 0, array.splice(i, 1)[0]);
     }
 
-    底层(el: x) {
-        let v = this.get(el);
+    底层(id: string) {
+        let v = this.get(id);
         this.mv(v.data, v.n, 0);
         this.reflash();
     }
-    下一层(el: x) {
-        let v = this.get(el);
+    下一层(id: string) {
+        let v = this.get(id);
         this.mv(v.data, v.n, v.n - 1);
         this.reflash();
     }
-    上一层(el: x) {
-        let v = this.get(el);
+    上一层(id: string) {
+        let v = this.get(id);
         this.mv(v.data, v.n, v.n + 1);
         this.reflash();
     }
-    顶层(el: x) {
-        let v = this.get(el);
+    顶层(id: string) {
+        let v = this.get(id);
         this.mv(v.data, v.n, v.data.length - 1);
         this.reflash();
     }
@@ -3867,23 +3871,23 @@ class 图层 {
 var z = new 图层();
 
 xywh_x_el.oninput = () => {
-    z.聚焦元素.style.left = xywh_x_el.value + "px";
+    get_x_by_id(z.聚焦元素).style.left = xywh_x_el.value + "px";
     data_changed();
 };
 xywh_y_el.oninput = () => {
-    z.聚焦元素.style.top = xywh_y_el.value + "px";
+    get_x_by_id(z.聚焦元素).style.top = xywh_y_el.value + "px";
     data_changed();
 };
 xywh_w_el.oninput = () => {
-    z.聚焦元素.style.width = xywh_w_el.value + "px";
+    get_x_by_id(z.聚焦元素).style.width = xywh_w_el.value + "px";
     data_changed();
 };
 xywh_h_el.oninput = () => {
-    z.聚焦元素.style.height = xywh_h_el.value + "px";
+    get_x_by_id(z.聚焦元素).style.height = xywh_h_el.value + "px";
     data_changed();
 };
 function load_xywh() {
-    let fe = z.聚焦元素;
+    let fe = get_x_by_id(z.聚焦元素);
     xywh_x_el.value = String(fe.offsetLeft);
     xywh_y_el.value = String(fe.offsetTop);
     xywh_w_el.value = String(fe.offsetWidth);
@@ -4704,7 +4708,7 @@ function click_search_item(iid: string) {
     let arg = cmd(search_el.value);
     if (arg.name == "s") {
         let el = elFromId(iid) as x & xlink;
-        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el);
+        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el.id);
         else view_el.classList.add("viewer_hide");
         show_search_l([]);
         let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
@@ -5046,9 +5050,9 @@ function preview_x_link(el: x | xlink) {
 var now_data_id = "0";
 
 /** 跳转到元素位置并记录 */
-function jump_to_x_link(el: x | xlink, nrc?: boolean) {
+function jump_to_x_link(id: string, nrc?: boolean) {
     view_el.classList.add("viewer_hide");
-
+    const el = get_link_el_by_id(id);
     for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
         if (画布el.contains(el)) {
             select_p(画布el.id);
@@ -5064,7 +5068,7 @@ function jump_to_x_link(el: x | xlink, nrc?: boolean) {
             };
             set_O_p(ex, ey);
             if (el.tagName == "X-X") {
-                z.focus(el as x);
+                z.focus(id);
             }
             z.reflash(true);
         }
@@ -5100,7 +5104,7 @@ function add_bci(el: x | xlink) {
         preview_x_link(elFromId(el.id) as x);
     };
     text.onpointerdown = () => {
-        jump_to_x_link(elFromId(el.id) as x);
+        jump_to_x_link(el.id);
     };
     text.onpointermove = (e) => {
         window.requestAnimationFrame(() => {
@@ -5413,7 +5417,7 @@ function add_none_layout() {
 /** 固定布局修剪 */
 function reflash_none_layout(el: x) {
     if (el.value.length == 0) {
-        z.remove(el);
+        z.remove(el.id);
         data_changed();
         return;
     }
@@ -5443,7 +5447,7 @@ function to_none_layout(els: x[]) {
     let xels = els_to_rels(els);
     for (let el of xels) {
         data.push(get_x_out_value(el));
-        z.remove(el);
+        z.remove(el.id);
     }
     x.value = data;
     reflash_none_layout(x);
@@ -5459,7 +5463,7 @@ function to_one_line(xels: x[]) {
                 t += md._value.text;
                 if (i == 0) type = md._value.type;
             });
-            el.querySelectorAll("x-x").forEach((el) => z.remove(el as x));
+            el.querySelectorAll("x-x").forEach((el) => z.remove(el.id));
             let md = createEl("x-md");
             el.append(md);
             md.value = JSON.stringify({ text: t, type });
@@ -5538,7 +5542,7 @@ function out_group(els: x[]) {
                 nx.style.zIndex = String(O.childElementCount + 1);
                 p[i].el.remove();
             }
-            z.remove(x);
+            z.remove(x.id);
         }
     }
     get_data();
@@ -5546,8 +5550,9 @@ function out_group(els: x[]) {
 }
 
 /** 获取从近到远元素列表 */
-function match_nearest_x(x: x) {
-    let l: { el: x; x: number; y: number; r: number }[] = [];
+function match_nearest_x(id: string) {
+    const x = get_x_by_id(id);
+    let l: { id: string; x: number; y: number; r: number }[] = [];
     let r = el_offset2(x, O);
     let center = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
     O.querySelectorAll("x-x").forEach((el: x) => {
@@ -5555,7 +5560,7 @@ function match_nearest_x(x: x) {
             let r = el_offset2(el, O);
             let center2 = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
             l.push({
-                el: el,
+                id: el.id,
                 x: center2.x - center.x,
                 y: center2.y - center.y,
                 r: Math.sqrt((center2.x - center.x) ** 2 + (center2.y - center.y) ** 2),
@@ -5566,26 +5571,26 @@ function match_nearest_x(x: x) {
     return l;
 }
 
-function get_nearest_x(x: x, a: "left" | "right" | "up" | "down") {
-    console.log(match_nearest_x(x));
-    for (let i of match_nearest_x(x)) {
-        if (i.el == x) continue;
+function get_nearest_x(id: string, a: "left" | "right" | "up" | "down") {
+    console.log(match_nearest_x(id));
+    for (let i of match_nearest_x(id)) {
+        if (i.id == id) continue;
         switch (a) {
             case "down":
-                if (i.y > 0) return i.el;
+                if (i.y > 0) return i.id;
                 break;
             case "up":
-                if (i.y <= 0) return i.el;
+                if (i.y <= 0) return i.id;
                 break;
             case "left":
-                if (i.x <= 0) return i.el;
+                if (i.x <= 0) return i.id;
                 break;
             case "right":
-                if (i.x > 0) return i.el;
+                if (i.x > 0) return i.id;
                 break;
         }
     }
-    return x;
+    return id;
 }
 
 window["xln"] = {};
@@ -5796,7 +5801,7 @@ ys_add.onclick = () => {
 import JSON5 from "json5";
 
 function load_value() {
-    let el = z.聚焦元素;
+    let el = get_x_by_id(z.聚焦元素);
     value_el.innerHTML = "";
     if (el.value && is_smallest_el(el)) {
         let t = createEl("textarea");
@@ -6395,7 +6400,7 @@ class x extends HTMLElement {
         };
 
         this.onpointerdown = (e) => {
-            if (!mu_sel_key(e) && selected_el.length <= 1) z.focus(this);
+            if (!mu_sel_key(e) && selected_el.length <= 1) z.focus(this.id);
             if (模式 != "设计") return;
             e.preventDefault();
             free_old_point = e2p(e);
@@ -6596,7 +6601,7 @@ function new_x_bar(id: string) {
 
     d.onclick = () => {
         selected_el = selected_el.filter((el) => el != main_x);
-        z.remove(main_x);
+        z.remove(main_x.id);
 
         if (main_x.querySelector("x-file")) assets_reflash();
     };
@@ -6876,7 +6881,7 @@ class markdown extends HTMLElement {
                 if (e.key == "Backspace") {
                     if (this._value.type == "p") {
                         if (text.selectionStart == 0 && text.selectionEnd == 0) {
-                            z.remove(this.parentElement as x);
+                            z.remove(this.parentElement.id);
                         }
                     }
                     if (this._value.type != "text") {
@@ -6897,12 +6902,12 @@ class markdown extends HTMLElement {
                             md.text.setSelectionRange(text.selectionStart, text.selectionStart);
                             md.edit = true;
                         } else {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     } else {
                         if (text.selectionStart == 0) {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     }
@@ -6919,12 +6924,12 @@ class markdown extends HTMLElement {
                             md.text.setSelectionRange(text.selectionStart, text.selectionStart);
                             md.edit = true;
                         } else {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     } else {
                         if (text.selectionEnd == text.value.length) {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     }
@@ -6940,7 +6945,7 @@ class markdown extends HTMLElement {
                             md.edit = true;
                             md.text.setSelectionRange(md.text.value.length, md.text.value.length);
                         } else {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     }
@@ -6956,7 +6961,7 @@ class markdown extends HTMLElement {
                             md.edit = true;
                             md.text.setSelectionRange(0, 0);
                         } else {
-                            z.focus(this.parentElement as x);
+                            z.focus(this.parentElement.id);
                             set_模式("设计");
                         }
                     }
@@ -7080,7 +7085,7 @@ class markdown extends HTMLElement {
                         let ml = a.getAttribute("href").split(":");
                         const id = ml[0].slice(1);
                         let el = elFromId(id);
-                        jump_to_x_link(el as x);
+                        jump_to_x_link(id);
                         let mel = el.querySelector("audio") || el.querySelector("video");
                         if (ml[1]) {
                             let ar = ml[1].split(",");
@@ -8696,7 +8701,7 @@ class link_value extends HTMLElement {
                 view_el.classList.add("viewer_hide");
             };
             n.onpointerup = () => {
-                jump_to_x_link(get_x_by_id(i));
+                jump_to_x_link(i);
             };
             let rm = createEl("div");
             rm.innerHTML = icon(close_svg);
