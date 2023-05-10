@@ -3852,6 +3852,18 @@ class 图层 {
         delete 集.values[id];
         图层_el.querySelector(`li[data-id="${id}"]`)?.remove();
         breadcrumbs_el.querySelector(`div[data-id="${id}"]`)?.remove();
+        for (let i of 集.数据) {
+            w(i.data);
+        }
+        function w(data: data) {
+            for (let i in data) {
+                if (data[i].type == "X-X" && data[i].id == id) {
+                    data.splice(Number(i), 1);
+                } else {
+                    if (data[i].子元素) w(data[i].子元素);
+                }
+            }
+        }
         render_select_rects();
         data_changed();
     }
