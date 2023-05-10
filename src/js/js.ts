@@ -2241,7 +2241,6 @@ function new_集(pname: string): 集type {
 function get_data() {
     let l = 集;
     for (let O of 画布s.children) {
-        if ((O as HTMLElement).style.display == "none") continue;
         for (let i of 集.数据) {
             if (i.id == O.id) {
                 let els = O.querySelectorAll(":scope > *");
@@ -2262,10 +2261,10 @@ function get_data() {
                     zoom,
                 };
                 i.name = O.getAttribute("data-name");
-                当前画布 = i;
+                if ((O as HTMLElement).style.display != "none") 当前画布 = i;
             }
         }
-        集.meta.focus_page = O.id;
+        if ((O as HTMLElement).style.display != "none") 集.meta.focus_page = O.id;
     }
     window["xln"]["集"] = l;
     return l;
@@ -5392,6 +5391,13 @@ function find_root_layout(el: HTMLElement) {
     }
 }
 
+/** 获取画布 */
+function find_p(el: HTMLElement) {
+    for (let p of 画布s.querySelectorAll(":scope > div")) {
+        if (p.contains(el)) return p as x;
+    }
+}
+
 /** 元素集转为父根元素集 */
 function els_to_rels(els: x[]) {
     let xels = [] as x[];
@@ -6509,6 +6515,7 @@ class x extends HTMLElement {
     }
 
     get value() {
+        let p_el = find_p(this);
         let list = [] as data;
         let els = this.querySelectorAll(":scope > *");
         let map: { index: number; z: number }[] = [];
@@ -6527,6 +6534,7 @@ class x extends HTMLElement {
                     class: el.className,
                     子元素: (el as x).value,
                     type: el.tagName,
+                    rect: el_offset2(el, p_el),
                 });
             } else {
                 list.push({
