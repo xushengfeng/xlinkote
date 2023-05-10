@@ -2494,7 +2494,7 @@ async function set_data(l: 集type) {
             当前画布 = p;
             集.meta.focus_page = p.id;
             O = ps[p.id];
-            O.style.display = "block";
+            O.style.visibility = "visible";
             zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
         }
     }
@@ -2527,7 +2527,7 @@ function render_data(inputdata: 画布type) {
         h: (画布.offsetHeight + 20) / inputdata.p.zoom,
     };
     let el = createEl("div");
-    el.style.display = "none";
+    el.style.visibility = "hidden";
     el.id = inputdata.id;
     el.setAttribute("data-name", inputdata.name);
     let values = {};
@@ -2587,10 +2587,10 @@ function select_p(id: string) {
     for (let el of 画布s.children) {
         if (el.id == id) {
             O = el as HTMLElement;
-            O.style.display = "block";
+            O.style.visibility = "visible";
             set_zoom(O.style.transform);
         } else {
-            (el as HTMLElement).style.display = "none";
+            (el as HTMLElement).style.visibility = "hidden";
         }
     }
     图层_el.querySelectorAll(":scope > ul > li").forEach((el: HTMLElement) => {
@@ -5843,9 +5843,9 @@ function ys_jump(item: ys_item) {
         for (let el of 画布s.children) {
             if (el.id == item.position.O) {
                 O = el as HTMLElement;
-                O.style.display = "block";
+                O.style.visibility = "visible";
             } else {
-                (el as HTMLElement).style.display = "none";
+                (el as HTMLElement).style.visibility = "hidden";
             }
         }
         O.style.transition = item.transition;
