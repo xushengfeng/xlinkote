@@ -3791,6 +3791,11 @@ class 图层 {
                 let n = await xprompt("重命名画布", i.name);
                 if (n) {
                     elFromId(i.id).setAttribute("data-name", n);
+                    for (let p of 集.数据) {
+                        if (p.id == i.id) {
+                            p.name = n;
+                        }
+                    }
                     get_data();
                     z.reflash();
                 }
@@ -3803,6 +3808,11 @@ class 图层 {
                 if (!x) return;
                 z.remove(elFromId(i.id).querySelector(":scope > x-x").id);
                 elFromId(i.id).remove();
+                for (let pi in 集.数据) {
+                    if (集.数据[pi].id == i.id) {
+                        集.数据.splice(Number(pi), 1);
+                    }
+                }
                 if (i.id == 当前画布.id) {
                     let id = 画布s.children[0].id;
                     select_p(id);
