@@ -696,6 +696,7 @@ function set_O_p(x: number | null, y: number | null) {
     }
     render_map();
     render_select_rects();
+    check_render_x();
 }
 
 fxsd_el.onclick = () => {
@@ -1405,8 +1406,10 @@ function range_offset(range: Range, pel?: Element) {
     return { x: ox, y: oy, w: range.getBoundingClientRect().width, h: range.getBoundingClientRect().height };
 }
 
+type rect = { x: number; y: number; w: number; h: number };
+
 /**元素大小和相对位置（画布坐标） */
-function el_offset2(el: Element, pel?: Element, xz?: number) {
+function el_offset2(el: Element, pel?: Element, xz?: number): rect {
     if (!pel) pel = el.parentElement;
     let z = xz || zoom;
     let ox = el.getBoundingClientRect().x - pel.getBoundingClientRect().x,
@@ -1419,6 +1422,32 @@ function el_offset2(el: Element, pel?: Element, xz?: number) {
     };
 }
 
+/** 框有交集 */
+function rect_x_rect(rect0: rect, rect1: rect) {
+    if (
+        rect0.x <= rect1.x + rect1.w &&
+        rect0.x + rect0.w >= rect1.x &&
+        rect0.y <= rect1.y + rect1.h &&
+        rect0.y + rect0.h >= rect1.y
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+/** rect0是rect1的子集 */
+function rect_in_rect(rect0: rect, rect1: rect) {
+    if (
+        rect0.x >= rect1.x &&
+        rect0.x + rect0.w <= rect1.x + rect1.w &&
+        rect0.y >= rect1.y &&
+        rect0.y + rect0.h <= rect1.y + rect1.h
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
 /** 获取元素框 */
 function reflash_rect() {
     let els_rect: { el: x; rect: { x: number; y: number; w: number; h: number } }[] = [];
@@ -2171,6 +2200,7 @@ type data = Array<{
     子元素?: data;
     value?: string;
     global?: boolean;
+    rect?: rect;
 }>;
 /** 画布 */
 type 画布type = {
@@ -2210,40 +2240,32 @@ function new_集(pname: string): 集type {
 /** 获取集 */
 function get_data() {
     let l = 集;
-    let p = {};
-    for (let i of 集.数据) {
-        p[i.id] = i.p;
-    }
-    集.数据 = [];
     for (let O of 画布s.children) {
-        let data = [] as data;
-        let els = O.querySelectorAll(":scope > *");
-        let map: { index: number; z: number }[] = [];
-        els.forEach((el: HTMLElement, i) => {
-            map.push({ index: i, z: Number(el.style.zIndex) || 1 });
-        });
-        map = map.sort((a, b) => a.z - b.z);
-        for (let i of map) {
-            let el = <x>els[i.index];
-            let type = "X-X";
-            data.push({ id: el.id, style: "", 子元素: el.value, type, class: "" });
-            if (el.getAttribute("style")) data[data.length - 1].style = el.getAttribute("style");
-            data[data.length - 1].class = el.className;
+        if ((O as HTMLElement).style.display == "none") continue;
+        for (let i of 集.数据) {
+            if (i.id == O.id) {
+                let els = O.querySelectorAll(":scope > *");
+                els.forEach((el: x) => {
+                    let data = i.data;
+                    for (let i of data) {
+                        if (i.id == el.id) {
+                            if (el.getAttribute("style")) i.style = el.getAttribute("style");
+                            i.class = el.className;
+                            i.子元素 = el.value;
+                            i.rect = el_offset2(el);
+                        }
+                    }
+                });
+                i.p = {
+                    x: (画布.offsetWidth / 2 - el_offset(O).x) / zoom,
+                    y: (画布.offsetHeight / 2 - el_offset(O).y) / zoom,
+                    zoom,
+                };
+                i.name = O.getAttribute("data-name");
+                当前画布 = i;
+            }
         }
-        if ((O as HTMLElement).style.display == "block") {
-            p[O.id] = { x: el_offset(O).x - 画布.offsetWidth / 2, y: el_offset(O).y - 画布.offsetHeight / 2, zoom };
-            集.meta.focus_page = O.id;
-        }
-        let 画布数据 = {
-            id: O.id,
-            data,
-            name: O.getAttribute("data-name"),
-            p: p[O.id],
-        };
-        集.数据.push(画布数据);
-        if (O.id == 当前画布.id) {
-            当前画布 = 画布数据;
-        }
+        集.meta.focus_page = O.id;
     }
     window["xln"]["集"] = l;
     return l;
@@ -2499,6 +2521,12 @@ function reload_side() {
 
 /** 渲染画布 */
 function render_data(inputdata: 画布type) {
+    let rect: rect = {
+        x: inputdata.p.x - (10 + 画布.offsetWidth / 2) / inputdata.p.zoom,
+        y: inputdata.p.y - (10 + 画布.offsetHeight / 2) / inputdata.p.zoom,
+        w: (画布.offsetWidth + 20) / inputdata.p.zoom,
+        h: (画布.offsetHeight + 20) / inputdata.p.zoom,
+    };
     let el = createEl("div");
     el.style.display = "none";
     el.id = inputdata.id;
@@ -2507,22 +2535,24 @@ function render_data(inputdata: 画布type) {
     function w(data: data, pid?: string) {
         let text = "";
         for (let i of data) {
-            let style = i.style ? `style='${i.style}'` : "";
-            let _class = i.class ? `class='${i.class}'` : "";
-            if (i.value) {
-                values[pid] = i.value;
+            if (pid || !i.rect || rect_x_rect(i.rect, rect)) {
+                let style = i.style ? `style='${i.style}'` : "";
+                let _class = i.class ? `class='${i.class}'` : "";
+                if (i.value) {
+                    values[pid] = i.value;
+                }
+                let s = i.子元素 ? w(i.子元素, i.id) : "";
+                if (i.type == "X-X" && !i.id) i.id = uuid_id();
+                text += `<${i.type} id='${i.id}' ${style} ${_class}>${s}</${i.type}>`;
             }
-            let s = i.子元素 ? w(i.子元素, i.id) : "";
-            if (i.type == "X-X" && !i.id) i.id = uuid_id();
-            text += `<${i.type} id='${i.id}' ${style} ${_class}>${s}</${i.type}>`;
             link(i.id).add();
         }
         return text;
     }
     let t = w(inputdata.data);
     el.innerHTML = t;
-    el.style.left = (inputdata?.p?.x || 0) + 画布.offsetWidth / 2 + "px";
-    el.style.top = (inputdata?.p?.y || 0) + 画布.offsetHeight / 2 + "px";
+    el.style.left = -(inputdata?.p?.x || 0) * inputdata.p.zoom + 画布.offsetWidth / 2 + "px";
+    el.style.top = -(inputdata?.p?.y || 0) * inputdata.p.zoom + 画布.offsetHeight / 2 + "px";
     el.style.transform = `scale(${inputdata.p.zoom})`;
     画布s.append(el);
 
@@ -2532,7 +2562,8 @@ function render_data(inputdata: 画布type) {
         try {
             for (let i of data) {
                 if (values[pid]) {
-                    (<markdown>get_x_by_id(pid).querySelector(i.type)).value = values[pid];
+                    if (<markdown>get_x_by_id(pid)?.querySelector(i.type))
+                        (<markdown>get_x_by_id(pid).querySelector(i.type)).value = values[pid];
                 }
                 if (i.子元素) v(i.子元素, i.id);
             }
@@ -2591,6 +2622,35 @@ function get_zoom(id: string) {
 
 function set_zoom(zooms: string) {
     zoom_o(Number(zooms.match(/scale\((.*)\)/)[1]) || zoom);
+}
+
+function render_x(data: data[0]) {
+    if (O.contains(elFromId(data.id))) return;
+    let xel = createEl("x-x");
+    xel.id = data.id;
+    O.append(xel);
+    xel.className = data.class;
+    xel.setAttribute("style", data.style);
+    xel.value = data.子元素;
+}
+
+function check_render_x() {
+    if (!集?.数据) return;
+    let w = (画布.offsetWidth + 20) / zoom;
+    let h = (画布.offsetHeight + 20) / zoom;
+    let x = (-el_offset(O).x - 10) / zoom;
+    let y = (-el_offset(O).y - 10) / zoom;
+    for (let i of 集.数据) {
+        if (i.id == 当前画布.id) {
+            for (let data of i.data) {
+                if (!data.rect || rect_x_rect(data.rect, { x, y, w, h })) {
+                    render_x(data);
+                } else {
+                    elFromId(data.id)?.remove();
+                }
+            }
+        }
+    }
 }
 
 type diff_i = diff.Diff<any, any>;
@@ -3567,7 +3627,7 @@ class 图层 {
         li.setAttribute("data-id", i.id);
         li.append(c);
         li.append(s);
-        if (is_smallest_el(elFromId(i.id) as x)) {
+        if (i.子元素.length == 0) {
             let add_link = createEl("x-link-add");
             li.append(add_link);
             add_link.value = i.id;
