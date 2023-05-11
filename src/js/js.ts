@@ -2295,13 +2295,26 @@ function get_data() {
                 let z = get_zoom(i.id);
                 els.forEach((el: x) => {
                     let data = i.data;
+                    let has = false;
                     for (let i of data) {
                         if (i.id == el.id) {
                             if (el.getAttribute("style")) i.style = el.getAttribute("style");
                             i.class = el.className;
                             i.子元素 = el.value;
                             i.rect = el_offset2(el, O, z);
+                            has = true;
+                            break;
                         }
+                    }
+                    if (!has && el.id) {
+                        data.push({
+                            id: el.id,
+                            style: el.getAttribute("style"),
+                            type: "X-X",
+                            class: el.className,
+                            子元素: el.value,
+                            rect: el_offset2(el, O, z),
+                        });
                     }
                 });
                 if (show)
