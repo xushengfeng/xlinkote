@@ -1552,8 +1552,10 @@ elFromId("画布").onwheel = (e) => {
         zoom = Math.abs(zoom);
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;
-        zoom_o(zoom);
-        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+        requestAnimationFrame(() => {
+            zoom_o(zoom);
+            set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+        });
     } else {
         let el = <HTMLElement>e.target;
         if (el.tagName == "TEXTAREA") return;
@@ -1572,7 +1574,9 @@ elFromId("画布").onwheel = (e) => {
                 if (fxsd == 0 || fxsd == 2) dx = -e.deltaX;
                 if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
             }
-            set_O_p(el_offset(O).x + dx, el_offset(O).y + dy);
+            requestAnimationFrame(() => {
+                set_O_p(el_offset(O).x + dx, el_offset(O).y + dy);
+            });
         } else {
             let a = e.deltaY > 0 ? "next" : "back";
             ys_bn(a as "next" | "back");
