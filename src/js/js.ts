@@ -1422,6 +1422,22 @@ function el_offset2(el: Element, pel?: Element, xz?: number): rect {
     };
 }
 
+function el_has(data: data[0], id: string) {
+    if (data.id == id) return true;
+    w(data.子元素);
+    function w(data: data) {
+        for (let i of data) {
+            if (i.id == id) {
+                return true;
+            }
+            if (i.子元素) {
+                w(i.子元素);
+            }
+        }
+    }
+    return false;
+}
+
 /** 框有交集 */
 function rect_x_rect(rect0: rect, rect1: rect) {
     if (
@@ -3662,7 +3678,7 @@ class 图层 {
             });
         };
         li.onpointerenter = () => {
-            preview_x_link(get_x_by_id(i.id));
+            preview_x_link(i.id);
         };
         li.onpointermove = (e) => {
             window.requestAnimationFrame(() => {
@@ -4716,7 +4732,7 @@ search_el.oninput = search_el.click = () => {
         }
         select_index = clip(select_index, 0, l.length - 1); // 搜索记录上次定位
         let el = select_search(select_index);
-        preview_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+        preview_x_link(el.getAttribute("data-id"));
         let r = el.getBoundingClientRect();
         set_viewer_posi(r.x + r.width, r.y);
     }
@@ -4769,7 +4785,7 @@ search_el.onkeyup = (e) => {
         let arg = cmd(search_el.value);
         if (el) {
             if (arg.name == "s") {
-                preview_x_link(get_link_el_by_id(el.getAttribute("data-id")));
+                preview_x_link(el.getAttribute("data-id"));
                 let r = el.getBoundingClientRect();
                 set_viewer_posi(r.x + r.width, r.y);
             }
@@ -4877,8 +4893,7 @@ function show_search_l(l: search_result, exid?: string) {
 
     function add_div_event(div: HTMLElement, id: string) {
         div.addEventListener("mouseenter", () => {
-            let el = elFromId(id);
-            preview_x_link(el as x & xlink);
+            preview_x_link(id);
         });
         div.onmousemove = (e) => {
             window.requestAnimationFrame(() => {
@@ -5078,40 +5093,52 @@ function set_viewer_posi(x: number, y: number) {
 }
 
 /** 跳转到元素位置 */
-function preview_x_link(el: x | xlink) {
-    let pel: HTMLElement;
-    画布s.querySelectorAll(":scope > div").forEach((xel) => {
-        if (xel.contains(el)) {
-            pel = xel as HTMLElement;
-            return;
+function preview_x_link(id: string) {
+    let pid = "",
+        rect: rect;
+    for (let i of 集.数据) {
+        pid = i.id;
+        w(i.data);
+        if (rect) break;
+    }
+    function w(data: data) {
+        for (let i of data) {
+            if (i.type == "X-X" && i.id == id) {
+                rect = i.rect;
+                return;
+            } else {
+                if (i.子元素) {
+                    w(i.子元素);
+                }
+            }
         }
-    });
-    let pel_display = pel.style.display;
-    pel.style.display = "block";
-    let pzoom = get_zoom(pel.id);
-    let center_rect = el_offset2(el, pel, pzoom);
+    }
+    let center_rect = rect;
 
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
     let dx = view_width / 2 / zoom,
         dy = view_height / 2 / zoom;
     let out_rect = {
-        left: center_point.x - dx,
-        right: center_point.x + dx,
-        top: center_point.y - dy,
-        bottom: center_point.y + dy,
+        x: center_point.x - dx,
+        y: center_point.y - dy,
+        w: 2 * dx,
+        h: 2 * dy,
     };
 
-    let els: { el: x; x: number; y: number }[] = [];
-    pel.querySelectorAll(":scope > x-x").forEach((xel: x) => {
-        let r = el_offset2(xel, pel, pzoom);
-        if (
-            (r.x < out_rect.right && out_rect.left < r.x + r.w && r.y < out_rect.bottom && out_rect.top < r.y + r.h) ||
-            xel.contains(el) // 针对固定布局元素
-        ) {
-            els.push({ el: xel, x: r.x, y: r.y });
+    let els: { el: data[0]; x: number; y: number }[] = [];
+    for (let p of 集.数据) {
+        if (p.id == pid) {
+            for (let x of p.data) {
+                let r = x.rect;
+                if (
+                    rect_x_rect(r, out_rect) ||
+                    el_has(x, id) // 针对固定布局元素
+                ) {
+                    els.push({ el: x, x: r.x, y: r.y });
+                }
+            }
         }
-    });
-    pel.style.display = pel_display;
+    }
 
     view_el.style.width = 2 * dx * zoom + "px";
     view_el.style.height = 2 * dy * zoom + "px";
@@ -5123,17 +5150,17 @@ function preview_x_link(el: x | xlink) {
     view_el.classList.remove("viewer_hide");
     for (let x of els) {
         let xel = createEl("x-x");
-        xel.setAttribute("style", x.el.getAttribute("style"));
-        xel.style.left = x.x - out_rect.left + "px";
-        xel.style.top = x.y - out_rect.top + "px";
-        xel.className = x.el.className;
+        xel.setAttribute("style", x.el.style);
+        xel.style.left = x.x - out_rect.x + "px";
+        xel.style.top = x.y - out_rect.y + "px";
+        xel.className = x.el.class;
         view_children_el.append(xel);
         xel.id = x.el.id;
-        xel.value = x.el.value;
+        xel.value = x.el.子元素;
     }
     let highlight = view_highlight_el;
-    highlight.style.left = (center_rect.x - out_rect.left) * zoom + "px";
-    highlight.style.top = (center_rect.y - out_rect.top) * zoom + "px";
+    highlight.style.left = (center_rect.x - out_rect.x) * zoom + "px";
+    highlight.style.top = (center_rect.y - out_rect.y) * zoom + "px";
     highlight.style.width = center_rect.w * zoom + "px";
     highlight.style.height = center_rect.h * zoom + "px";
 }
@@ -5192,7 +5219,7 @@ function add_bci(el: x | xlink) {
     }
     li.setAttribute("data-id", el.id);
     text.onpointerenter = () => {
-        preview_x_link(elFromId(el.id) as x);
+        preview_x_link(el.id);
     };
     text.onpointerdown = () => {
         jump_to_x_link(el.id);
@@ -8795,7 +8822,7 @@ class link_value extends HTMLElement {
             };
             el.onpointerover = (e) => {
                 set_viewer_posi(e.clientX, e.clientY);
-                preview_x_link(get_x_by_id(i));
+                preview_x_link(i);
             };
             el.onpointerout = () => {
                 view_el.classList.add("viewer_hide");
