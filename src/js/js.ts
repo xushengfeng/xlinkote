@@ -2270,6 +2270,7 @@ function get_data() {
         for (let i of 集.数据) {
             if (i.id == O.id) {
                 let els = O.querySelectorAll(":scope > *");
+                let z = get_zoom(i.id);
                 els.forEach((el: x) => {
                     let data = i.data;
                     for (let i of data) {
@@ -2277,7 +2278,7 @@ function get_data() {
                             if (el.getAttribute("style")) i.style = el.getAttribute("style");
                             i.class = el.className;
                             i.子元素 = el.value;
-                            i.rect = el_offset2(el);
+                            i.rect = el_offset2(el, O, z);
                         }
                     }
                 });
@@ -6555,6 +6556,7 @@ class x extends HTMLElement {
 
     get value() {
         let p_el = find_p(this);
+        let z = get_zoom(p_el.id);
         let list = [] as data;
         let els = this.querySelectorAll(":scope > *");
         let map: { index: number; z: number }[] = [];
@@ -6573,7 +6575,7 @@ class x extends HTMLElement {
                     class: el.className,
                     子元素: (el as x).value,
                     type: el.tagName,
-                    rect: el_offset2(el, p_el),
+                    rect: el_offset2(el, p_el, z),
                 });
             } else {
                 list.push({
