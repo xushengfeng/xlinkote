@@ -4629,28 +4629,48 @@ function search(input: string[], type: "str" | "regex") {
         if (searched) {
             let c = link(id).get(1);
             for (let i in c) {
-                chainr.push({
-                    id: i,
-                    score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
-                    text: elFromId(i).innerText,
-                });
+                for (let i of 集.数据) {
+                    w(i.data);
+                }
+                function w(data: data) {
+                    for (let xel of data) {
+                        if (xel.id == i && xel.子元素.length == 1 && xel.子元素[0].type == "X-MD") {
+                            chainr.push({
+                                id: i,
+                                score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
+                                text: JSON5.parse(xel.子元素[0].value).text,
+                            });
+                        } else {
+                            if (xel.子元素) w(xel.子元素);
+                        }
+                    }
+                }
             }
         }
 
         if (searched) {
-            const pel = elFromId(id).parentElement;
-            if (is_flex(pel) == "flex")
-                pel.querySelectorAll("x-x").forEach((xel: x) => {
-                    if (is_smallest_el(xel)) {
-                        if (xel.id != id) {
-                            flex.push({
-                                id: xel.id,
-                                score: search_score(xel.id, 0, x.t, x.v, x.s, x.opsit),
-                                text: xel.innerText,
-                            });
+            for (let i of 集.数据) {
+                for (let j of i.data) w(j);
+            }
+            function w(data: data[0]) {
+                for (let i of data.子元素) {
+                    if (i.id == id) {
+                        for (let i of data.子元素) {
+                            if (i.子元素.length == 1 && i.子元素[0].type != "X-X" && i.id != id) {
+                                flex.push({
+                                    id: i.id,
+                                    score: search_score(i.id, 0, x.t, x.v, x.s, x.opsit),
+                                    text: i.子元素[0].value,
+                                });
+                            }
+                        }
+                    } else {
+                        if (i.子元素) {
+                            w(i);
                         }
                     }
-                });
+                }
+            }
         }
 
         if (!s) {
