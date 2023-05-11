@@ -3147,13 +3147,17 @@ function check_backup() {
         (now.getTime() - Number(localStorage.getItem("backup_last_time"))) / 1000 / 60 / 60 / 24 >
             Number(store.backup.频率)
     ) {
-        db_download(
-            `xln_db_${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1).toString().padStart(2, "0")}${now
-                .getDate()
-                .toString()
-                .padStart(2, "0")}${now.getHours().toString().padStart(2, "0")}.zip`
-        );
         localStorage.setItem("backup_last_time", String(now.getTime()));
+        setTimeout(() => {
+            db_download(
+                `xln_db_${now.getFullYear().toString().slice(-2)}${(now.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}${now
+                    .getHours()
+                    .toString()
+                    .padStart(2, "0")}.zip`
+            );
+        }, 10);
     }
     setTimeout(() => {
         check_backup();
