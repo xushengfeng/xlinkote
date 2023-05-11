@@ -2266,6 +2266,7 @@ function new_集(pname: string): 集type {
 function get_data() {
     let l = 集;
     for (let O of 画布s.children) {
+        let show = (O as HTMLElement).style.visibility != "hidden";
         for (let i of 集.数据) {
             if (i.id == O.id) {
                 let els = O.querySelectorAll(":scope > *");
@@ -2280,16 +2281,17 @@ function get_data() {
                         }
                     }
                 });
-                i.p = {
-                    x: (画布.offsetWidth / 2 - el_offset(O).x) / zoom,
-                    y: (画布.offsetHeight / 2 - el_offset(O).y) / zoom,
-                    zoom,
-                };
+                if (show)
+                    i.p = {
+                        x: (画布.offsetWidth / 2 - el_offset(O).x) / zoom,
+                        y: (画布.offsetHeight / 2 - el_offset(O).y) / zoom,
+                        zoom,
+                    };
                 i.name = O.getAttribute("data-name");
-                if ((O as HTMLElement).style.display != "none") 当前画布 = i;
+                if (show) 当前画布 = i;
             }
         }
-        if ((O as HTMLElement).style.display != "none") 集.meta.focus_page = O.id;
+        if (show) 集.meta.focus_page = O.id;
     }
     window["xln"]["集"] = l;
     return l;
