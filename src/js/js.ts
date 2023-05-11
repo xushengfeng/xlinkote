@@ -1071,31 +1071,49 @@ function add_blank(op: p_point, p: p_point) {
             a = 3;
         }
     }
-
-    for (let xel of O.querySelectorAll(":scope > x-x")) {
-        let el_o = el_offset2(xel);
-        let el = xel as x;
-        switch (a) {
-            case 0:
-                if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                    el.style.top = el_o.y - r.h + "px";
+    function set_style(style: string, x: string, v: string) {
+        let ns = style.split(";").reduce((styleObj, rule) => {
+            if (!rule.trim()) return styleObj;
+            const [key, value] = rule.split(":");
+            styleObj[key.trim()] = value.trim();
+            return styleObj;
+        }, {});
+        ns[x] = v;
+        return Object.entries(ns)
+            .map(([key, value]) => `${key}: ${value};`)
+            .join(" ");
+    }
+    for (let i of 集.数据) {
+        if (i.id == 当前画布.id) {
+            for (let xel of i.data) {
+                let el_o = xel.rect;
+                switch (a) {
+                    case 0:
+                        if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
+                            xel.style = set_style(xel.style, "top", el_o.y - r.h + "px");
+                        }
+                        break;
+                    case 1:
+                        if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
+                            xel.style = set_style(xel.style, "left", el_o.x + r.w + "px");
+                        }
+                        break;
+                    case 2:
+                        if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
+                            xel.style = set_style(xel.style, "top", el_o.y + r.h + "px");
+                        }
+                        break;
+                    case 3:
+                        if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
+                            xel.style = set_style(xel.style, "left", el_o.x - r.w + "px");
+                        }
+                        break;
                 }
-                break;
-            case 1:
-                if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                    el.style.left = el_o.x + r.w + "px";
+                let el = elFromId(xel.id);
+                if (el) {
+                    el.setAttribute("style", xel.style);
                 }
-                break;
-            case 2:
-                if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                    el.style.top = el_o.y + r.h + "px";
-                }
-                break;
-            case 3:
-                if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                    el.style.left = el_o.x - r.w + "px";
-                }
-                break;
+            }
         }
     }
 }
