@@ -1798,7 +1798,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             }
             if (had) continue;
             集.中转站.push(get_x_out_value(i));
-            i.remove();
+            z.remove(i.id, true);
         }
         free_o_rects = [];
         console.log(集.中转站);
@@ -3916,16 +3916,23 @@ class 图层 {
         link(el.id).add();
     }
 
-    remove(id: string) {
-        link(id).rm();
+    /**
+     * 移除元素
+     * @param id id
+     * @param p 是否仅在画布移除
+     */
+    remove(id: string, p?: boolean) {
+        if (!p) {
+            link(id).rm();
+            delete 集.values[id];
+        }
         get_x_by_id(id)
             .querySelectorAll("x-x, x-link")
             .forEach((el) => {
-                link(el.id).rm();
+                if (!p) link(el.id).rm();
                 breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`)?.remove();
             });
         get_x_by_id(id)?.remove();
-        delete 集.values[id];
         图层_el.querySelector(`li[data-id="${id}"]`)?.remove();
         breadcrumbs_el.querySelector(`div[data-id="${id}"]`)?.remove();
         for (let i of 集.数据) {
