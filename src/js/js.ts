@@ -5293,8 +5293,8 @@ function link(key0: string) {
          */
         get: (chain?: number) => {
             const l = { ...集.链接[key0] };
-            for (const i of Object.keys(集.链接[0])) {
-                for (const x of Object.keys(集.链接[i])) {
+            for (const i of Object.keys(集.链接[0] || [])) {
+                for (const x of Object.keys(集.链接[i] || [])) {
                     if (x === key0) {
                         l[i] = 集.链接[i][x];
                     }
@@ -5307,7 +5307,7 @@ function link(key0: string) {
                     const xl = {};
                     let next = null;
                     let maxn = 0;
-                    for (const i of Object.keys(list)) {
+                    for (const i of Object.keys(list || [])) {
                         if (i === "0") continue;
                         if (xl[i]) continue;
                         if (list[i].value > maxn) {
