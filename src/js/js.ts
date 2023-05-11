@@ -4476,21 +4476,22 @@ let search_list: { [id: string]: string } = {};
 
 function get_search_list() {
     search_list = {};
-    画布s.querySelectorAll("x-md, x-pdf").forEach((el: HTMLElement) => {
-        let text = "";
-        let id = "";
-        if (el.tagName == "X-MD") {
-            text = JSON5.parse((el as markdown).value).text;
-            id = el.parentElement.id;
-        } else if (el.tagName == "X-PDF") {
-            text = (el as pdf_viewer).text.innerText;
-            id = el.parentElement.parentElement.parentElement.id;
-        } else {
-            text = el.innerText;
+    for (let i of 集.数据) {
+        w(i.data);
+    }
+    function w(data: data, pid?: string) {
+        // TODO pdf
+        for (let i of data) {
+            if (i.type == "X-MD") {
+                if (!集.链接[0][pid]) continue;
+                search_list[pid] = JSON5.parse(i.value).text;
+            } else {
+                if (i.子元素) {
+                    w(i.子元素, i.id);
+                }
+            }
         }
-        if (!集.链接[0][id]) return;
-        search_list[id] = text;
-    });
+    }
 }
 
 function search(input: string[], type: "str" | "regex") {
