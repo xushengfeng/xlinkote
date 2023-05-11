@@ -1450,19 +1450,28 @@ function rect_in_rect(rect0: rect, rect1: rect) {
 }
 /** 获取元素框 */
 function reflash_rect() {
-    let els_rect: { el: x; rect: { x: number; y: number; w: number; h: number } }[] = [];
-    O.querySelectorAll("x-x").forEach((xel: x) => {
-        if (集.values?.[xel.id]?.fixed) return;
-        els_rect.push({ el: xel, rect: el_offset2(xel, O) });
-    });
+    let els_rect: { x: number; y: number; w: number; h: number }[] = [];
+    if (集)
+        for (let i of 集.数据) {
+            if (i.id == 当前画布.id) w(i.data);
+        }
+    function w(data: data) {
+        for (let i of data) {
+            if (集.values?.[i.id]?.fixed) return;
+            if (i.rect) els_rect.push(i.rect);
+            if (i.子元素) {
+                w(i.子元素);
+            }
+        }
+    }
     return els_rect;
 }
 
 /** 获取最大框 */
-function get_out_rect(rect: { el: x; rect: { x: number; y: number; w: number; h: number } }[]) {
+function get_out_rect(rect: { x: number; y: number; w: number; h: number }[]) {
     let out_rect = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
     for (let i of rect) {
-        const r = i.rect;
+        const r = i;
         out_rect.left = Math.min(r.x, out_rect.left);
         out_rect.right = Math.max(r.x + r.w, out_rect.right);
         out_rect.top = Math.min(r.y, out_rect.top);
@@ -1495,7 +1504,7 @@ function render_map() {
     let ctx = mini_map_el.getContext("2d");
     ctx.clearRect(0, 0, mini_map_el.offsetWidth, mini_map_el.height);
     for (let i of els_rect) {
-        const r = i.rect;
+        const r = i;
         let x = (r.x - out_rect.left) * z;
         let y = (r.y - out_rect.top) * z;
         let w = r.w * z;
