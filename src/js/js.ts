@@ -6602,7 +6602,7 @@ class x extends HTMLElement {
 
     get value() {
         let p_el = find_p(this);
-        let z = get_zoom(p_el.id);
+        let z = p_el ? get_zoom(p_el.id) : NaN;
         let list = [] as data;
         let els = this.querySelectorAll(":scope > *");
         let map: { index: number; z: number }[] = [];
@@ -6615,14 +6615,15 @@ class x extends HTMLElement {
             const l = els[n.index];
             let el = l as HTMLElement;
             if (el.tagName == "X-X") {
-                list.push({
+                let data = {
                     id: el.id,
                     style: el.getAttribute("style") || "",
                     class: el.className,
                     子元素: (el as x).value,
                     type: el.tagName,
-                    rect: el_offset2(el, p_el, z),
-                });
+                };
+                if (z) data["rect"] = el_offset2(el, p_el, z);
+                list.push(data);
             } else {
                 list.push({
                     id: el.id,
