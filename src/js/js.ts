@@ -477,28 +477,22 @@ elFromId("顶层").onclick = () => {
 };
 
 elFromId("纵向堆叠").onclick = () => {
-    to_flex(
-        selected_el.map((x) => get_x_by_id(x)),
-        "y"
-    );
+    to_flex(selected_el, "y");
 };
 elFromId("横向堆叠").onclick = () => {
-    to_flex(
-        selected_el.map((x) => get_x_by_id(x)),
-        "x"
-    );
+    to_flex(selected_el, "x");
 };
 elFromId("成组").onclick = () => {
-    to_none_layout(selected_el.map((x) => get_x_by_id(x)));
+    to_none_layout(selected_el);
 };
 elFromId("转为一行").onclick = () => {
-    to_one_line(selected_el.map((x) => get_x_by_id(x)));
+    to_one_line(selected_el);
 };
 elFromId("拆分为多行").onclick = () => {
-    to_more_line(selected_el.map((x) => get_x_by_id(x)));
+    to_more_line(selected_el);
 };
 elFromId("拆分组合").onclick = () => {
-    out_group(selected_el.map((x) => get_x_by_id(x)));
+    out_group(selected_el);
 };
 
 elFromId("层handle").onclick = () => {
@@ -1077,18 +1071,7 @@ function add_blank(op: p_point, p: p_point) {
             a = 3;
         }
     }
-    function set_style(style: string, x: string, v: string) {
-        let ns = style.split(";").reduce((styleObj, rule) => {
-            if (!rule.trim()) return styleObj;
-            const [key, value] = rule.split(":");
-            styleObj[key.trim()] = value.trim();
-            return styleObj;
-        }, {});
-        ns[x] = v;
-        return Object.entries(ns)
-            .map(([key, value]) => `${key}: ${value};`)
-            .join(" ");
-    }
+
     for (let i of 集.数据) {
         if (i.id == 当前画布.id) {
             for (let xel of i.data) {
@@ -1096,22 +1079,22 @@ function add_blank(op: p_point, p: p_point) {
                 switch (a) {
                     case 0:
                         if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                            xel.style = set_style(xel.style, "top", el_o.y - r.h + "px");
+                            xel.style = set_data_style(xel.style, "top", el_o.y - r.h + "px");
                         }
                         break;
                     case 1:
                         if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                            xel.style = set_style(xel.style, "left", el_o.x + r.w + "px");
+                            xel.style = set_data_style(xel.style, "left", el_o.x + r.w + "px");
                         }
                         break;
                     case 2:
                         if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                            xel.style = set_style(xel.style, "top", el_o.y + r.h + "px");
+                            xel.style = set_data_style(xel.style, "top", el_o.y + r.h + "px");
                         }
                         break;
                     case 3:
                         if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                            xel.style = set_style(xel.style, "left", el_o.x - r.w + "px");
+                            xel.style = set_data_style(xel.style, "left", el_o.x - r.w + "px");
                         }
                         break;
                 }
@@ -3902,6 +3885,26 @@ class 图层 {
         if (!nosave) data_changed();
     }
 
+    add(id: string) {
+        集_for_each((data, p, path) => {
+            if (data.id == id) {
+                let ppel = path[path.length - 1];
+                if (!data.style.includes("z-index") && !(is_data_flex(ppel) == "flex")) {
+                    data.style = set_data_style(data.style, "z-index", String(ppel.子元素.length + 1));
+                }
+                let li = this.create_li(data);
+                let pli = 图层_el.querySelector(`li[data-id="${path[path.length - 1].id}"]`);
+                if (pli.querySelector(":scope > ul")) {
+                    pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
+                } else {
+                    get_data();
+                    this.reflash();
+                }
+            }
+        });
+        link(id).add();
+    }
+
     push(el: x, pel?: x) {
         el.id = el.id === "undefined" || !el.id ? `${uuid_id()}` : el.id;
         let ppel = pel || O;
@@ -3940,18 +3943,7 @@ class 图层 {
         get_x_by_id(id)?.remove();
         图层_el.querySelector(`li[data-id="${id}"]`)?.remove();
         breadcrumbs_el.querySelector(`div[data-id="${id}"]`)?.remove();
-        for (let i of 集.数据) {
-            w(i.data);
-        }
-        function w(data: data) {
-            for (let i in data) {
-                if (data[i].type == "X-X" && data[i].id == id) {
-                    data.splice(Number(i), 1);
-                } else {
-                    if (data[i].子元素) w(data[i].子元素);
-                }
-            }
-        }
+        remove_x_data(id);
         render_select_rects();
         data_changed();
     }
@@ -4029,6 +4021,81 @@ class 图层 {
 }
 
 var z = new 图层();
+
+function for_each(data: data, f: (data: data[0], i: number, path?: data) => boolean | void) {
+    w(data, []);
+    function w(data: data, path: data) {
+        for (let i in data) {
+            let stop = f(data[i], Number(i), path);
+            if (!stop) {
+                if (data[i].子元素) {
+                    let pp = path;
+                    pp.push(data[i]);
+                    w(data[i].子元素, pp);
+                }
+            } else {
+                break;
+            }
+        }
+    }
+}
+function 集_for_each(f: (data: data[0], p?: 画布type, path?: data) => boolean | void) {
+    for (let i of 集.数据) {
+        w(i.data, i, []);
+    }
+    function w(data: data, p: 画布type, path: data) {
+        for (let i of data) {
+            let stop = f(i, p, path);
+            if (!stop) {
+                if (i.子元素) {
+                    let pp = path;
+                    pp.push(i);
+                    w(i.子元素, p, pp);
+                }
+            } else {
+                break;
+            }
+        }
+    }
+}
+function get_x_data(id: string) {
+    let xdata: data[0];
+    集_for_each((data, path) => {
+        if (data.id == id) {
+            xdata = data;
+            return true;
+        }
+    });
+    return xdata;
+}
+
+function remove_x_data(id: string) {
+    for (let i of 集.数据) {
+        w(i.data);
+    }
+    function w(data: data) {
+        for (let i in data) {
+            if (data[i].type == "X-X" && data[i].id == id) {
+                data.splice(Number(i), 1);
+            } else {
+                if (data[i].子元素) w(data[i].子元素);
+            }
+        }
+    }
+}
+
+function set_data_style(style: string, x: string, v: string) {
+    let ns = style.split(";").reduce((styleObj, rule) => {
+        if (!rule.trim()) return styleObj;
+        const [key, value] = rule.split(":");
+        styleObj[key.trim()] = value.trim();
+        return styleObj;
+    }, {});
+    ns[x] = v;
+    return Object.entries(ns)
+        .map(([key, value]) => `${key}: ${value};`)
+        .join(" ");
+}
 
 xywh_x_el.oninput = () => {
     get_x_by_id(z.聚焦元素).style.left = xywh_x_el.value + "px";
@@ -4634,48 +4701,34 @@ function search(input: string[], type: "str" | "regex") {
         if (searched) {
             let c = link(id).get(1);
             for (let i in c) {
-                for (let i of 集.数据) {
-                    w(i.data);
-                }
-                function w(data: data) {
-                    for (let xel of data) {
-                        if (xel.id == i && xel.子元素.length == 1 && xel.子元素[0].type == "X-MD") {
-                            chainr.push({
-                                id: i,
-                                score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
-                                text: JSON5.parse(xel.子元素[0].value).text,
-                            });
-                        } else {
-                            if (xel.子元素) w(xel.子元素);
-                        }
+                集_for_each((xel) => {
+                    if (xel.id == i && xel.子元素.length == 1 && xel.子元素[0].type == "X-MD") {
+                        chainr.push({
+                            id: i,
+                            score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
+                            text: JSON5.parse(xel.子元素[0].value).text,
+                        });
+                        return true;
                     }
-                }
+                });
             }
         }
 
         if (searched) {
-            for (let i of 集.数据) {
-                for (let j of i.data) w(j);
-            }
-            function w(data: data[0]) {
-                for (let i of data.子元素) {
-                    if (i.id == id) {
-                        for (let i of data.子元素) {
-                            if (i.子元素.length == 1 && i.子元素[0].type != "X-X" && i.id != id) {
-                                flex.push({
-                                    id: i.id,
-                                    score: search_score(i.id, 0, x.t, x.v, x.s, x.opsit),
-                                    text: i.子元素[0].value,
-                                });
-                            }
-                        }
-                    } else {
-                        if (i.子元素) {
-                            w(i);
+            集_for_each((i, p, path) => {
+                if (i.id == id) {
+                    for (let i of path[path.length - 1].子元素) {
+                        if (i.子元素.length == 1 && i.子元素[0].type != "X-X" && i.id != id) {
+                            flex.push({
+                                id: i.id,
+                                score: search_score(i.id, 0, x.t, x.v, x.s, x.opsit),
+                                text: i.子元素[0].value,
+                            });
                         }
                     }
+                    return true;
                 }
-            }
+            });
         }
 
         if (!s) {
@@ -5509,16 +5562,6 @@ function find_p(el: HTMLElement) {
     }
 }
 
-/** 元素集转为父根元素集 */
-function els_to_rels(els: x[]) {
-    let xels = [] as x[];
-    for (let el of els) {
-        let rel = find_root_layout(el);
-        if (!xels.includes(rel)) xels.push(rel);
-    }
-    return xels;
-}
-
 /** 获取主元素值 */
 function get_x_out_value(el: x) {
     return {
@@ -5549,42 +5592,43 @@ function copy_value(id: string, new_id: string) {
 }
 
 /** 转化为堆叠布局 */
-function to_flex(els: x[], d: "x" | "y") {
+function to_flex(els: string[], d: "x" | "y") {
     if (els.length == 1) {
-        if (els[0].classList.contains("flex-row") && d == "y") {
-            els[0].classList.replace("flex-row", "flex-column");
+        let elclass = get_x_data(els[0]).class;
+        if (elclass.includes("flex-row") && d == "y") {
+            elclass.replace("flex-row", "flex-column");
         }
-        if (els[0].classList.contains("flex-column") && d == "x") {
-            els[0].classList.replace("flex-column", "flex-row");
+        if (elclass.includes("flex-column") && d == "x") {
+            elclass.replace("flex-column", "flex-row");
         }
         get_data();
         z.reflash();
         return;
     }
-    let xels = [] as x[];
-    for (let el of els) {
-        let rel = find_root_layout(el);
-        if (!xels.includes(rel)) xels.push(rel);
+    let xels = [] as data;
+    for (let i of els) {
+        xels.push(get_x_data(i));
     }
     let xel = createEl("x-x");
     xel.id = uuid_id();
     if (d == "x") {
         xel.classList.add("flex-row");
-        xels.sort((a, b) => el_offset2(a).x - el_offset2(b).x);
+        xels.sort((a, b) => a.rect.x - b.rect.x);
     } else {
         xel.classList.add("flex-column");
-        xels.sort((a, b) => el_offset2(a).y - el_offset2(b).y);
+        xels.sort((a, b) => a.rect.y - b.rect.y);
     }
-    xel.style.left = el_offset2(xels[0]).x + "px";
-    xel.style.top = el_offset2(xels[0]).y + "px";
+    xel.style.left = xels[0].rect.x + "px";
+    xel.style.top = xels[0].rect.y + "px";
     z.push(xel);
     let data = [] as data;
     for (let el of xels) {
-        el.style.left = "";
-        el.style.top = "";
-        el.style.position = "relative";
-        data.push(get_x_out_value(el));
-        el.remove();
+        el.style = set_data_style(el.style, "left", "");
+        el.style = set_data_style(el.style, "top", "");
+        el.style = set_data_style(el.style, "position", "relative");
+        data.push(el);
+        remove_x_data(el.id);
+        elFromId(el.id)?.remove();
     }
     xel.value = data;
     get_data();
@@ -5600,6 +5644,17 @@ function is_flex(el: HTMLElement) {
         return "col";
     }
     if (el.classList.contains("flex-row")) {
+        return "row";
+    }
+}
+function is_data_flex(data: data[0]) {
+    if (data.class.split(" ").includes("flex-column") || data.class.split(" ").includes("flex-row")) {
+        return "flex";
+    }
+    if (data.class.split(" ").includes("flex-column")) {
+        return "col";
+    }
+    if (data.class.split(" ").includes("flex-row")) {
         return "row";
     }
 }
@@ -5640,56 +5695,91 @@ function reflash_none_layout(el: x) {
 }
 
 /** 转化为固定布局 */
-function to_none_layout(els: x[]) {
+function to_none_layout(els: string[]) {
     let x = add_none_layout();
     let data = [] as data;
-    let xels = els_to_rels(els);
-    for (let el of xels) {
-        data.push(get_x_out_value(el));
-        z.remove(el.id);
+    for (let id of els) {
+        data.push(get_x_data(id));
+        remove_x_data(id);
+        elFromId(id)?.remove();
     }
     x.value = data;
     reflash_none_layout(x);
 }
 
 /** 把flex所有文字转为一行 */
-function to_one_line(xels: x[]) {
-    for (let el of xels) {
-        if (is_flex(el) == "flex") {
-            let t = "";
-            let type: md_type;
-            el.querySelectorAll("x-md").forEach((md: markdown, i) => {
-                t += md._value.text;
-                if (i == 0) type = md._value.type;
-            });
-            el.querySelectorAll("x-x").forEach((el) => z.remove(el.id));
-            let md = createEl("x-md");
-            el.append(md);
-            md.value = JSON.stringify({ text: t, type });
-            data_changed();
-        }
+function to_one_line(xels: string[]) {
+    get_data();
+    for (let id of xels) {
+        集_for_each((data) => {
+            if (data.id == id) {
+                if (is_data_flex(data) == "flex") {
+                    let t = "";
+                    let type: md_type;
+                    for_each(data.子元素, (x, i, path) => {
+                        if (x.type == "X-MD") {
+                            t += JSON5.parse(x.value).text;
+                            if (i == 0) type = JSON5.parse(x.value).type;
+                            z.remove(path[path.length - 1].id);
+                        }
+                    });
+                    data.子元素 = [
+                        { id: "", type: "X-MD", class: t, style: "", value: JSON.stringify({ text: t, type }) },
+                    ];
+                    // TODO 链接合并
+                    let x = get_x_by_id(id);
+                    if (x) {
+                        x.innerHTML = "";
+                        x.value = data.子元素;
+                    }
+                    data_changed();
+                }
+                return true;
+            }
+        });
     }
 }
 
 /** 按换行拆分 */
-function to_more_line(xels: x[], c?: string | RegExp) {
-    for (let el of xels) {
-        if (is_smallest_el(el) && el.querySelector("x-md")) {
-            let v = (el.querySelector("x-md") as markdown)._value;
-            let l = v.text.trim().split(c || "\n");
-            el.querySelector("x-md").remove();
-            el.classList.add("flex-column");
-            for (let t of l) {
-                if (!t) continue;
-                let x = createEl("x-x");
-                x.setAttribute("style", "");
-                let md = createEl("x-md");
-                x.append(md);
-                z.push(x, el);
-                md.value = JSON.stringify({ text: t, type: v.type });
+function to_more_line(xels: string[], c?: string | RegExp) {
+    for (let id of xels) {
+        集_for_each((el, path) => {
+            if (el.id == id) {
+                if (el.子元素.length == 1 && el.子元素[0].type == "X-MD") {
+                    let v = JSON5.parse(el.子元素[0].value);
+                    let l = v.text.trim().split(c || "\n");
+                    el.子元素 = [];
+                    el.class += " flex-column";
+                    for (let t of l) {
+                        if (!t) continue;
+                        let id = uuid_id();
+                        el.子元素.push({
+                            type: "X-X",
+                            id,
+                            class: "",
+                            style: "",
+                            子元素: [
+                                {
+                                    type: "X-MD",
+                                    id: "",
+                                    class: v.type,
+                                    style: "",
+                                    value: JSON.stringify({ text: t, type: v.type }),
+                                },
+                            ],
+                        });
+                        z.add(id);
+                    }
+                    let x = get_x_by_id(id);
+                    if (x) {
+                        x.innerHTML = "";
+                        x.value = el.子元素;
+                    }
+                    data_changed();
+                }
+                return true;
             }
-            data_changed();
-        }
+        });
     }
 }
 
@@ -5724,24 +5814,30 @@ function fixed_el() {
 }
 
 /** 拆分组合 */
-function out_group(els: x[]) {
-    for (let x of els) {
-        if (!is_smallest_el(x)) {
-            let p: { [id: string]: { x: number; y: number; el: x } } = {};
-            x.querySelectorAll(":scope > x-x").forEach((el: x) => {
-                let x = el_offset2(el, O).x;
-                let y = el_offset2(el, O).y;
-                p[el.id] = { x, y, el };
-            });
-            for (let i in p) {
-                let nx = copy_x(p[i].el);
-                nx.style.left = p[i].x + "px";
-                nx.style.top = p[i].y + "px";
-                nx.style.position = "absolute";
-                nx.style.zIndex = String(O.childElementCount + 1);
-                p[i].el.remove();
+function out_group(els: string[]) {
+    for (let id of els) {
+        let el = get_x_data(id);
+        if (el.子元素.length > 1 || el.子元素[0].type == "X-X") {
+            let p: { [id: string]: data[0] } = {};
+            for (let data of el.子元素) {
+                if (data.type == "X-X") {
+                    p[data.id] = data;
+                }
             }
-            z.remove(x.id);
+            for (let r of 集.数据) {
+                if (r.id == 当前画布.id) {
+                    for (let i in p) {
+                        let el = p[i];
+                        el.style = set_data_style(el.style, "left", p[i].rect.x + "px");
+                        el.style = set_data_style(el.style, "top", p[i].rect.y + "px");
+                        el.style = set_data_style(el.style, "position", "absolute");
+                        el.style = set_data_style(el.style, "z-index", String(r.data.length + 1));
+                        r.data.push(p[i]);
+                    }
+                }
+            }
+            z.remove(id);
+            check_render_x();
         }
     }
     get_data();
