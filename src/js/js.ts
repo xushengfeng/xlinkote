@@ -1130,7 +1130,9 @@ function render_select_rects() {
         }
     }
     for (let i of selected_el) {
-        let select_bar = add_r(get_x_by_id(i));
+        let el = get_x_by_id(i);
+        if (!el) continue;
+        let select_bar = add_r(el);
         select_bar.classList.add("x-x_selected");
     }
     function add_r(i: x) {
@@ -1232,10 +1234,7 @@ function render_x_bar() {
             }
         }
     }
-    if (selected_el.length == 1)
-        for (let i of selected_el) {
-            xels.push(get_x_by_id(i));
-        }
+    if (selected_el.length == 1) if (get_x_by_id(select_el[0])) xels.push(get_x_by_id(select_el[0]));
 
     for (let i of x_bar_con.children) {
         let has = false;
