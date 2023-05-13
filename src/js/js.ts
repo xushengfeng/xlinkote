@@ -377,7 +377,7 @@ elFromId("新建元素").onclick = () => {
 };
 elFromId("删除元素").onclick = () => {
     for (let i of selected_el) {
-        z.remove(i.id);
+        z.remove(i);
     }
 };
 
@@ -477,22 +477,28 @@ elFromId("顶层").onclick = () => {
 };
 
 elFromId("纵向堆叠").onclick = () => {
-    to_flex(selected_el, "y");
+    to_flex(
+        selected_el.map((x) => get_x_by_id(x)),
+        "y"
+    );
 };
 elFromId("横向堆叠").onclick = () => {
-    to_flex(selected_el, "x");
+    to_flex(
+        selected_el.map((x) => get_x_by_id(x)),
+        "x"
+    );
 };
 elFromId("成组").onclick = () => {
-    to_none_layout(selected_el);
+    to_none_layout(selected_el.map((x) => get_x_by_id(x)));
 };
 elFromId("转为一行").onclick = () => {
-    to_one_line(selected_el);
+    to_one_line(selected_el.map((x) => get_x_by_id(x)));
 };
 elFromId("拆分为多行").onclick = () => {
-    to_more_line(selected_el);
+    to_more_line(selected_el.map((x) => get_x_by_id(x)));
 };
 elFromId("拆分组合").onclick = () => {
-    out_group(selected_el);
+    out_group(selected_el.map((x) => get_x_by_id(x)));
 };
 
 elFromId("层handle").onclick = () => {
@@ -984,7 +990,7 @@ function e2p(e: MouseEvent) {
     } as p_point;
 }
 
-var selected_el: x[] = [];
+var selected_el: string[] = [];
 
 window["get_selected_el"] = () => selected_el;
 
@@ -993,7 +999,7 @@ function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     for (const el of O.querySelectorAll(":scope > x-x")) {
         let r = el_offset2(el);
         if (rect.x <= r.x && r.x + r.w <= rect.x + rect.w && rect.y <= r.y && r.y + r.h <= rect.y + rect.h) {
-            selected_el.push(<x>el);
+            selected_el.push(el.id);
             render_select_rects();
         }
     }
@@ -1010,7 +1016,7 @@ function select_x_x2(points: [number, number][]) {
             ray_casting([r.x + r.w, r.y], points) &&
             ray_casting([r.x + r.w, r.y + r.h], points)
         ) {
-            selected_el.push(<x>el);
+            selected_el.push(el.id);
             render_select_rects();
         }
     }
@@ -1141,7 +1147,7 @@ function render_select_rects() {
         }
     }
     for (let i of selected_el) {
-        let select_bar = add_r(i);
+        let select_bar = add_r(get_x_by_id(i));
         select_bar.classList.add("x-x_selected");
     }
     function add_r(i: x) {
@@ -1203,7 +1209,7 @@ function render_select_rects() {
             i.classList.remove("x-x_hover");
         }
         for (let x of selected_el) {
-            if (x.id == i.getAttribute("data-id")) {
+            if (x == i.getAttribute("data-id")) {
                 has = true;
                 break;
             }
@@ -1245,7 +1251,7 @@ function render_x_bar() {
     }
     if (selected_el.length == 1)
         for (let i of selected_el) {
-            xels.push(i);
+            xels.push(get_x_by_id(i));
         }
 
     for (let i of x_bar_con.children) {
@@ -1742,18 +1748,19 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                         el.parentElement.classList.contains("flex-column") ||
                         el.parentElement.classList.contains("flex-row")
                     ) {
+                        let xel = get_x_by_id(x);
                         if (el.parentElement.classList.contains("flex-column")) {
                             if (e.clientY - rect.y < rect.height / 2) {
-                                cx(el, x, true);
+                                cx(el, xel, true);
                             } else {
-                                cx(el, x, false);
+                                cx(el, xel, false);
                             }
                         }
                         if (el.parentElement.classList.contains("flex-row")) {
                             if (e.clientX - rect.x < rect.width / 2) {
-                                cx(el, x, true);
+                                cx(el, xel, true);
                             } else {
-                                cx(el, x, false);
+                                cx(el, xel, false);
                             }
                         }
                         selected_el = [];
@@ -1785,20 +1792,20 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         for (let i of selected_el) {
             let had = false;
             for (let x of global_x) {
-                if (x.data.id == i.id) {
+                if (x.data.id == i) {
                     had = true;
                     break;
                 }
             }
             for (let x of 集.中转站) {
-                if (x.id == i.id) {
+                if (x.id == i) {
                     had = true;
                     break;
                 }
             }
             if (had) continue;
-            集.中转站.push(get_x_out_value(i));
-            z.remove(i.id, true);
+            集.中转站.push(get_x_out_value(get_x_by_id(i)));
+            z.remove(i, true);
         }
         free_o_rects = [];
         console.log(集.中转站);
@@ -1839,7 +1846,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                 x.style.stroke = "var(--color6)";
                 x.style.strokeWidth = "1";
                 x.classList.add("link_arrow_p");
-                selected_el = selected_el.filter((el) => el != x);
+                selected_el = selected_el.filter((el) => el != x.id);
             }, free_db_dtime);
         } else {
             let arrow = elFromId(free_link).querySelector("x-link-arrow") as link_arrow;
@@ -2105,7 +2112,7 @@ document.onkeydown = (e) => {
             if (模式 != "设计") return;
             if (!is_input_el(target))
                 for (let el of selected_el) {
-                    z.remove(el.id);
+                    z.remove(el);
                 }
             selected_el = [];
             break;
@@ -3705,8 +3712,7 @@ class 图层 {
             selected_el = [];
             图层_el.querySelectorAll("input").forEach((el) => {
                 if (el.checked) {
-                    let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
-                    selected_el.push(x);
+                    selected_el.push(el.parentElement.getAttribute("data-id"));
                     render_select_rects();
                 }
             });
@@ -3781,8 +3787,7 @@ class 图层 {
                         get_x_by_id(i.id).style.setProperty("--z", String(i.子元素.length));
                 }
                 图层_el.querySelectorAll("input").forEach((el) => {
-                    let x = get_x_by_id(el.parentElement.getAttribute("data-id"));
-                    if (selected_el.includes(x)) {
+                    if (selected_el.includes(el.parentElement.getAttribute("data-id"))) {
                         el.checked = true;
                     } else {
                         el.checked = false;
@@ -3965,7 +3970,7 @@ class 图层 {
         if (el.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
 
         selected_el = [];
-        selected_el.push(el);
+        selected_el.push(id);
         render_select_rects();
         set_style(el);
         load_xywh();
@@ -6601,11 +6606,12 @@ class x extends HTMLElement {
             free_o_a = -1;
 
             if (mu_sel_key(e)) {
-                selected_el.push(this);
+                selected_el.push(this.id);
             }
 
             free_o_rects = [];
-            for (const el of selected_el) {
+            for (const id of selected_el) {
+                let el = get_x_by_id(id);
                 free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
             }
         };
@@ -6746,7 +6752,7 @@ function new_x_bar(id: string) {
             free_old_point = e2p(e);
             free_o_a = -1;
 
-            selected_el.push(main_x);
+            selected_el.push(main_x.id);
 
             free_o_rects = [{ el: main_x, x: main_x.offsetLeft, y: main_x.offsetTop }];
         }
@@ -6798,7 +6804,7 @@ function new_x_bar(id: string) {
     };
 
     d.onclick = () => {
-        selected_el = selected_el.filter((el) => el != main_x);
+        selected_el = selected_el.filter((el) => el != main_x.id);
         z.remove(main_x.id);
 
         if (main_x.querySelector("x-file")) assets_reflash();
