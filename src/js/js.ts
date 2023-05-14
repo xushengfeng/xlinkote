@@ -5316,14 +5316,13 @@ var now_data_id = "0";
 /** 跳转到元素位置并记录 */
 function jump_to_x_link(id: string, nrc?: boolean) {
     view_el.classList.add("viewer_hide");
-    const el = get_link_el_by_id(id);
-    for (let 画布el of 画布s.querySelectorAll(":scope > div")) {
-        if (画布el.contains(el)) {
-            select_p(画布el.id);
-            let x = el_offset(el, O).x - 画布.offsetWidth / 2,
-                y = el_offset(el, O).y - 画布.offsetHeight / 2;
-            let ex = -x - (el.offsetWidth * zoom) / 2,
-                ey = -y - (el.offsetHeight * zoom) / 2;
+    集_for_each((data, p) => {
+        if (data.id == id) {
+            select_p(p.id);
+            let x = data.rect.x * p.p.zoom - 画布.offsetWidth / 2,
+                y = data.rect.y * p.p.zoom - 画布.offsetHeight / 2;
+            let ex = -x - (data.rect.w * p.p.zoom) / 2,
+                ey = -y - (data.rect.h * p.p.zoom) / 2;
             let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
             O.style.transitionDuration = `${t / 1000}s`;
             O.ontransitioncancel = O.ontransitionend = () => {
@@ -5331,13 +5330,14 @@ function jump_to_x_link(id: string, nrc?: boolean) {
                 render_select_rects();
             };
             set_O_p(ex, ey);
-            if (el.tagName == "X-X") {
+            if (data.type == "X-X") {
                 z.focus(id);
             }
             z.reflash(true);
+            return true;
         }
-    }
-    if (!nrc) add_bci(el);
+    });
+    if (!nrc) add_bci(get_x_by_id(id));
 }
 
 let bci_ids = [];
