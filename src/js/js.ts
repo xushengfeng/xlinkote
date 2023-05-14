@@ -3986,7 +3986,7 @@ class 图层 {
         load_xywh();
         load_value();
 
-        add_bci(el);
+        add_bci(id);
 
         link(id).value("0", link_value_min_d());
 
@@ -4969,7 +4969,7 @@ function click_search_item(iid: string) {
         link(id).add(iid);
         search_el.blur();
         link_value_bar.elid = link_value_bar.elid;
-        add_bci(el);
+        add_bci(iid);
     }
     if (arg.name == "type") {
         search_el.value = `type ${iid}`;
@@ -5187,6 +5187,16 @@ function is_smallest_el(el: x | xlink) {
         return false;
     }
 }
+/** 判断是否是最小元素 */
+function is_smallest_data_el(id: string) {
+    let data = get_x_data(id);
+    let has = false;
+    for_each(data.子元素, (d) => {
+        if (d.type == "X-X") has = true;
+    });
+    // TODO link
+    return !has;
+}
 
 /** 展示链接栏 */
 function show_link_value_bar(el: x | xlink) {
@@ -5337,14 +5347,14 @@ function jump_to_x_link(id: string, nrc?: boolean) {
             return true;
         }
     });
-    if (!nrc) add_bci(get_x_by_id(id));
+    if (!nrc) add_bci(id);
 }
 
 let bci_ids = [];
 
 /** 添加到面包屑栏 */
-function add_bci(el: x | xlink) {
-    let qel = breadcrumbs_el.querySelector(`div[data-id="${el.id}"]`) as HTMLElement;
+function add_bci(id: string) {
+    let qel = breadcrumbs_el.querySelector(`div[data-id="${id}"]`) as HTMLElement;
     if (qel) {
         // breadcrumbs_el.scrollLeft = qel.offsetLeft + qel.offsetWidth - breadcrumbs_el.offsetWidth;
         // return;
@@ -5356,19 +5366,19 @@ function add_bci(el: x | xlink) {
     li.append(main);
     let text = createEl("span");
     li.classList.add("bci");
-    text.innerText = `#${el.id}`;
+    text.innerText = `#${id}`;
     main.append(text);
-    if (is_smallest_el(el)) {
+    if (is_smallest_data_el(id)) {
         let add = createEl("x-link-add");
         main.append(add);
-        add.value = el.id;
+        add.value = id;
     }
-    li.setAttribute("data-id", el.id);
+    li.setAttribute("data-id", id);
     text.onpointerenter = () => {
-        preview_x_link(el.id);
+        preview_x_link(id);
     };
     text.onpointerdown = () => {
-        jump_to_x_link(el.id);
+        jump_to_x_link(id);
     };
     text.onpointermove = (e) => {
         window.requestAnimationFrame(() => {
@@ -5381,8 +5391,8 @@ function add_bci(el: x | xlink) {
     breadcrumbs_el.append(li);
     breadcrumbs_el.scrollLeft = li.offsetLeft + li.offsetWidth - breadcrumbs_el.offsetWidth;
 
-    bci_ids = bci_ids.filter((x) => x != el.id);
-    bci_ids.push(el.id);
+    bci_ids = bci_ids.filter((x) => x != id);
+    bci_ids.push(id);
 }
 
 breadcrumbs_el.onwheel = (e) => {
@@ -8953,14 +8963,14 @@ class link_value extends HTMLElement {
             this.v.innerHTML = "";
             this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
-            add_bci(get_link_el_by_id(this._id));
+            add_bci(this._id);
         };
         down_el.onclick = () => {
             link("0").value(this._id, -0.1);
             this.v.innerHTML = "";
             this.v.append(link_value_text(集.链接[0][this._id].value));
             now_data_id = "0";
-            add_bci(get_link_el_by_id(this._id));
+            add_bci(this._id);
         };
 
         this.vl = createEl("div");
@@ -8969,7 +8979,7 @@ class link_value extends HTMLElement {
             // 搜索
             let v = "";
             let el = get_x_by_id(this._id);
-            add_bci(el);
+            add_bci(this._id);
             if (el.tagName == "X-X") {
                 let w = (v: data) => {
                     for (let i of v) {
