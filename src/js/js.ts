@@ -4637,6 +4637,7 @@ function get_search_list() {
             }
         }
     }
+    link("0").map();
 }
 
 function search(input: string[], type: "str" | "regex") {
@@ -5403,6 +5404,7 @@ function link(key0: string) {
                 delete 集.链接[key1][key0];
             } else {
                 delete 集.链接[0][key0];
+                link("0").map();
                 for (let i in link(key0).get()) {
                     link(key0).rm(i);
                 }
@@ -5415,14 +5417,7 @@ function link(key0: string) {
          * @returns 指向链接
          */
         get: (chain?: number) => {
-            const l = { ...集.链接[key0] };
-            for (const i of Object.keys(集.链接[0] || [])) {
-                for (const x of Object.keys(集.链接[i] || [])) {
-                    if (x === key0) {
-                        l[i] = 集.链接[i][x];
-                    }
-                }
-            }
+            const l = link_map[key0];
             if (!chain) {
                 return l;
             } else {
@@ -5490,6 +5485,24 @@ function link(key0: string) {
                 return count === 0 ? 0 : n / count;
             }
         },
+        map: () => {
+            link_map = {};
+            for (const i of Object.keys(集.链接[0] || [])) {
+                for (const x of Object.keys(集.链接[i] || [])) {
+                    const value = 集.链接[i][x];
+                    if (link_map[i]) {
+                        link_map[i][x] = value;
+                    } else {
+                        link_map[i] = { x: value };
+                    }
+                    if (link_map[x]) {
+                        link_map[x][i] = value;
+                    } else {
+                        link_map[x] = { i: value };
+                    }
+                }
+            }
+        },
         衰减: () => {
             for (let i in 集.链接) {
                 for (let j in 集.链接[i]) {
@@ -5518,6 +5531,8 @@ function link(key0: string) {
         },
     };
 }
+
+let link_map: 集type["链接"] = null;
 
 /** 链接展示精度位数 */
 let link_value_precision = 2;
@@ -8971,6 +8986,7 @@ class link_value extends HTMLElement {
     }
 
     show_links() {
+        link("0").map();
         let v_text = (i: string) => {
             let span = link_value_text(link(this._id).get()[i].value);
             span.innerText = `#${i} ` + span.innerText;
@@ -9604,6 +9620,7 @@ class calendar extends HTMLElement {
                 div.classList.add("calendar_week");
                 pel.append(div);
             }
+            link("0").map();
             for (let i of date_list) {
                 let div = createEl("x-link");
                 div.id = `${this.parentElement.id}:${i.toLocaleDateString()}`;
