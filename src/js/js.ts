@@ -1981,7 +1981,7 @@ var free_mouse = (e: MouseEvent) => {
                 }
             }
             if (xel.el.id == z.聚焦元素) {
-                set_style(xel.el);
+                set_style(xel.el.id);
                 load_xywh();
             }
         }
@@ -3982,7 +3982,7 @@ class 图层 {
         selected_el = [];
         selected_el.push(id);
         render_select_rects();
-        set_style(el);
+        set_style(id);
         load_xywh();
         load_value();
 
@@ -4270,9 +4270,9 @@ function change_input_w(el: HTMLInputElement) {
     el.style.width = `${el.value.length}ch`;
 }
 
-function set_style(el: x) {
-    let style = el.getAttribute("style");
-    el_style.setAttribute("data-id", el.id);
+function set_style(id: string) {
+    let style = get_x_data(id).style;
+    el_style.setAttribute("data-id", id);
     el_style.innerHTML = "";
     let l = style.split(";");
     for (let i of l) {
@@ -4301,13 +4301,19 @@ function style_to_el() {
         if (i.querySelector("input"))
             t += `${i.querySelectorAll("input")[0].value}:${i.querySelectorAll("input")[1].value};`;
     }
-    elFromId(el_style.getAttribute("data-id")).setAttribute("style", t);
+    集_for_each((data) => {
+        if (data.id == el_style.getAttribute("data-id")) {
+            data.style = t;
+            return true;
+        }
+    });
+    elFromId(el_style.getAttribute("data-id"))?.setAttribute("style", t);
     data_changed();
 }
 
 switch_global_style.onclick = () => {
     if (el_style.querySelector("textarea")) {
-        set_style(elFromId(el_style.getAttribute("data-id")) as x);
+        set_style(el_style.getAttribute("data-id"));
     } else {
         el_style.innerHTML = "";
         let text = createEl("textarea");
