@@ -2693,7 +2693,15 @@ function render_x(data: data[0]) {
 
 function can_rander_x(data: data[0], rect: rect) {
     let large = data.子元素[0]?.type == "X-FILE" || data.子元素[0]?.type == "X-GRAPH";
-    return large || !data.rect || rect_x_rect(data.rect, rect);
+    let none_layout = !is_data_flex(data) && (data.子元素.length > 1 || data.子元素[0]?.type == "X-X");
+    if (none_layout) {
+        let rects: rect[] = [];
+        for (let i of data.子元素) {
+            if (i.rect) rects.push(i.rect);
+        }
+        none_layout = rect_x_rect(get_out_rect(rects), rect);
+    }
+    return large || !data.rect || rect_x_rect(data.rect, rect) || none_layout;
 }
 
 function check_render_x() {
