@@ -2686,7 +2686,8 @@ function render_x(data: data[0]) {
 }
 
 function can_rander_x(data: data[0], rect: rect) {
-    return !data.rect || rect_x_rect(data.rect, rect);
+    let large = data.子元素[0]?.type == "X-FILE" || data.子元素[0]?.type == "X-GRAPH";
+    return large || !data.rect || rect_x_rect(data.rect, rect);
 }
 
 function check_render_x() {
