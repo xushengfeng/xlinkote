@@ -2586,7 +2586,7 @@ function render_data(inputdata: 画布type) {
     function w(data: data, pid?: string) {
         let text = "";
         for (let i of data) {
-            if (pid || !i.rect || rect_x_rect(i.rect, rect)) {
+            if (pid || can_rander_x(i, rect)) {
                 let style = i.style ? `style='${i.style}'` : "";
                 let _class = i.class ? `class='${i.class}'` : "";
                 if (i.value) {
@@ -2685,6 +2685,10 @@ function render_x(data: data[0]) {
     xel.value = data.子元素;
 }
 
+function can_rander_x(data: data[0], rect: rect) {
+    return !data.rect || rect_x_rect(data.rect, rect);
+}
+
 function check_render_x() {
     if (!集?.数据) return;
     let w = (画布.offsetWidth + 20) / zoom;
@@ -2694,7 +2698,7 @@ function check_render_x() {
     for (let i of 集.数据) {
         if (i.id == 当前画布.id) {
             for (let data of i.data) {
-                if (!data.rect || rect_x_rect(data.rect, { x, y, w, h })) {
+                if (can_rander_x(data, { x, y, w, h })) {
                     render_x(data);
                 } else {
                     elFromId(data.id)?.remove();
