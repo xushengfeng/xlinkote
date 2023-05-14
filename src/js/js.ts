@@ -1490,7 +1490,7 @@ function reflash_rect() {
 }
 
 /** 获取最大框 */
-function get_out_rect(rect: { x: number; y: number; w: number; h: number }[]) {
+function get_out_rect(rect: rect[]) {
     let out_rect = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
     for (let i of rect) {
         const r = i;
@@ -1499,7 +1499,13 @@ function get_out_rect(rect: { x: number; y: number; w: number; h: number }[]) {
         out_rect.top = Math.min(r.y, out_rect.top);
         out_rect.bottom = Math.max(r.y + r.h, out_rect.bottom);
     }
-    return out_rect;
+    return {
+        ...out_rect,
+        x: out_rect.left,
+        y: out_rect.top,
+        w: out_rect.right - out_rect.left,
+        h: out_rect.bottom - out_rect.top,
+    };
 }
 
 /** 渲染小地图 */
