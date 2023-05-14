@@ -2692,7 +2692,8 @@ function render_x(data: data[0]) {
 }
 
 function can_rander_x(data: data[0], rect: rect) {
-    let large = data.子元素[0]?.type == "X-FILE" || data.子元素[0]?.type == "X-GRAPH";
+    let large =
+        data.子元素[0]?.type == "X-FILE" || data.子元素[0]?.type == "X-GRAPH" || data.子元素[0]?.type == "X-DRAW";
     let none_layout = !is_data_flex(data) && (data.子元素.length > 1 || data.子元素[0]?.type == "X-X");
     if (none_layout) {
         let rects: rect[] = [];
