@@ -3984,7 +3984,7 @@ class 图层 {
             }
         }
         focus_draw_el = null;
-        if (el.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
+        if (el?.querySelector("x-draw") && 模式 == "绘制") focus_draw_el = el.querySelector("x-draw") as draw;
 
         selected_el = [];
         selected_el.push(id);
@@ -3998,7 +3998,7 @@ class 图层 {
         link(id).value("0", link_value_min_d());
 
         if (模式 == "设计") {
-            let d = el.querySelector("x-draw") as draw;
+            let d = el?.querySelector("x-draw") as draw;
             if (d) {
                 penc_el.value = d.pen.color;
             }
