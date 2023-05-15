@@ -1514,8 +1514,9 @@ function render_map() {
     let els_rect = reflash_rect();
     let out_rect = get_out_rect(els_rect);
     let z = 1;
+    const zz = 2;
     const min = 600,
-        minstyle = "300px";
+        minstyle = `${600 / zz}px`;
     if (out_rect.right - out_rect.left > out_rect.bottom - out_rect.top) {
         mini_map_el.height = min;
         mini_map_el.style.height = minstyle;
@@ -1552,10 +1553,10 @@ function render_map() {
         main_rect.h * z
     );
 
-    let ol = ((main_rect.x - out_rect.left) * z) / 2;
-    let ot = ((main_rect.y - out_rect.top) * z) / 2;
-    mini_map_el.parentElement.scrollLeft = ol - 300 / 2 + (main_rect.w * z) / 2 / 2;
-    mini_map_el.parentElement.scrollTop = ot - 300 / 2 + (main_rect.h * z) / 2 / 2;
+    let ol = ((main_rect.x - out_rect.left) * z) / zz;
+    let ot = ((main_rect.y - out_rect.top) * z) / zz;
+    mini_map_el.parentElement.scrollLeft = ol - 300 / 2 + (main_rect.w * z) / zz / 2;
+    mini_map_el.parentElement.scrollTop = ot - 300 / 2 + (main_rect.h * z) / zz / 2;
 }
 
 elFromId("画布").onwheel = (e) => {
