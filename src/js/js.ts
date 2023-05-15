@@ -5351,6 +5351,8 @@ function jump_to_x_link(id: string, nrc?: boolean) {
             O.ontransitioncancel = O.ontransitionend = () => {
                 O.style.transitionDuration = "";
                 render_select_rects();
+                check_render_x();
+                render_map();
             };
             set_O_p(ex, ey);
             if (data.type == "X-X") {
