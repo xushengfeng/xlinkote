@@ -1551,6 +1551,11 @@ function render_map() {
         main_rect.w * z,
         main_rect.h * z
     );
+
+    let ol = ((main_rect.x - out_rect.left) * z) / 2;
+    let ot = ((main_rect.y - out_rect.top) * z) / 2;
+    mini_map_el.parentElement.scrollLeft = ol - 300 / 2 + (main_rect.w * z) / 2 / 2;
+    mini_map_el.parentElement.scrollTop = ot - 300 / 2 + (main_rect.h * z) / 2 / 2;
 }
 
 elFromId("画布").onwheel = (e) => {
