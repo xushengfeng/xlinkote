@@ -4163,7 +4163,8 @@ xywh_h_el.oninput = () => {
     data_changed();
 };
 function load_xywh() {
-    let fe = get_x_data(z.聚焦元素).rect;
+    let fe = get_x_data(z.聚焦元素)?.rect;
+    if (!fe) return;
     xywh_x_el.value = String(fe.x);
     xywh_y_el.value = String(fe.y);
     xywh_w_el.value = String(fe.w);
@@ -4302,7 +4303,8 @@ function change_input_w(el: HTMLInputElement) {
 }
 
 function set_style(id: string) {
-    let style = get_x_data(id).style;
+    let style = get_x_data(id)?.style;
+    if (!style) return;
     el_style.setAttribute("data-id", id);
     el_style.innerHTML = "";
     let l = style.split(";");
@@ -5227,6 +5229,7 @@ function is_smallest_el(el: x | xlink) {
 /** 判断是否是最小元素 */
 function is_smallest_data_el(id: string) {
     let data = get_x_data(id);
+    if (!data) return true;
     let has = false;
     for_each(data.子元素, (d) => {
         if (d.type == "X-X") has = true;
