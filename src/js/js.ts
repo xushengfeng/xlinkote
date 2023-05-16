@@ -2225,6 +2225,7 @@ type 集type = {
     };
     中转站: data;
     values: { [key: string]: { [key: string]: any } };
+    links?: { [key: string]: { pid: string; rect: rect } };
 };
 
 type meta = {
@@ -5230,11 +5231,11 @@ function is_smallest_el(el: x | xlink) {
 function is_smallest_data_el(id: string) {
     let data = get_x_data(id);
     if (!data) return true;
+    if (集.links?.[id]) return true;
     let has = false;
     for_each(data.子元素, (d) => {
         if (d.type == "X-X") has = true;
     });
-    // TODO link
     return !has;
 }
 
@@ -5299,10 +5300,15 @@ function preview_x_link(id: string) {
     }
     function w(data: data) {
         for (let i of data) {
-            if (i.type == "X-X" && i.id == id) {
-                rect = i.rect;
-                return;
-            } else {
+            if (i.type == "X-X") {
+                if (i.id == id) {
+                    rect = i.rect;
+                    return;
+                }
+                if (i.id == 集.links?.[id]?.pid) {
+                    rect = 集.links[id].rect;
+                    return;
+                }
                 if (i.子元素) {
                     w(i.子元素);
                 }
@@ -6820,6 +6826,12 @@ class x extends HTMLElement {
             const l = els[n.index];
             let el = l as HTMLElement;
             if (el.tagName == "X-X") {
+                if (el.querySelector("x-link")) {
+                    if (!集.links) 集.links = {};
+                    el.querySelectorAll("x-link").forEach((lel) => {
+                        if (z) 集.links[lel.id] = { pid: el.id, rect: el_offset2(lel, p_el, z) };
+                    });
+                }
                 let data = {
                     id: el.id,
                     style: el.getAttribute("style") || "",
