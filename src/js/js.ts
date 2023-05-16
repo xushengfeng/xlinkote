@@ -4123,27 +4123,51 @@ function set_data_style(style: string, x: string, v: string) {
 }
 
 xywh_x_el.oninput = () => {
-    get_x_by_id(z.聚焦元素).style.left = xywh_x_el.value + "px";
+    if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.left = xywh_x_el.value + "px";
+    集_for_each((data) => {
+        if (data.id == z.聚焦元素) {
+            data.style = set_data_style(data.style, "left", xywh_x_el.value);
+            return true;
+        }
+    });
     data_changed();
 };
 xywh_y_el.oninput = () => {
-    get_x_by_id(z.聚焦元素).style.top = xywh_y_el.value + "px";
+    if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.top = xywh_y_el.value + "px";
+    集_for_each((data) => {
+        if (data.id == z.聚焦元素) {
+            data.style = set_data_style(data.style, "top", xywh_y_el.value);
+            return true;
+        }
+    });
     data_changed();
 };
 xywh_w_el.oninput = () => {
-    get_x_by_id(z.聚焦元素).style.width = xywh_w_el.value + "px";
+    if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.width = xywh_w_el.value + "px";
+    集_for_each((data) => {
+        if (data.id == z.聚焦元素) {
+            data.style = set_data_style(data.style, "width", xywh_w_el.value);
+            return true;
+        }
+    });
     data_changed();
 };
 xywh_h_el.oninput = () => {
-    get_x_by_id(z.聚焦元素).style.height = xywh_h_el.value + "px";
+    if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.height = xywh_h_el.value + "px";
+    集_for_each((data) => {
+        if (data.id == z.聚焦元素) {
+            data.style = set_data_style(data.style, "height", xywh_h_el.value);
+            return true;
+        }
+    });
     data_changed();
 };
 function load_xywh() {
-    let fe = get_x_by_id(z.聚焦元素);
-    xywh_x_el.value = String(fe.offsetLeft);
-    xywh_y_el.value = String(fe.offsetTop);
-    xywh_w_el.value = String(fe.offsetWidth);
-    xywh_h_el.value = String(fe.offsetHeight);
+    let fe = get_x_data(z.聚焦元素).rect;
+    xywh_x_el.value = String(fe.x);
+    xywh_y_el.value = String(fe.y);
+    xywh_w_el.value = String(fe.w);
+    xywh_h_el.value = String(fe.h);
 }
 
 import css_properties_file from "../../lib/css/CSSProperties.json?raw";
