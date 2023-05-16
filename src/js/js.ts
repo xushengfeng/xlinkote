@@ -10167,7 +10167,8 @@ class x_zi extends HTMLElement {
     }
 
     connectedCallback() {
-        let c = this.getAttribute("value").toLocaleLowerCase().replace(/^u/, "");
+        let t = this.getAttribute("value");
+        let c = /[^a-zA-Z0-9]/g.test(t) ? t.codePointAt(0).toString(16) : t.toLocaleLowerCase().replace(/^u/, "");
 
         let img = createEl("img");
         img.src = `https://glyphwiki.org/glyph/u${c}@1.svg`;
