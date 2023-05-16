@@ -849,10 +849,10 @@ body > #main > #画布 > #选择 > div {
 }
 .x-x_hover > div {
     border: 1px solid var(--main-color);
-    background-color: #fff;
+    background-color: var(--bg1);
 }
 .x-x_hover {
-    border: 1px dashed #000;
+    border: 1px dashed var(--color6);
 }
 .xxhandle > div:hover {
     background-color: var(--main-color);
