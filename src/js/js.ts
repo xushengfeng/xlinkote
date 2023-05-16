@@ -5561,16 +5561,14 @@ function link(key0: string) {
             for (const i of Object.keys(集.链接[0] || [])) {
                 for (const x of Object.keys(集.链接[i] || [])) {
                     const value = 集.链接[i][x];
-                    if (link_map[i]) {
-                        link_map[i][x] = value;
-                    } else {
-                        link_map[i] = { x: value };
+                    if (!link_map[i]) {
+                        link_map[i] = {};
                     }
-                    if (link_map[x]) {
-                        link_map[x][i] = value;
-                    } else {
-                        link_map[x] = { i: value };
+                    link_map[i][x] = value;
+                    if (!link_map[x]) {
+                        link_map[x] = {};
                     }
+                    link_map[x][i] = value;
                 }
             }
         },
