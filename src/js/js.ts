@@ -9117,6 +9117,7 @@ class link_value extends HTMLElement {
     set elid(id: string) {
         this._id = id;
         link("0").衰减();
+        link("0").map();
         let v = link(id).get_v();
         if (v) {
             this.v.innerHTML = "";
