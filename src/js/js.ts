@@ -10163,3 +10163,20 @@ class add_link extends HTMLElement {
 }
 
 window.customElements.define("x-link-add", add_link);
+
+class x_zi extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        let c = this.getAttribute("value").toLocaleLowerCase().replace(/^u/, "");
+
+        let img = createEl("img");
+        img.src = `https://glyphwiki.org/glyph/u${c}@1.svg`;
+
+        this.append(img);
+    }
+}
+
+window.customElements.define("x-zi", x_zi);

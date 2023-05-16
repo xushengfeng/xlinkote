@@ -1862,6 +1862,14 @@ x-link {
     @apply cursor-pointer;
 }
 
+x-zi {
+    @apply inline-block;
+}
+x-zi > img {
+    @apply h-4;
+    filter: var(--icon-color);
+}
+
 @media (any-pointer: coarse) {
     :root {
         --icon-p-b-size: 48px;
