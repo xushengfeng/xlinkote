@@ -1538,7 +1538,7 @@ function render_map() {
         let y = (r.y - out_rect.top) * z;
         let w = r.w * z;
         let h = r.h * z;
-        ctx.fillStyle = "#0002";
+        ctx.fillStyle = is_dark ? "#fff2" : "#0002";
         ctx.fillRect(x, y, w, h);
     }
     let main_rect = el_offset2(画布, O);
