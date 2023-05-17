@@ -5377,14 +5377,9 @@ function jump_to_x_link(id: string, nrc?: boolean) {
                 y = data.rect.y * p.p.zoom - 画布.offsetHeight / 2;
             let ex = -x - (data.rect.w * p.p.zoom) / 2,
                 ey = -y - (data.rect.h * p.p.zoom) / 2;
-            let t = Math.sqrt((ex - O.offsetLeft) ** 2 + (ey - O.offsetTop) ** 2) / 1.6;
-            O.style.transitionDuration = `${t / 1000}s`;
-            O.ontransitioncancel = O.ontransitionend = () => {
-                O.style.transitionDuration = "";
-                render_select_rects();
-                check_render_x();
-                render_map();
-            };
+            render_select_rects();
+            check_render_x();
+            render_map();
             set_O_p(ex, ey);
             if (data.type == "X-X") {
                 z.focus(id);
