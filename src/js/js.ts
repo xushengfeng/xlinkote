@@ -3512,14 +3512,16 @@ function assets_reflash() {
         let goto = createEl("div");
         goto.classList.add("assets_goto");
 
-        画布s.querySelectorAll("x-file").forEach((el: file) => {
-            if (el._value.id == i) {
-                r.classList.add("not_click");
-                let go = createEl("div");
-                go.onclick = () => {
-                    jump_to_x_link(el.parentElement.id);
-                };
-                goto.append(go);
+        集_for_each((data) => {
+            if (data.子元素?.[0]?.type == "X-FILE") {
+                if (JSON5.parse(data.子元素[0].value).id == i) {
+                    r.classList.add("not_click");
+                    let go = createEl("div");
+                    go.onclick = () => {
+                        jump_to_x_link(data.id);
+                    };
+                    goto.append(go);
+                }
             }
         });
 
