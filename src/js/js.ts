@@ -159,6 +159,8 @@ const ys_add = elFromId("ys_add");
 const menu_el = elFromId("菜单");
 const menu_new = elFromId("菜单_新建");
 
+const css_style_el = elFromId("css");
+
 function icon(src: string) {
     return `<img src="${src}" class="icon">`;
 }
@@ -2564,7 +2566,7 @@ async function set_data(l: 集type) {
     reload_side();
     location.hash = `#${集.meta.UUID}`;
 
-    set_css(l.extra.style || "./md.css");
+    set_css(l.extra.style);
     if (l.extra?.slide) ys_init(l.extra.slide);
 
     check_webdav_file();
@@ -2831,35 +2833,13 @@ function set_diff_data(diffl: diff_i[], undo_data: 集type) {
     }
 }
 
-set_css("./md.css");
+const default_style = "@import url('./md.css');";
+set_css();
 
 /** 设置文件css样式 */
-function set_css(t: string) {
-    let style: HTMLElement;
-    const css = elFromId("css");
-    if (t.includes("\n")) {
-        if (css && css.tagName == "STYLE") {
-            css.innerHTML = t;
-        } else {
-            style = createEl("style");
-            style.innerHTML = t;
-            _new();
-        }
-    } else {
-        if (css && css.tagName == "LINK") {
-            (css as HTMLLinkElement).href = t;
-        } else {
-            style = createEl("link");
-            (style as HTMLLinkElement).href = t;
-            (style as HTMLLinkElement).rel = "stylesheet";
-            _new();
-        }
-    }
-    function _new() {
-        css?.remove();
-        style.id = "css";
-        document.body.append(style);
-    }
+function set_css(t?: string) {
+    t = t || default_style;
+    css_style_el.innerHTML = t;
 }
 
 function set_dependencies(ds: meta["dependencies"]) {
@@ -4354,7 +4334,8 @@ switch_global_style.onclick = () => {
         el_style.append(text);
         text.value = 集.extra.style;
         text.onchange = () => {
-            集.extra.style = text.value;
+            集.extra.style = text.value || default_style;
+            set_css(集.extra.style);
             data_changed();
         };
     }
