@@ -2681,6 +2681,7 @@ function select_p(id: string) {
             el.classList.remove("画布focus");
         }
     });
+    selected_el = [];
 }
 
 /** 转换zoom */
