@@ -1081,22 +1081,22 @@ function add_blank(op: p_point, p: p_point) {
                 switch (a) {
                     case 0:
                         if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                            xel.style = set_data_style(xel.style, "top", el_o.y - r.h + "px");
+                            set_data_style(xel, "top", el_o.y - r.h + "px");
                         }
                         break;
                     case 1:
                         if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                            xel.style = set_data_style(xel.style, "left", el_o.x + r.w + "px");
+                            set_data_style(xel, "left", el_o.x + r.w + "px");
                         }
                         break;
                     case 2:
                         if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
-                            xel.style = set_data_style(xel.style, "top", el_o.y + r.h + "px");
+                            set_data_style(xel, "top", el_o.y + r.h + "px");
                         }
                         break;
                     case 3:
                         if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
-                            xel.style = set_data_style(xel.style, "left", el_o.x - r.w + "px");
+                            set_data_style(xel, "left", el_o.x - r.w + "px");
                         }
                         break;
                 }
@@ -1982,19 +1982,19 @@ var free_mouse = (e: MouseEvent) => {
                         }
                         if (!isNaN(x)) {
                             data.rect.x = x;
-                            data.style = set_data_style(data.style, "left", x + "px");
+                            set_data_style(data, "left", x + "px");
                         }
                         if (!isNaN(y)) {
                             data.rect.y = y;
-                            data.style = set_data_style(data.style, "top", y + "px");
+                            set_data_style(data, "top", y + "px");
                         }
                         if (!isNaN(w)) {
                             data.rect.w = w;
-                            data.style = set_data_style(data.style, "width", w + "px");
+                            set_data_style(data, "width", w + "px");
                         }
                         if (!isNaN(h)) {
                             data.rect.h = h;
-                            data.style = set_data_style(data.style, "height", h + "px");
+                            set_data_style(data, "height", h + "px");
                         }
                         elFromId(xel.el)?.setAttribute("style", data.style);
                     }
@@ -3911,7 +3911,7 @@ class 图层 {
             if (data.id == id) {
                 let ppel = path[path.length - 1];
                 if (!data.style.includes("z-index") && !(is_data_flex(ppel) == "flex")) {
-                    data.style = set_data_style(data.style, "z-index", String(ppel.子元素.length + 1));
+                    set_data_style(data, "z-index", String(ppel.子元素.length + 1));
                 }
                 let li = this.create_li(data);
                 let pli = 图层_el.querySelector(`li[data-id="${path[path.length - 1].id}"]`);
@@ -4105,15 +4105,15 @@ function remove_x_data(id: string) {
     }
 }
 
-function set_data_style(style: string, x: string, v: string) {
-    let ns = style.split(";").reduce((styleObj, rule) => {
+function set_data_style(el: data[0], x: string, v: string) {
+    let ns = el.style.split(";").reduce((styleObj, rule) => {
         if (!rule.trim()) return styleObj;
         const [key, value] = rule.split(":");
         styleObj[key.trim()] = value.trim();
         return styleObj;
     }, {});
     ns[x] = v;
-    return Object.entries(ns)
+    el.style = Object.entries(ns)
         .map(([key, value]) => `${key}: ${value};`)
         .join(" ");
 }
@@ -4122,7 +4122,7 @@ xywh_x_el.oninput = () => {
     if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.left = xywh_x_el.value + "px";
     集_for_each((data) => {
         if (data.id == z.聚焦元素) {
-            data.style = set_data_style(data.style, "left", xywh_x_el.value);
+            set_data_style(data, "left", xywh_x_el.value);
             return true;
         }
     });
@@ -4132,7 +4132,7 @@ xywh_y_el.oninput = () => {
     if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.top = xywh_y_el.value + "px";
     集_for_each((data) => {
         if (data.id == z.聚焦元素) {
-            data.style = set_data_style(data.style, "top", xywh_y_el.value);
+            set_data_style(data, "top", xywh_y_el.value);
             return true;
         }
     });
@@ -4142,7 +4142,7 @@ xywh_w_el.oninput = () => {
     if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.width = xywh_w_el.value + "px";
     集_for_each((data) => {
         if (data.id == z.聚焦元素) {
-            data.style = set_data_style(data.style, "width", xywh_w_el.value);
+            set_data_style(data, "width", xywh_w_el.value);
             return true;
         }
     });
@@ -4152,7 +4152,7 @@ xywh_h_el.oninput = () => {
     if (get_x_by_id(z.聚焦元素)) get_x_by_id(z.聚焦元素).style.height = xywh_h_el.value + "px";
     集_for_each((data) => {
         if (data.id == z.聚焦元素) {
-            data.style = set_data_style(data.style, "height", xywh_h_el.value);
+            set_data_style(data, "height", xywh_h_el.value);
             return true;
         }
     });
@@ -5703,9 +5703,9 @@ function to_flex(els: string[], d: "x" | "y") {
     z.push(xel);
     let data = [] as data;
     for (let el of xels) {
-        el.style = set_data_style(el.style, "left", "");
-        el.style = set_data_style(el.style, "top", "");
-        el.style = set_data_style(el.style, "position", "relative");
+        set_data_style(el, "left", "");
+        set_data_style(el, "top", "");
+        set_data_style(el, "position", "relative");
         data.push(el);
         remove_x_data(el.id);
         elFromId(el.id)?.remove();
@@ -5908,10 +5908,10 @@ function out_group(els: string[]) {
                 if (r.id == 当前画布.id) {
                     for (let i in p) {
                         let el = p[i];
-                        el.style = set_data_style(el.style, "left", p[i].rect.x + "px");
-                        el.style = set_data_style(el.style, "top", p[i].rect.y + "px");
-                        el.style = set_data_style(el.style, "position", "absolute");
-                        el.style = set_data_style(el.style, "z-index", String(r.data.length + 1));
+                        set_data_style(el, "left", p[i].rect.x + "px");
+                        set_data_style(el, "top", p[i].rect.y + "px");
+                        set_data_style(el, "position", "absolute");
+                        set_data_style(el, "z-index", String(r.data.length + 1));
                         r.data.push(p[i]);
                     }
                 }
