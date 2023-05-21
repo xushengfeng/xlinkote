@@ -1779,6 +1779,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                     }
                     xel.value = x.value;
                     xx.remove();
+                    let c = pel.parentElement.children;
+                    for (let i in c) {
+                        if (c[i] == xel) {
+                            move_x_data(xel.id, pel.parentElement.id, Number(i));
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -4101,6 +4108,32 @@ function remove_x_data(id: string) {
             }
         }
     }
+}
+
+function move_x_data(id: string, to: string, posi?: number) {
+    let d: data[0];
+    for (let i of 集.数据) {
+        w(i.data);
+    }
+    function w(data: data) {
+        for (let i in data) {
+            if (data[i].type == "X-X" && data[i].id == id) {
+                d = data.splice(Number(i), 1)[0];
+            } else {
+                if (data[i].子元素) w(data[i].子元素);
+            }
+        }
+    }
+    集_for_each((data) => {
+        if (data.id == to && d) {
+            if (posi) {
+                data.子元素.splice(posi, 0, d);
+            } else {
+                data.子元素.push(d);
+            }
+            return true;
+        }
+    });
 }
 
 function set_data_style(el: data[0], x: string, v: string) {
