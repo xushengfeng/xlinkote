@@ -4543,7 +4543,7 @@ function get_webdav_file_time(path: string) {
 }
 async function check_webdav_file() {
     const path = 集.meta.url;
-    if (path) {
+    if (path && store.webdav.网址) {
         let p = get_webdav_file_time(path);
         let n = ((await client.stat(path)) as FileStat).lastmod;
         if (new Date(n).getTime() > new Date(p).getTime()) {
