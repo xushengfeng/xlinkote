@@ -7137,6 +7137,7 @@ class markdown extends HTMLElement {
                                 x.style.position = "relative";
                                 x.value = p.value;
                                 p.remove();
+                                remove_x_data(p.id); // 后面的get_data会把p里的子元素都刷新，加回来
                                 p = x;
                             }
 
