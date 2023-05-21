@@ -1740,61 +1740,60 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         for (let el of els) {
             if (el.tagName == "X-X") {
                 let rect = el.getBoundingClientRect();
-                for (let x of selected_el) {
-                    if (
-                        el.parentElement.classList.contains("flex-column") ||
-                        el.parentElement.classList.contains("flex-row")
-                    ) {
-                        let xel = get_x_by_id(x);
-                        if (el.parentElement.classList.contains("flex-column")) {
-                            if (e.clientY - rect.y < rect.height / 2) {
-                                cx(el, xel, true);
-                            } else {
-                                cx(el, xel, false);
-                            }
-                        }
-                        if (el.parentElement.classList.contains("flex-row")) {
-                            if (e.clientX - rect.x < rect.width / 2) {
-                                cx(el, xel, true);
-                            } else {
-                                cx(el, xel, false);
-                            }
-                        }
-                        selected_el = [];
-                        break;
-                    }
-                }
-                function cx(pel: Element, x: x, before: boolean) {
-                    let xel = createEl("x-x");
-                    xel.id = x.id;
-                    xel.setAttribute("style", x.getAttribute("style"));
-                    xel.style.left = "";
-                    xel.style.top = "";
-                    xel.className = x.className;
-                    const xx = get_x_by_id(x.id);
-                    if (before) {
-                        pel.before(xel);
-                    } else {
-                        pel.after(xel);
-                    }
-                    xel.value = x.value;
-                    xx.remove();
-                    let c = pel.parentElement.children;
-                    for (let i in c) {
-                        if (c[i] == xel) {
-                            move_x_data(xel.id, pel.parentElement.id, Number(i));
-                            break;
+                let x = free_o_rects[0].el;
+                if (
+                    el.parentElement.classList.contains("flex-column") ||
+                    el.parentElement.classList.contains("flex-row")
+                ) {
+                    if (el.parentElement.classList.contains("flex-column")) {
+                        if (e.clientY - rect.y < rect.height / 2) {
+                            cx(el, x, true);
+                        } else {
+                            cx(el, x, false);
                         }
                     }
-                    集_for_each((data) => {
-                        if (data.id == xel.id) {
-                            set_data_style(data, "left", "");
-                            set_data_style(data, "top", "");
-                            return true;
+                    if (el.parentElement.classList.contains("flex-row")) {
+                        if (e.clientX - rect.x < rect.width / 2) {
+                            cx(el, x, true);
+                        } else {
+                            cx(el, x, false);
                         }
-                    });
+                    }
+                    free_o_rects = [];
+                    break;
                 }
             }
+        }
+        function cx(pel: Element, id: string, before: boolean) {
+            let x = get_x_data(id);
+            let xel = createEl("x-x");
+            xel.id = id;
+            xel.setAttribute("style", x.style);
+            xel.style.left = "";
+            xel.style.top = "";
+            xel.className = x.class;
+            const xx = get_x_by_id(id);
+            if (before) {
+                pel.before(xel);
+            } else {
+                pel.after(xel);
+            }
+            xel.value = x.子元素;
+            xx?.remove();
+            let c = pel.parentElement.children;
+            for (let i in c) {
+                if (c[i] == xel) {
+                    move_x_data(id, pel.parentElement.id, Number(i));
+                    break;
+                }
+            }
+            集_for_each((data) => {
+                if (data.id == id) {
+                    set_data_style(data, "left", "");
+                    set_data_style(data, "top", "");
+                    return true;
+                }
+            });
         }
         free_drag = false;
     }
