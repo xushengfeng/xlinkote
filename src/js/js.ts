@@ -29,6 +29,7 @@ import copy_svg from "../../assets/icons/copy.svg";
 import save_svg from "../../assets/icons/save.svg";
 import lock_svg from "../../assets/icons/lock.svg";
 import unlock_svg from "../../assets/icons/unlock.svg";
+import reload_svg from "../../assets/icons/reload.svg";
 import arrow_markers_svg from "../../assets/icons/arrow_markers.svg?raw";
 
 interface x_tag_map {
@@ -7795,16 +7796,26 @@ class symbols extends HTMLElement {
     connectedCallback() {
         var div = createEl("div");
         this.append(div);
-        for (const i in mathSymbols) {
-            for (const j of mathSymbols[i]) {
-                let img = createEl("img");
-                img.title = j.name;
-                img.id = `snippet_${j.source}`;
-                let b = btoa(j.svg);
-                img.src = `data:image/svg+xml;base64,${b}`;
-                div.append(img);
+        let b = createEl("div");
+        b.innerHTML = icon(reload_svg);
+        b.style.position = "relative";
+        b.style.width = "24px";
+        b.style.height = "24px";
+        div.append(b);
+        b.onclick = () => {
+            b.remove();
+            for (const i in mathSymbols) {
+                for (const j of mathSymbols[i]) {
+                    let img = createEl("img");
+                    img.title = j.name;
+                    img.id = `snippet_${j.source}`;
+                    let b = btoa(j.svg);
+                    img.src = `data:image/svg+xml;base64,${b}`;
+                    img.loading = "lazy";
+                    div.append(img);
+                }
             }
-        }
+        };
 
         this.onclick = (e) => {
             e.stopPropagation();
