@@ -1786,6 +1786,13 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                             break;
                         }
                     }
+                    集_for_each((data) => {
+                        if (data.id == xel.id) {
+                            set_data_style(data, "left", "");
+                            set_data_style(data, "top", "");
+                            return true;
+                        }
+                    });
                 }
             }
         }
