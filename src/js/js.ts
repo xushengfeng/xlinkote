@@ -1887,10 +1887,8 @@ var free_mouse = (e: MouseEvent) => {
                 h = xel.h;
             switch (free_o_a) {
                 case -1:
-                    x = xel.x + dx;
-                    y = xel.y + dy;
-                    xel.el.style.left = x + "px";
-                    xel.el.style.top = y + "px";
+                    c(-10, dx);
+                    c(-11, dy);
                     break;
                 case 0:
                     c(0, -dy);
@@ -1961,31 +1959,33 @@ var free_mouse = (e: MouseEvent) => {
                     j = 1;
                 }
                 switch (a) {
+                    case -10:
+                        x = xel.x + dx;
+                        break;
+                    case -11:
+                        y = xel.y + dy;
+                        break;
                     case 0:
-                        y = xel.y - d;
+                        if (!f) y = xel.y - d;
                         h = xel.h + i * d;
-                        xel.el.style.height = h + "px";
-                        if (!f) xel.el.style.top = y + "px";
                         break;
                     case 1:
                         w = xel.w + i * d;
-                        x = xel.x - j * d;
-                        xel.el.style.width = w + "px";
-                        if (!f) xel.el.style.left = x + "px";
+                        if (!f) x = xel.x - j * d;
                         break;
                     case 2:
                         h = xel.h + i * d;
-                        y = xel.y - j * d;
-                        xel.el.style.height = h + "px";
-                        if (!f) xel.el.style.top = y + "px";
+                        if (!f) y = xel.y - j * d;
                         break;
                     case 3:
-                        x = xel.x - d;
+                        if (!f) x = xel.x - d;
                         w = xel.w + i * d;
-                        xel.el.style.width = w + "px";
-                        if (!f) xel.el.style.left = x + "px";
                         break;
                 }
+                if (!isNaN(x)) xel.el.style.left = x + "px";
+                if (!isNaN(y)) xel.el.style.top = y + "px";
+                if (!isNaN(w)) xel.el.style.width = w + "px";
+                if (!isNaN(h)) xel.el.style.height = h + "px";
             }
             if (xel.el.id == z.聚焦元素) {
                 set_style(xel.el.id);
