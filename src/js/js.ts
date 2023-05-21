@@ -658,7 +658,7 @@ elFromId("常驻").onpointerdown = (e) => {
     set_模式("浏览");
     if (v) (<markdown>md).value = v;
     set_模式("设计");
-    free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+    free_o_rects = [{ el: xel.id, x: x / zoom, y: y / zoom }];
     free_old_point = e2p(e);
     drag_block = true;
 };
@@ -1174,7 +1174,7 @@ function render_select_rects() {
                 e.stopPropagation();
                 free_o_a = x_h.indexOf(el);
                 free_old_point = e2p(e);
-                free_o_rects = [{ el: i, x: i.offsetLeft, y: i.offsetTop, w: i.offsetWidth, h: i.offsetHeight }];
+                free_o_rects = [{ el: i.id, x: i.offsetLeft, y: i.offsetTop, w: i.offsetWidth, h: i.offsetHeight }];
                 if (selected_el.length <= 1) {
                     z.focus(i.id);
                 }
@@ -1652,7 +1652,7 @@ var selections = [{ id: "", start: 0, end: 0 }] as selection_type[];
 /** 触发调节时的位置 */
 let free_old_point: p_point;
 /** 所作用的元素及其原始位置大小 */
-let free_o_rects = [] as { el: x; x: number; y: number; w?: number; h?: number }[];
+let free_o_rects = [] as { el: string; x: number; y: number; w?: number; h?: number }[];
 /** 应该对元素执行的操作，移动还是调节大小 */
 let free_o_a = NaN;
 /** 是否移动过，可用于判断点击还是拖动 */
@@ -1824,11 +1824,11 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         !free_move &&
         free_old_point &&
         free_o_a != -1 &&
-        !free_o_rects[0].el.querySelector("x-link-arrow") &&
-        is_smallest_el(free_o_rects[0].el)
+        !elFromId(free_o_rects[0].el)?.querySelector("x-link-arrow") &&
+        is_smallest_data_el(free_o_rects[0].el)
     ) {
         if (!free_link) {
-            let elid = free_o_rects[0].el.id;
+            let elid = free_o_rects[0].el;
             free_db_time = setTimeout(() => {
                 let id = uuid_id();
                 free_link = id;
@@ -1846,10 +1846,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             }, free_db_dtime);
         } else {
             let arrow = elFromId(free_link).querySelector("x-link-arrow") as link_arrow;
-            arrow._value.end.id = free_o_rects[0].el.id;
+            arrow._value.end.id = free_o_rects[0].el;
             arrow._value.end.a = free_o_a;
             render_link_arrow(free_link, e);
-            link(arrow._value.start.id).add(free_o_rects[0].el.id);
+            link(arrow._value.start.id).add(free_o_rects[0].el);
             free_link = "";
         }
     }
@@ -1875,120 +1875,135 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
 var free_mouse = (e: MouseEvent) => {
     if (free_old_point) {
         for (const xel of free_o_rects) {
-            let f =
-                xel.el.parentElement.classList.contains("flex-column") ||
-                xel.el.parentElement.classList.contains("flex-row");
-            let np = e2p(e);
-            let dx = np.x - free_old_point.x,
-                dy = np.y - free_old_point.y;
-            let x = xel.x,
-                y = xel.y,
-                w = xel.w,
-                h = xel.h;
-            switch (free_o_a) {
-                case -1:
-                    c(-10, dx);
-                    c(-11, dy);
-                    break;
-                case 0:
-                    c(0, -dy);
-                    break;
-                case 1:
-                    c(1, dx);
-                    break;
-                case 2:
-                    c(2, dy);
-                    break;
-                case 3:
-                    c(3, -dx);
-                    break;
-                case 4:
-                    // ↗
-                    if (e.shiftKey) {
-                        let j = dx * w - dy * h;
-                        c(0, (j * h) / (w ** 2 + h ** 2));
-                        c(1, (j * w) / (w ** 2 + h ** 2));
-                    } else {
-                        c(0, -dy);
-                        c(1, dx);
+            集_for_each((data, p, path) => {
+                if (data.id == xel.el) {
+                    let f = path[path.length - 1] ? is_data_flex(path[path.length - 1]) == "flex" : false;
+                    let np = e2p(e);
+                    let dx = np.x - free_old_point.x,
+                        dy = np.y - free_old_point.y;
+                    let w = xel.w,
+                        h = xel.h;
+                    switch (free_o_a) {
+                        case -1:
+                            c(-10, dx);
+                            c(-11, dy);
+                            break;
+                        case 0:
+                            c(0, -dy);
+                            break;
+                        case 1:
+                            c(1, dx);
+                            break;
+                        case 2:
+                            c(2, dy);
+                            break;
+                        case 3:
+                            c(3, -dx);
+                            break;
+                        case 4:
+                            // ↗
+                            if (e.shiftKey) {
+                                let j = dx * w - dy * h;
+                                c(0, (j * h) / (w ** 2 + h ** 2));
+                                c(1, (j * w) / (w ** 2 + h ** 2));
+                            } else {
+                                c(0, -dy);
+                                c(1, dx);
+                            }
+                            break;
+                        case 5:
+                            // ↘
+                            if (e.shiftKey) {
+                                let j = dx * w + dy * h;
+                                c(1, (j * w) / (w ** 2 + h ** 2));
+                                c(2, (j * h) / (w ** 2 + h ** 2));
+                            } else {
+                                c(1, dx);
+                                c(2, dy);
+                            }
+                            break;
+                        case 6:
+                            // ↙
+                            if (e.shiftKey) {
+                                let j = -dx * w + dy * h;
+                                c(2, (j * h) / (w ** 2 + h ** 2));
+                                c(3, (j * w) / (w ** 2 + h ** 2));
+                            } else {
+                                c(2, dy);
+                                c(3, -dx);
+                            }
+                            break;
+                        case 7:
+                            // ↖
+                            if (e.shiftKey) {
+                                let j = -dx * w - dy * h;
+                                c(3, (j * w) / (w ** 2 + h ** 2));
+                                c(0, (j * h) / (w ** 2 + h ** 2));
+                            } else {
+                                c(3, -dx);
+                                c(0, -dy);
+                            }
+                            break;
                     }
-                    break;
-                case 5:
-                    // ↘
-                    if (e.shiftKey) {
-                        let j = dx * w + dy * h;
-                        c(1, (j * w) / (w ** 2 + h ** 2));
-                        c(2, (j * h) / (w ** 2 + h ** 2));
-                    } else {
-                        c(1, dx);
-                        c(2, dy);
+                    function c(a: number, d: number) {
+                        let x = NaN,
+                            y = NaN,
+                            w = NaN,
+                            h = NaN;
+                        let i = 1,
+                            j = 0;
+                        if (e.ctrlKey) {
+                            i = 2;
+                            j = 1;
+                        }
+                        switch (a) {
+                            case -10:
+                                x = xel.x + dx;
+                                break;
+                            case -11:
+                                y = xel.y + dy;
+                                break;
+                            case 0:
+                                if (!f) y = xel.y - d;
+                                h = xel.h + i * d;
+                                break;
+                            case 1:
+                                w = xel.w + i * d;
+                                if (!f) x = xel.x - j * d;
+                                break;
+                            case 2:
+                                h = xel.h + i * d;
+                                if (!f) y = xel.y - j * d;
+                                break;
+                            case 3:
+                                if (!f) x = xel.x - d;
+                                w = xel.w + i * d;
+                                break;
+                        }
+                        if (!isNaN(x)) {
+                            data.rect.x = x;
+                            data.style = set_data_style(data.style, "left", x + "px");
+                        }
+                        if (!isNaN(y)) {
+                            data.rect.y = y;
+                            data.style = set_data_style(data.style, "top", y + "px");
+                        }
+                        if (!isNaN(w)) {
+                            data.rect.w = w;
+                            data.style = set_data_style(data.style, "width", w + "px");
+                        }
+                        if (!isNaN(h)) {
+                            data.rect.h = h;
+                            data.style = set_data_style(data.style, "height", h + "px");
+                        }
+                        elFromId(xel.el)?.setAttribute("style", data.style);
                     }
-                    break;
-                case 6:
-                    // ↙
-                    if (e.shiftKey) {
-                        let j = -dx * w + dy * h;
-                        c(2, (j * h) / (w ** 2 + h ** 2));
-                        c(3, (j * w) / (w ** 2 + h ** 2));
-                    } else {
-                        c(2, dy);
-                        c(3, -dx);
-                    }
-                    break;
-                case 7:
-                    // ↖
-                    if (e.shiftKey) {
-                        let j = -dx * w - dy * h;
-                        c(3, (j * w) / (w ** 2 + h ** 2));
-                        c(0, (j * h) / (w ** 2 + h ** 2));
-                    } else {
-                        c(3, -dx);
-                        c(0, -dy);
-                    }
-                    break;
-            }
-            function c(a: number, d: number) {
-                let x = NaN,
-                    y = NaN,
-                    w = NaN,
-                    h = NaN;
-                let i = 1,
-                    j = 0;
-                if (e.ctrlKey) {
-                    i = 2;
-                    j = 1;
+
+                    return true;
                 }
-                switch (a) {
-                    case -10:
-                        x = xel.x + dx;
-                        break;
-                    case -11:
-                        y = xel.y + dy;
-                        break;
-                    case 0:
-                        if (!f) y = xel.y - d;
-                        h = xel.h + i * d;
-                        break;
-                    case 1:
-                        w = xel.w + i * d;
-                        if (!f) x = xel.x - j * d;
-                        break;
-                    case 2:
-                        h = xel.h + i * d;
-                        if (!f) y = xel.y - j * d;
-                        break;
-                    case 3:
-                        if (!f) x = xel.x - d;
-                        w = xel.w + i * d;
-                        break;
-                }
-                if (!isNaN(x)) xel.el.style.left = x + "px";
-                if (!isNaN(y)) xel.el.style.top = y + "px";
-                if (!isNaN(w)) xel.el.style.width = w + "px";
-                if (!isNaN(h)) xel.el.style.height = h + "px";
-            }
-            if (xel.el.id == z.聚焦元素) {
-                set_style(xel.el.id);
+            });
+            if (xel.el == z.聚焦元素) {
+                set_style(xel.el);
                 load_xywh();
             }
         }
@@ -6772,8 +6787,8 @@ class x extends HTMLElement {
 
             free_o_rects = [];
             for (const id of selected_el) {
-                let el = get_x_by_id(id);
-                free_o_rects.push({ el, x: el.offsetLeft, y: el.offsetTop });
+                let el = get_x_data(id);
+                free_o_rects.push({ el: el.id, x: el.rect.x, y: el.rect.y });
             }
         };
 
@@ -6898,7 +6913,7 @@ function new_x_bar(id: string) {
             xel.style.top = el_offset2(main_x, O).y + "px";
             xel.style.position = "absolute";
             main_x.remove();
-            free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+            free_o_rects = [{ el: xel.id, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
             free_o_a = -1;
 
@@ -6921,7 +6936,7 @@ function new_x_bar(id: string) {
 
             selected_el.push(main_x.id);
 
-            free_o_rects = [{ el: main_x, x: main_x.offsetLeft, y: main_x.offsetTop }];
+            free_o_rects = [{ el: main_x.id, x: main_x.offsetLeft, y: main_x.offsetTop }];
         }
     };
 
@@ -6965,7 +6980,7 @@ function new_x_bar(id: string) {
             el.id = nid;
             link(nid).add();
         });
-        free_o_rects = [{ el: xel, x: x / zoom, y: y / zoom }];
+        free_o_rects = [{ el: xel.id, x: x / zoom, y: y / zoom }];
         free_old_point = e2p(e);
         free_o_a = -1;
     };
