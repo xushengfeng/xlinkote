@@ -5833,15 +5833,20 @@ function to_one_line(xels: string[]) {
                 if (is_data_flex(data) == "flex") {
                     let t = "";
                     let type: md_type;
+                    let p_ids: string[] = [];
                     for_each(data.子元素, (x, i, path) => {
                         if (x.type == "X-MD") {
                             t += JSON5.parse(x.value).text;
                             if (i == 0) type = JSON5.parse(x.value).type;
-                            z.remove(path[path.length - 1].id);
+
+                            p_ids.push(path[path.length - 1].id);
                         }
                     });
+                    for (let i of p_ids) {
+                        z.remove(i);
+                    }
                     data.子元素 = [
-                        { id: "", type: "X-MD", class: t, style: "", value: JSON.stringify({ text: t, type }) },
+                        { id: "", type: "X-MD", class: type, style: "", value: JSON.stringify({ text: t, type }) },
                     ];
                     // TODO 链接合并
                     let x = get_x_by_id(id);
