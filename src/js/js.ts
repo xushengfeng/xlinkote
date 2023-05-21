@@ -4050,9 +4050,7 @@ function for_each(data: data, f: (data: data[0], i: number, path?: data) => bool
             let stop = f(data[i], Number(i), path);
             if (!stop) {
                 if (data[i].子元素) {
-                    let pp = path;
-                    pp.push(data[i]);
-                    w(data[i].子元素, pp);
+                    w(data[i].子元素, path.concat(data[i]));
                 }
             } else {
                 break;
@@ -4069,9 +4067,7 @@ function 集_for_each(f: (data: data[0], p?: 画布type, path?: data) => boolean
             let stop = f(i, p, path);
             if (!stop) {
                 if (i.子元素) {
-                    let pp = path;
-                    pp.push(i);
-                    w(i.子元素, p, pp);
+                    w(i.子元素, p, path.concat(i));
                 }
             } else {
                 break;
