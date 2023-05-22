@@ -3723,7 +3723,7 @@ class 图层 {
         li.setAttribute("data-id", i.id);
         li.append(c);
         li.append(s);
-        if (i.子元素.length == 0) {
+        if (is_smallest_data_el(i.id)) {
             let add_link = createEl("x-link-add");
             li.append(add_link);
             add_link.value = i.id;
