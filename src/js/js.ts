@@ -850,9 +850,9 @@ var mouse2 = (e: MouseEvent) => {
 };
 
 var o_touch_e: TouchEvent;
+var o_touch_e_l: { e: TouchEvent; t: number }[] = [];
 var o_touch_zoom_e: TouchEvent;
 var o_zoom = NaN;
-var o_touch_t = NaN;
 画布.ontouchstart = (e) => {
     if (模式 == "绘制") return;
     let el = <HTMLElement>e.changedTouches[0].target;
@@ -867,7 +867,6 @@ var o_touch_t = NaN;
         ) &&
         !document.querySelector("x-sinppet").contains(el)
     ) {
-        o_touch_t = new Date().getTime();
         O.style.transition = "";
         o_touch_e = o_touch_zoom_e = e;
         o_rect = { x: el_offset(O).x, y: el_offset(O).y };
@@ -881,6 +880,7 @@ var o_touch_t = NaN;
     if (e.targetTouches.length == 1) {
         touch_move(e);
         if (o_touch_e) move = true;
+        o_touch_e_l.push({ e: e, t: new Date().getTime() });
     } else if (e.targetTouches.length == 2) {
         e.preventDefault();
         touch_zoom(e);
@@ -889,27 +889,31 @@ var o_touch_t = NaN;
 };
 画布.ontouchend = (e) => {
     // 惯性滚动
-    let dt = new Date().getTime() - o_touch_t;
-    let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_touch_e.changedTouches[0].clientX : 0,
-        dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_touch_e.changedTouches[0].clientY : 0;
-    let ds = Math.sqrt(dx ** 2 + dy ** 2);
-    const m = 1,
-        a = 0.0015;
-    let p = 0.5 * m * (ds / dt / 2) ** 2;
-    let s = p / (m * a);
-    let t = Math.sqrt((2 * s) / a);
-    console.log(ds);
-    if (ds > 30) {
-        let x = el_offset(O).x + s * (dx / ds),
-            y = el_offset(O).y + s * (dy / ds);
-        O.style.transition = `${t / 1000}s`;
-        O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
-        setTimeout(() => {
-            O.style.transition = ``;
-            render_select_rects();
-            data_changed();
-        }, t);
-        set_O_p(x, y);
+    if (move) {
+        let o_e = o_touch_e_l?.[o_touch_e_l.length - 2] || { e: e, t: 0 };
+        let dt = new Date().getTime() - o_e.t;
+        let dx = fxsd == 0 || fxsd == 2 ? e.changedTouches[0].clientX - o_e.e.changedTouches[0].clientX : 0,
+            dy = fxsd == 0 || fxsd == 1 ? e.changedTouches[0].clientY - o_e.e.changedTouches[0].clientY : 0;
+        let ds = Math.sqrt(dx ** 2 + dy ** 2);
+        const m = 1,
+            a = 0.0015;
+        let p = 0.5 * m * (ds / dt / 2) ** 2;
+        let s = p / (m * a);
+        let t = Math.sqrt((2 * s) / a);
+        console.log(dt, ds);
+        if (dt < 15) {
+            let x = el_offset(O).x + s * (dx / ds),
+                y = el_offset(O).y + s * (dy / ds);
+            O.style.transition = `${t / 1000}s`;
+            O.style.transitionTimingFunction = "cubic-bezier(.17, .89, .45, 1)";
+            setTimeout(() => {
+                O.style.transition = ``;
+                render_select_rects();
+                data_changed();
+            }, t);
+            set_O_p(x, y);
+        }
+        o_touch_e_l = [];
     }
 
     o_touch_e = null;
