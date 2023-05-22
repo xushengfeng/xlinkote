@@ -4812,7 +4812,7 @@ function search(input: string[], type: "str" | "regex") {
 
         if (searched) {
             集_for_each((i, p, path) => {
-                if (i.id == id) {
+                if (i.id == id && path[path.length - 1]?.子元素) {
                     for (let i of path[path.length - 1].子元素) {
                         if (i.子元素?.length == 1 && i.子元素[0].type != "X-X" && i.id != id) {
                             flex.push({
