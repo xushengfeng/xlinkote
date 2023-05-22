@@ -7806,17 +7806,19 @@ class graph extends HTMLElement {
     }
 
     run(code: string) {
-        if (this.s.innerHTML) JXG.JSXGraph.freeBoard(JXG.getBoardByContainerId(this.s.id));
-        this.s.id = `g${uuid_id()}`;
-        eval(`{let gid = '${this.s.id}';${code}}`);
-        const svg = this.s.querySelector("svg");
-        if (!svg) return;
-        const ob = new MutationObserver(() => {
-            svg.setAttribute("width", String(el_offset2(this).w));
-            svg.setAttribute("height", String(el_offset2(this).h));
-            ob.disconnect();
-        });
-        ob.observe(svg, { attributes: true, attributeFilter: ["width"] });
+        setTimeout(() => {
+            if (this.s.innerHTML) JXG.JSXGraph.freeBoard(JXG.getBoardByContainerId(this.s.id));
+            this.s.id = `g${uuid_id()}`;
+            eval(`{let gid = '${this.s.id}';${code}}`);
+            const svg = this.s.querySelector("svg");
+            if (!svg) return;
+            const ob = new MutationObserver(() => {
+                svg.setAttribute("width", String(el_offset2(this).w));
+                svg.setAttribute("height", String(el_offset2(this).h));
+                ob.disconnect();
+            });
+            ob.observe(svg, { attributes: true, attributeFilter: ["width"] });
+        }, 10);
     }
 
     set value(v) {
@@ -8011,41 +8013,43 @@ class file extends HTMLElement {
             this._value.r = false;
         this.div.innerHTML = "";
         if (this._value.r) {
-            this.div.classList.remove("file");
-            if (type[0] == "image") {
-                let img = createEl("x-img");
-                this.div.append(img);
-                img.value = get_assets(this._value.id);
-            }
-            if (type[0] == "audio") {
-                let audio = createEl("x-audio");
-                this.div.append(audio);
-                audio.value = get_assets(this._value.id);
-            }
-            if (type[0] == "video") {
-                let video = createEl("video");
-                video.controls = true;
-                this.div.append(video);
-                video.src = get_assets(this._value.id);
-                video.onload = () => {
-                    URL.revokeObjectURL(video.src);
-                };
-            }
-            if (type[1] == "pdf") {
-                let pdf = createEl("x-pdf");
-                this.div.append(pdf);
-                pdf.value = this._value.other || JSON.stringify({ id: this._value.id, page: 1 });
-            }
-            if (type[1] == "gltf-binary") {
-                let td = createEl("x-three");
-                this.div.append(td);
-                td.value = this._value.id;
-            }
-            if (type[1] == "vnd.geogebra.file") {
-                let ggb = createEl("x-ggb");
-                this.div.append(ggb);
-                ggb.value = this._value.id;
-            }
+            setTimeout(() => {
+                this.div.classList.remove("file");
+                if (type[0] == "image") {
+                    let img = createEl("x-img");
+                    this.div.append(img);
+                    img.value = get_assets(this._value.id);
+                }
+                if (type[0] == "audio") {
+                    let audio = createEl("x-audio");
+                    this.div.append(audio);
+                    audio.value = get_assets(this._value.id);
+                }
+                if (type[0] == "video") {
+                    let video = createEl("video");
+                    video.controls = true;
+                    this.div.append(video);
+                    video.src = get_assets(this._value.id);
+                    video.onload = () => {
+                        URL.revokeObjectURL(video.src);
+                    };
+                }
+                if (type[1] == "pdf") {
+                    let pdf = createEl("x-pdf");
+                    this.div.append(pdf);
+                    pdf.value = this._value.other || JSON.stringify({ id: this._value.id, page: 1 });
+                }
+                if (type[1] == "gltf-binary") {
+                    let td = createEl("x-three");
+                    this.div.append(td);
+                    td.value = this._value.id;
+                }
+                if (type[1] == "vnd.geogebra.file") {
+                    let ggb = createEl("x-ggb");
+                    this.div.append(ggb);
+                    ggb.value = this._value.id;
+                }
+            }, 10);
         } else {
             this.div.classList.add("file");
             let i = createEl("div");
