@@ -5724,8 +5724,8 @@ function get_x_out_value(el: x) {
 
 function copy_x(x: x, pel?: x) {
     let new_x = createEl("x-x");
-    z.push(new_x, pel);
     new_x.id = x.id;
+    (pel || O).append(new_x);
     new_x.setAttribute("style", x.getAttribute("style"));
     new_x.className = x.className;
     new_x.value = x.value;
