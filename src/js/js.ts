@@ -6987,6 +6987,12 @@ function new_x_bar(id: string) {
             xel.style.left = el_offset2(main_x, O).x + "px";
             xel.style.top = el_offset2(main_x, O).y + "px";
             xel.style.position = "absolute";
+            集_for_each((d) => {
+                if (d.id == xel.id) {
+                    set_data_style(d, "position", "absolute");
+                    return true;
+                }
+            });
             main_x.remove();
             free_o_rects = [{ el: xel.id, x: x / zoom, y: y / zoom }];
             free_old_point = e2p(e);
