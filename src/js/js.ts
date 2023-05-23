@@ -1744,8 +1744,10 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         画布.classList.remove("拖拽");
         free_drag_tip.remove();
         let els = document.elementsFromPoint(e.clientX, e.clientY);
+        let in_el = false;
         for (let el of els) {
             if (el.tagName == "X-X") {
+                in_el = true;
                 let rect = el.getBoundingClientRect();
                 let x = free_o_rects[0].el;
                 if (
@@ -1802,6 +1804,11 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
                     return true;
                 }
             });
+        }
+        if (!in_el) {
+            let id = free_o_rects[0].el;
+            move_x_data(id, O.id);
+            z.move(id, O.id);
         }
         free_drag = false;
     }
@@ -4147,6 +4154,12 @@ function move_x_data(id: string, to: string, posi?: number) {
             } else {
                 if (data[i].子元素) w(data[i].子元素);
             }
+        }
+    }
+    for (let i of 集.数据) {
+        if (i.id == to) {
+            i.data.splice(posi || i.data.length, 0, d);
+            return;
         }
     }
     集_for_each((data) => {
