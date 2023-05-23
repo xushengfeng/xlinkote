@@ -997,30 +997,33 @@ window["get_selected_el"] = () => selected_el;
 
 /**选择元素 */
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
-    for (const el of O.querySelectorAll(":scope > x-x")) {
-        let r = el_offset2(el);
-        if (rect.x <= r.x && r.x + r.w <= rect.x + rect.w && rect.y <= r.y && r.y + r.h <= rect.y + rect.h) {
-            selected_el.push(el.id);
-            render_select_rects();
+    集_for_each((el, p, path) => {
+        if (p.id == 当前画布.id && path.length == 0) {
+            if (rect_in_rect(el.rect, rect)) {
+                selected_el.push(el.id);
+                render_select_rects();
+            }
         }
-    }
+    });
 }
 function select_x_x2(points: [number, number][]) {
     selected_el = [];
 
-    for (const el of O.querySelectorAll(":scope > x-x")) {
-        let r = el_offset2(el);
+    集_for_each((el, p, path) => {
+        if (p.id == 当前画布.id && path.length == 0) {
+            let r = el.rect;
 
-        if (
-            ray_casting([r.x, r.y], points) &&
-            ray_casting([r.x, r.y + r.h], points) &&
-            ray_casting([r.x + r.w, r.y], points) &&
-            ray_casting([r.x + r.w, r.y + r.h], points)
-        ) {
-            selected_el.push(el.id);
-            render_select_rects();
+            if (
+                ray_casting([r.x, r.y], points) &&
+                ray_casting([r.x, r.y + r.h], points) &&
+                ray_casting([r.x + r.w, r.y], points) &&
+                ray_casting([r.x + r.w, r.y + r.h], points)
+            ) {
+                selected_el.push(el.id);
+                render_select_rects();
+            }
         }
-    }
+    });
 }
 
 function ray_casting(p: [number, number], poly: [number, number][]) {
