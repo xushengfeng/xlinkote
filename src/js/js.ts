@@ -7046,14 +7046,33 @@ function new_x_bar(id: string) {
         let nid = uuid_id();
         copy_value(main_x.id, nid);
         xel.id = nid;
+        z.push(xel);
         xel.style.left = el_offset2(main_x, O).x + "px";
         xel.style.top = el_offset2(main_x, O).y + "px";
         xel.style.position = "absolute";
-        xel.querySelectorAll("x-x").forEach((el) => {
-            let nid = uuid_id();
-            copy_value(el.id, nid);
-            el.id = nid;
-            link(nid).add();
+        集_for_each((el, p) => {
+            if (el.id == main_x.id) {
+                for (let pc of 集.数据) {
+                    if (pc.id == p.id) {
+                        let v = [...el.子元素];
+                        for_each(v, (data) => {
+                            let nid = uuid_id();
+                            copy_value(data.id, nid);
+                            data.id = nid;
+                            link(nid).add();
+                        });
+                        pc.data.push({
+                            id: nid,
+                            class: main_x.className,
+                            style: xel.getAttribute("style"),
+                            type: "X-X",
+                            rect: el_offset2(main_x, O),
+                            子元素: v,
+                        });
+                        return true;
+                    }
+                }
+            }
         });
         free_o_rects = [{ el: xel.id, x: x / zoom, y: y / zoom }];
         free_old_point = e2p(e);
