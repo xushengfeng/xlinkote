@@ -1791,6 +1791,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             for (let i in c) {
                 if (c[i] == xel) {
                     move_x_data(id, pel.parentElement.id, Number(i));
+                    z.move(id, pel.parentElement.id, Number(i));
                     break;
                 }
             }
@@ -1839,7 +1840,6 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
         });
         data_changed();
     }
-    if (free_drag || free_old_point) z.reflash();
     if (
         !free_drag &&
         !free_move &&
@@ -3989,6 +3989,18 @@ class 图层 {
         remove_x_data(id);
         render_select_rects();
         data_changed();
+    }
+
+    move(id: string, toid: string, posi?: number) {
+        let li = 图层_el.querySelector(`li[data-id="${id}"]`);
+        let ul = 图层_el.querySelector(`li[data-id="${toid}"] > ul`);
+        if (ul) {
+            if (posi) {
+                ul.children[ul.children.length - posi].before(li);
+            } else {
+                ul.children[ul.children.length - 1].after(li);
+            }
+        }
     }
 
     focus(id: string) {
