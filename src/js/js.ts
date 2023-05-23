@@ -5453,7 +5453,6 @@ function jump_to_x_link(id: string, nrc?: boolean) {
             if (data.type == "X-X") {
                 z.focus(id);
             }
-            z.reflash(true);
             return true;
         }
     });
