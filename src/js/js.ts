@@ -5975,20 +5975,21 @@ function out_group(els: string[]) {
 
 /** 获取从近到远元素列表 */
 function match_nearest_x(id: string) {
-    const x = get_x_by_id(id);
     let l: { id: string; x: number; y: number; r: number }[] = [];
-    let r = el_offset2(x, O);
+    let r = get_x_data(id).rect;
     let center = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
-    O.querySelectorAll("x-x").forEach((el: x) => {
-        if (is_smallest_el(el)) {
-            let r = el_offset2(el, O);
-            let center2 = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
-            l.push({
-                id: el.id,
-                x: center2.x - center.x,
-                y: center2.y - center.y,
-                r: Math.sqrt((center2.x - center.x) ** 2 + (center2.y - center.y) ** 2),
-            });
+    集_for_each((el, p) => {
+        if (p.id == 当前画布.id) {
+            if (is_smallest_data_el(el.id)) {
+                let r = el.rect;
+                let center2 = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+                l.push({
+                    id: el.id,
+                    x: center2.x - center.x,
+                    y: center2.y - center.y,
+                    r: Math.sqrt((center2.x - center.x) ** 2 + (center2.y - center.y) ** 2),
+                });
+            }
         }
     });
     l.sort((a, b) => a.r - b.r);
