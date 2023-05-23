@@ -1177,6 +1177,7 @@ function render_select_rects() {
 
         select_bar.onpointerdown = (e) => {
             let el = e.target as HTMLDivElement;
+            i = get_x_by_id(i.id);
             if (x_h.includes(el)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1811,6 +1812,7 @@ document.addEventListener("pointerup", (e: PointerEvent) => {
             z.move(id, O.id);
         }
         free_drag = false;
+        render_select_rects();
     }
 
     if (free_old_point && free_o_a == -1 && 临时中转站.contains(e.target as HTMLElement)) {
