@@ -3953,7 +3953,7 @@ class 图层 {
                 }
                 let li = this.create_li(data);
                 let pli = 图层_el.querySelector(`li[data-id="${path[path.length - 1].id}"]`);
-                if (pli.querySelector(":scope > ul")) {
+                if (pli?.querySelector(":scope > ul")) {
                     pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
                 } else {
                     get_data();
@@ -3972,7 +3972,7 @@ class 图层 {
         ppel.append(el);
         let li = this.create_li(get_x_out_value(el));
         let pli = 图层_el.querySelector(`li[data-id="${ppel.id}"]`);
-        if (pli.querySelector(":scope > ul")) {
+        if (pli?.querySelector(":scope > ul")) {
             pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
         } else {
             get_data();
@@ -4008,7 +4008,7 @@ class 图层 {
     move(id: string, toid: string, posi?: number) {
         let li = 图层_el.querySelector(`li[data-id="${id}"]`);
         let ul = 图层_el.querySelector(`li[data-id="${toid}"] > ul`);
-        if (ul) {
+        if (li && ul) {
             if (posi) {
                 ul.children[ul.children.length - posi].before(li);
             } else {
