@@ -2622,11 +2622,20 @@ function reload_side() {
     if (O.children[O.children.length - 1]) {
         z.focus(O.children[O.children.length - 1].id);
     }
-    z.reflash(true);
     l_math();
     tmp_s_reflash();
     assets_reflash();
 }
+
+let rez = createEl("div");
+rez.onclick = () => {
+    z.reflash();
+};
+rez.innerHTML = icon(reload_svg);
+rez.style.width = "16px";
+rez.style.height = "16px";
+rez.style.position = "relative";
+图层_el.before(rez);
 
 /** 渲染画布 */
 function render_data(inputdata: 画布type) {
@@ -3903,7 +3912,6 @@ class 图层 {
                         }
                     }
                     get_data();
-                    z.reflash();
                 }
             };
             let rm = createEl("div");
@@ -3926,7 +3934,6 @@ class 图层 {
                 }
                 li.remove();
                 get_data();
-                z.reflash();
             };
             more.append(idel, rm, rename);
             s.append(more);
@@ -3950,7 +3957,6 @@ class 图层 {
                     pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
                 } else {
                     get_data();
-                    this.reflash();
                 }
             }
         });
@@ -3970,7 +3976,6 @@ class 图层 {
             pli.querySelector(":scope > ul").insertAdjacentElement("afterbegin", li);
         } else {
             get_data();
-            this.reflash();
         }
         this.focus(el.id);
         link(el.id).add();
@@ -4065,22 +4070,18 @@ class 图层 {
     底层(id: string) {
         let v = this.get(id);
         this.mv(v.data, v.n, 0);
-        this.reflash();
     }
     下一层(id: string) {
         let v = this.get(id);
         this.mv(v.data, v.n, v.n - 1);
-        this.reflash();
     }
     上一层(id: string) {
         let v = this.get(id);
         this.mv(v.data, v.n, v.n + 1);
-        this.reflash();
     }
     顶层(id: string) {
         let v = this.get(id);
         this.mv(v.data, v.n, v.data.length - 1);
-        this.reflash();
     }
 }
 
@@ -5752,7 +5753,6 @@ function to_flex(els: string[], d: "x" | "y") {
             elclass.replace("flex-column", "flex-row");
         }
         get_data();
-        z.reflash();
         return;
     }
     let xels = [] as data;
@@ -5782,7 +5782,6 @@ function to_flex(els: string[], d: "x" | "y") {
     }
     xel.value = data;
     get_data();
-    z.reflash();
 }
 
 /** 判断是否为flex */
@@ -5996,7 +5995,6 @@ function out_group(els: string[]) {
         }
     }
     get_data();
-    z.reflash();
 }
 
 /** 获取从近到远元素列表 */
@@ -7261,7 +7259,6 @@ class markdown extends HTMLElement {
                             md.text.setSelectionRange(0, 0);
 
                             get_data();
-                            z.reflash();
                         }
                     }
                 } else {
@@ -7317,8 +7314,6 @@ class markdown extends HTMLElement {
                         link(p.id).add();
                         md.edit = true;
                         md.text.setSelectionRange(0, 0);
-
-                        z.reflash();
                     }
                 }
                 if (e.key == "/" && e.ctrlKey) {
@@ -7527,7 +7522,6 @@ class markdown extends HTMLElement {
                                 }
                             }
                             get_data();
-                            z.reflash();
                         } else if (this._value.type != "text") {
                             e.preventDefault();
                             let t = e.clipboardData.getData("text/plain").replace("\n", "");
