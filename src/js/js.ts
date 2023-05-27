@@ -3454,6 +3454,8 @@ function add_file(type: string, text: string, data: File, x: number, y: number) 
         xel.append(file);
         file.value = JSON.stringify({ r: true, id });
     }
+
+    get_data();
 }
 
 /** 摘录 */
