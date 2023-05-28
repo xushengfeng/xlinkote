@@ -1407,6 +1407,16 @@ window.addEventListener("pointerup", () => {
 });
 ignore_el.push("#mini_map");
 
+mini_map_el.onwheel = (e) => {
+    let zz = 1 + Math.abs(e.deltaY) / 300;
+    if (e.deltaY > 0) {
+        mini_zoom = mini_zoom * zz;
+    } else {
+        mini_zoom = mini_zoom / zz;
+    }
+    render_map();
+};
+
 /**元素相对位置（屏幕坐标） */
 function el_offset(el: Element, pel?: Element) {
     if (!pel) pel = el.parentElement;
@@ -1519,28 +1529,27 @@ function get_out_rect(rect: rect[]) {
     };
 }
 
+var mini_zoom = 3;
+
 /** 渲染小地图 */
 function render_map() {
     if (mini_map_el.parentElement.classList.contains("mini_map_hide")) return;
+    let main_rect = el_offset2(画布, O);
     let els_rect = reflash_rect();
-    let out_rect = get_out_rect(els_rect);
     let z = 1;
     const zz = 2;
     const min = 600,
-        minstyle = `${600 / zz}px`;
-    if (out_rect.right - out_rect.left > out_rect.bottom - out_rect.top) {
-        mini_map_el.height = min;
-        mini_map_el.style.height = minstyle;
-        mini_map_el.style.width = "";
-        z = min / (out_rect.bottom - out_rect.top);
-        mini_map_el.width = (out_rect.right - out_rect.left) * z;
-    } else {
-        mini_map_el.width = min;
-        mini_map_el.style.width = minstyle;
-        mini_map_el.style.height = "";
-        z = min / (out_rect.right - out_rect.left);
-        mini_map_el.height = (out_rect.bottom - out_rect.top) * z;
-    }
+        minstyle = `${600 / zz}px`,
+        max = Math.max(main_rect.w, main_rect.h);
+    z = min / max / mini_zoom;
+    let out_rect = {
+        left: main_rect.x + main_rect.w / 2 - (max / 2) * mini_zoom,
+        top: main_rect.y + main_rect.h / 2 - (max / 2) * mini_zoom,
+    };
+    mini_map_el.style.height = minstyle;
+    mini_map_el.style.width = minstyle;
+    mini_map_el.height = min;
+    mini_map_el.width = min;
     let ctx = mini_map_el.getContext("2d");
     ctx.clearRect(0, 0, mini_map_el.offsetWidth, mini_map_el.height);
     for (let i of els_rect) {
@@ -1552,7 +1561,6 @@ function render_map() {
         ctx.fillStyle = is_dark ? "#fff2" : "#0002";
         ctx.fillRect(x, y, w, h);
     }
-    let main_rect = el_offset2(画布, O);
     ctx.strokeStyle = "#00f";
     ctx.fillStyle = "#00f2";
     ctx.lineWidth = 1;
@@ -1563,11 +1571,6 @@ function render_map() {
         main_rect.w * z,
         main_rect.h * z
     );
-
-    let ol = ((main_rect.x - out_rect.left) * z) / zz;
-    let ot = ((main_rect.y - out_rect.top) * z) / zz;
-    mini_map_el.parentElement.scrollLeft = ol - 300 / 2 + (main_rect.w * z) / zz / 2;
-    mini_map_el.parentElement.scrollTop = ot - 300 / 2 + (main_rect.h * z) / zz / 2;
 }
 
 elFromId("画布").onwheel = (e) => {
