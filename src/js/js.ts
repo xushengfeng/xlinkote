@@ -1377,34 +1377,22 @@ mini_map_el.parentElement.parentElement.onclick = (e) => {
     mini_map_el.parentElement.classList.toggle("mini_map_hide");
     render_map();
 };
-let mini_down = false;
+
 mini_map_el.onpointerdown = (e) => {
-    mini_down = true;
     e.stopPropagation();
-    let els_rect = reflash_rect();
-    let out_rect = get_out_rect(els_rect);
+    let main_rect = el_offset2(画布, O);
     let px = e.offsetX / mini_map_el.offsetWidth;
     let py = e.offsetY / mini_map_el.offsetHeight;
+    const max = Math.max(main_rect.w, main_rect.h);
+    let out_rect = {
+        left: main_rect.x + main_rect.w / 2 - (max / 2) * mini_zoom,
+        top: main_rect.y + main_rect.h / 2 - (max / 2) * mini_zoom,
+    };
 
-    let rx = px * (out_rect.right - out_rect.left) + out_rect.left;
-    let ry = py * (out_rect.bottom - out_rect.top) + out_rect.top;
+    let rx = px * (max * mini_zoom) + out_rect.left;
+    let ry = py * (max * mini_zoom) + out_rect.top;
     set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
 };
-mini_map_el.onpointermove = (e) => {
-    if (mini_down) {
-        let els_rect = reflash_rect();
-        let out_rect = get_out_rect(els_rect);
-        let px = e.offsetX / mini_map_el.offsetWidth;
-        let py = e.offsetY / mini_map_el.offsetHeight;
-
-        let rx = px * (out_rect.right - out_rect.left) + out_rect.left;
-        let ry = py * (out_rect.bottom - out_rect.top) + out_rect.top;
-        set_O_p(-rx * zoom + 画布.offsetWidth / 2, -ry * zoom + 画布.offsetHeight / 2);
-    }
-};
-window.addEventListener("pointerup", () => {
-    mini_down = false;
-});
 ignore_el.push("#mini_map");
 
 mini_map_el.onwheel = (e) => {
