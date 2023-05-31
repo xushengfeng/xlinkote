@@ -6061,6 +6061,9 @@ mqList.addEventListener("change", (event) => {
         ink_color = "#000";
     }
 });
+
+import { pinyin } from "pinyin-pro";
+
 let ink_move = false;
 var ink_t = {}; // 确保清除所有计时器
 ink_el.onpointerdown = (e) => {
@@ -6124,6 +6127,7 @@ ink_el.onpointerup = () => {
                         let text_l = v[1][0][1];
                         set_text(text_l[0]);
                         ink_reset();
+                        put_toast(pinyin(text_l[0]));
                     });
             }, Number(store.ink.延时) * 1000 || 600)
         )
