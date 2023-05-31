@@ -4842,7 +4842,10 @@ function search(input: string[], type: "str" | "regex") {
                             flex.push({
                                 id: i.id,
                                 score: search_score(i.id, 0, x.t, x.v, x.s, x.opsit),
-                                text: JSON5.parse(i.子元素[0].value).text,
+                                text:
+                                    i.子元素[0].type == "X-MD"
+                                        ? JSON5.parse(i.子元素[0].value).text
+                                        : i.子元素[0].value,
                             });
                         }
                     }
