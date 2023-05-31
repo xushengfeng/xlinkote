@@ -6127,7 +6127,7 @@ ink_el.onpointerup = () => {
                         let text_l = v[1][0][1];
                         set_text(text_l[0]);
                         ink_reset();
-                        put_toast(pinyin(text_l[0]));
+                        put_toast(pinyin(text_l[0], { multiple: true }));
                     });
             }, Number(store.ink.延时) * 1000 || 600)
         )
