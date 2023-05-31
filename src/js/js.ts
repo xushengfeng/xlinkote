@@ -9900,6 +9900,7 @@ class time extends HTMLElement {
             this._value2.run.push(new Date().getTime());
             this._value = JSON.stringify(this._value2);
             this.render();
+            this.is_no = false;
         };
         this.time_t = createEl("div");
 
