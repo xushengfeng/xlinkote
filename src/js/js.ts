@@ -1571,10 +1571,12 @@ elFromId("画布").onwheel = (e) => {
         e.preventDefault();
 
         if (zoom_lock) return;
-        let ozoom = zoom,
-            dzoom = -e.deltaY / (800 / zoom);
-        zoom += dzoom;
+
+        let zz = 1 + Math.abs(e.deltaY) / 1000;
+        let ozoom = zoom;
+        zoom = e.deltaY > 0 ? ozoom / zz : ozoom * zz;
         zoom = Math.abs(zoom);
+        let dzoom = zoom - ozoom;
         let dx = e.clientX - O.getBoundingClientRect().x,
             dy = e.clientY - O.getBoundingClientRect().y;
         requestAnimationFrame(() => {
