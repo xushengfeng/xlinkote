@@ -2571,10 +2571,6 @@ function version_tr(obj): 集type {
 
 var 当前画布 = 集.数据[0] as 画布type;
 
-import diff from "deep-diff";
-
-window["diff"] = diff;
-
 /** 设置集 */
 async function set_data(l: 集type) {
     l = version_tr(l);
@@ -2780,108 +2776,6 @@ function check_render_x() {
                     elFromId(data.id)?.remove();
                 }
             }
-        }
-    }
-}
-
-type diff_i = diff.Diff<any, any>;
-
-function set_diff_data(diffl: diff_i[], undo_data: 集type) {
-    if (!diffl) return;
-    console.log(diffl);
-    const main_data = get_data();
-    for (let d of diffl) {
-        if (!d.path) continue;
-        switch (d.path[0]) {
-            case "meta":
-                if (d.path.length == 1) {
-                    集.meta = d["rhs"];
-                } else {
-                    let last = d.path[d.path.length - 1];
-                    if (last == "focus_page") {
-                        let id = d["rhs"];
-                        集.meta.focus_page = id;
-                        for (let el of 画布s.children) {
-                            if (el.id == id) {
-                                (el as HTMLElement).style.display = "block";
-                                O = el as HTMLElement;
-                            } else {
-                                (el as HTMLElement).style.display = "none";
-                            }
-                        }
-                    }
-                    if (last == "file_name") {
-                        set_title(d["rhs"]);
-                        load_file_side_bar();
-                        reload_file_list();
-                    }
-                }
-                break;
-            case "链接":
-                集.链接 = undo_data.链接;
-                break;
-            case "assets":
-                集.assets = undo_data.assets;
-                assets_reflash();
-                break;
-            case "中转站":
-                集.中转站 = undo_data.中转站;
-                tmp_s_reflash();
-                break;
-            case "数据":
-                if (d.path.includes("data")) {
-                    if (d.path.includes("子元素")) {
-                        let offset = -1 - 2;
-                        if (d.path[d.path.length - 1] != "value") {
-                            offset = -1;
-                        }
-                        let t = main_data;
-                        for (let i = 0; i < d.path.length + offset; i++) {
-                            t = t[d.path[i]];
-                        }
-
-                        const id = t["id"];
-                        console.log(id);
-
-                        let el = get_x_by_id(id);
-                        if (d.kind == "E") {
-                            if (d.path[d.path.length - 1] == "value") {
-                                let t = main_data;
-                                for (let i = 0; i < d.path.length - 1; i++) {
-                                    t = t[d.path[i]];
-                                }
-                                (el.querySelector(`${t["type"]}`) as markdown).value = d["rhs"];
-                            } else if (d.path[d.path.length - 1] == "style") {
-                                el.setAttribute("style", d["rhs"]);
-                            } else if (d.path[d.path.length - 1] == "class") {
-                                el.className = d["rhs"];
-                            } else if (d.path[d.path.length - 1] == "id") {
-                                el.id = d["rhs"];
-                            } else if (d.path[d.path.length - 1] == "子元素") {
-                                el.value = d["rhs"];
-                            } else if (d.path[d.path.length - 1] == "type") {
-                                let new_el = createEl(d["rhs"]) as x;
-                                new_el.id = el.id;
-                                new_el.className = el.className;
-                                new_el.setAttribute("style", el.getAttribute("style"));
-                                let v = el.value;
-                                el.parentElement.replaceChild(new_el, el);
-                                if (v) {
-                                    new_el.value = el.value;
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-            case "values":
-                集.values = undo_data.values;
-                if (d.path[1]) {
-                    (elFromId(d.path[1]).querySelector("x-md") as markdown).reload();
-                }
-                break;
-            default:
-                break;
         }
     }
 }
@@ -3243,8 +3137,8 @@ function check_backup() {
 }
 
 // 撤销
-type undo_diff_data = { s: any; diff: diff.Diff<any, any>[] };
-var undo_stack: undo_diff_data[] = [],
+type undo_data = { s: any; data: 集type };
+var undo_stack: undo_data[] = [],
     undo_i = -1;
 
 function undo(v: boolean) {
@@ -3256,9 +3150,7 @@ function undo(v: boolean) {
         if (undo_i >= undo_stack.length) undo_i = undo_stack.length - 1;
     }
     let data = get_undo_s(undo_i);
-    let now_data = get_data();
-    set_diff_data(diff.diff(now_data, data.data), data.data);
-    console.log(diff.diff(get_data(), now_data));
+    set_data(data.data);
 
     selections = data.s;
     if (selections[0].id) {
@@ -3269,33 +3161,22 @@ function undo(v: boolean) {
     }
 }
 
-function get_undo_s(i: number): { s: selection_type[]; data: 集type } {
-    let z = {};
-    for (let n = 0; n <= i; n++) {
-        for (let d of undo_stack[n].diff) {
-            diff.applyChange(z, null, d);
-        }
-    }
-    return { s: undo_stack[i].s, data: z as 集type };
+function get_undo_s(i: number): undo_data {
+    return undo_stack[i];
 }
 
 function push_undo() {
     if (undo_i != undo_stack.length - 1 && undo_i != -1) {
         // 把当前位置的数据移到末
         let pre_data = get_undo_s(undo_i);
-        let last_data = get_undo_s(undo_stack.length - 1);
-        let d = diff.diff(last_data.data, pre_data.data);
-        if (!d) return;
-        let data: undo_diff_data = { s: structuredClone(pre_data.s), diff: d };
-        undo_stack.push(data);
+        if (!pre_data) return;
+        undo_stack.push(pre_data);
         undo_i = undo_stack.length - 1;
     }
 
-    let per = undo_i == -1 ? {} : get_undo_s(undo_i).data;
     let now_data = structuredClone(get_data());
-    let d = diff.diff(per, now_data);
-    if (!d) return;
-    undo_stack.push({ s: structuredClone(selections), diff: d });
+    if (!now_data) return;
+    undo_stack.push({ s: structuredClone(selections), data: now_data });
     undo_i = undo_stack.length - 1;
 
     console.log(undo_stack);
