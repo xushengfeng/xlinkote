@@ -6547,9 +6547,6 @@ function get_svg(c: string) {
     }
     if (!math_loaded && !will_load_math) {
         window.MathJax = {
-            tex: {
-                inlineMath: [["$", "$"]],
-            },
             options: {
                 enableMenu: false,
             },
