@@ -683,9 +683,11 @@ var op = { x: NaN, y: NaN };
  */
 var fxsd: 0 | 1 | 2 | 3 = 0;
 
-function set_O_p(x: number | null, y: number | null) {
+function set_O_p(x: number | null, y: number | null, dx?: number | null, dy?: number | null) {
+    if (dx) x = (op.x || el_offset(O).x) + dx;
+    if (dy) y = (op.y || el_offset(O).y) + dy;
     if (x) {
-        let dx = x - op.x || el_offset(O).x;
+        dx = x - (op.x || el_offset(O).x);
         link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.left = el_offset(search_pel).x + dx + "px";
         md_text.style.left = el_offset(md_text).x + dx + "px";
@@ -693,7 +695,7 @@ function set_O_p(x: number | null, y: number | null) {
         op.x = x;
     }
     if (y) {
-        let dy = y - op.y || el_offset(O).y;
+        dy = y - (op.y || el_offset(O).y);
         link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
         md_text.style.top = el_offset(md_text).y + dy + "px";
@@ -1336,7 +1338,7 @@ zoom_el.onchange = () => {
     let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
         dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
     zoom_o(zoom);
-    set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+    set_O_p(null, null, -dx * (dzoom / ozoom), -dy * (dzoom / ozoom));
     zoom_list.classList.add("zoom_list_hide");
 };
 
@@ -1369,7 +1371,7 @@ for (let i = 25; i <= 200; i += 25) {
         let dx = window.innerWidth / 2 - O.getBoundingClientRect().x,
             dy = window.innerHeight / 2 - O.getBoundingClientRect().y;
         zoom_o(nzoom);
-        set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+        set_O_p(null, null, -dx * (dzoom / ozoom), -dy * (dzoom / ozoom));
     };
 }
 set_O_p(画布.offsetWidth / 2, 画布.offsetHeight / 2);
@@ -1577,7 +1579,7 @@ elFromId("画布").onwheel = (e) => {
             dy = e.clientY - O.getBoundingClientRect().y;
         requestAnimationFrame(() => {
             zoom_o(zoom);
-            set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+            set_O_p(null, null, -dx * (dzoom / ozoom), -dy * (dzoom / ozoom));
         });
     } else {
         let el = <HTMLElement>e.target;
@@ -1598,7 +1600,7 @@ elFromId("画布").onwheel = (e) => {
                 if (fxsd == 0 || fxsd == 1) dy = -e.deltaY;
             }
             requestAnimationFrame(() => {
-                set_O_p(el_offset(O).x + dx, el_offset(O).y + dy);
+                set_O_p(null, null, +dx, +dy);
             });
         } else {
             let a = e.deltaY > 0 ? "next" : "back";
@@ -2162,7 +2164,7 @@ document.onkeydown = (e) => {
                 let dx = now_mouse_e.clientX - O.getBoundingClientRect().x,
                     dy = now_mouse_e.clientY - O.getBoundingClientRect().y;
                 zoom_o(1);
-                set_O_p(el_offset(O).x - dx * (dzoom / ozoom), el_offset(O).y - dy * (dzoom / ozoom));
+                set_O_p(null, null, -dx * (dzoom / ozoom), -dy * (dzoom / ozoom));
                 data_changed();
             }
             break;
@@ -7161,7 +7163,7 @@ class markdown extends HTMLElement {
                 if (e.key == "Enter") {
                     e.preventDefault();
                     if (this._value.type != "text" && this._value.type != "code")
-                        set_O_p(null, O.offsetTop - this.offsetHeight * zoom);
+                        set_O_p(null, null, null, -this.offsetHeight * zoom);
                     data_changed();
                     if (this._value.type == "text") {
                         let last_line_start = text.value.lastIndexOf("\n", text.selectionStart - 1) + 1;
