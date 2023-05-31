@@ -684,10 +684,10 @@ var op = { x: NaN, y: NaN };
 var fxsd: 0 | 1 | 2 | 3 = 0;
 
 function set_O_p(x: number | null, y: number | null, dx?: number | null, dy?: number | null) {
-    if (dx) x = (op.x || el_offset(O).x) + dx;
-    if (dy) y = (op.y || el_offset(O).y) + dy;
+    if (dx) x = op.x + dx;
+    if (dy) y = op.y + dy;
     if (x) {
-        dx = x - (op.x || el_offset(O).x);
+        dx = x - op.x;
         link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.left = el_offset(search_pel).x + dx + "px";
         md_text.style.left = el_offset(md_text).x + dx + "px";
@@ -695,7 +695,7 @@ function set_O_p(x: number | null, y: number | null, dx?: number | null, dy?: nu
         op.x = x;
     }
     if (y) {
-        dy = y - (op.y || el_offset(O).y);
+        dy = y - op.y;
         link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
         md_text.style.top = el_offset(md_text).y + dy + "px";
@@ -2602,6 +2602,7 @@ async function set_data(l: 集type) {
             O = ps[p.id];
             O.style.visibility = "visible";
             zoom_o(Number(O.style.transform.match(/scale\((.*)\)/)[1] || p.p.zoom));
+            op = { x: parseFloat(O.style.left), y: parseFloat(O.style.top) };
         }
     }
     reload_side();
@@ -2704,6 +2705,7 @@ function select_p(id: string) {
             O = el as HTMLElement;
             O.style.visibility = "visible";
             set_zoom(O.style.transform);
+            op = { x: parseFloat(O.style.left), y: parseFloat(O.style.top) };
         } else {
             (el as HTMLElement).style.visibility = "hidden";
         }
