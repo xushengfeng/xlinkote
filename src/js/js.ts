@@ -3279,10 +3279,6 @@ function get_undo_s(i: number): { s: selection_type[]; data: 集type } {
     return { s: undo_stack[i].s, data: z as 集type };
 }
 
-function clone(obj: object) {
-    return JSON5.parse(JSON.stringify(obj));
-}
-
 function push_undo() {
     if (undo_i != undo_stack.length - 1 && undo_i != -1) {
         // 把当前位置的数据移到末
@@ -3290,16 +3286,16 @@ function push_undo() {
         let last_data = get_undo_s(undo_stack.length - 1);
         let d = diff.diff(last_data.data, pre_data.data);
         if (!d) return;
-        let data: undo_diff_data = { s: clone(pre_data.s), diff: d };
+        let data: undo_diff_data = { s: structuredClone(pre_data.s), diff: d };
         undo_stack.push(data);
         undo_i = undo_stack.length - 1;
     }
 
     let per = undo_i == -1 ? {} : get_undo_s(undo_i).data;
-    let now_data = clone(get_data());
+    let now_data = structuredClone(get_data());
     let d = diff.diff(per, now_data);
     if (!d) return;
-    undo_stack.push({ s: clone(selections), diff: d });
+    undo_stack.push({ s: structuredClone(selections), diff: d });
     undo_i = undo_stack.length - 1;
 
     console.log(undo_stack);
