@@ -674,6 +674,7 @@ var o_rect;
 var move: boolean = false;
 var select_id = "";
 var fxsd_el = elFromId("方向锁定");
+var op = { x: NaN, y: NaN };
 /**
  * - 0为全向移动
  * - 1为y
@@ -684,18 +685,20 @@ var fxsd: 0 | 1 | 2 | 3 = 0;
 
 function set_O_p(x: number | null, y: number | null) {
     if (x) {
-        let dx = x - el_offset(O).x;
+        let dx = x - op.x || el_offset(O).x;
         link_value_bar.style.left = el_offset(link_value_bar).x + dx + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.left = el_offset(search_pel).x + dx + "px";
         md_text.style.left = el_offset(md_text).x + dx + "px";
         O.style.left = x + "px";
+        op.x = x;
     }
     if (y) {
-        let dy = y - el_offset(O).y;
+        let dy = y - op.y || el_offset(O).y;
         link_value_bar.style.top = el_offset(link_value_bar).y + dy + "px";
         if (!search_pel.getAttribute("data-fid")) search_pel.style.top = el_offset(search_pel).y + dy + "px";
         md_text.style.top = el_offset(md_text).y + dy + "px";
         O.style.top = y + "px";
+        op.y = y;
     }
     render_map();
     render_select_rects();
