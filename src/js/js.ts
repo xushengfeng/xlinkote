@@ -4830,11 +4830,17 @@ search_el.oninput = search_el.click = () => {
         show_md_type_l(arg.args);
     }
 };
-search_el.onblur = () => {
+function hide_search() {
     search_pel.classList.remove("搜索展示");
     search_pel.setAttribute("data-fid", "");
 
     view_el.classList.add("viewer_hide");
+
+    search_main = search_r;
+    search_more.classList.add("search_more_hide");
+}
+search_el.onblur = () => {
+    hide_search();
 };
 search_el.onkeydown = (e) => {
     if (e.key == "ArrowUp" || e.key == "ArrowDown") {
@@ -4844,10 +4850,7 @@ search_el.onkeydown = (e) => {
 search_el.onkeyup = (e) => {
     switch (e.key) {
         case "Escape":
-            search_pel.classList.remove("搜索展示");
-            search_pel.setAttribute("data-fid", "");
-
-            view_el.classList.add("viewer_hide");
+            hide_search();
             break;
         case "ArrowUp":
             if (select_index == -1) {
