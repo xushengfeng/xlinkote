@@ -1096,21 +1096,25 @@ function add_blank(op: p_point, p: p_point) {
                     case 0:
                         if (el_o.y + el_o.h < op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
                             set_data_style(xel, "top", el_o.y - r.h + "px");
+                            xel.rect.y -= r.h;
                         }
                         break;
                     case 1:
                         if (el_o.x > op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
                             set_data_style(xel, "left", el_o.x + r.w + "px");
+                            xel.rect.x += r.w;
                         }
                         break;
                     case 2:
                         if (el_o.y > op.y && r.x <= el_o.x && el_o.x + el_o.w <= r.x + r.w) {
                             set_data_style(xel, "top", el_o.y + r.h + "px");
+                            xel.rect.y += r.h;
                         }
                         break;
                     case 3:
                         if (el_o.x + el_o.w < op.x && r.y <= el_o.y && el_o.y + el_o.h <= r.y + r.h) {
                             set_data_style(xel, "left", el_o.x - r.w + "px");
+                            xel.rect.x -= r.w;
                         }
                         break;
                 }
