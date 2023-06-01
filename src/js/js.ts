@@ -144,6 +144,7 @@ const version_el = <HTMLElement>about.querySelector("#version");
 
 var search_el = elFromId("search") as HTMLInputElement;
 var search_r = elFromId("搜索结果");
+var search_more = elFromId("更多结果");
 var search_pel = elFromId("搜索");
 
 const view_el = elFromId("viewer");
@@ -4804,6 +4805,8 @@ function search_score(
 }
 
 let select_index = 0;
+let select_main_i = 0;
+let search_main = search_r;
 search_el.oninput = search_el.click = () => {
     let arg = cmd(search_el.value);
     if (arg.name == "s") {
@@ -4847,17 +4850,30 @@ search_el.onkeyup = (e) => {
             break;
         case "ArrowUp":
             if (select_index == -1) {
-                select_index = search_r.childElementCount - 1;
+                select_index = search_main.childElementCount - 1;
             } else {
                 select_index--;
             }
             break;
         case "ArrowDown":
-            if (select_index == search_r.childElementCount - 1) {
+            if (select_index == search_main.childElementCount - 1) {
                 select_index = -1;
             } else {
                 select_index++;
             }
+            break;
+        case "ArrowRight":
+            let el = select_search(select_index);
+            search_main = search_more;
+            select_main_i = select_index;
+            select_index = 0;
+            load_more_search(el.getAttribute("data-id"));
+            search_more.classList.remove("search_more_hide");
+            break;
+        case "ArrowLeft":
+            search_main = search_r;
+            select_index = select_main_i;
+            search_more.classList.add("search_more_hide");
             break;
         case "Enter":
             if (select_index != -1) e.preventDefault();
@@ -4879,22 +4895,72 @@ search_el.onkeyup = (e) => {
     }
 };
 
+function load_more_search(id: string) {
+    let chainr: search_result = [];
+    let flex: search_result = [];
+    // 链式搜索
+    let c = link(id).get(1);
+    for (let i in c) {
+        集_for_each((xel) => {
+            if (xel.id == i && xel.子元素.length == 1 && xel.子元素[0].type == "X-MD") {
+                chainr.push({
+                    id: i,
+                    score: 1,
+                    text: JSON5.parse(xel.子元素[0].value).text,
+                });
+                return true;
+            }
+        });
+    }
+    集_for_each((i, p, path) => {
+        if (i.id == id && path[path.length - 1]?.子元素) {
+            for (let i of path[path.length - 1].子元素) {
+                if (i.子元素?.length == 1 && i.子元素[0].type != "X-X") {
+                    flex.push({
+                        id: i.id,
+                        score: 1,
+                        text: i.子元素[0].type == "X-MD" ? JSON5.parse(i.子元素[0].value).text : i.子元素[0].value,
+                    });
+                }
+            }
+            return true;
+        }
+    });
+    let has_id = {};
+    let result = [] as search_result;
+    for (let i of chainr) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    for (let i of flex) {
+        if (!has_id[i.id]) {
+            result.push(i);
+            has_id[i.id] = true;
+        }
+    }
+    show_search_l(result);
+    select_search(0);
+}
+
 function select_search(i: number) {
-    search_r.querySelectorAll(".search_item_select").forEach((el) => {
+    search_main.querySelectorAll(".search_item_select").forEach((el) => {
         el.classList.remove("search_item_select");
     });
-    let el = <HTMLElement>search_r.children[i];
+    let el = <HTMLElement>search_main.children[i];
     if (!el) return;
     el.classList.add("search_item_select");
-    let ri = search_r.children[i].getBoundingClientRect();
-    let r = search_r.getBoundingClientRect();
+    let ri = search_main.children[i].getBoundingClientRect();
+    let r = search_main.getBoundingClientRect();
     if (ri.top < r.top) {
-        search_r.scrollTop = el.offsetTop - (<HTMLElement>search_r.children[0]).offsetTop;
+        search_main.scrollTop = el.offsetTop - (<HTMLElement>search_main.children[0]).offsetTop;
     }
     if (ri.bottom > r.bottom) {
-        search_r.scrollTop = el.offsetTop + el.offsetHeight - r.height - (<HTMLElement>search_r.children[0]).offsetTop;
+        search_main.scrollTop =
+            el.offsetTop + el.offsetHeight - r.height - (<HTMLElement>search_main.children[0]).offsetTop;
     }
-    return search_r.children[i];
+    return search_main.children[i];
 }
 
 function click_search_item(iid: string) {
@@ -4920,6 +4986,9 @@ function click_search_item(iid: string) {
 search_r.onpointerleave = () => {
     view_el.classList.add("viewer_hide");
 };
+search_more.onpointerleave = () => {
+    view_el.classList.add("viewer_hide");
+};
 
 search_el.onchange = () => {
     run_cmd();
@@ -4931,7 +5000,7 @@ function show_search_l(l: search_result, exid?: string) {
         return a.score - b.score;
     });
     if (exid) l = l.filter((i) => i.id != exid);
-    search_r.innerHTML = "";
+    search_main.innerHTML = "";
     const els = new Map<string, HTMLElement>();
     let search_r_f = document.createDocumentFragment();
     for (let i of l) {
@@ -4989,7 +5058,7 @@ function show_search_l(l: search_result, exid?: string) {
     }
 
     link("0").衰减();
-    search_r.append(search_r_f);
+    search_main.append(search_r_f);
     r_i_r();
 }
 
@@ -5009,7 +5078,7 @@ function create_r_item() {
 
 /** 为项添加序列信息 */
 function r_i_r() {
-    [...search_r.children].forEach((div, i) => {
+    [...search_main.children].forEach((div, i) => {
         div.setAttribute("data-i", String(i));
     });
 }

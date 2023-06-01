@@ -1058,7 +1058,7 @@ body > #搜索 {
     border-radius: 4px;
     box-sizing: border-box;
     z-index: 3;
-    @apply flex flex-col-reverse;
+    @apply flex flex-col-reverse overflow-hidden;
 }
 .搜索展示 {
     opacity: 1 !important;
@@ -1074,8 +1074,9 @@ body > #搜索 > input {
 body > #搜索 > #搜索结果 {
     overflow: auto;
     max-height: 50vh;
+    @apply search_r;
 }
-body > #搜索 > #搜索结果 > div {
+.search_r > div {
     position: relative;
     margin: 4px;
     padding: 4px;
@@ -1083,13 +1084,24 @@ body > #搜索 > #搜索结果 > div {
     border-radius: 4px;
     transition: var(--transition);
 }
-body > #搜索 > #搜索结果 > div > div:last-child {
+.search_r > div > div:last-child {
     position: absolute;
     right: 0;
     top: 0;
 }
-body > #搜索 > #搜索结果 > div > div > span > span {
+.search_r > div > div > span > span {
     color: #f55;
+}
+body > #搜索 > #更多结果 {
+    overflow: auto;
+    top: 24px;
+    height: calc(100% - 24px);
+    width: 100%;
+    transition: var(--transition);
+    @apply absolute bar search_r;
+}
+.search_more_hide {
+    transform: translateX(100%);
 }
 .search_item_select {
     background-color: var(--bg-color5);
