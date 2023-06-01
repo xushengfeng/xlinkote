@@ -3180,6 +3180,7 @@ function push_undo() {
     let now_data = structuredClone(get_data());
     if (!now_data) return;
     undo_stack.push({ s: structuredClone(selections), data: now_data });
+    if (undo_stack.length > 20) undo_stack.splice(0, 1);
     undo_i = undo_stack.length - 1;
 
     console.log(undo_stack);
