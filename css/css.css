@@ -1093,9 +1093,7 @@ body > #搜索 > #搜索结果 > div {
     cursor: pointer;
     border-radius: 4px;
     transition: var(--transition);
-}
-.search_r > div > div {
-    height: 24px;
+    height: 32px;
     @apply overflow-hidden;
 }
 .search_r > div > div:last-child {
