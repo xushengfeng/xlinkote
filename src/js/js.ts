@@ -5003,7 +5003,8 @@ function show_search_l(l: search_result, exid?: string) {
     search_main.innerHTML = "";
     const els = new Map<string, HTMLElement>();
     let search_r_f = document.createDocumentFragment();
-    for (let i of l) {
+    for (let n = l.length - 1; n >= 0; n--) {
+        const i = l[n];
         let div = els.get(i.id);
         if (!div) {
             div = create_r_item();
@@ -5039,11 +5040,7 @@ function show_search_l(l: search_result, exid?: string) {
         let value = createEl("div");
         value.append(link_value_text(link(i.id).get_v()));
         div.append(value);
-        if (search_r_f.firstChild) {
-            search_r_f.firstChild.before(div);
-        } else {
-            search_r_f.append(div);
-        }
+        search_r_f.append(div);
     }
 
     function add_div_event(div: HTMLElement, id: string) {
