@@ -9540,6 +9540,8 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
         pxel.style.textAlignLast = "justify";
         pxel.style.fontSize = "12px";
         z.push(pxel);
+        let xx = p.w / w,
+            yy = p.h / h;
         for (let i of v) {
             if (!i.text) continue;
             tl.push(i.text);
@@ -9548,10 +9550,10 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
             let x1 = i.box[2][0];
             let y1 = i.box[2][1];
             let xel = createEl("x-x");
-            xel.style.left = x0 + "px";
-            xel.style.top = y0 + "px";
-            xel.style.width = x1 - x0 + "px";
-            xel.style.height = y1 - y0 + "px";
+            xel.style.left = x0 * xx + "px";
+            xel.style.top = y0 * yy + "px";
+            xel.style.width = (x1 - x0) * xx + "px";
+            xel.style.height = (y1 - y0) * yy + "px";
             z.push(xel, pxel);
             var md = createEl("x-md");
             xel.append(md);
