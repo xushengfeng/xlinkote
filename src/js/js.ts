@@ -4652,8 +4652,6 @@ function search(input: string[], type: "str" | "regex") {
     let s = x.str;
     let result = [] as search_result;
     let sr: search_result = [];
-    let chainr: search_result = [];
-    let flex: search_result = [];
     let bci: search_result = [];
     let other: search_result = [];
     let has_id = {};
@@ -4703,42 +4701,6 @@ function search(input: string[], type: "str" | "regex") {
                 }
                 break;
         }
-        // 链式搜索
-        if (searched) {
-            let c = link(id).get(1);
-            for (let i in c) {
-                集_for_each((xel) => {
-                    if (xel.id == i && xel.子元素.length == 1 && xel.子元素[0].type == "X-MD") {
-                        chainr.push({
-                            id: i,
-                            score: search_score(i, 0, x.t, x.v, x.s, x.opsit),
-                            text: JSON5.parse(xel.子元素[0].value).text,
-                        });
-                        return true;
-                    }
-                });
-            }
-        }
-
-        if (searched) {
-            集_for_each((i, p, path) => {
-                if (i.id == id && path[path.length - 1]?.子元素) {
-                    for (let i of path[path.length - 1].子元素) {
-                        if (i.子元素?.length == 1 && i.子元素[0].type != "X-X" && i.id != id) {
-                            flex.push({
-                                id: i.id,
-                                score: search_score(i.id, 0, x.t, x.v, x.s, x.opsit),
-                                text:
-                                    i.子元素[0].type == "X-MD"
-                                        ? JSON5.parse(i.子元素[0].value).text
-                                        : i.子元素[0].value,
-                            });
-                        }
-                    }
-                    return true;
-                }
-            });
-        }
 
         if (!s) {
             other.push({
@@ -4770,18 +4732,6 @@ function search(input: string[], type: "str" | "regex") {
     for (let i of sr) {
         has_id[i.id] = true;
         result.push(i);
-    }
-    for (let i of chainr) {
-        if (!has_id[i.id]) {
-            result.push(i);
-            has_id[i.id] = true;
-        }
-    }
-    for (let i of flex) {
-        if (!has_id[i.id]) {
-            result.push(i);
-            has_id[i.id] = true;
-        }
     }
     for (let i of other) {
         if (!has_id[i.id]) {
