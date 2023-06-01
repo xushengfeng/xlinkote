@@ -5067,7 +5067,7 @@ function show_search_l(l: search_result, exid?: string) {
     link("0").衰减();
     let ddd = createEl("div");
     search_main.append(ddd);
-    ddd.style.height = search_r_divs.length * search_i_height + "px";
+    ddd.style.height = search_r_divs.length * search_i_height + 8 + "px";
     render_search_l();
     r_i_r();
 }
