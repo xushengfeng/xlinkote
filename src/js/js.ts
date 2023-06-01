@@ -5160,7 +5160,11 @@ function show_md_type_l(arg: string[]) {
     });
     let fr = fuse.search(arg[0]);
     search_r.innerHTML = "";
-    for (let i of fr) {
+    let dd = createEl("div");
+    search_r.append(dd);
+    search_r_divs = [];
+    for (let n in fr) {
+        const i = fr[n];
         for (let j of i.matches) {
             let indices = [...j.indices].sort((a, b) => a[0] - b[0]);
             let line = create_r_item();
@@ -5177,13 +5181,16 @@ function show_md_type_l(arg: string[]) {
             }
             line.append(p);
             line.setAttribute("data-id", j.value);
-            search_r.append(line);
+            dd.append(line);
+            line.style.top = Number(n) * search_i_height + "px";
+            search_r_divs.push(line);
             line.onpointerdown = () => {
                 search_el.value = "type " + j.value;
                 run_cmd();
             };
         }
     }
+    dd.style.height = fr.length * search_i_height + 8 + "px";
     select_index = -1;
     r_i_r();
 }
