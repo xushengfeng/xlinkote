@@ -1067,6 +1067,9 @@ body > #搜索 {
 body > #搜索[data-fid="0"] {
     @apply flex-col;
 }
+body > #搜索[data-fid="0"] > #更多结果 {
+    top: 24px;
+}
 body > #搜索 > input {
     width: 100%;
     padding-left: 4px;
@@ -1101,7 +1104,7 @@ body > #搜索 > #搜索结果 > div {
 }
 body > #搜索 > #更多结果 {
     overflow: auto;
-    top: 24px;
+    top: 0;
     height: calc(100% - 24px);
     width: 100%;
     transition: var(--transition);
