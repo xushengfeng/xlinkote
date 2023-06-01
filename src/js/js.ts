@@ -4850,13 +4850,13 @@ search_el.onkeyup = (e) => {
             break;
         case "ArrowUp":
             if (select_index == -1) {
-                select_index = search_main.childElementCount - 1;
+                select_index = search_r_divs.length - 1;
             } else {
                 select_index--;
             }
             break;
         case "ArrowDown":
-            if (select_index == search_main.childElementCount - 1) {
+            if (select_index == search_r_divs.length - 1) {
                 select_index = -1;
             } else {
                 select_index++;
@@ -4866,6 +4866,7 @@ search_el.onkeyup = (e) => {
             let el = select_search(select_index);
             search_main = search_more;
             select_main_i = select_index;
+            search_main_r_divs = search_r_divs;
             select_index = 0;
             load_more_search(el.getAttribute("data-id"));
             search_more.classList.remove("search_more_hide");
@@ -4873,6 +4874,7 @@ search_el.onkeyup = (e) => {
         case "ArrowLeft":
             search_main = search_r;
             select_index = select_main_i;
+            search_r_divs = search_main_r_divs;
             search_more.classList.add("search_more_hide");
             break;
         case "Enter":
@@ -4948,19 +4950,16 @@ function select_search(i: number) {
     search_main.querySelectorAll(".search_item_select").forEach((el) => {
         el.classList.remove("search_item_select");
     });
-    let el = <HTMLElement>search_main.children[i];
+    let el = search_r_divs[i];
     if (!el) return;
     el.classList.add("search_item_select");
-    let ri = search_main.children[i].getBoundingClientRect();
-    let r = search_main.getBoundingClientRect();
-    if (ri.top < r.top) {
-        search_main.scrollTop = el.offsetTop - (<HTMLElement>search_main.children[0]).offsetTop;
+    if (i * search_i_height < search_main.scrollTop) {
+        search_main.scrollTop = i * search_i_height;
     }
-    if (ri.bottom > r.bottom) {
-        search_main.scrollTop =
-            el.offsetTop + el.offsetHeight - r.height - (<HTMLElement>search_main.children[0]).offsetTop;
+    if ((i + 1) * search_i_height > search_main.scrollTop + search_main.offsetHeight) {
+        search_main.scrollTop = (i + 1) * search_i_height - search_main.offsetHeight;
     }
-    return search_main.children[i];
+    return el;
 }
 
 function click_search_item(iid: string) {
@@ -4994,6 +4993,10 @@ search_el.onchange = () => {
     run_cmd();
 };
 
+let search_r_divs: HTMLElement[] = [];
+let search_main_r_divs: HTMLElement[] = [];
+const search_i_height = 32;
+
 /** 展示搜索结果 */
 function show_search_l(l: search_result, exid?: string) {
     l = l.sort((a, b) => {
@@ -5001,8 +5004,8 @@ function show_search_l(l: search_result, exid?: string) {
     });
     if (exid) l = l.filter((i) => i.id != exid);
     search_main.innerHTML = "";
+    search_r_divs = [];
     const els = new Map<string, HTMLElement>();
-    let search_r_f = document.createDocumentFragment();
     for (let n = l.length - 1; n >= 0; n--) {
         const i = l[n];
         let div = els.get(i.id);
@@ -5040,7 +5043,8 @@ function show_search_l(l: search_result, exid?: string) {
         let value = createEl("div");
         value.append(link_value_text(link(i.id).get_v()));
         div.append(value);
-        search_r_f.append(div);
+        div.style.top = search_i_height * (l.length - n - 1) + "px";
+        search_r_divs.push(div);
     }
 
     function add_div_event(div: HTMLElement, id: string) {
@@ -5055,9 +5059,35 @@ function show_search_l(l: search_result, exid?: string) {
     }
 
     link("0").衰减();
-    search_main.append(search_r_f);
+    let ddd = createEl("div");
+    search_main.append(ddd);
+    ddd.style.height = search_r_divs.length * search_i_height + "px";
+    render_search_l();
     r_i_r();
 }
+
+function render_search_l() {
+    let top = search_main.scrollTop;
+    let b = top + search_main.offsetHeight;
+    let start = Math.floor(top / search_i_height);
+    let len = Math.ceil((b - top) / search_i_height);
+    let has = [];
+    for (let el of search_main.querySelector("div").children) {
+        let eli = Number(el.getAttribute("data-i"));
+        if (eli < start || start + len < eli) {
+            el.remove();
+        } else {
+            has.push(eli);
+        }
+    }
+    for (let i = start; i < Math.min(search_r_divs.length, start + len); i++) {
+        if (!has.includes(i)) search_main.querySelector("div").append(search_r_divs[i]);
+    }
+}
+
+search_main.onscroll = () => {
+    render_search_l();
+};
 
 /** 创建项 */
 function create_r_item() {
@@ -5075,7 +5105,7 @@ function create_r_item() {
 
 /** 为项添加序列信息 */
 function r_i_r() {
-    [...search_main.children].forEach((div, i) => {
+    search_r_divs.forEach((div, i) => {
         div.setAttribute("data-i", String(i));
     });
 }

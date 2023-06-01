@@ -1072,12 +1072,19 @@ body > #搜索 > input {
     padding-left: 4px;
 }
 body > #搜索 > #搜索结果 {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 50vh;
+}
+body > #搜索 > #搜索结果 > div {
     @apply search_r;
 }
+.search_r {
+    @apply relative;
+}
 .search_r > div {
-    position: relative;
+    position: absolute;
+    width: calc(100% - 8px);
     margin: 4px;
     padding: 4px;
     cursor: pointer;
@@ -1098,7 +1105,10 @@ body > #搜索 > #更多结果 {
     height: calc(100% - 24px);
     width: 100%;
     transition: var(--transition);
-    @apply absolute bar search_r;
+    @apply absolute bar;
+}
+body > #搜索 > #更多结果 > div {
+    @apply search_r;
 }
 .search_more_hide {
     transform: translateX(100%);
