@@ -999,8 +999,6 @@ function e2p(e: MouseEvent) {
 
 var selected_el: string[] = [];
 
-window["get_selected_el"] = () => selected_el;
-
 /**选择元素 */
 function select_x_x(rect: { x: number; y: number; w: number; h: number }) {
     集_for_each((el, p, path) => {
@@ -5978,7 +5976,13 @@ function get_nearest_x(id: string, a: "left" | "right" | "up" | "down") {
     return id;
 }
 
-window["xln"] = {};
+window["xln"] = {
+    el: {
+        selected_els: () => selected_el,
+        get_data: get_x_data,
+        set_style: set_data_style,
+    },
+};
 
 // 手写识别
 elFromId("ink_icon").onpointerdown = (e) => {
