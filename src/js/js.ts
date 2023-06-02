@@ -764,7 +764,7 @@ document.onmouseup = (e) => {
             add_blank(o_ab_p, e2p(e));
         } else {
             let r = p2rect(o_ab_p, e2p(e));
-            create_x_x(r.x, r.y);
+            if (r.w > 8 && r.h > 8) create_x_x(r.x, r.y);
         }
     }
     o_e = null;
