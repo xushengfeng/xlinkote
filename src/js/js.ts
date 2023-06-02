@@ -6445,17 +6445,17 @@ function tikz_svg(e: Event) {
     let svg1 = elFromId(id);
     let rx = Infinity,
         ry = Infinity,
-        rw = 0,
-        rh = 0;
+        rr = -Infinity,
+        rb = -Infinity;
     svg1.querySelectorAll(":scope > *").forEach((el: SVGGElement) => {
         let r = el.getBBox();
         if (r.x < rx) rx = r.x;
         if (r.y < ry) ry = r.y;
-        if (r.x + r.width > rw) rw = r.x + r.width;
-        if (r.y + r.height > rh) rh = r.y + r.height;
+        if (r.x + r.width > rr) rr = r.x + r.width;
+        if (r.y + r.height > rb) rb = r.y + r.height;
     });
-    rw = rw - rx;
-    rh = rh - ry;
+    let rw = rr - rx;
+    let rh = rb - ry;
     svg1.setAttribute("viewBox", `${rx} ${ry} ${rw} ${rh}`);
     svg1.setAttribute("width", String(rw));
     svg1.setAttribute("height", String(rh));
