@@ -3443,6 +3443,14 @@ function assets_reflash() {
             }
         });
 
+        for (let data of 集.中转站) {
+            if (data.子元素?.[0]?.type == "X-FILE") {
+                if (JSON5.parse(data.子元素[0].value).id == i) {
+                    r.classList.add("not_click");
+                }
+            }
+        }
+
         function bytes_to_size(sizes: number) {
             let mYsize = sizes;
             if (mYsize == 0) return 0 + "B";
