@@ -4722,6 +4722,16 @@ function search(input: string[], type: "str" | "regex") {
 function search_cmd(str: string[]) {
     let xop = window["xln"]["search"]["score"];
     type sf = (str: string, info: { type: string; text: string }, id: string) => search_result;
+    let d_search: sf = (str, info, id) => {
+        let sr: search_result = [];
+        sr.push({
+            id: id,
+            type: "str",
+            text: info.text,
+            score: search_score(id, 1, xop.t, xop.v, xop.s, xop.opsit),
+        });
+        return sr;
+    };
     let str_search: sf = (str, md, id) => {
         const fuse = new Fuse(md.text.split("\n"), {
             includeMatches: true,
