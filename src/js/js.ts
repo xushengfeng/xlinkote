@@ -4633,9 +4633,9 @@ type search_result = {
     type?: "str" | "regex";
     score: number;
 }[];
-let search_x: ReturnType<typeof search_cmd> = null;
+let search_x: string = "";
 
-let search_list: { [id: string]: string } = {};
+let search_list: { [id: string]: { text: string; type: string } } = {};
 
 function get_search_list() {
     search_list = {};
@@ -4647,7 +4647,7 @@ function get_search_list() {
         for (let i of data) {
             if (i.type == "X-MD") {
                 if (!集.链接[0][pid]) continue;
-                search_list[pid] = JSON5.parse(i.value).text;
+                search_list[pid] = JSON5.parse(i.value);
             } else {
                 if (i.子元素) {
                     w(i.子元素, i.id);
@@ -4666,7 +4666,9 @@ function set_search_de() {
 
 function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
-    search_x = x;
+    console.log(x);
+    let xop = window["xln"]["search"]["score"];
+    search_x = input[1] || "";
     let s = x.str;
     let result = [] as search_result;
     let sr: search_result = [];
@@ -4674,77 +4676,23 @@ function search(input: string[], type: "str" | "regex") {
     let other: search_result = [];
     let has_id = {};
     for (let id in search_list) {
-        const text = search_list[id];
-
-        let searched = false;
-        switch (type) {
-            case "str":
-                const fuse = new Fuse(text.split("\n"), {
-                    includeMatches: true,
-                    findAllMatches: true,
-                    useExtendedSearch: true,
-                    includeScore: true,
-                });
-                let fr = fuse.search(s);
-                for (let i of fr) {
-                    sr.push({
-                        id: id,
-                        l: i.matches,
-                        n: i.refIndex,
-                        type: "str",
-                        score: search_score(id, 1 - i.score, x.t, x.v, x.s, x.opsit),
-                    });
-                    searched = true;
-                }
-                break;
-            case "regex":
-                let r: RegExp;
-                try {
-                    r = eval("/" + s + "/g");
-                } catch (error) {
-                    console.error(error);
-                }
-                let rl = Array.from(new Set(text.match(r)));
-                let l = [];
-                for (let i of rl) {
-                    l.push({ value: i, indices: s_i(i, text).map((v) => [v, v + i.length]) });
-                }
-                if (l.length != 0) {
-                    sr.push({
-                        id: id,
-                        l,
-                        score: search_score(id, 1, x.t, x.v, x.s, x.opsit),
-                    });
-                    searched = true;
-                }
-                break;
-        }
+        const info = search_list[id];
+        let r = x.f(x.str, info, id);
+        sr.push(...r);
 
         if (!s) {
             other.push({
                 id: id,
-                score: search_score(id, 0, x.t, x.v, x.s, x.opsit),
-                text: text,
+                score: search_score(id, 0, xop.t, xop.v, xop.s, xop.opsit),
+                text: info.text,
             });
 
             bci.push({
                 id: id,
-                score: search_score(id, 0, x.t, x.v, x.s, x.opsit),
-                text: text,
+                score: search_score(id, 0, xop.t, xop.v, xop.s, xop.opsit),
+                text: info.text,
             });
         }
-    }
-
-    function s_i(t: string, st: string) {
-        let l = [];
-        if (t == "") return l;
-        let n = 0;
-        while (st.indexOf(t, n) != -1) {
-            n = st.indexOf(t, n);
-            l.push(n);
-            n++;
-        }
-        return l;
     }
 
     for (let i of sr) {
@@ -4763,7 +4711,7 @@ function search(input: string[], type: "str" | "regex") {
             has_id[i.id] = true;
         }
     }
-    if (x.random) {
+    if (xop.random) {
         for (let x of result) {
             x.score = Math.random();
         }
@@ -4772,33 +4720,77 @@ function search(input: string[], type: "str" | "regex") {
 }
 
 function search_cmd(str: string[]) {
-    let op = false,
-        random = false,
-        s = 2,
-        v = 1,
-        t = 1;
-    if (str[1]) {
-        let ll = str.slice(1);
-        if (ll[0] == "-" || ll[0] == "r") {
-            if (ll[0] == "-") {
-                op = true;
-            }
-            if (ll[0] == "r") {
-                random = true;
-            }
-            ll.splice(0, 1);
+    let xop = window["xln"]["search"]["score"];
+    type sf = (str: string, info: { type: string; text: string }, id: string) => search_result;
+    let str_search: sf = (str, md, id) => {
+        const fuse = new Fuse(md.text.split("\n"), {
+            includeMatches: true,
+            findAllMatches: true,
+            useExtendedSearch: true,
+            includeScore: true,
+        });
+        let fr = fuse.search(str);
+        let sr: search_result = [];
+        for (let i of fr) {
+            sr.push({
+                id: id,
+                l: i.matches,
+                n: i.refIndex,
+                type: "str",
+                score: search_score(id, 1 - i.score, xop.t, xop.v, xop.s, xop.opsit),
+            });
         }
-        if (ll[0]) {
-            s = Number(ll[0]);
+        return sr;
+    };
+
+    function s_i(t: string, st: string) {
+        let l = [];
+        if (t == "") return l;
+        let n = 0;
+        while (st.indexOf(t, n) != -1) {
+            n = st.indexOf(t, n);
+            l.push(n);
+            n++;
         }
-        if (ll[1]) {
-            v = Number(ll[1]);
-        }
-        if (ll[2]) {
-            t = Number(ll[2]);
-        }
+        return l;
     }
-    return { str: str[0] || "", s, v, t, opsit: op, random };
+
+    let regex_search: sf = (str, info, id) => {
+        let r: RegExp;
+        try {
+            r = eval("/" + str + "/g");
+        } catch (error) {
+            console.error(error);
+        }
+        let rl = Array.from(new Set(info.text.match(r)));
+        let l = [];
+        for (let i of rl) {
+            l.push({ value: i, indices: s_i(i, info.text).map((v) => [v, v + i.length]) });
+        }
+        let sr: search_result = [];
+        if (l.length != 0) {
+            sr.push({
+                id: id,
+                l,
+                score: search_score(id, 1, xop.t, xop.v, xop.s, xop.opsit),
+            });
+        }
+        return sr;
+    };
+    let fun: sf;
+    if (str?.[1]?.[0] == "#") {
+        let data = get_x_data(str[1].replace("#", ""));
+        if (data && data.子元素[0].type == "X-MD") {
+            let code = JSON5.parse(data.子元素[0].value).text;
+            let f: sf = eval(code);
+            fun = f;
+        } else {
+            fun = str_search;
+        }
+    } else {
+        fun = str_search;
+    }
+    return { str: str[0], f: fun };
 }
 
 /** 计算 时间 值 搜索匹配度 距离 */
@@ -5132,9 +5124,7 @@ function r_i_r() {
 function search_text(text: string) {
     let t = `s '${text}'`;
     if (search_x) {
-        t += ` ${search_x.s || ""} ${search_x.v || ""} ${search_x.t || ""}`;
-        if (search_x.opsit) t += " -";
-        if (search_x.random) t += " r";
+        t += ` ${search_x || ""}`;
     }
     return t;
 }
@@ -6002,6 +5992,9 @@ window["xln"] = {
         selected_els: () => selected_el,
         get_data: get_x_data,
         set_style: set_data_style,
+    },
+    search: {
+        score: { t: 1, v: 2, s: 1, opsit: false, random: false },
     },
 };
 
