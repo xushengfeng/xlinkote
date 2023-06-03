@@ -4976,8 +4976,7 @@ function select_search(i: number) {
 function click_search_item(iid: string) {
     let arg = cmd(search_el.value);
     if (arg.name == "s") {
-        let el = elFromId(iid) as x & xlink;
-        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(el.id);
+        if (search_pel.getAttribute("data-fid") == "0") jump_to_x_link(iid);
         else view_el.classList.add("viewer_hide");
         show_search_l([]);
         let id = search_pel.getAttribute("data-fid") || link_value_bar.elid;
