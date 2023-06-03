@@ -4658,6 +4658,12 @@ function get_search_list() {
     link("0").map();
 }
 
+/** 设置默认搜索，清楚更多搜索 */
+function set_search_de() {
+    search_main = search_r;
+    search_more.classList.add("search_more_hide");
+}
+
 function search(input: string[], type: "str" | "regex") {
     let x = search_cmd(input);
     search_x = x;
@@ -4846,8 +4852,7 @@ function hide_search() {
 
     view_el.classList.add("viewer_hide");
 
-    search_main = search_r;
-    search_more.classList.add("search_more_hide");
+    set_search_de();
 }
 search_el.onblur = () => {
     hide_search();
@@ -5148,6 +5153,7 @@ function show_g_search() {
         search_el.value = search_text("");
         search_el.setSelectionRange(3, 3);
     }
+    set_search_de();
     get_search_list();
     let l = search(arg.args, "str");
     show_search_l(l);
@@ -9104,6 +9110,7 @@ class link_value extends HTMLElement {
             } else {
                 v = el.innerText;
             }
+            set_search_de();
             get_search_list();
             let l = search([v], "str");
             show_search_l(l, this._id);
