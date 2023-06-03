@@ -1140,7 +1140,7 @@ body > #viewer > #viewer_children {
     transition: opacity var(--transition);
 }
 body > #viewer > #viewer_highlight {
-    @apply absolute;
+    @apply absolute transition-all;
     border: 1px dashed var(--main-color);
 }
 body > #tips {
