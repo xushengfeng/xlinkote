@@ -4680,7 +4680,7 @@ function search(input: string[], type: "str" | "regex") {
         let r = x.f(x.str, info, id);
         sr.push(...r);
 
-        if (!s) {
+        if (!s && !input[1]) {
             other.push({
                 id: id,
                 score: search_score(id, 0, xop.t, xop.v, xop.s, xop.opsit),
