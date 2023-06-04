@@ -6003,7 +6003,7 @@ window["xln"] = {
         set_style: set_data_style,
     },
     search: {
-        score: { t: 1, v: 2, s: 1, opsit: false, random: false },
+        score: { t: 1, v: 1, s: 3, opsit: false, random: false },
     },
 };
 
