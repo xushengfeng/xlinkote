@@ -2620,7 +2620,7 @@ function reload_side() {
     if (O.children[O.children.length - 1]) {
         z.focus(O.children[O.children.length - 1].id);
     }
-    l_math();
+    l_latex_math();
     tmp_s_reflash();
     assets_reflash();
 }
@@ -5220,6 +5220,7 @@ const md_type_l: md_type[] = [
     "p",
     "text",
     "todo",
+    "latex math",
     "math",
     "iframe",
 ];
@@ -6348,6 +6349,8 @@ var md = markdownit({
     .use(markdownitTaskLists, { enabled: true })
     .use(markdownitEmoji);
 
+import * as xmmath from "xmmath";
+
 var defaultRender =
     md.renderer.rules.heading_open ||
     function (tokens, idx, options, env, self) {
@@ -6503,7 +6506,7 @@ var mathjax_cache = JSON.parse(
     pako.inflate(JSON.parse(localStorage.getItem("mathjax") || "[]"), { to: "string" }) || "{}"
 );
 var math_loaded = false;
-function get_svg(c: string) {
+function get_latex_math_svg(c: string) {
     let html: string,
         ca = mathjax_cache?.[c];
     if (ca) {
@@ -6527,7 +6530,7 @@ function get_svg(c: string) {
                     return window.MathJax.startup.defaultPageReady().then(() => {
                         console.log("MathJax initial typesetting complete");
                         math_loaded = true;
-                        l_math();
+                        l_latex_math();
                     });
                 },
             },
@@ -6544,7 +6547,7 @@ function get_svg(c: string) {
     }
     return html;
 }
-function l_math() {
+function l_latex_math() {
     画布.querySelectorAll("x-md").forEach((pel) => {
         if (pel.querySelector("mjx-container[loaded=false]")) {
             (<markdown>pel).reload();
@@ -6565,7 +6568,7 @@ function l_math() {
 
 md.renderer.rules["mathjax_inline"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_inline = (tokens, idx) => {
-    return get_svg(tokens[idx].content).replace(`display="true"`, "");
+    return get_latex_math_svg(tokens[idx].content).replace(`display="true"`, "");
 };
 md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
     var found,
@@ -6620,7 +6623,7 @@ md.inline.ruler.after("escape", "mathjax_inline", function (state, silent) {
 
 md.renderer.rules["mathjax_block"] = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
 md.renderer.rules.mathjax_block = (tokens, idx) => {
-    return get_svg(`\\displaylines{${tokens[idx].content} }`);
+    return get_latex_math_svg(`\\displaylines{${tokens[idx].content} }`);
 };
 
 function math_b(state, startLine, endLine, silent) {
@@ -7076,6 +7079,7 @@ type md_type =
     | "blockquote"
     | "code"
     | "todo"
+    | "latex math"
     | "math"
     | "iframe";
 
@@ -7704,8 +7708,10 @@ class markdown extends HTMLElement {
             let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
             this.index = md.parse(text, {});
             this.h.innerHTML = i + md.render(text);
+        } else if (type == "latex math") {
+            this.h.innerHTML = get_latex_math_svg(`\\displaylines{${text} }`);
         } else if (type == "math") {
-            this.h.innerHTML = get_svg(`\\displaylines{${text} }`);
+            this.h.innerHTML = xmmath.toMMLHTML(text);
         } else if (type == "iframe") {
             this.h.innerHTML = `<iframe src="${text}"></iframe>`;
         } else if (type == "code") {

@@ -37,7 +37,8 @@
         "svgo": "^3.0.2",
         "three": "^0.150.1",
         "turndown": "^7.1.2",
-        "webdav": "^4.11.2"
+        "webdav": "^4.11.2",
+        "xmmath": "^1.0.3"
     },
     "devDependencies": {
         "@types/color": "^3.0.3",
