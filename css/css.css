@@ -1346,6 +1346,15 @@ p {
     margin: 0;
 }
 
+@font-face {
+    font-family: mathfont;
+    src: url("../assets/latinmodern-math.otf");
+}
+
+math {
+    font-family: mathfont;
+}
+
 mjx-container svg {
     display: inline;
 }
