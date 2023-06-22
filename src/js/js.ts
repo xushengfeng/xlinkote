@@ -2568,6 +2568,25 @@ function version_tr(obj): 集type {
             }
             obj.meta.version = "0.24.0";
         case version_in(v, "0.24.0", "0.24.1"):
+            {
+                for (let i of obj.数据) {
+                    w(i.data);
+                }
+                w(obj.中转站);
+                function w(data) {
+                    for (let i of data) {
+                        if (i.type == "X-MD") {
+                            let o = JSON5.parse(i.value);
+                            if (o.type == "math") o.type = "latex math";
+                            i.value = JSON.stringify(o);
+                        } else {
+                            if (i.子元素) w(i.子元素);
+                        }
+                    }
+                }
+            }
+            obj.meta.version = "0.25.0";
+        case version_in(v, "0.25.0", "0.25.0"):
             return obj;
         default:
             put_toast(`文件版本是 ${v}，与当前软件版本 ${packagejson.version} 不兼容，请升级软件`);
