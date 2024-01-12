@@ -113,7 +113,7 @@ body {
     width: 100%;
     height: 100%;
     color: var(--color6);
-    font-family: sans-serif misansl3;
+    font-family: sans-serif, misansl3;
 }
 
 input,
