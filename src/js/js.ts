@@ -8282,6 +8282,8 @@ class pdf_viewer extends HTMLElement {
 window.customElements.define("x-pdf", pdf_viewer);
 
 /** 绘画元素 */
+import { getStroke } from "perfect-freehand";
+
 import nDollar from "ndollar-js";
 let recognizer = new nDollar.Recognizer(false);
 
@@ -8595,112 +8597,77 @@ class draw extends HTMLElement {
         if (type == "s") pen_s(this);
 
         function pen_p(d: draw) {
-            if (d.points.length != 1) {
-                let ps1 = [],
-                    ps2 = [];
-                let so = (i: number) => {
-                    let w = d.points[i - 1].p * (d.pen.width / 2);
-                    if (d.pen.zoom) w = w / zoom;
-                    let x0 = d.points[i - 2].x,
-                        y0 = d.points[i - 2].y,
-                        x1 = d.points[i - 1].x,
-                        y1 = d.points[i - 1].y,
-                        x2 = d.points?.[i]?.x || x,
-                        y2 = d.points?.[i]?.y || y;
-                    let a = Math.atan2(y2 - y0, x2 - x0);
-                    let p1 = { x: x1 + w * Math.cos(a + Math.PI / 2), y: y1 + w * Math.sin(a + Math.PI / 2) };
-                    let p2 = { x: x1 + w * Math.cos(a - Math.PI / 2), y: y1 + w * Math.sin(a - Math.PI / 2) };
-                    ps1.push(p1);
-                    ps2.push(p2);
-                };
-                for (let i = 3; i < d.points.length; i++) {
-                    so(i);
-                }
-                so(d.points.length);
-                ps1.push({ x, y });
-
-                let ps = [];
-                for (let i of ps1) {
-                    ps.push(i);
-                }
-                for (let i = ps2.length - 1; i >= 0; i--) {
-                    ps.push(ps2[i]);
-                }
-                let at = draw_curve(ps);
-                let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                let t = `translate(${d.ox},${d.oy})`;
-                p.setAttribute("transform", t);
-                if (d.points.length != 2) p.setAttribute("d", at);
-                p.setAttribute("fill", d.pen.color);
-
-                d.tmp_svg.innerHTML = "";
-
-                d.tmp_svg.append(p);
-            }
-            if (d.points.length == 1 || d.points.length == 2) {
-                d.points.push({ x, y, p: e.pressure });
-            } else {
-                let a1 = Math.atan2(
-                    d.points[d.points.length - 1].y - d.points[d.points.length - 2].y,
-                    d.points[d.points.length - 1].x - d.points[d.points.length - 2].x
-                );
-                let a2 = Math.atan2(d.points[d.points.length - 1].y - y, d.points[d.points.length - 1].x - x);
-                let s = Math.sqrt(
-                    (d.points[d.points.length - 1].y - y) ** 2 + (d.points[d.points.length - 1].x - x) ** 2
-                );
-                if (
-                    s >
-                        ((d.pen.width / 2) * (e.pressure + d.points[d.points.length - 1].p)) /
-                            (d.pen.zoom ? zoom : 1) ||
-                    Math.abs(a1 - a2) < Math.PI / 2
-                ) {
-                    d.points.push({ x, y, p: e.pressure });
-                }
-            }
-        }
-
-        function pen_s(d: draw) {
             d.points.push({ x, y, p: e.pressure });
-            if (d.points.length < 2) return;
-            let ps = d.points.slice(1, d.points.length - 1);
-            let at = draw_curve(ps);
+            let ps = d.points.map((i) => [i.x, i.y, i.p]);
+            ps = ps.slice(1);
+            const outlinePoints = getStroke(ps, {
+                simulatePressure: false,
+                size: d.pen.zoom ? d.pen.width / zoom : d.pen.width,
+            });
+
+            console.log(ps);
+
+            let at = getSvgPathFromStroke(outlinePoints);
+
             let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
             let t = `translate(${d.ox},${d.oy})`;
             p.setAttribute("transform", t);
-            p.setAttribute("d", at);
-            p.setAttribute("fill", "none");
-            p.setAttribute("stroke", d.pen.color);
-            p.setAttribute("stroke-width", (d.pen.zoom ? d.pen.width / zoom : d.pen.width) + "px");
-            p.setAttribute("stroke-linecap", "round");
-            p.setAttribute("stroke-linejoin", "round");
+            if (d.points.length != 2) p.setAttribute("d", at);
+            p.setAttribute("fill", d.pen.color);
+
             d.tmp_svg.innerHTML = "";
 
             d.tmp_svg.append(p);
         }
 
-        function draw_curve(p: { x: number; y: number }[]) {
-            let t = 1 / 5;
-            let pc = [];
-            for (let i = 1; i < p.length - 1; i++) {
-                let dx = p[i - 1].x - p[i + 1].x;
-                let dy = p[i - 1].y - p[i + 1].y;
-                pc[i] = [
-                    { x: p[i].x - dx * t, y: p[i].y - dy * t },
-                    { x: p[i].x + dx * t, y: p[i].y + dy * t },
-                ];
+        function pen_s(d: draw) {
+            d.points.push({ x, y, p: e.pressure });
+            if (d.points.length < 2) return;
+            let ps = d.points.map((i) => [i.x, i.y, i.p]);
+            ps = ps.slice(1);
+            const outlinePoints = getStroke(ps, {
+                size: d.pen.zoom ? d.pen.width / zoom : d.pen.width,
+            });
+
+            let at = getSvgPathFromStroke(outlinePoints);
+            let p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            let t = `translate(${d.ox},${d.oy})`;
+            p.setAttribute("transform", t);
+            p.setAttribute("d", at);
+            p.setAttribute("fill", d.pen.color);
+            d.tmp_svg.innerHTML = "";
+
+            d.tmp_svg.append(p);
+        }
+
+        function getSvgPathFromStroke(points: number[][], closed = true) {
+            const average = (a: number, b: number) => (a + b) / 2;
+            const len = points.length;
+
+            if (len < 4) {
+                return ``;
             }
 
-            let d = `M${p[0].x},${p[0].y} Q${pc[1][1].x},${pc[1][1].y}, ${p[1].x},${p[1].y} `;
-            if (p.length > 2) {
-                for (var i = 1; i < p.length - 2; i++) {
-                    d += `C${pc[i][0].x}, ${pc[i][0].y}, ${pc[i + 1][1].x}, ${pc[i + 1][1].y}, ${p[i + 1].x},${
-                        p[i + 1].y
-                    }`;
-                }
-                let n = p.length - 1;
-                d += `Q${pc[n - 1][0].x}, ${pc[n - 1][0].y}, ${p[n].x}, ${p[n].y}`;
+            let a = points[0];
+            let b = points[1];
+            const c = points[2];
+
+            let result = `M${a[0].toFixed(2)},${a[1].toFixed(2)} Q${b[0].toFixed(2)},${b[1].toFixed(2)} ${average(
+                b[0],
+                c[0]
+            ).toFixed(2)},${average(b[1], c[1]).toFixed(2)} T`;
+
+            for (let i = 2, max = len - 1; i < max; i++) {
+                a = points[i];
+                b = points[i + 1];
+                result += `${average(a[0], b[0]).toFixed(2)},${average(a[1], b[1]).toFixed(2)} `;
             }
-            return d;
+
+            if (closed) {
+                result += "Z";
+            }
+
+            return result;
         }
     }
 
