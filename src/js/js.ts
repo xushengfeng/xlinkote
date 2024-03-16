@@ -1195,6 +1195,9 @@ function render_select_rects() {
                 if (selected_el.length <= 1) {
                     z.focus(i.id);
                 }
+                const data = get_x_data(i.id);
+                set_data_style(data, "max-width", "");
+                i.setAttribute("style", data.style);
             }
             clearTimeout(free_db_time);
         };
@@ -2091,6 +2094,7 @@ function create_x_x(x: number, y: number) {
     let xel = createEl("x-x");
     xel.style.left = x + "px";
     xel.style.top = y + "px";
+    xel.style.maxWidth = "320px";
     z.push(xel);
     var md = createEl("x-md");
     xel.append(md);
@@ -4095,6 +4099,7 @@ function set_data_style(el: data[0], x: string, v: string) {
         return styleObj;
     }, {});
     ns[x] = v;
+    if (!v) delete ns[x];
     el.style = Object.entries(ns)
         .map(([key, value]) => `${key}: ${value};`)
         .join(" ");

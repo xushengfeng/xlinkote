@@ -1339,6 +1339,7 @@ x-md {
     min-width: 0.5rem;
     min-height: 0.5rem;
     outline: none;
+    word-wrap: break-word;
 }
 x-md *:hover > .handle {
     opacity: 1;
