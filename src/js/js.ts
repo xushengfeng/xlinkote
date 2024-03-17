@@ -97,6 +97,9 @@ const link_value_bar = createEl("x-link-value");
 
 const md_text = createEl("textarea");
 画布.append(md_text);
+const md_text2 = createEl("input");
+md_text2.style.display = "none";
+画布.append(md_text2);
 
 const breadcrumbs_el = elFromId("breadcrumbs");
 
@@ -2096,7 +2099,7 @@ function create_x_x(x: number, y: number) {
     xel.style.top = y + "px";
     xel.style.maxWidth = "320px";
     z.push(xel);
-    var md = createEl("x-md");
+    var md = createEl("x-text");
     xel.append(md);
     (<markdown>md).edit = true;
 }
@@ -7089,6 +7092,343 @@ function new_x_bar(id: string) {
     };
 
     return bar;
+}
+
+/** 文字元素 */
+class Text extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    _value: { type: md_type; index: RichTextType } = { type: "p", index: [] };
+
+    selectRange: range = { start: 0, end: 0 };
+
+    text: HTMLInputElement;
+
+    h: HTMLElement;
+
+    map: Map<range, Node>;
+
+    cursor = createEl("div");
+
+    add_event: () => void;
+
+    connectedCallback() {
+        const s = this;
+        this.h = this;
+
+        if (this.getAttribute("value")) {
+            let v = this.getAttribute("value");
+            this._value = JSON5.parse(v);
+            this.render();
+        }
+
+        this.add_event = () => {
+            this.text = md_text2;
+            const text = this.text;
+            text.oninput = (e) => {
+                const t = text.value;
+                const select = rSelect(this._value.index, this.selectRange.start, this.selectRange.end);
+                select.replace(t);
+                this._value.index = select.get();
+
+                text.value = "";
+
+                this.selectRange.start = this.selectRange.end = select.getRange().end;
+
+                this.render();
+            };
+        };
+
+        s.onpointerdown = () => {
+            if (模式 === "浏览") this.edit = true;
+        };
+        s.spellcheck = false;
+        s.onpointerup = (e) => {
+            if (模式 != "浏览") return;
+            let el = <HTMLElement>e.target;
+            if (el.tagName != "INPUT") {
+                s.contentEditable = "true";
+            } else {
+                return;
+            }
+            console.log(document.getSelection().getRangeAt(0));
+            let r = document.getSelection().getRangeAt(0);
+            const Range2Select = (node: Node, of: number) => {
+                let before = 0;
+                this.map.forEach((n, r) => {
+                    if (n.contains(node)) {
+                        before = of + r.start;
+                    }
+                });
+
+                return before;
+            };
+            let start_t = Range2Select(r.startContainer, r.startOffset);
+            let end_t = Range2Select(r.endContainer, r.endOffset);
+            console.log(start_t, end_t);
+            this.selectRange.start = start_t;
+            this.selectRange.end = end_t;
+            setTimeout(() => {
+                this.edit = true;
+            }, 10);
+            s.contentEditable = "false";
+            this.text.focus();
+        };
+    }
+
+    setSelect(start: number, end: number) {
+        let range = new Range();
+        this.map.forEach((n, r) => {
+            if (r.start <= start && start < r.end) {
+                range.setStart(n, start - r.start);
+            }
+        });
+        this.map.forEach((n, r) => {
+            if (r.start < end && end <= r.end) {
+                range.setEnd(n, end - r.start);
+            }
+        });
+        console.log(range);
+        return range;
+    }
+
+    set edit(v: boolean | "cr") {
+        if (v) {
+            if (md_text.getAttribute("data-id") != this.parentElement.id) {
+                md_text.setAttribute("data-id", this.parentElement.id);
+                this.add_event();
+            }
+            this.text.classList.add("show_md");
+            if (v != "cr") this.text.focus();
+            set_模式("浏览");
+        } else {
+            md_text.setAttribute("data-id", "");
+            this.text.classList.remove("show_md");
+            this.text.blur();
+            this.text = null;
+        }
+    }
+
+    set value(v) {
+        this._value = JSON5.parse(v);
+        this.type = this._value.type;
+        this.render();
+    }
+
+    get value() {
+        return JSON.stringify(this._value);
+    }
+
+    reload() {
+        this.render();
+    }
+
+    render() {
+        let type = this._value.type;
+        let index = this._value.index;
+        if (type === "text") {
+            this.h.innerHTML = "";
+            const x = renderRich(index);
+            this.h.append(x.f);
+            this.map = x.map;
+        } else if (type === "todo") {
+            this.init_v("todo");
+            if (!集.values[this.parentElement.id].todo["checked"])
+                集.values[this.parentElement.id].todo["checked"] = false;
+            let i = `<input type="checkbox" ${集.values[this.parentElement.id].todo.checked ? "checked" : ""}>`;
+            this.h.innerHTML = i;
+            const x = renderRich(index);
+            this.h.append(x.f);
+            this.map = x.map;
+        } else if (type === "latex math") {
+            this.h.innerHTML = get_latex_math_svg(`\\displaylines{${index[0].text} }`);
+        } else if (type === "math") {
+            this.h.innerHTML = xmmath.toMMLHTML(index[0].text);
+        } else if (type === "iframe") {
+            this.h.innerHTML = `<iframe src="${index[0].text}"></iframe>`;
+        } else if (type === "code") {
+            this.init_v("code");
+            if (!集.values[this.parentElement.id].code?.lan) 集.values[this.parentElement.id].code["lan"] = "";
+            if (集.values?.[this.parentElement.id]?.code?.["html"]) {
+                this.h.innerHTML = 集.values[this.parentElement.id].code["html"];
+            } else {
+                switch (集.values[this.parentElement.id].code["lan"]) {
+                    case "mermaid":
+                        this.h.innerHTML = mermaid_code(index[0].text);
+                        break;
+                    case "tikz":
+                        this.h.innerHTML = tikz_code(index[0].text);
+                        break;
+                    case "jxg":
+                        this.h.innerHTML = jxg_code(index[0].text);
+                        break;
+                    default:
+                        this.h.innerText = index[0].text;
+                        break;
+                }
+            }
+        } else {
+            this.h.innerHTML = "";
+            const x = renderRich(index);
+            this.h.append(x.f);
+            this.map = x.map;
+        }
+    }
+
+    init_v(type: md_type) {
+        if (!集.values[this.parentElement.id]) 集.values[this.parentElement.id] = {};
+        if (!集.values[this.parentElement.id][type]) 集.values[this.parentElement.id][type] = {};
+    }
+
+    set type(type: md_type) {
+        this._value.type = type;
+        this.h.className = type;
+        this.render();
+    }
+}
+
+window.customElements.define("x-text", Text);
+
+type range = { start: number; end: number };
+type RichTextType = {
+    text: string;
+    index: range; // [], ![)
+    style?: { [key in keyof CSSStyleDeclaration]?: string };
+    classList?: string[];
+    isHTML?: boolean;
+}[];
+
+function rSelect(_index: RichTextType, start?: number, end?: number) {
+    let length = len(_index);
+    if (start === undefined) start = 0;
+    if (end === undefined) end = length;
+    if (start > end) [start, end] = [end, start];
+    start = clip(start, 0, length);
+    end = clip(end, 0, length);
+    let range = { start, end };
+    let { before, center, after } = clipI(range, _index);
+    function replace(_range: range, text: string) {
+        let p = center[0] ?? before.at(-1) ?? { text: "", index: { start: _range.start, end: _range.start } }; // 以左边样式为准
+        p = structuredClone(p);
+        p.text = text;
+        p.index.start = _range.start;
+        p.index.end = _range.start + text.length;
+        center = [p];
+        after = rightAdd(text.length - (_range.end - _range.start), after);
+        range.end = p.index.end;
+    }
+    function setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
+        center.forEach((i) => {
+            if (!i.style) i["style"] = {};
+            if (styleName === "length" || styleName === "parentRule") return;
+            i.style[styleName] = style;
+            if (!style) delete i.style[styleName];
+        });
+    }
+    function addClass(_class: string) {
+        center.forEach((i) => {
+            if (i.classList?.includes(_class)) return;
+            if (!i.classList) i["classList"] = [];
+            i.classList.push(_class);
+        });
+    }
+    function rmClass(_class: string) {
+        center.forEach((i) => {
+            if (i.classList) i.classList = i.classList.filter((c) => c != _class);
+        });
+    }
+    function clipI(range: range, _index: RichTextType) {
+        let index = structuredClone(_index);
+        function c(point: number, _index: typeof index) {
+            let index = structuredClone(_index);
+            let a: typeof index = [];
+            let b: typeof index = [];
+            let isA = true;
+            for (let i of index) {
+                if (i.index.start < point && point < i.index.end) {
+                    const dp = point - i.index.start;
+                    let ai = structuredClone(i);
+                    ai.index.end = point;
+                    ai.text = ai.text.slice(0, dp);
+                    let bi = structuredClone(i);
+                    bi.index.start = point;
+                    bi.text = bi.text.slice(dp);
+                    a.push(ai);
+                    b.push(bi);
+                    isA = false;
+                    continue;
+                }
+                if (i.index.start === point) isA = false;
+                if (isA) a.push(i);
+                else b.push(i);
+            }
+            return [a, b];
+        }
+
+        let [before, tmp] = c(range.start, index);
+        let [center, after] = c(range.end, tmp);
+        return { before, center, after, range };
+    }
+    function join(..._indexes: RichTextType[]) {
+        let index = _indexes.flat();
+        return index as RichTextType;
+    }
+    function rightAdd(num: number, _index: RichTextType) {
+        let index = structuredClone(_index);
+        return index.map((i) => {
+            i.index.start += num;
+            i.index.end += num;
+            return i;
+        });
+    }
+    function len(_index: RichTextType) {
+        if (_index.length === 0) return 0;
+        return _index.at(-1).index.end - _index.at(0).index.start;
+    }
+    return {
+        replace: (text: string) => replace({ start, end }, text),
+        setStyle: setStyle,
+        addClass: (_class: string) => addClass(_class),
+        rmClass: (_class: string) => rmClass(_class),
+        get: () => join(before, center, after),
+        getSelect: () => join(center),
+        getRange: () => join(center)[0].index,
+        getABC: () => {
+            return { before, center, after };
+        },
+        len: () => len(center),
+    };
+}
+
+function renderRich(index: RichTextType) {
+    let span = document.createDocumentFragment();
+    let map: Map<range, Node> = new Map();
+    for (let i of index) {
+        if (i.isHTML) {
+            let el = createEl("span");
+            el.setAttribute("data-html", "true");
+            el.innerHTML = i.text;
+            span.append(el);
+            map.set(i.index, el);
+            continue;
+        }
+        if (!i.classList && !i.style) {
+            const textNode = document.createTextNode(i.text);
+            span.append(textNode);
+            map.set(i.index, textNode);
+            continue;
+        }
+        let el = createEl("span");
+        const textNode = document.createTextNode(i.text);
+        el.append(textNode);
+        if (i.classList) for (let c of i.classList) el.classList.add(c);
+        if (i.style) for (let n in i.style) el.style[n] = i.style[n];
+        map.set(i.index, textNode);
+        span.append(el);
+    }
+    return { f: span, map: map };
 }
 
 type md_type =
