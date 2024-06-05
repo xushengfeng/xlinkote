@@ -1625,11 +1625,16 @@ elFromId("画布").onwheel = (e) => {
 let middle_b: PointerEvent;
 let middle_p = { x: 0, y: 0 };
 画布.addEventListener("pointerdown", (e) => {
-    if (e.button == 1) {
-        middle_b = e;
-        middle_p.x = el_offset(O).x;
-        middle_p.y = el_offset(O).y;
-    }
+    if (e.target === 画布)
+        if (
+            (e.button === 1 && e.pointerType === "mouse") ||
+            e.pointerType === "touch" ||
+            (e.button === 0 && e.pointerType === "pen")
+        ) {
+            middle_b = e;
+            middle_p.x = el_offset(O).x;
+            middle_p.y = el_offset(O).y;
+        }
 });
 document.addEventListener("pointermove", (e) => {
     if (middle_b) {
