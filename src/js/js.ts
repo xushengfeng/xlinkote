@@ -2099,7 +2099,7 @@ function create_x_x(x: number, y: number) {
     xel.style.top = y + "px";
     xel.style.maxWidth = "320px";
     z.push(xel);
-    var md = createEl("x-text");
+    var md = createEl("x-md");
     xel.append(md);
     (<markdown>md).edit = true;
 }
