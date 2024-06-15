@@ -9924,7 +9924,6 @@ async function to_text(img: HTMLImageElement | HTMLCanvasElement) {
 }
 
 var ocr_init = false;
-var ocr;
 
 var imported_index: { [key: string]: { loaded: boolean; el: HTMLScriptElement } } = {};
 
@@ -9951,17 +9950,20 @@ async function import_script(url: string) {
     });
 }
 
+import * as ocr from "esearch-ocr";
+
 async function ocr_start() {
     await import_script("https://unpkg.com/opencv.js@1.2.1/opencv.js");
     await import_script("https://unpkg.com/onnxruntime-web@1.13.1/dist/ort.min.js");
-    ocr = (await import("../../ai/ocr")).default;
-    var dic = (await import("../../public/ocr/ppocr_keys_v1.txt?raw")).default;
+    const dic = (await import("../../public/ocr/ppocr_keys_v1.txt?raw")).default;
     await ocr.init({
-        det_path: "./ocr/ppocr_det.onnx",
-        rec_path: "./ocr/ppocr_rec.onnx",
+        detPath: "./ocr/ppocr_det.onnx",
+        recPath: "./ocr/ppocr_rec.onnx",
         dic: dic,
         dev: false,
-        node: true,
+        ort: window["ort"],
+        cv: window["cv"],
+        detShape: [640, 640],
     });
     ocr_init = true;
 }

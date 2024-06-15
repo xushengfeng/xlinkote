@@ -20,6 +20,7 @@
         "color": "^4.2.3",
         "crypto-js": "^4.1.1",
         "deep-diff": "^1.0.2",
+        "esearch-ocr": "^4.2.1",
         "fuse.js": "^6.6.2",
         "html2canvas": "^1.4.1",
         "iconify-icon": "^1.0.7",

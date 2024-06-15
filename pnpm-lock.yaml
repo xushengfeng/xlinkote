@@ -20,6 +20,9 @@ dependencies:
   deep-diff:
     specifier: ^1.0.2
     version: 1.0.2
+  esearch-ocr:
+    specifier: ^4.2.1
+    version: 4.2.1(opencv.js@1.2.1)
   fuse.js:
     specifier: ^6.6.2
     version: 6.6.2
@@ -2021,6 +2024,16 @@ packages:
     engines: {node: '>=0.8.0'}
     dev: true
 
+  /esearch-ocr@4.2.1(opencv.js@1.2.1):
+    resolution: {integrity: sha512-AhzW58H6GHVbviDQF3uVwZP/E0gB+s+OqIejm4ofuR5OolcLJVKhI1blnY8EP9nb3QdPdc43cqekVuyRMIPTTA==}
+    peerDependencies:
+      opencv.js: ^1.2.1
+    dependencies:
+      js-clipper: 1.0.1
+      onnxruntime-common: 1.18.0
+      opencv.js: 1.2.1
+    dev: false
+
   /exif-parser@0.1.12:
     resolution: {integrity: sha512-c2bQfLNbMzLPmzQuOr8fy0csy84WmwnER81W88DzTp9CYNPJ6yzOj2EZAh9pywYpqHnshVLHQJ8WzldAyfY+Iw==}
     dev: false
@@ -2538,6 +2551,10 @@ packages:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
     dev: false
 
+  /js-clipper@1.0.1:
+    resolution: {integrity: sha512-0XYAS0ZoCki5K0fWwj8j8ug4mgxHXReW3ayPbVqr4zXPJuIs2pyvemL1sALadsEiAywZwW5Ify1XfU4bNJvokg==}
+    dev: false
+
   /json-buffer@3.0.0:
     resolution: {integrity: sha512-CuUqjv0FUZIdXkHPI8MezCnFCdaTAacej1TZYulLoAg1h/PhwkdXFN4V/gzY4g+fMBCOV2xF+rp7t2XD2ns/NQ==}
     dev: true
@@ -2936,6 +2953,10 @@ packages:
     resolution: {integrity: sha512-3LJpegM2iMNRX2wUmtYfeX/ytfOzNwAWKSq1HbRrKc9+uqG/FsEA0bbKZl1btQeZaXhC26l44NWpNUeXPII7Ew==}
     dev: false
 
+  /onnxruntime-common@1.18.0:
+    resolution: {integrity: sha512-lufrSzX6QdKrktAELG5x5VkBpapbCeS3dQwrXbN0eD9rHvU0yAWl7Ztju9FvgAKWvwd/teEKJNj3OwM6eTZh3Q==}
+    dev: false
+
   /onnxruntime-node@1.14.0:
     resolution: {integrity: sha512-5ba7TWomIV/9b6NH/1x/8QEeowsb+jBEvFzU6z0T4mNsFwdPqXeFUM7uxC6QeSRkEbWu3qEB0VMjrvzN/0S9+w==}
     os: [win32, darwin, linux]
@@ -2954,6 +2975,10 @@ packages:
       onnx-proto: 4.0.4
       onnxruntime-common: 1.14.0
       platform: 1.3.6
+    dev: false
+
+  /opencv.js@1.2.1:
+    resolution: {integrity: sha512-+ji5Pk3eyz+RRSeZr2kLZNJpjsKoGyPJOjFWng7+Cuq9ylHakBqJMxDGlBW1+qdju3k8DadWOiHJ6JaF28UpKA==}
     dev: false
 
   /p-cancelable@0.4.1:
@@ -3475,6 +3500,7 @@ packages:
 
   /string_decoder@1.3.0:
     resolution: {integrity: sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==}
+    requiresBuild: true
     dependencies:
       safe-buffer: 5.2.1
     dev: false
