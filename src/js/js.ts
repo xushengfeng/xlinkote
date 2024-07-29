@@ -1455,6 +1455,7 @@ function el_offset2(el: Element, pel?: Element, xz?: number): rect {
 
 function el_has(data: srcData[0], id: string) {
     if (data.id == id) return true;
+    if (!data.子元素) return false;
     w(data.子元素);
     function w(data: data) {
         for (let i of data) {
@@ -2253,7 +2254,7 @@ type 集type = {
     };
     data: srcData;
     数据: 画布type[];
-    链接: { [key: string]: { [key: string]: { value?: number; time?: number; s: number } } };
+    链接: { [key: string]: { [key: string]: { time: number } } };
     assets: {
         [key: string]: {
             source: Blob | File;
@@ -3993,7 +3994,7 @@ class 图层 {
 
         add_bci(id);
 
-        link(id).value("0", link_value_min_d());
+        link(id).value("0");
 
         if (模式 == "设计") {
             let d = el?.querySelector("x-draw") as draw;
@@ -5165,7 +5166,6 @@ function show_search_l(l: search_result, exid?: string) {
         };
     }
 
-    link("0").衰减();
     let ddd = createEl("div");
     search_main.append(ddd);
     ddd.style.height = search_r_divs.length * search_i_height + 8 + "px";
@@ -5564,16 +5564,16 @@ function link(key0: string) {
                 if (key0 == key1) return;
                 link(key0).add();
                 link(key1).add();
-                if (集.链接[key0][key1]?.value === undefined || 集.链接[key1][key0]?.value === undefined) {
+                if (集.链接[key0][key1] === undefined || 集.链接[key1][key0] === undefined) {
                     // 只存储在边的一个方向上，以时间换空间
-                    集.链接[key0][key1] = { value: 1, time: t, s: default_down_s };
+                    集.链接[key0][key1] = { time: t };
                 }
             } else {
                 if (!集.链接[key0]) {
                     集.链接[key0] = {};
                 }
                 if (!集.链接[0][key0]) {
-                    集.链接[0][key0] = { value: 1, time: t, s: default_down_s };
+                    集.链接[0][key0] = { time: t };
                 }
             }
         },
@@ -5597,23 +5597,27 @@ function link(key0: string) {
          */
         get: (chain?: number) => {
             const l = link_map[key0];
+            function sort(obj: typeof l) {
+                const l = Object.keys(obj);
+                l.sort((a, b) => obj[b].time - obj[a].time);
+                let o: typeof obj = {};
+                for (let i of l) {
+                    o[i] = obj[i];
+                }
+                return o;
+            }
             if (!chain) {
-                return l;
+                return sort(l);
             } else {
                 const walk = (list: typeof l, chain_n: number) => {
                     const xl = {};
                     let next = null;
-                    let maxn = 0;
                     for (const i of Object.keys(list || [])) {
                         if (i === "0") continue;
                         if (xl[i]) continue;
-                        if (list[i].value > maxn) {
-                            next = i;
-                            maxn = list[i].value;
-                        }
                     }
                     if (!next) return xl;
-                    const ln = chain_n - list[next].value;
+                    const ln = chain_n; // todo 搜索loss
                     if (ln > 0) {
                         return walk(link(next).get(), ln);
                     } else {
@@ -5621,17 +5625,15 @@ function link(key0: string) {
                         return xl;
                     }
                 };
-                return walk(l, chain);
+                return sort(walk(l, chain));
             }
         },
-        value: (key1: string, dv: number) => {
+        value: (key1: string) => {
             if (key1) {
                 // 尝试正向、反向寻找边的值，否则新建
-                if (集.链接[key0]?.[key1]?.value !== undefined) {
-                    集.链接[key0][key1].value = clip(集.链接[key0][key1].value + dv, 0, 1);
+                if (集.链接[key0]?.[key1] !== undefined) {
                     集.链接[key0][key1].time = t;
-                } else if (集.链接[key1]?.[key0]?.value !== undefined) {
-                    集.链接[key1][key0].value = clip(集.链接[key1][key0].value + dv, 0, 1);
+                } else if (集.链接[key1]?.[key0] !== undefined) {
                     集.链接[key1][key0].time = t;
                 } else {
                     link(key0).add(key1);
@@ -5642,26 +5644,13 @@ function link(key0: string) {
         get_v: (is_small?: boolean) => {
             const el = get_link_el_by_id(key0);
             if (is_small || !el || is_smallest_el(el)) {
-                const link_value = 集.链接[0][key0]?.value;
+                const link_value = 集.链接[0][key0];
                 if (link_value) {
                     const l = link(key0).get();
-                    let n = 0;
-                    l["0"] = 集.链接[0][key0];
-                    for (const i in l) {
-                        n += l[i].value;
-                    }
-                    return n;
+                    return Object.keys(l).filter((i) => i !== "0").length;
                 }
             } else {
-                let n = 0;
-                let count = 0;
-                el.querySelectorAll("x-x, x-link").forEach((child) => {
-                    if (集.链接[0][child.id]) {
-                        n += link(child.id).get_v(true);
-                        count++;
-                    }
-                });
-                return count === 0 ? 0 : n / count;
+                return 0;
             }
         },
         map: () => {
@@ -5678,32 +5667,6 @@ function link(key0: string) {
                     }
                     link_map[x][i] = value;
                 }
-            }
-        },
-        衰减: () => {
-            for (let i in 集.链接) {
-                for (let j in 集.链接[i]) {
-                    let target = 集.链接[i][j];
-                    集.链接[i][j].value = down(target.value, target.time, t, target.s || default_down_s);
-                    集.链接[i][j].time = t;
-                }
-            }
-            function down(value: number, t0: number, t1: number, xv_s: number) {
-                const xv_c = 0.9;
-                // 计算衰减值
-                function x2v(x: number) {
-                    return Math.exp((x * Math.log(xv_c)) / xv_s);
-                }
-                // 通过值反推原先输入的x
-                function v2x(v: number) {
-                    return Math.log(v) * (xv_s / Math.log(xv_c));
-                }
-                let old_x = v2x(value);
-                // 半天为一个单位
-                let t = (t1 - t0) / 1000 / 60 / 60 / 12;
-                let new_x = t + old_x;
-                let new_v = Math.max(x2v(new_x), link_value_min_d() / 2); // 下限为精度四舍五入后保留1，如2->0.005
-                return new_v;
             }
         },
     };
@@ -9431,29 +9394,10 @@ class link_value extends HTMLElement {
     vl: HTMLElement;
 
     connectedCallback() {
-        const add_el = createEl("img");
-        const down_el = createEl("img");
         this.v = createEl("div");
         const c = createEl("div");
-        c.append(down_el, this.v, add_el);
+        c.append(this.v);
         this.append(c);
-
-        add_el.src = add_svg;
-        down_el.src = minus_svg;
-        add_el.onclick = () => {
-            link("0").value(this._id, 0.1);
-            this.v.innerHTML = "";
-            this.v.append(link_value_text(集.链接[0][this._id].value));
-            now_data_id = "0";
-            add_bci(this._id);
-        };
-        down_el.onclick = () => {
-            link("0").value(this._id, -0.1);
-            this.v.innerHTML = "";
-            this.v.append(link_value_text(集.链接[0][this._id].value));
-            now_data_id = "0";
-            add_bci(this._id);
-        };
 
         this.vl = createEl("div");
         this.append(this.vl);
@@ -9503,8 +9447,8 @@ class link_value extends HTMLElement {
     show_links() {
         link("0").map();
         let v_text = (i: string) => {
-            let span = link_value_text(link(this._id).get()[i].value);
-            span.innerText = `#${i} ` + span.innerText;
+            let span = createEl("span");
+            span.innerText = `#${i}`;
             return span;
         };
         // 展示链接
@@ -9540,27 +9484,18 @@ class link_value extends HTMLElement {
                 el.remove();
             };
             const add_el = createEl("div");
-            const down_el = createEl("div");
 
             add_el.innerHTML = icon(add_svg);
-            down_el.innerHTML = icon(minus_svg);
             add_el.onclick = () => {
-                link(this._id).value(i, 0.1);
-                n.innerHTML = "";
-                n.append(v_text(i));
+                link(this._id).value(i);
+                this.show_links();
             };
-            down_el.onclick = () => {
-                link(this._id).value(i, -0.1);
-                n.innerHTML = "";
-                n.append(v_text(i));
-            };
-            el.append(n, add_el, rm, down_el);
+            el.append(n, add_el, rm);
         }
     }
 
     set elid(id: string) {
         this._id = id;
-        link("0").衰减();
         link("0").map();
         let v = link(id).get_v();
         if (v) {
