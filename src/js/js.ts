@@ -4090,6 +4090,33 @@ function get_x_data(id: string) {
     return getDataFromId(id);
 }
 
+function getXPid(_id: string) {
+    let pid = "";
+    let get = false;
+    for (let i of 集.数据) {
+        pid = i.id;
+        w(i.data);
+        if (get) break;
+    }
+    function w(data: data) {
+        for (let id of data) {
+            const i = getDataFromId(id);
+            if (id === _id) {
+                get = true;
+                return;
+            }
+            if (id === 集.links?.[_id]?.pid) {
+                get = true;
+                return;
+            }
+            if (i.子元素) {
+                w(i.子元素);
+            }
+        }
+    }
+    return pid;
+}
+
 function removeXID(id: string) {
     for (let i of 集.数据) {
         w(i.data);
@@ -5397,31 +5424,8 @@ function set_viewer_posi(x: number, y: number) {
 
 /** 跳转到元素位置 */
 function preview_x_link(id: string) {
-    let pid = "",
-        rect: rect;
-    for (let i of 集.数据) {
-        pid = i.id;
-        w(i.data);
-        if (rect) break;
-    }
-    function w(data: data) {
-        for (let id of data) {
-            const i = getDataFromId(id);
-            if (i.type == "x-x") {
-                if (i.id == id) {
-                    rect = i.rect;
-                    return;
-                }
-                if (i.id == 集.links?.[id]?.pid) {
-                    rect = 集.links[id].rect;
-                    return;
-                }
-                if (i.子元素) {
-                    w(i.子元素);
-                }
-            }
-        }
-    }
+    let pid = getXPid(id);
+    const rect = getDataFromId(id).rect;
     let center_rect = rect;
 
     let center_point = { x: center_rect.x + center_rect.w / 2, y: center_rect.y + center_rect.h / 2 };
